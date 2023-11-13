@@ -62,7 +62,7 @@ public class EquipeJDBC implements EquipeDAO{
 	@Override
 	public boolean delete(Equipe value) throws Exception {
 		Statement st = cn.createStatement();
-		return st.executeUpdate("delete Equipe where idEquipe = "+value.getIdEquipe()) > 0;
+		return st.executeUpdate("delete from Equipe where idEquipe = "+value.getIdEquipe()) > 0;
 	}
 
 	@Override

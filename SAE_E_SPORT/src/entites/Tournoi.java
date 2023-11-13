@@ -1,17 +1,17 @@
 package entites;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class Tournoi {
 
 	private int idTournoi;
 	private String nomTournoi;
-	private String niveau;
-	private LocalDate dateDebut;
-	private LocalDate dateFin;
+	private Niveau niveau;
+	private Date dateDebut;
+	private Date dateFin;
 	private Equipe vainqueur;
 	
-	public Tournoi(int idTournoi, String nomTournoi, String niveau, LocalDate dateDebut, LocalDate dateFin) {
+	public Tournoi(int idTournoi, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin) {
 		this.idTournoi = idTournoi;
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
@@ -35,15 +35,15 @@ public class Tournoi {
 		return nomTournoi;
 	}
 
-	public String getNiveau() {
+	public Niveau getNiveau() {
 		return niveau;
 	}
 
-	public LocalDate getDateDebut() {
+	public Date getDateDebut() {
 		return dateDebut;
 	}
 
-	public LocalDate getDateFin() {
+	public Date getDateFin() {
 		return dateFin;
 	}
 	
