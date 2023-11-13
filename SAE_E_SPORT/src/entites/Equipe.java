@@ -8,7 +8,6 @@ public class Equipe {
 	private String nomPays;
 	
 	public Equipe(int id, String nom, int rang, String pays) {
-		super();
 		this.idEquipe = id;
 		this.nom = nom;
 		this.rang = rang;
