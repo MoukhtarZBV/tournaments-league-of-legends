@@ -30,10 +30,10 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public Optional<Equipe> getById(Integer... id) throws Exception {
+	public Optional<Equipe> getById(Integer id) throws Exception {
 		Optional<Equipe> equipes = Optional.empty();
 		Statement st = cn.createStatement();
-		ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id[0]);
+		ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 		if(rs.next()) {
 			equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), rs.getString("pays")));
 		}
@@ -75,5 +75,5 @@ public class EquipeJDBC implements EquipeDAO{
 		}
 		return equipe;
 	}
-	
+
 }
