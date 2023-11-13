@@ -6,41 +6,45 @@ public class Arbitre {
 	private String nomArbitre;
 	private String prenomArbitre;
 	
+	
+	// Constructeur
 	public Arbitre(int idArbitre, String nomArbitre, String prenomArbitre) {
 		this.idArbitre = idArbitre;
 		this.nomArbitre = nomArbitre;
 		this.prenomArbitre = nomArbitre;
 	}
 	
-	public int getidArbitre() {
+	
+	// Get
+	public int getId() {
 		return this.idArbitre;
 	}
 	
-	public String getnomArbitre() {
+	public String getNom() {
 		return this.nomArbitre;
 	}
 	
-	public String getprenomArbitre() {
+	public String getPrenom() {
 		return this.prenomArbitre;
 	}
 	
-	public void setidArbitre(int idArbitre) {
-		this.idArbitre = idArbitre;
-	}
 	
-	public void setnomArbitre(String nomArbitre) {
+	// Set
+	public void setNom(String nomArbitre) {
 		this.nomArbitre = nomArbitre;
 	}
 	
-	public void setprenomArbitre(String prenomArbitre) {
+	public void setPrenom(String prenomArbitre) {
 		this.prenomArbitre = prenomArbitre;
 	}
 	
+	
+	// Overrides
 	@Override
 	public boolean equals(Object o) {
 		if(o instanceof Arbitre) {
 			Arbitre a = (Arbitre) o;
-			if (this.idArbitre == a.getidArbitre()) {
+			if (this.idArbitre == a.getId()) {
 				return true;
 			}
 			else {
@@ -52,6 +56,6 @@ public class Arbitre {
 	
 	@Override
 	public String toString() {
-		return this.idArbitre + " - "+this.nomArbitre + " - "+this.prenomArbitre;
+		return String.format("Arbitre ID[%d], %s %s", this.getId(), this.getPrenom(), this.getNom().toUpperCase());
 	}	
 }

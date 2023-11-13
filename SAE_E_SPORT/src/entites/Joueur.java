@@ -1,19 +1,20 @@
 package entites;
 
-import java.sql.*;
-import java.util.*;
-
 public class Joueur {
 	
 	private int idJoueur;
 	private String pseudo;
 	
+	
+	// Constructeur
 	public Joueur(int idJoueur, String pseudo) {
 		this.idJoueur = idJoueur;
 		this.pseudo = pseudo;
 	}
 	
-	public int getIdJoueur() {
+	
+	// Get
+	public int getId() {
 		return this.idJoueur;
 	}
 	
@@ -21,19 +22,19 @@ public class Joueur {
 		return this.pseudo;
 	}
 	
-	public void setIdJoueur(int idJoueur) {
-		this.idJoueur = idJoueur;
-	}
 	
+	// Set	
 	public void setPseudo(String pseudo) {
 		this.pseudo = pseudo;
 	}
 	
+	
+	// Overrides
 	@Override
 	public boolean equals(Object o) {
 		if(o instanceof Joueur) {
 			Joueur j = (Joueur) o;
-			if (this.idJoueur == j.getIdJoueur()) {
+			if (this.idJoueur == j.getId()) {
 				return true;
 			}
 			else {
@@ -45,8 +46,6 @@ public class Joueur {
 	
 	@Override
 	public String toString() {
-		return this.idJoueur + " - "+this.pseudo;
-	}	
-
-
+		return String.format("Joueur ID[%d], %s", this.getId(), this.getPseudo());
+	}
 }
