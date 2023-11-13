@@ -16,7 +16,7 @@ public class AdminJDBC implements AdminDAO {
 	private static Connection con;
 	
 	public AdminJDBC(Connection connection) {
-		this.con = connection;
+		con = connection;
 	}
 
 	@Override

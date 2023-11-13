@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import entites.Administrateur;
 import entites.Joueur;
 
 public class JoueurJDBC implements JoueurDAO{
@@ -16,12 +18,12 @@ public class JoueurJDBC implements JoueurDAO{
 	public static Connection con;
     
 	public JoueurJDBC(Connection connect) {
-	    this.con = connect;
+	    con = connect;
 	}
 
 	@Override
 	public List<Joueur> getAll() throws Exception {
-		Statement st = this.con.createStatement();
+		Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select * from joueur");
         List<Joueur> listeJoueurs = new ArrayList<Joueur>();
         
@@ -33,37 +35,35 @@ public class JoueurJDBC implements JoueurDAO{
 	}
 
 	@Override
-	public Optional<Joueur> getById(Integer... id) throws Exception {
+	public Optional<Joueur> getById(Integer id) throws Exception {
 		try {
-			Statement st = this.con.createStatement();
-	        ResultSet rs = st.executeQuery("select * from joueur where idJoueur = "+id[0]);
-	        Optional<Joueur> retour = Optional.empty();
-	        if (rs.next()) {        	
-	        	retour = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
-        }
-        return retour;
-        
+			String req = "SELECT * FROM Joueur WHERE idJoueur = ?;";
+			
+			PreparedStatement st = con.prepareStatement(req);
+			st.setInt(1, id);
+			
+			ResultSet rs = st.executeQuery(req);
+			
+			return Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
+			
 		} catch (SQLException e) {
-			System.out.println("Erreur dans la séléction");
-			e.printStackTrace();
 			return Optional.empty();
 		}
 	}
 	
 	@Override
-	public Optional<Joueur> getByPseudo(String... pseudo) throws Exception {
+	public Optional<Joueur> getByPseudo(String value) throws Exception {
 		try {
-			Statement st = this.con.createStatement();
-	        ResultSet rs = st.executeQuery("select * from joueur where pseudo = "+pseudo[0]);
-	        Optional<Joueur> retour = Optional.empty();
-	        if (rs.next()) {        	
-	        	retour = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
-        }
-        return retour;
-        
+			String req = "SELECT * FROM Joueur WHERE pseudo = ?;";
+			
+			PreparedStatement st = con.prepareStatement(req);
+			st.setString(1, value);
+			
+			ResultSet rs = st.executeQuery(req);
+			
+			return Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
+			
 		} catch (SQLException e) {
-			System.out.println("Erreur dans la séléction");
-			e.printStackTrace();
 			return Optional.empty();
 		}
 	}
@@ -71,13 +71,18 @@ public class JoueurJDBC implements JoueurDAO{
 	@Override
 	public boolean add(Joueur value) throws Exception {
 		try {
-			Statement st = this.con.createStatement();
-	        String req = "INSERT INTO joueur (pseudo) VALUES ('"+ value.getPseudo() + "')";
-	        st.executeUpdate(req);
-	        return true;
-		}catch (SQLException e) {
-			System.out.println("Erreur à l'insertion d'un sujet");
-			e.printStackTrace();
+			String addAdmin = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?)";
+			
+			PreparedStatement st  = con.prepareStatement(addAdmin);
+			
+			st.setString(1, value.getPseudo());
+			
+			st.executeUpdate(addAdmin);
+			
+			System.out.println("Le joueur "+ value.getPseudo().toUpperCase() +" a été ajouté.");
+			return true;
+			
+		} catch (SQLException e) {
 			return false;
 		}
 	}
@@ -85,21 +90,40 @@ public class JoueurJDBC implements JoueurDAO{
 	@Override
 	public boolean update(Joueur value) throws Exception {
 		try {
-			Statement st = this.con.createStatement();
-	        String req = "UPDATE joueur SET contenuSujet = '"+value.getContenu()+"' , utilisateur = '"+value.getUtilisateur()+"' WHERE idSujet = " + value.getIdSujet();
-	        st.executeUpdate(req);
-	        return true;
-		}catch (SQLException e) {
-			System.out.println("Erreur à la mise à jour d'un sujet");
-			e.printStackTrace();
+			String updateAdmin = "UPDATE Joueur "
+					   		   + "SET pseudo = ?"
+					   		   + "WHERE idJoueur = ?;";
+			
+			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			st.setString(1, value.getPseudo());
+			st.setInt(2, value.getId());
+
+			st.executeUpdate(updateAdmin);
+			
+			System.out.println("Le joueur " + value.getPseudo().toUpperCase() + " a été modifié.");
+			return true;
+			
+		} catch (SQLException e) {
 			return false;
 		}
 	}
 
 	@Override
 	public boolean delete(Joueur value) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			String updateAdmin = "DELETE FROM Joueur WHERE idJoueur = ?;";
+			
+			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			st.setInt(1, value.getId());
+			
+			st.executeUpdate();
+			
+			System.out.println("Le joueur " + value.getPseudo().toUpperCase() + " a été supprimé.");
+			return true;
+			
+		} catch (SQLException e) {
+			return false;
+		}
 	}
 
 }
