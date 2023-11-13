@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Administrateur;
 import entites.Arbitre;
 
 public class ArbitreJDBC implements ArbitreDAO{
@@ -73,14 +72,14 @@ public class ArbitreJDBC implements ArbitreDAO{
 	@Override
 	public boolean add(Arbitre value) throws Exception {
 		try {
-			String addAdmin = "INSERT INTO Arbitre VALUES (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
+			String addArbitre = "INSERT INTO Arbitre VALUES (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
 			
-			PreparedStatement st  = con.prepareStatement(addAdmin);
+			PreparedStatement st  = con.prepareStatement(addArbitre);
 			
 			st.setString(1, value.getNom());
 			st.setString(2, value.getPrenom());
 			
-			st.executeUpdate(addAdmin);
+			st.executeUpdate(addArbitre);
 			
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom()  +" a été ajouté.");
 			return true;
@@ -93,16 +92,16 @@ public class ArbitreJDBC implements ArbitreDAO{
 	@Override
 	public boolean update(Arbitre value) throws Exception {
 		try {
-			String updateAdmin = "UPDATE Arbitre "
+			String updateArbitre = "UPDATE Arbitre "
 					   		   + "SET nom = ?, prenom = ?"
 					   		   + "WHERE idArbitre = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			PreparedStatement st  = con.prepareStatement(updateArbitre);
 			st.setString(1, value.getNom());
 			st.setString(2, value.getPrenom());
 			st.setInt(3, value.getId());
 
-			st.executeUpdate(updateAdmin);
+			st.executeUpdate(updateArbitre);
 			
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom() + " a été modifié.");
 			return true;
@@ -115,9 +114,9 @@ public class ArbitreJDBC implements ArbitreDAO{
 	@Override
 	public boolean delete(Arbitre value) throws Exception {
 		try {
-			String updateAdmin = "DELETE FROM Arbitre WHERE idArbitre = ?;";
+			String updateArbitre = "DELETE FROM Arbitre WHERE idArbitre = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			PreparedStatement st  = con.prepareStatement(updateArbitre);
 			st.setInt(1, value.getId());
 			
 			st.executeUpdate();
