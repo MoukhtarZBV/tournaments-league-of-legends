@@ -1,6 +1,6 @@
 package dao;
 
-import entites.Tournoi;
+import modele.Tournoi;
 
 public interface TournoiDAO extends DAO<Tournoi, Integer>{
 	

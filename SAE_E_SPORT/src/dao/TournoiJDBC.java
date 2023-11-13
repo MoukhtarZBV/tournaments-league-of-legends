@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Niveau;
-import entites.Tournoi;
+import modele.Niveau;
+import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO{
 
