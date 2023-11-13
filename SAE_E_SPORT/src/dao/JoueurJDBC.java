@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Administrateur;
-import entites.Joueur;
+import modele.Joueur;
 
 public class JoueurJDBC implements JoueurDAO{
 	
@@ -71,13 +70,13 @@ public class JoueurJDBC implements JoueurDAO{
 	@Override
 	public boolean add(Joueur value) throws Exception {
 		try {
-			String addAdmin = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?)";
+			String addJoueur = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?)";
 			
-			PreparedStatement st  = con.prepareStatement(addAdmin);
+			PreparedStatement st  = con.prepareStatement(addJoueur);
 			
 			st.setString(1, value.getPseudo());
 			
-			st.executeUpdate(addAdmin);
+			st.executeUpdate(addJoueur);
 			
 			System.out.println("Le joueur "+ value.getPseudo().toUpperCase() +" a été ajouté.");
 			return true;
@@ -90,15 +89,15 @@ public class JoueurJDBC implements JoueurDAO{
 	@Override
 	public boolean update(Joueur value) throws Exception {
 		try {
-			String updateAdmin = "UPDATE Joueur "
+			String updateJoueur = "UPDATE Joueur "
 					   		   + "SET pseudo = ?"
 					   		   + "WHERE idJoueur = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			PreparedStatement st  = con.prepareStatement(updateJoueur);
 			st.setString(1, value.getPseudo());
 			st.setInt(2, value.getId());
 
-			st.executeUpdate(updateAdmin);
+			st.executeUpdate(updateJoueur);
 			
 			System.out.println("Le joueur " + value.getPseudo().toUpperCase() + " a été modifié.");
 			return true;
@@ -111,9 +110,9 @@ public class JoueurJDBC implements JoueurDAO{
 	@Override
 	public boolean delete(Joueur value) throws Exception {
 		try {
-			String updateAdmin = "DELETE FROM Joueur WHERE idJoueur = ?;";
+			String updateJoueur = "DELETE FROM Joueur WHERE idJoueur = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			PreparedStatement st  = con.prepareStatement(updateJoueur);
 			st.setInt(1, value.getId());
 			
 			st.executeUpdate();

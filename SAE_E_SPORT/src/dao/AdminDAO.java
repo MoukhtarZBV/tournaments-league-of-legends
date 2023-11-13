@@ -1,7 +1,8 @@
 package dao;
 
-import entites.Administrateur;
 import java.util.Optional;
+
+import modele.Administrateur;
 
 public interface AdminDAO extends DAO<Administrateur, Integer> {
 	

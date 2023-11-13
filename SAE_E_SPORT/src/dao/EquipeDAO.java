@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Equipe;
+import modele.Equipe;
 
 public interface EquipeDAO extends DAO<Equipe, Integer>{
 	
