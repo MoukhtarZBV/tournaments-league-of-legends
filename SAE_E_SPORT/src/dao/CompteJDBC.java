@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Compte;
-import entites.TypeCompte;
+import modele.Compte;
+import modele.TypeCompte;
 
 public class CompteJDBC implements CompteDAO{
 	

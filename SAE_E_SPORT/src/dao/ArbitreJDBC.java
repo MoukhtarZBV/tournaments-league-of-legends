@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Arbitre;
+import modele.Arbitre;
 
 public class ArbitreJDBC implements ArbitreDAO{
 	

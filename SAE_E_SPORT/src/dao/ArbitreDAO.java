@@ -2,7 +2,7 @@ package dao;
 
 import java.util.Optional;
 
-import entites.Arbitre;
+import modele.Arbitre;
 
 public interface ArbitreDAO extends DAO<Arbitre,Integer>{
 	

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Administrateur;
+import modele.Administrateur;
 
 public class AdminJDBC implements AdminDAO {
 	

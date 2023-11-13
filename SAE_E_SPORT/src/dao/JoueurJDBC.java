@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import entites.Joueur;
+import modele.Joueur;
 
 public class JoueurJDBC implements JoueurDAO{
 	

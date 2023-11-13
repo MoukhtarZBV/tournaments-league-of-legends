@@ -1,6 +1,6 @@
 package dao;
 
-import entites.Compte;
+import modele.Compte;
 
 public interface CompteDAO extends DAO<Compte,Integer>{
 

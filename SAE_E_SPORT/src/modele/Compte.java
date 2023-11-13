@@ -1,4 +1,4 @@
-package entites;
+package modele;
 
 public class Compte {
 	private int idCompte;
