@@ -7,7 +7,7 @@ public interface DAO <T, T1> {
 	   
     List <T> getAll() throws Exception;
 
-    Optional <T> getById(T1... id) throws Exception;
+    Optional <T> getById(T1 id) throws Exception;
 
     boolean add(T value) throws Exception;
 
