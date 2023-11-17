@@ -24,7 +24,7 @@ public class EquipeJDBC implements EquipeDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Equipe");
 		while(rs.next()) {
-			equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), rs.getString("pays")));
+			equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), rs.getString("nationalite")));
 		}
 		return equipes;
 	}
@@ -41,8 +41,8 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public boolean add(Equipe e) throws Exception {
-		CallableStatement cs = cn.prepareCall("insert into Equipe ('idEquipe','nomEquipe','rang','pays') values (NEXT VALUE FOR idEquipe,?,?,?)");
+	public boolean add(Equipe e) throws Exception {// modif values
+		CallableStatement cs = cn.prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (?,?,?,?)");
 		cs.setInt(1, e.getIdEquipe());
 		cs.setString(2, e.getNom());
 		cs.setInt(3, e.getRang());
