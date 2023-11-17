@@ -1,11 +1,12 @@
 package modele;
 
+import java.util.Objects;
+
 public class Compte {
 	private int idCompte;
 	private String login;
 	private String motDePasse;
 	private TypeCompte type;
-	
 	
 	// Constructeur
 	public Compte(int idCompte, String login, String motDePasse, TypeCompte type) {
@@ -14,7 +15,6 @@ public class Compte {
 		this.motDePasse = motDePasse;
 		this.type = type;
 	}
-	
 	
 	// Get
 	public int getId() {
@@ -33,7 +33,6 @@ public class Compte {
 		return this.type;
 	}
 	
-	
 	// Set	
 	public void setLogin(String login) {
 		this.login = login;
@@ -47,20 +46,22 @@ public class Compte {
 		this.type = type;
 	}
 	
-	
 	// Overrides
 	@Override
 	public boolean equals(Object o) {
+		if (o==this) return true;
+		if (o==null) return false;
 		if(o instanceof Compte) {
-			Compte j = (Compte) o;
-			if (this.idCompte == j.getId()) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			Compte c = (Compte) o;
+			return this.idCompte == c.getId();
+		} else {
+			return false;
 		}
-		return false;
+	}
+	
+	@Override 
+	public int hashCode() {
+		return Objects.hash(this.idCompte);
 	}
 	
 	@Override

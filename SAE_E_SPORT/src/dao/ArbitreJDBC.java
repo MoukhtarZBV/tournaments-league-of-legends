@@ -17,25 +17,30 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public static Connection con;
     
 	public ArbitreJDBC(Connection connect) {
-	    con = connect;
+	    con = ConnectionJDBC.getConnection();
 	}
 
 	@Override
 	public List<Arbitre> getAll() throws Exception {
-		Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select * from Arbitre");
-        List<Arbitre> listeArbitres = new ArrayList<Arbitre>();
-        
-        while (rs.next()) {
-        	listeArbitres.add(new Arbitre(rs.getInt("idArbitre"),
-            		                 rs.getString("nom"),
-            		                 rs.getString("prenom")));  	        
-        }
+        List<Arbitre> listeArbitres = new ArrayList<>();
+		try {
+			Statement st = con.createStatement();
+	        ResultSet rs = st.executeQuery("select * from Arbitre");
+	        
+	        while (rs.next()) {
+	        	listeArbitres.add(new Arbitre(rs.getInt("idArbitre"),
+	            		                 rs.getString("nom"),
+	            		                 rs.getString("prenom")));  	        
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         return listeArbitres;
 	}
 
 	@Override
 	public Optional<Arbitre> getById(Integer id) throws Exception {
+		Optional<Arbitre> opt = Optional.empty();
 		try {
 			String req = "SELECT * FROM Arbitre WHERE idArbitre = ?;";
 			
@@ -44,15 +49,17 @@ public class ArbitreJDBC implements ArbitreDAO{
 			
 			ResultSet rs = st.executeQuery(req);
 			
-			return Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
+			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
 			
 		} catch (SQLException e) {
-			return Optional.empty();
+			e.printStackTrace();
 		}
+		return opt;
 	}
 	
 	@Override
 	public Optional<Arbitre> getByNomPrenom(String nom, String prenom) throws Exception {
+		Optional<Arbitre> opt = Optional.empty();
 		try {
 			String req = "SELECT * FROM Arbitre WHERE nom = ? AND prenom = ?;";
 			
@@ -62,15 +69,17 @@ public class ArbitreJDBC implements ArbitreDAO{
 			
 			ResultSet rs = st.executeQuery(req);
 			
-			return Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
+			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
 			
 		} catch (SQLException e) {
-			return Optional.empty();
+			e.printStackTrace();
 		}
+		return opt;
 	}
 
 	@Override
 	public boolean add(Arbitre value) throws Exception {
+		boolean res = false;
 		try {
 			String addArbitre = "INSERT INTO Arbitre VALUES (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
 			
@@ -82,15 +91,17 @@ public class ArbitreJDBC implements ArbitreDAO{
 			st.executeUpdate(addArbitre);
 			
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom()  +" a été ajouté.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 	@Override
 	public boolean update(Arbitre value) throws Exception {
+		boolean res = false;
 		try {
 			String updateArbitre = "UPDATE Arbitre "
 					   		   + "SET nom = ?, prenom = ?"
@@ -104,15 +115,17 @@ public class ArbitreJDBC implements ArbitreDAO{
 			st.executeUpdate(updateArbitre);
 			
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom() + " a été modifié.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 	@Override
 	public boolean delete(Arbitre value) throws Exception {
+		boolean res = false;
 		try {
 			String updateArbitre = "DELETE FROM Arbitre WHERE idArbitre = ?;";
 			
@@ -122,11 +135,12 @@ public class ArbitreJDBC implements ArbitreDAO{
 			st.executeUpdate();
 			
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom() + " a été supprimé.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 }

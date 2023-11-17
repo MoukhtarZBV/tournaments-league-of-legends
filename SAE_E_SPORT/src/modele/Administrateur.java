@@ -1,11 +1,12 @@
 package modele;
 
+import java.util.Objects;
+
 public class Administrateur {
 	
 	private    int idAdministrateur;
 	private String nomAdmin;
 	private String prenomAdmin;
-	
 	
 	// Constructeur
 	public Administrateur(int id, String nom, String prenom) {
@@ -13,7 +14,6 @@ public class Administrateur {
 		this.prenomAdmin      = prenom;
 		this.idAdministrateur = id;
 	}
-	
 	
 	// Get
 	public int getId() {
@@ -37,22 +37,27 @@ public class Administrateur {
 		this.prenomAdmin = prenom;
 	}
 	
-	
 	// Overrides
 	@Override
     public boolean equals(Object o) {
- 
         if (o == this) {
             return true;
         }
- 
-        if (!(o instanceof Administrateur)) {
-            return false;
+        if (o == null) {
+        	return false;
         }
-         
-        Administrateur a = (Administrateur) o;
-        return a.getId() == this.getId();
+        if (o instanceof Administrateur) {
+        	Administrateur a = (Administrateur) o;
+            return a.getId() == this.getId();
+        } else {
+        	return false;
+        }
     }
+	
+	@Override 
+	public int hashCode() {
+		return Objects.hash(this.idAdministrateur);
+	}
 	
 	@Override
 	public String toString() {

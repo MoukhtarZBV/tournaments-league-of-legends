@@ -1,11 +1,12 @@
 package modele;
 
+import java.util.Objects;
+
 public class Arbitre {
 	
 	private int idArbitre;
 	private String nomArbitre;
 	private String prenomArbitre;
-	
 	
 	// Constructeur
 	public Arbitre(int idArbitre, String nomArbitre, String prenomArbitre) {
@@ -13,7 +14,6 @@ public class Arbitre {
 		this.nomArbitre = nomArbitre;
 		this.prenomArbitre = nomArbitre;
 	}
-	
 	
 	// Get
 	public int getId() {
@@ -28,7 +28,6 @@ public class Arbitre {
 		return this.prenomArbitre;
 	}
 	
-	
 	// Set
 	public void setNom(String nomArbitre) {
 		this.nomArbitre = nomArbitre;
@@ -38,20 +37,22 @@ public class Arbitre {
 		this.prenomArbitre = prenomArbitre;
 	}
 	
-	
 	// Overrides
 	@Override
 	public boolean equals(Object o) {
+		if (o==null) return false;
+		if (o==this) return true;
 		if(o instanceof Arbitre) {
 			Arbitre a = (Arbitre) o;
-			if (this.idArbitre == a.getId()) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			return this.idArbitre == a.getId(); 
+		} else {
+			return false;
 		}
-		return false;
+	}
+	
+	@Override 
+	public int hashCode() {
+		return Objects.hash(this.idArbitre);
 	}
 	
 	@Override

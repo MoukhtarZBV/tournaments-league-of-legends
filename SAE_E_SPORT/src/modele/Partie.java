@@ -2,6 +2,7 @@ package modele;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Objects;
 
 public class Partie {
 
@@ -37,6 +38,23 @@ public class Partie {
 	
 	public Tournoi getTournoi() {
 		return this.tournoi;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o==null) return false;
+		if (o==this) return true;
+		if (o instanceof Partie) {
+			Partie p = (Partie) o;
+			return p.getDate()==this.date && p.getHeure()==this.heure;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.date, this.heure);
 	}
 	
 }

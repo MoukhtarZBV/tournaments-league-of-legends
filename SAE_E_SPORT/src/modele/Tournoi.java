@@ -1,6 +1,7 @@
 package modele;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class Tournoi {
 
@@ -63,5 +64,25 @@ public class Tournoi {
 	public Date getDateFin() {
 		return dateFin;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(idTournoi);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof Tournoi) {
+			Tournoi other = (Tournoi) obj;
+			return idTournoi == other.idTournoi;
+		} 
+		return false;
+	}
+	
+	
 	
 }
