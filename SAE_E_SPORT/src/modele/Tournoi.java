@@ -9,16 +9,33 @@ public class Tournoi {
 	private Niveau niveau;
 	private Date dateDebut;
 	private Date dateFin;
+	private Pays pays;
+	private Compte compte;
 	private Equipe vainqueur;
 	
-	public Tournoi(int idTournoi, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin) {
+	public Tournoi(int idTournoi, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) {
 		this.idTournoi = idTournoi;
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
+		this.pays = pays;
+		this.compte = null;
+		this.niveau = null;
 	}
 
+	public Compte getCompte() {
+		return this.compte;
+	}
+	
+	public void setCompte(Compte compte) {
+		this.compte = compte;
+	}
+	
+	public Pays getPays() {
+		return this.pays;
+	}
+	
 	public Equipe getVainqueur() {
 		return vainqueur;
 	}

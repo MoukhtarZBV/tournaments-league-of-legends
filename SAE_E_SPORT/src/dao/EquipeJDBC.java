@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import modele.Equipe;
+import modele.Pays;
 
 public class EquipeJDBC implements EquipeDAO{
 
@@ -24,7 +25,7 @@ public class EquipeJDBC implements EquipeDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Equipe");
 		while(rs.next()) {
-			equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), rs.getString("pays")));
+			equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("pays"))));
 		}
 		return equipes;
 	}
@@ -35,7 +36,7 @@ public class EquipeJDBC implements EquipeDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 		if(rs.next()) {
-			equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), rs.getString("pays")));
+			equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("pays"))));
 		}
 		return equipes;
 	}
@@ -46,7 +47,7 @@ public class EquipeJDBC implements EquipeDAO{
 		cs.setInt(1, e.getIdEquipe());
 		cs.setString(2, e.getNom());
 		cs.setInt(3, e.getRang());
-		cs.setString(4, e.getPays());
+		cs.setString(4, e.getNationnalité().toString());
 		return cs.executeUpdate()>0;
 	}
 
@@ -55,7 +56,7 @@ public class EquipeJDBC implements EquipeDAO{
 		CallableStatement cs = cn.prepareCall("update Equipe set nomEquipe = ?, rang = ?, pays = ? where idEquipe = "+e.getIdEquipe());
 		cs.setString(1, e.getNom());
 		cs.setInt(2, e.getRang());
-		cs.setString(3, e.getPays());
+		cs.setString(3, e.getNationnalité().toString());
 		return cs.executeUpdate()>0;
 	}
 
@@ -71,7 +72,7 @@ public class EquipeJDBC implements EquipeDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Equipe where nomEquipe = "+nom);	
 		if (rs.next()) {
-			equipe = Optional.of(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), rs.getString("pays")));
+			equipe = Optional.of(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("pays"))));
 		}
 		return equipe;
 	}

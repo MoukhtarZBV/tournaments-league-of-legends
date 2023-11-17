@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import modele.Niveau;
+import modele.Pays;
 import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO{
@@ -26,7 +27,7 @@ public class TournoiJDBC implements TournoiDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Tournoi");
 		while(rs.next()) {
-			tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin")));
+			tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("pays"))));
 		}
 		return tournois;
 	}
@@ -37,7 +38,7 @@ public class TournoiJDBC implements TournoiDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Tournoi where idTournoi = "+ id);
 		if(rs.next()) {
-			tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin")));
+			tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("pays"))));
 		}
 		return Optional.empty();
 	}
