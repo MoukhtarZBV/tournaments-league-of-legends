@@ -67,12 +67,6 @@ public class CreateDB {
 		}
 		
 		try {
-			stmt.executeUpdate("DROP TABLE NiveauTournoi");
-		} catch (SQLException e) {
-			System.out.println("Drop NiveauTournoi échoué");
-		}
-		
-		try {
 			stmt.executeUpdate("DROP TABLE Arbitre");
 		} catch (SQLException e) {
 			System.out.println("Drop Arbitre échoué");
@@ -88,6 +82,12 @@ public class CreateDB {
 			stmt.executeUpdate("DROP TABLE Tournoi");
 		} catch (SQLException e) {
 			System.out.println("Drop Tournoi échoué");
+		}
+		
+		try {
+			stmt.executeUpdate("DROP TABLE NiveauTournoi");
+		} catch (SQLException e) {
+			System.out.println("Drop NiveauTournoi échoué");
 		}
 		
 		try {
@@ -236,7 +236,8 @@ public class CreateDB {
 					+ "login VARCHAR(30),"
 					+ "motDePasse VARCHAR(30),"
 					+ "type VARCHAR(20),"
-					+ "CONSTRAINT PK_Compte_idCompte PRIMARY KEY (idCompte))");
+					+ "CONSTRAINT PK_Compte_idCompte PRIMARY KEY (idCompte),"
+					+ "CONSTRAINT FK_Compte_type FOREIGN KEY (type) REFERENCES TypeCompte(type))");
 			System.out.println("-- Table Compte créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -272,6 +273,17 @@ public class CreateDB {
 			System.exit(-1);
 		}
 		
+		// Table NiveauTournoi
+		try {
+			stmt.executeUpdate("CREATE TABLE NiveauTournoi ("
+					+ "niveau VARCHAR(30),"
+					+ "CONSTRAINT PK_NiveauTournoi_niveau PRIMARY KEY (niveau))");
+			System.out.println("-- Table NiveauTournoi créée");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
 		// Table Tournoi
 		try {
 			stmt.executeUpdate("CREATE TABLE Tournoi ("
@@ -286,7 +298,8 @@ public class CreateDB {
 					+ "CONSTRAINT PK_Tournoi_idTournoi PRIMARY KEY (idTournoi)," 
 					+ "CONSTRAINT FK_Tournoi_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
 					+ "CONSTRAINT FK_Tournoi_idCompte FOREIGN KEY (idCompte) REFERENCES Compte(idCompte),"
-					+ "CONSTRAINT FK_Tournoi_nomPays FOREIGN KEY (nomPays) REFERENCES Pays(nomPays))");
+					+ "CONSTRAINT FK_Tournoi_nomPays FOREIGN KEY (nomPays) REFERENCES Pays(nomPays),"
+					+ "CONSTRAINT FK_Tournoi_niveau FOREIGN KEY (niveau) REFERENCES NiveauTournoi(niveau))");
 			System.out.println("-- Table Tournoi créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -318,17 +331,6 @@ public class CreateDB {
 					+ "prenomArbitre VARCHAR(50),"
 					+ "CONSTRAINT PK_Arbitre_idArbitre PRIMARY KEY (idArbitre))");
 			System.out.println("-- Table Arbitre créée");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		
-		// Table NiveauTournoi
-		try {
-			stmt.executeUpdate("CREATE TABLE NiveauTournoi ("
-					+ "niveau VARCHAR(30),"
-					+ "CONSTRAINT PK_NiveauTournoi_niveau PRIMARY KEY (niveau))");
-			System.out.println("-- Table NiveauTournoi créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(-1);
