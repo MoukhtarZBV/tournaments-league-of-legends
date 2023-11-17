@@ -1,0 +1,218 @@
+----------------------------------------------------------------
+Fri Nov 17 14:27:45 CET 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-018b-dd77-4cf2-ffffd5b1b81c 
+on database directory C:\Users\moukh\Documents\CoursS3\SAEA01\SAE-e-sport\SAE_E_SPORT\BDD\BDD  with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@22d8cfe0 
+Loaded from file:/C:/Users/moukh/Documents/CoursS3/SAEA01/SAE-e-sport/SAE_E_SPORT/derby.jar
+java.vendor=Eclipse Adoptium
+java.runtime.version=17.0.8+7
+user.dir=C:\Users\moukh\Documents\CoursS3\SAEA01\SAE-e-sport\SAE_E_SPORT
+derby.system.home=C:\Users\moukh\Documents\CoursS3\SAEA01\SAE-e-sport\SAE_E_SPORT/BDD
+Database Class Loader started - derby.database.classpath=''
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 787), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 787), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Pays
+ERROR X0Y25: Operation 'DROP CONSTRAINT' cannot be performed on object 'PK_PAYS_NOMPAYS' because CONSTRAINT 'FK_EQUIPE_NATIONALITE' is dependent on that object.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:373)
+	at org.apache.derby.iapi.sql.dictionary.ConstraintDescriptor.prepareToInvalidate(ConstraintDescriptor.java:584)
+	at org.apache.derby.impl.sql.depend.BasicDependencyManager.coreInvalidateFor(BasicDependencyManager.java:437)
+	at org.apache.derby.impl.sql.depend.BasicDependencyManager.invalidateFor(BasicDependencyManager.java:298)
+	at org.apache.derby.impl.sql.execute.DropTableConstantAction.dropAllConstraintDescriptors(DropTableConstantAction.java:387)
+	at org.apache.derby.impl.sql.execute.DropTableConstantAction.executeConstantAction(DropTableConstantAction.java:222)
+	at org.apache.derby.impl.sql.execute.MiscResultSet.open(MiscResultSet.java:61)
+	at org.apache.derby.impl.sql.GenericPreparedStatement.executeStmt(GenericPreparedStatement.java:436)
+	at org.apache.derby.impl.sql.GenericPreparedStatement.execute(GenericPreparedStatement.java:317)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeStatement(EmbedStatement.java:1242)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:630)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:143)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 797), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 797), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Equipe
+ERROR X0Y25: Operation 'DROP CONSTRAINT' cannot be performed on object 'PK_EQUIPE_IDEQUIPE' because CONSTRAINT 'FK_JOUEUR_IDEQUIPE' is dependent on that object.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:373)
+	at org.apache.derby.iapi.sql.dictionary.ConstraintDescriptor.prepareToInvalidate(ConstraintDescriptor.java:584)
+	at org.apache.derby.impl.sql.depend.BasicDependencyManager.coreInvalidateFor(BasicDependencyManager.java:437)
+	at org.apache.derby.impl.sql.depend.BasicDependencyManager.invalidateFor(BasicDependencyManager.java:298)
+	at org.apache.derby.impl.sql.execute.DropTableConstantAction.dropAllConstraintDescriptors(DropTableConstantAction.java:387)
+	at org.apache.derby.impl.sql.execute.DropTableConstantAction.executeConstantAction(DropTableConstantAction.java:222)
+	at org.apache.derby.impl.sql.execute.MiscResultSet.open(MiscResultSet.java:61)
+	at org.apache.derby.impl.sql.GenericPreparedStatement.executeStmt(GenericPreparedStatement.java:436)
+	at org.apache.derby.impl.sql.GenericPreparedStatement.execute(GenericPreparedStatement.java:317)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeStatement(EmbedStatement.java:1242)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:630)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:161)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Partie
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'PARTIE' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:173)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Arbitre
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'ARBITRE' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:179)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE NiveauTournoi
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'NIVEAUTOURNOI' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:185)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Tournoi
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'TOURNOI' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:191)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Administrateur
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'ADMINISTRATEUR' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:197)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Participer
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'PARTICIPER' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:203)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Jouer
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'JOUER' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:209)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Arbitrer
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'ARBITRER' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:215)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 802), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: DROP TABLE Associer
+ERROR 42Y55: 'DROP TABLE' cannot be performed on 'ASSOCIER' because it does not exist.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.justGetDescriptor(DDLStatementNode.java:364)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:335)
+	at org.apache.derby.impl.sql.compile.DDLStatementNode.getTableDescriptor(DDLStatementNode.java:287)
+	at org.apache.derby.impl.sql.compile.DropTableNode.bindStatement(DropTableNode.java:97)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:610)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:221)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 840), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Fri Nov 17 14:27:46 CET 2023 Thread[main,5,main] (XID = 840), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: CREATE TABLE Pays (nomPays VARCHAR(50),CONSTRAINT PK_Pays_nomPays PRIMARY KEY (nomPays))
+ERROR X0Y32: Table/View 'PAYS' already exists in Schema 'APP'.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:373)
+	at org.apache.derby.impl.sql.catalog.DataDictionaryImpl.duplicateDescriptorException(DataDictionaryImpl.java:1932)
+	at org.apache.derby.impl.sql.catalog.DataDictionaryImpl.addDescriptor(DataDictionaryImpl.java:1923)
+	at org.apache.derby.impl.sql.execute.CreateTableConstantAction.executeConstantAction(CreateTableConstantAction.java:238)
+	at org.apache.derby.impl.sql.execute.MiscResultSet.open(MiscResultSet.java:61)
+	at org.apache.derby.impl.sql.GenericPreparedStatement.executeStmt(GenericPreparedStatement.java:436)
+	at org.apache.derby.impl.sql.GenericPreparedStatement.execute(GenericPreparedStatement.java:317)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeStatement(EmbedStatement.java:1242)
+	at org.apache.derby.impl.jdbc.EmbedStatement.execute(EmbedStatement.java:630)
+	at org.apache.derby.impl.jdbc.EmbedStatement.executeUpdate(EmbedStatement.java:179)
+	at dao.CreateDB.createTables(CreateDB.java:309)
+	at dao.CreateDB.<init>(CreateDB.java:124)
+	at dao.CreateDB.main(CreateDB.java:113)
+Cleanup action completed
