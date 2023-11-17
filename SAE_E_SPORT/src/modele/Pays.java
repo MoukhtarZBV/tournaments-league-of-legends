@@ -2,6 +2,6 @@ package modele;
 
 public enum Pays {
 
-		FRANCE, TAIWAN
+		FRANCE, TAIWAN, PORTUGAL, ALBANIE, BRESIL
 	
 }

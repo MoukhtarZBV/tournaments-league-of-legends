@@ -1,31 +1,29 @@
 package modele;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.sql.Date;
+import java.sql.Time;
 
 public class Partie {
 
-	private LocalDate date;
-	private LocalTime heure;
+	private Date date;
+	private Time heure;
 	private String deroulement;
-	private Equipe equipe1;
-	private Equipe equipe2;
+	private Equipe idEquipe;
 	private Tournoi tournoi;
 	
-	public Partie(LocalDate date, LocalTime heure, String deroulement, Equipe equipe1, Equipe equipe2, Tournoi tournoi) {
+	public Partie(Date date, Time heure, String deroulement, Equipe idEquipe, Tournoi tournoi) {
 		this.date = date;
 		this.heure = heure;
 		this.deroulement = deroulement;
-		this.equipe1 = equipe1;
-		this.equipe2 = equipe2;
+		this.idEquipe = idEquipe;
 		this.tournoi = tournoi;
 	}
 
-	public LocalDate getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public LocalTime getHeure() {
+	public Time getHeure() {
 		return heure;
 	}
 
@@ -33,12 +31,8 @@ public class Partie {
 		return deroulement;
 	}
 
-	public Equipe getEquipe1() {
-		return equipe1;
-	}
-
-	public Equipe getEquipe2() {
-		return equipe2;
+	public Equipe getEquipeGagnant() {
+		return idEquipe;
 	}
 	
 	public Tournoi getTournoi() {
