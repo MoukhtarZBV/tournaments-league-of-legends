@@ -17,11 +17,7 @@ public class TestInsertion {
 		Connection dbConnection = DriverManager.getConnection(urlConnexion);
 		
 		EquipeJDBC equipe = new EquipeJDBC(dbConnection);
-		/*
-		equipe.add(new Equipe(4,"Danois",11,"Portugal"));
-		equipe.add(new Equipe(2,"Gnugnugnu",12,"Albanie"));
-		equipe.add(new Equipe(1,"RHHHHHHHHHHHH",1,"Brésil"));
-		*/
+		
 		Statement st = dbConnection.createStatement();
 		String req = "DELETE FROM EQUIPE";
 		st.executeUpdate(req);
