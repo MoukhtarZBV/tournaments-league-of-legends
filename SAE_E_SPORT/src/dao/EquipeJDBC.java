@@ -25,7 +25,7 @@ public class EquipeJDBC implements EquipeDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Equipe");
 		while(rs.next()) {
-			equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), rs.getString("nationalite")));
+			equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite"))));
 		}
 		return equipes;
 	}
@@ -36,7 +36,7 @@ public class EquipeJDBC implements EquipeDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 		if(rs.next()) {
-			equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("pays"))));
+			equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite"))));
 		}
 		return equipes;
 	}
