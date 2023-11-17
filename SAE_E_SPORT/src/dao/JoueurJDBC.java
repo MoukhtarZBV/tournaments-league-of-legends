@@ -16,25 +16,30 @@ public class JoueurJDBC implements JoueurDAO{
 	
 	public static Connection con;
     
-	public JoueurJDBC(Connection connect) {
-	    con = connect;
+	public JoueurJDBC() {
+	    con = ConnectionJDBC.getConnection();
 	}
 
 	@Override
 	public List<Joueur> getAll() throws Exception {
+        List<Joueur> listeJoueurs = new ArrayList<Joueur>();
+        try {
 		Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select * from joueur");
-        List<Joueur> listeJoueurs = new ArrayList<Joueur>();
         
         while (rs.next()) {
         	listeJoueurs.add(new Joueur(rs.getInt("idJoueur"),
             		                 rs.getString("pseudo")));  	        
+        }
+        } catch (SQLException e) {
+        	e.printStackTrace();
         }
         return listeJoueurs;
 	}
 
 	@Override
 	public Optional<Joueur> getById(Integer id) throws Exception {
+		Optional<Joueur> opt = Optional.empty();
 		try {
 			String req = "SELECT * FROM Joueur WHERE idJoueur = ?;";
 			
@@ -43,15 +48,17 @@ public class JoueurJDBC implements JoueurDAO{
 			
 			ResultSet rs = st.executeQuery(req);
 			
-			return Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
+			opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
 			
 		} catch (SQLException e) {
-			return Optional.empty();
+			e.printStackTrace();
 		}
+		return opt;
 	}
 	
 	@Override
 	public Optional<Joueur> getByPseudo(String value) throws Exception {
+		Optional<Joueur> opt = Optional.empty();
 		try {
 			String req = "SELECT * FROM Joueur WHERE pseudo = ?;";
 			
@@ -60,15 +67,17 @@ public class JoueurJDBC implements JoueurDAO{
 			
 			ResultSet rs = st.executeQuery(req);
 			
-			return Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
+			opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
 			
 		} catch (SQLException e) {
-			return Optional.empty();
+			e.printStackTrace();
 		}
+		return opt;
 	}
 
 	@Override
 	public boolean add(Joueur value) throws Exception {
+		boolean res = false;
 		try {
 			String addJoueur = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?)";
 			
@@ -79,15 +88,17 @@ public class JoueurJDBC implements JoueurDAO{
 			st.executeUpdate(addJoueur);
 			
 			System.out.println("Le joueur "+ value.getPseudo().toUpperCase() +" a été ajouté.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 	@Override
 	public boolean update(Joueur value) throws Exception {
+		boolean res = false;
 		try {
 			String updateJoueur = "UPDATE Joueur "
 					   		   + "SET pseudo = ?"
@@ -100,15 +111,17 @@ public class JoueurJDBC implements JoueurDAO{
 			st.executeUpdate(updateJoueur);
 			
 			System.out.println("Le joueur " + value.getPseudo().toUpperCase() + " a été modifié.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();;
 		}
+		return res;
 	}
 
 	@Override
 	public boolean delete(Joueur value) throws Exception {
+		boolean res = false;
 		try {
 			String updateJoueur = "DELETE FROM Joueur WHERE idJoueur = ?;";
 			
@@ -118,11 +131,12 @@ public class JoueurJDBC implements JoueurDAO{
 			st.executeUpdate();
 			
 			System.out.println("Le joueur " + value.getPseudo().toUpperCase() + " a été supprimé.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 }

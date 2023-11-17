@@ -18,27 +18,32 @@ public class CompteJDBC implements CompteDAO{
 	
 	public static Connection con;
     
-	public CompteJDBC(Connection connect) {
-	    con = connect;
+	public CompteJDBC() {
+	    con = ConnectionJDBC.getConnection();
 	}
 
 	@Override
 	public List<Compte> getAll() throws Exception {
-		Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select * from Compte");
-        List<Compte> listeComptes = new ArrayList<Compte>();
-        
-        while (rs.next()) {
-        	listeComptes.add(new Compte(rs.getInt("idCompte"),
-            		                 rs.getString("login"),
-            		                 rs.getString("motDePasse"),
-            		                 TypeCompte.valueOf(rs.getString("type"))));  	        
-        }
+        List<Compte> listeComptes = new ArrayList<>();
+		try {
+			Statement st = con.createStatement();
+	        ResultSet rs = st.executeQuery("select * from Compte");
+	        
+	        while (rs.next()) {
+	        	listeComptes.add(new Compte(rs.getInt("idCompte"),
+	            		                 rs.getString("login"),
+	            		                 rs.getString("motDePasse"),
+	            		                 TypeCompte.valueOf(rs.getString("type"))));  	        
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         return listeComptes;
 	}
 
 	@Override
 	public Optional<Compte> getById(Integer id) throws Exception {
+		Optional<Compte> compte = Optional.empty();
 		try {
 			String req = "SELECT * FROM Compte WHERE idCompte = ?;";
 			
@@ -47,18 +52,20 @@ public class CompteJDBC implements CompteDAO{
 			
 			ResultSet rs = st.executeQuery(req);
 			
-			return Optional.ofNullable(new Compte(rs.getInt("idCompte"),
+			compte = Optional.ofNullable(new Compte(rs.getInt("idCompte"),
 	                 rs.getString("login"),
 	                 rs.getString("motDePasse"),
 	                 TypeCompte.valueOf(rs.getString("type"))));
 			
 		} catch (SQLException e) {
-			return Optional.empty();
+			e.printStackTrace();
 		}
+		return compte;
 	}
 
 	@Override
 	public boolean add(Compte value) throws Exception {
+		boolean res = false;
 		try {
 			String addCompte = "INSERT INTO Compte VALUES (NEXT VALUE FOR SEQ_Compte, ?, ?, ?)";
 			
@@ -66,20 +73,22 @@ public class CompteJDBC implements CompteDAO{
 			
 			st.setString(1, value.getLogin());
 			st.setString(2, value.getMotDePasse());
-			st.setString(3,value.getType().toString());
+			st.setString(3,value.getType().denomination());
 			
 			st.executeUpdate(addCompte);
 			
+			res = true;
 			System.out.println("Le compte "+ value.getLogin().toUpperCase() + " " + value.getMotDePasse() + value.getType() +" a été ajouté.");
-			return true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 	@Override
 	public boolean update(Compte value) throws Exception {
+		boolean res = false;
 		try {
 			String updateCompte = "UPDATE Compte "
 					   		   + "SET login = ?, motDePasse = ?, type = ?"
@@ -94,15 +103,17 @@ public class CompteJDBC implements CompteDAO{
 			st.executeUpdate(updateCompte);
 			
 			System.out.println("Le compte "+ value.getLogin().toUpperCase() + " " + value.getMotDePasse() + value.getType() + " a été modifié.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 	@Override
 	public boolean delete(Compte value) throws Exception {
+		boolean res = false;
 		try {
 			String updateCompte = "DELETE FROM Compte WHERE idCompte = ?;";
 			
@@ -112,11 +123,12 @@ public class CompteJDBC implements CompteDAO{
 			st.executeUpdate();
 			
 			System.out.println("Le compte "+ value.getLogin().toUpperCase() + " " + value.getMotDePasse() + value.getType() + " a été supprimé.");
-			return true;
+			res = true;
 			
 		} catch (SQLException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return res;
 	}
 
 }

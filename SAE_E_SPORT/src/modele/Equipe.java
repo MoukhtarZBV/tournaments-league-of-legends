@@ -2,20 +2,21 @@ package modele;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Equipe {
 
 	private int idEquipe;
 	private String nom;
 	private int rang;
-	private Pays nationnalité;
+	private Pays nationnalite;
 	private List<Joueur> joueurs;
 	
-	public Equipe(int id, String nom, int rang, Pays nationnalité) {
+	public Equipe(int id, String nom, int rang, Pays nationnalite) {
 		this.idEquipe = id;
 		this.nom = nom;
 		this.rang = rang;
-		this.nationnalité = nationnalité;
+		this.nationnalite = nationnalite;
 		this.joueurs = new LinkedList<>();
 	}
 
@@ -40,7 +41,24 @@ public class Equipe {
 	}
 
 	public Pays getNationnalité() {
-		return this.nationnalité;
+		return this.nationnalite;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o==this) return true;
+		if (o==null) return false;
+		if(o instanceof Equipe) {
+			Equipe e = (Equipe) o;
+			return this.idEquipe == e.getIdEquipe();
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.idEquipe);
 	}
 	
 }
