@@ -8,13 +8,14 @@ public class Equipe {
 	private int idEquipe;
 	private String nom;
 	private int rang;
-	private String nomPays;
+	private Pays nationnalité;
 	private List<Joueur> joueurs;
 	
-	public Equipe(int id, String nom, int rang, String pays) {
+	public Equipe(int id, String nom, int rang, Pays nationnalité) {
 		this.idEquipe = id;
 		this.nom = nom;
 		this.rang = rang;
+		this.nationnalité = nationnalité;
 		this.joueurs = new LinkedList<>();
 	}
 
@@ -38,8 +39,8 @@ public class Equipe {
 		return this.rang;
 	}
 
-	public String getPays() {
-		return this.nomPays;
+	public Pays getNationnalité() {
+		return this.nationnalité;
 	}
 	
 }
