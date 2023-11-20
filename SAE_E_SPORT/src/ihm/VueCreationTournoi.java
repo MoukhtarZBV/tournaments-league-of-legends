@@ -15,21 +15,30 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.swing.JFormattedTextField;
-import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.border.LineBorder;
 
 public class VueCreationTournoi extends JFrame {
-
-	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-
-	/**
-	 * Launch the application.
-	 */
+	
+	private 		 JTextField inputNom;
+	private 		  JComboBox inputNiveau;
+	private 		  JComboBox inputPays;
+	private JFormattedTextField inputDateDebut;
+	private JFormattedTextField inputDateFin;
+	
+	private JPanel     panelErreur;
+	private JTextField txtBorder, txtErreur;
+	
+	
+	// Main, lançant la fenêtre
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -43,24 +52,26 @@ public class VueCreationTournoi extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	
+	// Création la fenêtre
 	public VueCreationTournoi() {
-		// Fenêtre
+		
+		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 600);
 		setTitle("Nouveau tournoi");
 		
 		
-		// Panel principal
-		contentPane = new JPanel();
+		
+		///// PANEL PRINCIPAL \\\\\
+		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		
-		// Panel du haut
+		
+		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
 		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelTop.setLayout(new BorderLayout(0, 0));
@@ -68,88 +79,288 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Label titre
 		JLabel lblTitre = new JLabel("Nouveau tournoi");
-		lblTitre.setBorder(new EmptyBorder(30, 0, 30, 0));
+		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitre.setFont(new Font("DejaVu Sans", Font.PLAIN, 40));
 		panelTop.add(lblTitre, BorderLayout.CENTER);
 		
 		// Ligne colorée séparatrice
-		textField = new JTextField();
-		textField.setBackground(new Color(25, 25, 112));
-		textField.setEnabled(false);
-		textField.setEditable(false);
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 5));
-		panelTop.add(textField, BorderLayout.SOUTH);
+		JTextField ligneColoree = new JTextField();
+		ligneColoree.setBackground(new Color(25, 25, 112));
+		ligneColoree.setEnabled(false);
+		ligneColoree.setEditable(false);
+		ligneColoree.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		panelTop.add(ligneColoree, BorderLayout.SOUTH);
 		
 		
-		// Panel du milieu
+		
+		///// MAN PANEL MILIEU \\\\\
+		GridBagLayout gb_panelMain = new GridBagLayout();
+		gb_panelMain.columnWidths  = new int[]   {774, 0};
+		gb_panelMain.rowHeights    = new int[]   {0, 100, 100, 0, 0, 0};
+		gb_panelMain.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gb_panelMain.rowWeights    = new double[]{1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+
 		JPanel panelMain = new JPanel();
+		panelMain.setLayout(gb_panelMain);
 		panelMain.setBackground(new Color(255, 255, 255));
-		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
-		panelMain.setLayout(new GridLayout(5, 1, 10, 0));
+		panelMain.setBorder(new EmptyBorder(15, 50, 15, 50));
 		contentPane.add(panelMain, BorderLayout.CENTER);
+		
+		
+		///// PANEL ERREUR \\\\\
+		GridBagConstraints gbc_panelErreur = new GridBagConstraints();
+		gbc_panelErreur.insets = new Insets(0, 0, 5, 0);
+		gbc_panelErreur.fill   = GridBagConstraints.BOTH;
+		gbc_panelErreur.gridx  = 0;
+		gbc_panelErreur.gridy  = 0;
+		
+		panelErreur = new JPanel();
+		panelMain.add(panelErreur, gbc_panelErreur);
+		panelErreur.setLayout(new BorderLayout(0, 0));
+		
+		// Petite bordure rouge
+		txtBorder = new JTextField();
+		txtBorder.setText(" ");
+		txtBorder.setBorder(new EmptyBorder(0, 0, 0, 0));
+		txtBorder.setEnabled(false);
+		txtBorder.setEditable(false);
+		txtBorder.setMargin(new Insets(5, 5, 5, 5));
+		txtBorder.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		txtBorder.setBackground(new Color(255, 0, 0));
+		panelErreur.add(txtBorder, BorderLayout.WEST);
+		
+		// Label erreur
+		txtErreur = new JTextField();
+		txtErreur.setText("LES CHAMPS NE SONT PAS REMPLIS CORRECTEMENT");
+		txtErreur.setBorder(new EmptyBorder(2, 10, 2, 2));
+		txtErreur.setEditable(false);
+		txtErreur.setHorizontalAlignment(SwingConstants.LEFT);
+		txtErreur.setForeground(Color.RED);
+		txtErreur.setFont(new Font("Tahoma", Font.BOLD, 14));
+		txtErreur.setColumns(10);
+		txtErreur.setBackground(new Color(255, 204, 204));
+		panelErreur.add(txtErreur);
+		
+		
+		///// PANEL INFOS TOURNOIS \\\\\
+		GridBagConstraints gbc_panelInfosTournoi = new GridBagConstraints();
+		gbc_panelInfosTournoi.fill   = GridBagConstraints.BOTH;
+		gbc_panelInfosTournoi.insets = new Insets(0, 0, 5, 0);
+		gbc_panelInfosTournoi.gridx  = 0;
+		gbc_panelInfosTournoi.gridy  = 1;		
+
+		JPanel panelInfosTournoi = new JPanel();
+		panelInfosTournoi.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelInfosTournoi.setLayout(new BorderLayout(0, 0));
+		panelMain.add(panelInfosTournoi, gbc_panelInfosTournoi);
+		
+		// Titre infos
+		JLabel lblTitreInfos = new JLabel("  -- Infos Tournoi -------------");
+		lblTitreInfos.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		panelInfosTournoi.add(lblTitreInfos, BorderLayout.NORTH);
+		
+		
+		// Panel Inputs informations
+		JPanel panelInfos = new JPanel();
+		panelInfos.setLayout(new GridLayout(2, 0, 0, 0));
+		panelInfosTournoi.add(panelInfos, BorderLayout.CENTER);
 		
 		
 		// Panel Nom
 		JPanel panelNomTournoi = new JPanel();
 		panelNomTournoi.setBorder(new EmptyBorder(25, 35, 25, 35));
-		panelMain.add(panelNomTournoi);
 		panelNomTournoi.setLayout(new BoxLayout(panelNomTournoi, BoxLayout.X_AXIS));
+		panelInfos.add(panelNomTournoi);
 		
 		// Label Nom
-		JLabel lblNomTournoi = new JLabel("Nom du tournoi :");
-		lblNomTournoi.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNomTournoi.setForeground(new Color(0, 0, 0));
-		lblNomTournoi.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
-		panelNomTournoi.add(lblNomTournoi);
+		JLabel lblNom = new JLabel("Nom :");
+		lblNom.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNom.setForeground(new Color(0, 0, 0));
+		lblNom.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		panelNomTournoi.add(lblNom);
 		
-		Component horizontalStrut = Box.createHorizontalStrut(20);
+		Component horizontalStrut = Box.createHorizontalStrut(53);
 		panelNomTournoi.add(horizontalStrut);
 		
 		// Text field Nom
-		JTextField txtNom = new JTextField();
-		txtNom.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		txtNom.setColumns(35);
-		panelNomTournoi.add(txtNom);
+		inputNom = new JTextField();
+		inputNom.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		inputNom.setColumns(35);
+		panelNomTournoi.add(inputNom);
 		
 		
-		// Panel Nom
+		// Panel Niveau et Pays
+		JPanel panelNiveauPays = new JPanel();
+		panelNiveauPays.setLayout(new GridLayout(0, 2, 0, 0));
+		panelInfos.add(panelNiveauPays);
+		
+		
+		// Panel Niveau
+		JPanel panelNiveau = new JPanel();
+		panelNiveau.setBorder(new EmptyBorder(25, 35, 25, 5));
+		panelNiveau.setLayout(new BoxLayout(panelNiveau, BoxLayout.X_AXIS));
+		panelNiveauPays.add(panelNiveau);
+		
+		// Label Niveau
+		JLabel lblNiveau = new JLabel("Niveau :");
+		lblNiveau.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNiveau.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		panelNiveau.add(lblNiveau);
+		
+		Component horizontalStrut_3 = Box.createHorizontalStrut(30);
+		panelNiveau.add(horizontalStrut_3);
+		
+		// Combo box Niveau
+		inputNiveau = new JComboBox();
+		panelNiveau.add(inputNiveau);
+		
+		
+		// Panel Pays
+		JPanel panelPays = new JPanel();
+		panelPays.setBorder(new EmptyBorder(25, 5, 25, 35));
+		panelNiveauPays.add(panelPays);
+		panelPays.setLayout(new BoxLayout(panelPays, BoxLayout.X_AXIS));
+		
+		Component horizontalStrut_5 = Box.createHorizontalStrut(20);
+		panelPays.add(horizontalStrut_5);
+		
+		// Label Pays
+		JLabel lblPays = new JLabel("Pays :");
+		lblPays.setHorizontalAlignment(SwingConstants.LEFT);
+		lblPays.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		panelPays.add(lblPays);
+		
+		Component horizontalStrut_4 = Box.createHorizontalStrut(30);
+		panelPays.add(horizontalStrut_4);
+		
+		// Combo box pays
+		inputPays = new JComboBox();
+		panelPays.add(inputPays);
+		
+		
+		///// PANEL DATES \\\\\
+		GridBagConstraints gbc_panelDatesTournoi = new GridBagConstraints();
+		gbc_panelDatesTournoi.insets = new Insets(0, 0, 5, 0);
+		gbc_panelDatesTournoi.fill  = GridBagConstraints.BOTH;
+		gbc_panelDatesTournoi.gridx = 0;
+		gbc_panelDatesTournoi.gridy = 2;
+		
 		JPanel panelDatesTournoi = new JPanel();
-		panelDatesTournoi.setBorder(new EmptyBorder(0, 0, 0, 0));
-		panelMain.add(panelDatesTournoi);
-		panelDatesTournoi.setLayout(new GridLayout(0, 2, 0, 0));
+		panelDatesTournoi.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelDatesTournoi.setLayout(new BorderLayout(0, 0));
+		panelMain.add(panelDatesTournoi, gbc_panelDatesTournoi);
 		
+		// Titre dates
+		JLabel lblTitresDates = new JLabel("  -- Dates --------------------");
+		lblTitresDates.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		panelDatesTournoi.add(lblTitresDates, BorderLayout.NORTH);
+	
+		
+		// Panel inputs dates
+		JPanel panelDatesInputs = new JPanel();
+		panelDatesTournoi.add(panelDatesInputs, BorderLayout.CENTER);
+		panelDatesInputs.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		
+		// Panel dates début
 		JPanel panelDateDebut = new JPanel();
-		panelDateDebut.setBorder(new EmptyBorder(0, 35, 0, 0));
-		FlowLayout flowLayout = (FlowLayout) panelDateDebut.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
-		panelDatesTournoi.add(panelDateDebut);
+		panelDateDebut.setBorder(new EmptyBorder(25, 35, 25, 5));
+		panelDateDebut.setLayout(new BoxLayout(panelDateDebut, BoxLayout.X_AXIS));
+		panelDatesInputs.add(panelDateDebut);
 		
-		JLabel lblDateDeDebut = new JLabel("Date de début :");
+		// Label date début
+		JLabel lblDateDeDebut = new JLabel("Début :");
 		lblDateDeDebut.setHorizontalAlignment(SwingConstants.LEFT);
 		lblDateDeDebut.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
 		panelDateDebut.add(lblDateDeDebut);
 		
-		JFormattedTextField formattedTextField = new JFormattedTextField();
-		formattedTextField.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		formattedTextField.setColumns(10);
-		panelDateDebut.add(formattedTextField);
+		Component horizontalStrut_1 = Box.createHorizontalStrut(38);
+		panelDateDebut.add(horizontalStrut_1);
+
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		
-		JPanel panelDateDebut_1 = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panelDateDebut_1.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		panelDateDebut_1.setBorder(new EmptyBorder(0, 35, 0, 0));
-		panelDatesTournoi.add(panelDateDebut_1);
+		// Input date début
+		inputDateDebut = new JFormattedTextField(dateFormat);
+		inputDateDebut.setText("JJ/MM/AAAA");
+		inputDateDebut.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		inputDateDebut.setColumns(10);
+		panelDateDebut.add(inputDateDebut);
 		
-		JLabel lblDateDeFin = new JLabel("Date de fin :");
+		
+		// Panel date fin
+		JPanel panelDateFin = new JPanel();
+		panelDateFin.setBorder(new EmptyBorder(25, 5, 25, 35));
+		panelDateFin.setLayout(new BoxLayout(panelDateFin, BoxLayout.X_AXIS));
+		panelDatesInputs.add(panelDateFin);
+		
+		Component horizontalStrut_6 = Box.createHorizontalStrut(20);
+		panelDateFin.add(horizontalStrut_6);
+		
+		// Label date fin
+		JLabel lblDateDeFin = new JLabel("Fin :");
 		lblDateDeFin.setHorizontalAlignment(SwingConstants.LEFT);
 		lblDateDeFin.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
-		panelDateDebut_1.add(lblDateDeFin);
+		panelDateFin.add(lblDateDeFin);
 		
-		JFormattedTextField formattedTextField_1 = new JFormattedTextField();
-		formattedTextField_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		formattedTextField_1.setColumns(10);
-		panelDateDebut_1.add(formattedTextField_1);
+		Component horizontalStrut_2 = Box.createHorizontalStrut(45);
+		panelDateFin.add(horizontalStrut_2);
+		
+		// Input date fin
+		inputDateFin = new JFormattedTextField(dateFormat);
+		inputDateFin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		inputDateDebut.setText("JJ/MM/AAAA");
+		inputDateFin.setColumns(10);
+		panelDateFin.add(inputDateFin);
+		
+		
+		Component verticalStrut = Box.createVerticalStrut(10);
+		GridBagConstraints gbc_verticalStrut = new GridBagConstraints();
+		gbc_verticalStrut.insets = new Insets(0, 0, 5, 0);
+		gbc_verticalStrut.gridx = 0;
+		gbc_verticalStrut.gridy = 3;
+		panelMain.add(verticalStrut, gbc_verticalStrut);
+		
+		
+		///// PANEL BOUTONS \\\\\
+		GridBagConstraints gbc_panelBoutons = new GridBagConstraints();
+		gbc_panelBoutons.fill  = GridBagConstraints.BOTH;
+		gbc_panelBoutons.gridx = 0;
+		gbc_panelBoutons.gridy = 4;
+		
+		JPanel panelBoutons = new JPanel();
+		panelBoutons.setLayout(new GridLayout(1, 2, 50, 0));
+		panelBoutons.setBorder(new EmptyBorder(10, 100, 10, 100));
+		panelMain.add(panelBoutons, gbc_panelBoutons);
+		
+		// Bouton annuler
+		JButton btnAnnuler = new JButton("Annuler");
+		btnAnnuler.setBackground(new Color(255, 255, 255));
+		btnAnnuler.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnAnnuler.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panelBoutons.add(btnAnnuler);
+		
+		// Bouton valider
+		JButton btnValider = new JButton("Valider");
+		btnValider.setBackground(new Color(255, 255, 255));
+		btnValider.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnValider.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panelBoutons.add(btnValider);
+		
+		
+		this.effacerMessageErreur();
+	}
+	
+	
+	// Afficher le message d'erreur
+	public void afficherMessageErreur(String text) {
+		this.panelErreur.setVisible(true);
+		this.txtErreur.setText(text);
+	}
+	
+	// Effacer le message d'erreur
+	public void effacerMessageErreur() {
+		this.panelErreur.setVisible(false);
 	}
 
 }
