@@ -21,7 +21,7 @@ public class Tournoi {
 		this.dateFin = dateFin;
 		this.pays = pays;
 		this.compte = null;
-		this.niveau = null;
+		this.vainqueur = null;
 	}
 
 	public Compte getCompte() {

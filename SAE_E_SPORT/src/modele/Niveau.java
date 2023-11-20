@@ -14,4 +14,12 @@ public enum Niveau {
 		return this.denomination;
 	}
 	
+	public static Niveau getNiveau(String nom) {
+    	for (Niveau niveau : Niveau.values()) {
+    		if (niveau.denomination().equals(nom)) {
+    			return niveau;
+    		}
+    	}
+    	return null;
+    }
 }

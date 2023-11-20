@@ -47,12 +47,12 @@ public class TournoiJDBC implements TournoiDAO{
 
 	@Override
 	public boolean add(Tournoi t) throws Exception {
-		CallableStatement cs = cn.prepareCall("insert into Tournoi ('idTournoi','nomTournoi','niveau','dateDebut','dateFin','vainqueur') values (NEXT VALUE FOR idEquipe,?,?,?,?,?)");
+		CallableStatement cs = cn.prepareCall("insert into Tournoi (idTournoi,nomTournoi,niveau,dateDebut,dateFin,nomPays) values (NEXT VALUE FOR SEQ_Equipe,?,?,?,?,?)");
 		cs.setString(1, t.getNomTournoi());
-		cs.setString(2, t.getNiveau().toString());
+		cs.setString(2, t.getNiveau().denomination());
 		cs.setDate(3, t.getDateDebut());
 		cs.setDate(4, t.getDateFin());
-		cs.setInt(5, t.getVainqueur().getIdEquipe());
+		cs.setString(5, t.getPays().denomination());
 		return cs.executeUpdate()>0;
 	}
 

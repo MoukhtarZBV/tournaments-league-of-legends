@@ -19,6 +19,9 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Date;
 import java.time.LocalDate;
 import java.text.DateFormat;
@@ -51,8 +54,19 @@ public class VueCreationTournoi extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VueCreationTournoi frame = new VueCreationTournoi();
-					frame.setVisible(true);
+					String dirProjetJava = System.getProperty("user.dir");
+					System.setProperty("derby.system.home", dirProjetJava + "/BDD");		
+					String urlConnexion = "jdbc:derby:BDD;create=true";
+					
+					try {
+						DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
+						Connection cn = DriverManager.getConnection(urlConnexion);
+						VueCreationTournoi frame = new VueCreationTournoi(cn);
+						frame.setVisible(true);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,9 +76,9 @@ public class VueCreationTournoi extends JFrame {
 
 	
 	// Création la fenêtre
-	public VueCreationTournoi() {
+	public VueCreationTournoi(Connection cn) {
 		
-		ControleurTournoi controleur = new ControleurTournoi(this);
+		ControleurTournoi controleur = new ControleurTournoi(this, cn);
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -414,11 +428,11 @@ public class VueCreationTournoi extends JFrame {
 	}
 	
 	public Pays getPays() {
-		return Pays.valueOf((String) this.inputPays.getSelectedItem());
+		return Pays.getPays((String) this.inputPays.getSelectedItem());
 	}
 	
 	public Niveau getNiveau() {
-		return Niveau.valueOf((String) this.inputNiveau.getSelectedItem());
+		return Niveau.getNiveau((String) this.inputNiveau.getSelectedItem());
 	}
 	
 	private static LocalDate getDate(String date) {
@@ -441,7 +455,7 @@ public class VueCreationTournoi extends JFrame {
         return date;
 	}
 	
-	public Date getDateFin() {
+	public java.sql.Date getDateFin() {
 		java.sql.Date date = java.sql.Date.valueOf(getDate(this.inputDateFin.getText()));
         return date;
 	}

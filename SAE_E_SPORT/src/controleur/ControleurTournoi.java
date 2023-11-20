@@ -1,8 +1,10 @@
 package controleur;
 
 import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -32,28 +34,24 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 	
 	private String date;
 	
-	public ControleurTournoi(VueCreationTournoi vue) {
+	public ControleurTournoi(VueCreationTournoi vue, Connection cn) {
 		this.modele = new ModeleCreationTournoi();
-		this.etat = Etat.SAISIE;
+		this.etat = Etat.FIN_SAISIE;
 		this.vue = vue;
+		this.jdbc = new TournoiJDBC(cn);
 		
 		this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("BBBBBBBBBBBBBBBBBBBB");
-		
-		// Si l'action provient d'un bouton
 		JButton bouton = (JButton) e.getSource();
-			
 		switch (this.etat) {
 			case SAISIE:
 				if (bouton.getText() == "Annuler") {
 					System.exit(0);
 				}
 				break;
-				
 			case FIN_SAISIE:
 				if (bouton.getText() == "Annuler") {
 					System.exit(0);
@@ -73,9 +71,12 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 										vue.getNiveau(), 
 										vue.getDateDebut(), 
 										vue.getDateFin(), 
-										vue.getPays());
-								
+										vue.getPays());		
+								System.out.println(vue.getNiveau() + " - " + vue.getPays());
 								jdbc.add(tournoi);
+								for (Tournoi t : jdbc.getAll()) {
+									System.out.println(t);
+								}
 							}
 						} catch (SQLException e1) {
 							e1.printStackTrace();

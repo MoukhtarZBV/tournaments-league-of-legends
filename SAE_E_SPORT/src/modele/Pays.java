@@ -208,7 +208,7 @@ public enum Pays {
         return denomination;
     }
     
-    public Pays getPays(String nom) {
+    public static Pays getPays(String nom) {
     	for (Pays pays : Pays.values()) {
     		if (pays.denomination().equals(nom)) {
     			return pays;
