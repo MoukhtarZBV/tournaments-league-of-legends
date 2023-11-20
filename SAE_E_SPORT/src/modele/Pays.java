@@ -2,7 +2,7 @@ package modele;
 
 public enum Pays {
 
-	FRANCE("France"), TAIWAN("Taiwan"), PORTUGAL("Portugal"), ALBANIE("Albanie"), BRESIL("Bresil");
+	FRANCE("France"), TAIWAN("Taiwan"), PORTUGAL("Portugal"), ALBANIE("Albanie"), BRESIL("Bresil"),France("FR");
 	
 	private String denomination;
 	

@@ -15,26 +15,27 @@ import modele.Tournoi;
 
 public class PartieJDBC implements PartieDAO{
 
-	private static Connection cn;
+	private Connection cn;
+	
+	public PartieJDBC (Connection c) {
+		this.cn = c;
+	}
 	
 	@Override
 	public List<Partie> getAll() throws Exception {
 		List<Partie> parties = new ArrayList<>();
 		try {
-		    cn = ConnectionJDBC.getConnection();
-
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Partie");
 			while(rs.next()) {
-				TournoiJDBC tournoiBDD = new TournoiJDBC();
+				TournoiJDBC tournoiBDD = new TournoiJDBC(this.cn);
 				Tournoi tournoi = tournoiBDD.getById(rs.getInt("idTournoi")).get();
-				EquipeJDBC equipeBDD = new EquipeJDBC();
+				EquipeJDBC equipeBDD = new EquipeJDBC(this.cn);
 				Equipe equipe = equipeBDD.getById(rs.getInt("equipe")).get();
 				
 				parties.add(new Partie(rs.getDate("dateDebut"), rs.getTime("heureDebut"), rs.getString("deroulement"), equipe, tournoi));
 			}
 			
-			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -45,19 +46,17 @@ public class PartieJDBC implements PartieDAO{
 	public Optional<Partie> getById(Integer id) throws Exception {
 		Optional<Partie> partie = Optional.empty();
 		try {
-		    cn = ConnectionJDBC.getConnection();
 
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Partie where idPartie = "+id);
 			if (rs.next()) {
-				TournoiJDBC tournoiBDD = new TournoiJDBC();
+				TournoiJDBC tournoiBDD = new TournoiJDBC(this.cn);
 				Tournoi tournoi = tournoiBDD.getById(rs.getInt("idTournoi")).get();
-				EquipeJDBC equipeBDD = new EquipeJDBC();
+				EquipeJDBC equipeBDD = new EquipeJDBC(this.cn);
 				Equipe equipe = equipeBDD.getById(rs.getInt("equipe")).get();
 				partie = Optional.ofNullable(new Partie(rs.getDate("dateDebut"), rs.getTime("heureDebut"), rs.getString("deroulement"), equipe, tournoi));
 			}
 			
-			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -68,8 +67,6 @@ public class PartieJDBC implements PartieDAO{
 	public boolean add(Partie p) throws Exception {
 		boolean res = false;
 		try {
-		    cn = ConnectionJDBC.getConnection();
-
 			CallableStatement cs = cn.prepareCall("insert into Partie (date, heure, deroulement, idEquipe, idTournoi) values (?,?,?,?,?)");
 			cs.setDate(1, p.getDate());
 			cs.setTime(2, p.getHeure());
@@ -79,7 +76,8 @@ public class PartieJDBC implements PartieDAO{
 			cs.executeUpdate();
 			res = true;
 			
-			cn.close();
+			System.out.println("Partie ajoute");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +88,6 @@ public class PartieJDBC implements PartieDAO{
 	public boolean update(Partie p) throws Exception {
 		boolean res = false;
 		try {
-		    cn = ConnectionJDBC.getConnection();
 
 			CallableStatement cs = cn.prepareCall("update Partie (date, heure, deroulement, idEquipe, idTournoi) values (?,?,?,?,?)");
 			cs.setDate(1, p.getDate());
@@ -101,7 +98,8 @@ public class PartieJDBC implements PartieDAO{
 			cs.executeUpdate();
 			res = true;
 			
-			cn.close();
+			System.out.println("Partie mis a jour");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -112,15 +110,14 @@ public class PartieJDBC implements PartieDAO{
 	public boolean delete(Partie p) throws Exception {
 		boolean res = false;
 		try {
-		    cn = ConnectionJDBC.getConnection();
-
 			CallableStatement cs = cn.prepareCall("delete from Partie where datePartie = ?, heureDebut = ?)");
 			cs.setDate(1, p.getDate());
 			cs.setTime(2, p.getHeure());
 			cs.executeUpdate();
 			res = true;
 			
-			cn.close();
+			System.out.println("Partie supprime.");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

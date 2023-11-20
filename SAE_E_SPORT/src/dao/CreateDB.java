@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -12,14 +11,10 @@ public class CreateDB {
 	}
 
 	public CreateDB() {
-		String dirProjetJava = System.getProperty("user.dir");
-		System.setProperty("derby.system.home", dirProjetJava + "/BDD");		
-		String urlConnexion = "jdbc:derby:BDD;create=true";
-		
 		try {
-			DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-			Connection connection = DriverManager.getConnection(urlConnexion);
+			Connection connection = ConnectionJDBC.createConnection();
 			createTables(connection);
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -9,8 +9,8 @@ public class Compte {
 	private TypeCompte type;
 	
 	// Constructeur
-	public Compte(int idCompte, String login, String motDePasse, TypeCompte type) {
-		this.idCompte = idCompte;
+	public Compte(int id, String login, String motDePasse, TypeCompte type) {
+		this.idCompte = id;
 		this.login = login;
 		this.motDePasse = motDePasse;
 		this.type = type;
@@ -53,7 +53,7 @@ public class Compte {
 		if (o==null) return false;
 		if(o instanceof Compte) {
 			Compte c = (Compte) o;
-			return this.idCompte == c.getId();
+			return this.idCompte == c.idCompte && this.login == c.login && this.motDePasse == c.login;
 		} else {
 			return false;
 		}

@@ -13,14 +13,16 @@ import modele.Arbitre;
 
 public class ArbitreJDBC implements ArbitreDAO{
 	
-	private static Connection con;
+	private Connection con;
 
+	public ArbitreJDBC (Connection c) {
+		con = c;
+	}
+	
 	@Override
 	public List<Arbitre> getAll() throws Exception {
         List<Arbitre> listeArbitres = new ArrayList<>();
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			Statement st = con.createStatement();
 	        ResultSet rs = st.executeQuery("select * from Arbitre");
 	        
@@ -30,7 +32,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 	            		                 rs.getString("prenom")));  	        
 	        }
 	        
-	        con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,8 +42,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public Optional<Arbitre> getById(Integer id) throws Exception {
 		Optional<Arbitre> opt = Optional.empty();
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String req = "SELECT * FROM Arbitre WHERE idArbitre = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -52,7 +51,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 			
 			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -63,8 +61,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public Optional<Arbitre> getByNomPrenom(String nom, String prenom) throws Exception {
 		Optional<Arbitre> opt = Optional.empty();
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String req = "SELECT * FROM Arbitre WHERE nom = ? AND prenom = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -75,7 +71,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 			
 			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -86,8 +81,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public boolean add(Arbitre value) throws Exception {
 		boolean res = false;
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String addArbitre = "INSERT INTO Arbitre VALUES (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
 			
 			PreparedStatement st  = con.prepareStatement(addArbitre);
@@ -100,7 +93,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom()  +" a été ajouté.");
 			res = true;
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -111,8 +103,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public boolean update(Arbitre value) throws Exception {
 		boolean res = false;
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String updateArbitre = "UPDATE Arbitre "
 					   		   + "SET nom = ?, prenom = ?"
 					   		   + "WHERE idArbitre = ?;";
@@ -127,7 +117,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom() + " a été modifié.");
 			res = true;
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -138,8 +127,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public boolean delete(Arbitre value) throws Exception {
 		boolean res = false;
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String updateArbitre = "DELETE FROM Arbitre WHERE idArbitre = ?;";
 			
 			PreparedStatement st  = con.prepareStatement(updateArbitre);
@@ -150,7 +137,6 @@ public class ArbitreJDBC implements ArbitreDAO{
 			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom() + " a été supprimé.");
 			res = true;
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

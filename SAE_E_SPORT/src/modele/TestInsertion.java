@@ -17,18 +17,12 @@ public class TestInsertion {
 		Connection dbConnection = DriverManager.getConnection(urlConnexion);
 		
 		EquipeJDBC equipe = new EquipeJDBC();
-		/*
-		equipe.add(new Equipe(4,"Danois",11,"Portugal"));
-		equipe.add(new Equipe(2,"Gnugnugnu",12,"Albanie"));
-		equipe.add(new Equipe(1,"RHHHHHHHHHHHH",1,"Brésil"));
-		*/
-		// EquipeJDBC equipe = new EquipeJDBC(dbConnection);
 		
 		// Statement st = dbConnection.createStatement();
 		// String req = "DELETE FROM EQUIPE";
 		// st.executeUpdate(req);
 		
-		//String req2 = "INSERT INTO PAYS VALUES('FRANCE')";
+		//String req2 = "INSERT INTO PAYS VALUES('France')";
 		//st.executeUpdate(req2);
 
 		

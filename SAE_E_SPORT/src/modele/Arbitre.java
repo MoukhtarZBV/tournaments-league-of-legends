@@ -9,8 +9,8 @@ public class Arbitre {
 	private String prenomArbitre;
 	
 	// Constructeur
-	public Arbitre(int idArbitre, String nomArbitre, String prenomArbitre) {
-		this.idArbitre = idArbitre;
+	public Arbitre(int id, String nomArbitre, String prenomArbitre) {
+		this.idArbitre = id;
 		this.nomArbitre = nomArbitre;
 		this.prenomArbitre = nomArbitre;
 	}
@@ -44,7 +44,7 @@ public class Arbitre {
 		if (o==this) return true;
 		if(o instanceof Arbitre) {
 			Arbitre a = (Arbitre) o;
-			return this.idArbitre == a.getId(); 
+			return this.idArbitre == a.idArbitre && this.nomArbitre == a.nomArbitre && this.prenomArbitre == a.prenomArbitre; 
 		} else {
 			return false;
 		}

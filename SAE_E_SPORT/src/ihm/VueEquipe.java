@@ -2,6 +2,8 @@ package ihm;
 
 import java.awt.EventQueue;
 
+
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,14 +13,24 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.List;
+import java.util.Optional;
+
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import javax.swing.JComboBox;
+import javax.swing.table.TableModel;
+
+import modele.Equipe;
 
 public class VueEquipe extends JFrame {
 
@@ -35,30 +47,16 @@ public class VueEquipe extends JFrame {
 	private JLabel libWR;
 	private JTextField fieldWR;
 	private JLabel libPays;
-	private JTextField fieldPays;
 	private JButton btnSave;
 	private JButton btnBack;
+	private JComboBox comboPays;
+	private JTable table;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VueEquipe frame = new VueEquipe();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public VueEquipe() {
+	public VueEquipe(List<Equipe> equipes, Optional<Equipe> equipe) {
+		setMaximumSize(new Dimension(800, 800));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 563, 400);
 		contentPane = new JPanel();
@@ -98,6 +96,7 @@ public class VueEquipe extends JFrame {
 		fieldName.setHorizontalAlignment(SwingConstants.LEFT);
 		panelName.add(fieldName);
 		fieldName.setColumns(10);
+		fieldName.setText(equipe.get().getNom());
 		
 		panelRank = new JPanel();
 		panelRank.setBackground(new Color(255, 255, 255));
@@ -111,6 +110,7 @@ public class VueEquipe extends JFrame {
 		fieldWR = new JTextField();
 		fieldWR.setHorizontalAlignment(SwingConstants.LEFT);
 		fieldWR.setColumns(10);
+		fieldWR.setText(String.valueOf(equipe.get().getRang()));
 		panelRank.add(fieldWR);
 		
 		panelPays = new JPanel();
@@ -122,10 +122,8 @@ public class VueEquipe extends JFrame {
 		panelPays.add(libPays);
 		panelPays.setBorder(new EmptyBorder(30, 20, 0, 80));
 		
-		fieldPays = new JTextField();
-		fieldPays.setHorizontalAlignment(SwingConstants.LEFT);
-		fieldPays.setColumns(10);
-		panelPays.add(fieldPays);
+		comboPays = new JComboBox();
+		panelPays.add(comboPays);
 		
 		panelButton = new JPanel();
 		panelButton.setBackground(new Color(255, 255, 255));
@@ -145,6 +143,21 @@ public class VueEquipe extends JFrame {
 		right.setBackground(new Color(255, 255, 255));
 		body.add(right);
 		right.setLayout(new BorderLayout(0, 0));
+		
+		// Données du tableau (A RETIRER PLUS TARD)
+        String[] columnsName = new String [] {"", "Membres"};
+        
+        // Création du DefaultTableModel avec les données et les en-têtes
+        DefaultTableModel model = new DefaultTableModel(columnsName, 6);
+		
+		table = new JTable(model);
+		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		table.setRowHeight(25);
+		right.add(table, BorderLayout.NORTH);
+		right.setBorder(new EmptyBorder(50, 20, 0, 20));
+		TableColumnModel columnModel = table.getColumnModel();
+		columnModel.getColumn(0).setPreferredWidth(1);
+		columnModel.getColumn(1).setPreferredWidth(130);
 	}
 
 }

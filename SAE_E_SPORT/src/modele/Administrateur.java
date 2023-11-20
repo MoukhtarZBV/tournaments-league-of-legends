@@ -10,9 +10,9 @@ public class Administrateur {
 	
 	// Constructeur
 	public Administrateur(int id, String nom, String prenom) {
+		this.idAdministrateur = id;
 		this.nomAdmin         = nom;
 		this.prenomAdmin      = prenom;
-		this.idAdministrateur = id;
 	}
 	
 	// Get
@@ -48,7 +48,7 @@ public class Administrateur {
         }
         if (o instanceof Administrateur) {
         	Administrateur a = (Administrateur) o;
-            return a.getId() == this.getId();
+            return a.idAdministrateur == this.idAdministrateur && a.nomAdmin == this.nomAdmin && a.prenomAdmin == this.prenomAdmin;
         } else {
         	return false;
         }

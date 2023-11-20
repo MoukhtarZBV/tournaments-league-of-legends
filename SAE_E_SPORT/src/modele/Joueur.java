@@ -6,11 +6,13 @@ public class Joueur {
 	
 	private int idJoueur;
 	private String pseudo;
+	private Equipe equipe;
 	
 	// Constructeur
-	public Joueur(int idJoueur, String pseudo) {
-		this.idJoueur = idJoueur;
+	public Joueur(int id, String pseudo, Equipe e) {
+		this.idJoueur = id;
 		this.pseudo = pseudo;
+		this.equipe = e;
 	}
 	
 	// Get
@@ -20,6 +22,10 @@ public class Joueur {
 	
 	public String getPseudo() {
 		return this.pseudo;
+	}
+	
+	public Equipe getEquipe() {
+		return this.equipe;
 	}
 	
 	// Set	
@@ -34,7 +40,7 @@ public class Joueur {
 		if (o==null) return false;
 		if(o instanceof Joueur) {
 			Joueur j = (Joueur) o;
-			return this.idJoueur == j.getId();
+			return this.idJoueur == j.idJoueur && this.pseudo == j.pseudo;
 		} else {
 			return false;
 		}
