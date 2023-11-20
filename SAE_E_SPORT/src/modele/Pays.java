@@ -209,6 +209,15 @@ public enum Pays {
         return nom;
     }
     
+    public Pays getPays(String nom) {
+    	for (Pays pays : Pays.values()) {
+    		if (pays.getNom().equals(nom)) {
+    			return pays;
+    		}
+    	}
+    	return null;
+    }
+    
     public static List<String> listeNomsPays(){
     	return Arrays.stream(Pays.values()).map(e -> e.getNom()).sorted().collect(Collectors.toList());
     }
