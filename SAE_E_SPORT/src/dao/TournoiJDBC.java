@@ -16,21 +16,21 @@ import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO{
 
-	public static Connection cn;
-    
-	public TournoiJDBC() {
-	    cn = ConnectionJDBC.getConnection();
-	}
+	private static Connection cn;
 	
 	@Override
 	public List<Tournoi> getAll() throws Exception {
 		List<Tournoi> tournois = new ArrayList<>();
 		try {
+		    cn = ConnectionJDBC.getConnection();
+
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi");
 			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nationnalite"))));
+				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays"))));
 			}
+			
+			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,11 +41,15 @@ public class TournoiJDBC implements TournoiDAO{
 	public Optional<Tournoi> getById(Integer id) throws Exception {
 		Optional<Tournoi> tournois = Optional.empty();
 		try {
-		Statement st = cn.createStatement();
-		ResultSet rs = st.executeQuery("select * from Tournoi where idTournoi = "+ id);
-		if(rs.next()) {
-			tournois = Optional.ofNullable(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nationnalite"))));
-		}
+		    cn = ConnectionJDBC.getConnection();
+
+			Statement st = cn.createStatement();
+			ResultSet rs = st.executeQuery("select * from Tournoi where idTournoi = "+ id);
+			if(rs.next()) {
+				tournois = Optional.ofNullable(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays"))));
+			}
+			
+			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -56,6 +60,8 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean add(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
+		    cn = ConnectionJDBC.getConnection();
+
 			CallableStatement cs = cn.prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, vainqueur) values (NEXT VALUE FOR idEquipe,?,?,?,?,?)");
 			cs.setString(1, t.getNomTournoi());
 			cs.setString(2, t.getNiveau().denomination());
@@ -64,6 +70,8 @@ public class TournoiJDBC implements TournoiDAO{
 			cs.setInt(5, t.getVainqueur().getIdEquipe());
 			cs.executeUpdate();
 			res = true;
+			
+			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -74,6 +82,8 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean update(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
+		    cn = ConnectionJDBC.getConnection();
+
 			CallableStatement cs = cn.prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, dateDebut = ?, dateFin = ?, vainqueur =? where idEquipe = ?");
 			cs.setString(1, t.getNomTournoi());
 			cs.setString(2, t.getNiveau().denomination());
@@ -83,6 +93,8 @@ public class TournoiJDBC implements TournoiDAO{
 			cs.setInt(6, t.getIdTournoi());
 			cs.executeUpdate();
 			res = true;
+			
+			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -93,9 +105,13 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean delete(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
+		    cn = ConnectionJDBC.getConnection();
+
 			CallableStatement cs = cn.prepareCall("delete from Tournoi where idTournoi = ?");
 			cs.setInt(1, t.getIdTournoi());
 			res = true;
+			
+			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

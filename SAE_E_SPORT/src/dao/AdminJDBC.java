@@ -23,6 +23,8 @@ public class AdminJDBC implements AdminDAO {
 	public List<Administrateur> getAll() throws Exception {
 		List<Administrateur> list = new ArrayList<>();
 		try {			
+		    con = ConnectionJDBC.getConnection();
+
 			Statement st = con.createStatement();
 			
 			String req   = "SELECT * FROM Administrateur";
@@ -31,8 +33,8 @@ public class AdminJDBC implements AdminDAO {
 			while(rs.next()) {
 				list.add(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
 			}
-			return list;
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -43,6 +45,8 @@ public class AdminJDBC implements AdminDAO {
 	public Optional<Administrateur> getById(Integer id) throws Exception {
 		Optional<Administrateur> opt = Optional.empty();
 		try {
+		    con = ConnectionJDBC.getConnection();
+
 			String req = "SELECT * FROM Administrateur WHERE idAdministrateur = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -52,6 +56,7 @@ public class AdminJDBC implements AdminDAO {
 			
 			opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -62,6 +67,8 @@ public class AdminJDBC implements AdminDAO {
 	public boolean add(Administrateur value) throws Exception {
 		boolean res = false;
 		try {
+		    con = ConnectionJDBC.getConnection();
+
 			String addAdmin = "INSERT INTO Administrateur VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?)";
 			
 			PreparedStatement st  = con.prepareStatement(addAdmin);
@@ -74,6 +81,7 @@ public class AdminJDBC implements AdminDAO {
 			System.out.println("L'administrateur "+ value.getNom().toUpperCase() +" a été ajouté.");
 			res = true;
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -84,6 +92,8 @@ public class AdminJDBC implements AdminDAO {
 	public boolean update(Administrateur value) throws Exception {
 		boolean res = false;
 		try {
+		    con = ConnectionJDBC.getConnection();
+
 			String updateAdmin = "UPDATE Administrateur "
 					   		   + "SET nom = ?, prenom = ? "
 					   		   + "WHERE idAdministrateur = ?;";
@@ -97,6 +107,7 @@ public class AdminJDBC implements AdminDAO {
 			System.out.println("L'Administrateur " + value.getNom().toUpperCase() + " a été modifié.");
 			res = true;
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -107,6 +118,8 @@ public class AdminJDBC implements AdminDAO {
 	public boolean delete(Administrateur value) throws Exception {
 		boolean res = false;
 		try {
+		    con = ConnectionJDBC.getConnection();
+
 			String updateAdmin = "DELETE FROM Administrateur WHERE idAdministrateur = ?;";
 			
 			PreparedStatement st  = con.prepareStatement(updateAdmin);
@@ -117,6 +130,7 @@ public class AdminJDBC implements AdminDAO {
 			System.out.println("L'Administrateur " + value.getNom().toUpperCase() + " a été supprimé.");
 			res = true;
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -127,6 +141,8 @@ public class AdminJDBC implements AdminDAO {
 	public Optional<Administrateur> getByNom(String nom) throws Exception {
 		Optional<Administrateur> opt = Optional.empty();
 		try {
+		    con = ConnectionJDBC.getConnection();
+
 			String req = "SELECT * FROM Administrateur WHERE nomAdmin = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -136,6 +152,7 @@ public class AdminJDBC implements AdminDAO {
 			
 			opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -146,6 +163,8 @@ public class AdminJDBC implements AdminDAO {
 	public Optional<Administrateur> getByNomPrenom(String nom, String prenom) throws Exception {
 		Optional<Administrateur> opt = Optional.empty();
 		try {
+		    con = ConnectionJDBC.getConnection();
+
 			String req = "SELECT * FROM Administrateur WHERE nomAdmin = ? AND prenomAdmin = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -156,6 +175,7 @@ public class AdminJDBC implements AdminDAO {
 			
 			opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();;
 		}
