@@ -16,10 +16,13 @@ public class TestJoueur {
 	public static void main (String[] args) throws Exception {
 		Connection c = ConnectionJDBC.createConnection();
 		
-//		c.createStatement().execute("insert into Pays values('France')");
-		
 		EquipeJDBC eJDBC = new EquipeJDBC(c);
-		Equipe e1 = new Equipe(1, "T1", 1000, Pays.FRANCE);
+		JoueurJDBC jJDBC = new JoueurJDBC(c);
+
+//		c.createStatement().execute("insert into Pays values('France')");
+//		c.createStatement().execute("insert into Pays values('Taiwan')");
+		
+//		Equipe e1 = new Equipe(1, "T1", 1000, Pays.FR);
 //		
 //		Joueur j1 = new Joueur(1, "Zeus", e1);
 //		Joueur j2 = new Joueur(2, "Oner", e1);
@@ -28,8 +31,8 @@ public class TestJoueur {
 //		Joueur j5 = new Joueur(5, "Keria", e1);
 //		
 //		e1.ajouterJoueur(j1, j2, j3, j4, j5);
-		
-		Equipe e2 = new Equipe(2, "GenG", 1000, Pays.FRANCE);
+//		
+//		Equipe e2 = new Equipe(2, "GenG", 1000, Pays.FR);
 //		Joueur j11 = new Joueur(1, "Doran", e2);
 //		Joueur j21 = new Joueur(2, "Peanut", e2);
 //		Joueur j31 = new Joueur(3, "Chovy", e2);
@@ -39,8 +42,7 @@ public class TestJoueur {
 //		
 //		eJDBC.add(e1);
 //		eJDBC.add(e2);
-		
-		JoueurJDBC jJDBC = new JoueurJDBC(c);
+//		
 //		jJDBC.add(j1);
 //		jJDBC.add(j2);
 //		jJDBC.add(j3);
@@ -52,7 +54,7 @@ public class TestJoueur {
 //		jJDBC.add(j31);
 //		jJDBC.add(j41);
 //		jJDBC.add(j51);
-		
+//		
 //		for(Joueur j : jJDBC.getAll()) {
 //			System.out.println(j.toString());
 //		}
@@ -60,16 +62,26 @@ public class TestJoueur {
 //		for(Equipe e : eJDBC.getAll()) {
 //			System.out.println(e.toString());
 //		}
-		
+//		
 //		for (Joueur j : jJDBC.getByEquipe(e2)) {
 //			System.out.println(j.toString());
 //		};
+//				
+//		System.out.println(jJDBC.getById(5).toString());
+//		
+//		System.out.println(jJDBC.getByPseudo("Faker"));
+//
+//		System.out.println();
+//		
+		for (Equipe e : eJDBC.getAll()) {
+			System.out.println(e.toString());
+		}
+//		int id1 = eJDBC.getIdByNom("T1");
+//		System.out.println("Team 1 : " + id1);
+//		
+//		int id2 = eJDBC.getIdByNom("GenG");
+//		System.out.println("Team 2 : " + id2);
 		
-		System.out.println(jJDBC.getById(5).toString());
-		
-		System.out.println(jJDBC.getByPseudo("Faker"));
-
-		System.out.println();
 		c.close();
 	}
 	

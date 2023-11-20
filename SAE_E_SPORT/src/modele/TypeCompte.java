@@ -12,6 +12,16 @@ public enum TypeCompte {
 	public String denomination() {
 		return this.denomination;
 	}
+	
+	public static TypeCompte getTypeCompte(String type) {
+		if (type.equals("Arbitre")) {
+			return TypeCompte.ARBITRE;
+		} else if (type.equals("Administrateur")) {
+			return TypeCompte.ADMINISTRATEUR;
+		} else {
+			return null;
+		}
+	}
 
 }
 

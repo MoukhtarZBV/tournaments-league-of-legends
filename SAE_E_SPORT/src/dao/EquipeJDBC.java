@@ -28,7 +28,7 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe");
 			while(rs.next()) {
-				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite").toUpperCase()));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
 				JoueurJDBC j = new JoueurJDBC(this.cn);
 				for(Joueur joueur : j.getByEquipe(e)) {
 					e.ajouterJoueur(joueur);
@@ -49,7 +49,7 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 			if(rs.next()) {
-				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite").toUpperCase()));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
 				JoueurJDBC j = new JoueurJDBC(this.cn);
 				for(Joueur jou : j.getByEquipe(e)) {
 					e.ajouterJoueur(jou);
@@ -73,7 +73,7 @@ public class EquipeJDBC implements EquipeDAO{
 			CallableStatement cs = cn.prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (NEXT VALUE FOR SEQ_EQUIPE,?,?,?)");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().denomination());
+			cs.setString(3, e.getNationalite().getNom());
 			cs.executeUpdate();
 			
 			res = true;
@@ -90,7 +90,7 @@ public class EquipeJDBC implements EquipeDAO{
 			CallableStatement cs = cn.prepareCall("update Equipe set nomEquipe = ?, rang = ?, nationalite = ? where idEquipe = ?");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().denomination());
+			cs.setString(3, e.getNationalite().getNom());
 			cs.setInt(4, e.getIdEquipe());
 			cs.executeUpdate();
 			res = true;
@@ -101,18 +101,18 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public boolean delete(Equipe value) throws Exception {
+	public boolean delete(Equipe e) throws Exception {
 		boolean res = false;
 		try {
 			JoueurJDBC jjdbc = new JoueurJDBC(this.cn);
-			for (Joueur joueur : value.getJoueurs()) {
+			for (Joueur joueur : e.getJoueurs()) {
 				jjdbc.update(joueur);
 			}
 			Statement st = cn.createStatement();
-			st.executeUpdate("delete from Equipe where idEquipe = "+value.getIdEquipe());
+			st.executeUpdate("delete from Equipe where idEquipe = "+e.getIdEquipe());
 			res = true;
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException exp) {
+			exp.printStackTrace();
 		}
 		return res;
 	}
@@ -124,7 +124,7 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe where nomEquipe = '"+nom+"'");	
 			if (rs.next()) {
-				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite").toUpperCase()));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
 				JoueurJDBC j = new JoueurJDBC(this.cn);
 				for(Joueur jou : j.getByEquipe(e)) {
 					e.ajouterJoueur(jou);
@@ -135,6 +135,20 @@ public class EquipeJDBC implements EquipeDAO{
 			e.printStackTrace();
 		}
 		return equipe;
+	}
+	
+	public int getIdByNom(String nom) throws Exception{
+		int id = -1;
+		try {
+			Statement st = this.cn.createStatement();
+			ResultSet rs = st.executeQuery("select idEquipe from Equipe where nomEquipe = '"+nom+"'");    
+			if (rs.next()) {
+				id = rs.getInt("idEquipe");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 
 }

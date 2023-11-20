@@ -178,6 +178,7 @@ public enum Pays {
     SR("Suriname"),
     SY("Syrie"),
     TJ("Tadjikistan"),
+    TW("Taiwan"),
     TZ("Tanzanie"),
     TD("Tchad"),
     TH("Thailande"),
@@ -209,7 +210,7 @@ public enum Pays {
         return nom;
     }
     
-    public Pays getPays(String nom) {
+    public static Pays getPays(String nom) {
     	for (Pays pays : Pays.values()) {
     		if (pays.getNom().equals(nom)) {
     			return pays;

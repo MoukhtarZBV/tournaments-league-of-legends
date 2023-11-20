@@ -19,22 +19,22 @@ public class TestInsertion {
 		// String req = "DELETE FROM EQUIPE";
 		// st.executeUpdate(req);
 		
-		//String req2 = "INSERT INTO PAYS VALUES('France')";
+		//String req2 = "INSERT INTO PAYS VALUES('FR')";
 		//st.executeUpdate(req2);
 
 		
-		equipe.add(new Equipe(3,"DanFQFQFQois",11,Pays.FRANCE));
-		equipe.add(new Equipe(5,"DanFQFDQDois",11,Pays.FRANCE));
-		equipe.add(new Equipe(6,"DanoFQFis",11,Pays.FRANCE));
-		equipe.add(new Equipe(7,"DanQDQois",11,Pays.FRANCE));
-		equipe.add(new Equipe(8,"DanQQois",11,Pays.FRANCE));
-		equipe.add(new Equipe(9,"DanoiSFSs",11,Pays.FRANCE));
-		equipe.add(new Equipe(10,"DaYInois",11,Pays.FRANCE));
-		equipe.add(new Equipe(11,"Do",11,Pays.FRANCE));
-		equipe.add(new Equipe(12,"Danois",11,Pays.FRANCE));
-		equipe.add(new Equipe(13,"Danois",11,Pays.FRANCE));
-		equipe.add(new Equipe(14,"Dnis",11,Pays.FRANCE));
-		equipe.add(new Equipe(15,"Dois",11,Pays.FRANCE));
-		equipe.add(new Equipe(16,"Da",11,Pays.FRANCE));
+		equipe.add(new Equipe(3,"DanFQFQFQois",11,Pays.FR));
+		equipe.add(new Equipe(5,"DanFQFDQDois",11,Pays.FR));
+		equipe.add(new Equipe(6,"DanoFQFis",11,Pays.FR));
+		equipe.add(new Equipe(7,"DanQDQois",11,Pays.FR));
+		equipe.add(new Equipe(8,"DanQQois",11,Pays.FR));
+		equipe.add(new Equipe(9,"DanoiSFSs",11,Pays.FR));
+		equipe.add(new Equipe(10,"DaYInois",11,Pays.FR));
+		equipe.add(new Equipe(11,"Do",11,Pays.FR));
+		equipe.add(new Equipe(12,"Danois",11,Pays.FR));
+		equipe.add(new Equipe(13,"Danois",11,Pays.FR));
+		equipe.add(new Equipe(14,"Dnis",11,Pays.FR));
+		equipe.add(new Equipe(15,"Dois",11,Pays.FR));
+		equipe.add(new Equipe(16,"Da",11,Pays.FR));
 	}
 }
