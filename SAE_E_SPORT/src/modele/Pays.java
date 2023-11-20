@@ -141,7 +141,7 @@ public enum Pays {
     PW("Palaos"),
     PS("Palestine"),
     PA("Panama"),
-    PG("Papouasie Nouvelle Guinee"),
+    PG("Papua New Guinea"),
     PY("Paraguay"),
     NL("Pays Bas"),
     PE("Perou"),
@@ -158,7 +158,6 @@ public enum Pays {
     KN("Saint Christophe et Nevis"),
     LC("Sainte Lucie"),
     SM("Saint Marin"),
-    VC("Saint Vincent et les Grenadines"),
     SV("Salvador"),
     WS("Samoa"),
     ST("Sao Tome et Principe"),
@@ -199,26 +198,22 @@ public enum Pays {
     ZM("Zambie"),
     ZW("Zimbabwe");
 
-    private final String nom;
+    private final String denomination;
 
-    private Pays(String nom) {
-        this.nom = nom;
+    private Pays(String denomination) {
+        this.denomination = denomination;
     }
 
-    public String getNom() {
-        return nom;
+    public String denomination() {
+        return denomination;
     }
     
     public Pays getPays(String nom) {
     	for (Pays pays : Pays.values()) {
-    		if (pays.getNom().equals(nom)) {
+    		if (pays.denomination().equals(nom)) {
     			return pays;
     		}
     	}
     	return null;
-    }
-    
-    public static List<String> listeNomsPays(){
-    	return Arrays.stream(Pays.values()).map(e -> e.getNom()).sorted().collect(Collectors.toList());
     }
 }

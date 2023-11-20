@@ -223,7 +223,13 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Combo box Niveau
 		inputNiveau = new JComboBox();
+		inputNiveau.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		inputNiveau.setBackground(new Color(255, 255, 255));
 		panelNiveau.add(inputNiveau);
+		inputNiveau.addItem("-- Niveau --");
+		for (Niveau niveau : Niveau.values()) {
+			inputNiveau.addItem(niveau.denomination());
+		}
 		
 		
 		// Panel Pays
@@ -246,7 +252,13 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Combo box pays
 		inputPays = new JComboBox();
+		inputPays.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		inputPays.setBackground(new Color(255, 255, 255));
 		panelPays.add(inputPays);
+		inputPays.addItem("-- Pays --");
+		for (Pays pays : Pays.values()) {
+			inputPays.addItem(pays.denomination());
+		}
 		
 		
 		///// PANEL DATES \\\\\
@@ -424,13 +436,13 @@ public class VueCreationTournoi extends JFrame {
 		return localDate;
 	}
 	
-	public Date getDateDebut() {
-        Date date = Date.valueOf(getDate(this.inputDateDebut.getText()));
+	public java.sql.Date getDateDebut() {
+		java.sql.Date date = java.sql.Date.valueOf(getDate(this.inputDateDebut.getText()));
         return date;
 	}
 	
 	public Date getDateFin() {
-        Date date = Date.valueOf(getDate(this.inputDateFin.getText()));
+		java.sql.Date date = java.sql.Date.valueOf(getDate(this.inputDateFin.getText()));
         return date;
 	}
 }
