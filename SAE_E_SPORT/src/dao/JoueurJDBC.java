@@ -13,23 +13,22 @@ import modele.Joueur;
 
 public class JoueurJDBC implements JoueurDAO{
 	
-	public static Connection con;
-    
-	public JoueurJDBC() {
-	    con = ConnectionJDBC.getConnection();
-	}
+	private static Connection con;
 
 	@Override
 	public List<Joueur> getAll() throws Exception {
         List<Joueur> listeJoueurs = new ArrayList<Joueur>();
         try {
-		Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select * from joueur");
+    		con = ConnectionJDBC.getConnection();
+
+			Statement st = con.createStatement();
+	        ResultSet rs = st.executeQuery("select * from joueur");
         
-        while (rs.next()) {
-        	listeJoueurs.add(new Joueur(rs.getInt("idJoueur"),
-            		                 rs.getString("pseudo")));  	        
-        }
+	        while (rs.next()) {
+	        	listeJoueurs.add(new Joueur(rs.getInt("idJoueur"),
+	            		                 rs.getString("pseudo")));  	        
+	        }
+	        con.close();
         } catch (SQLException e) {
         	e.printStackTrace();
         }
@@ -40,6 +39,8 @@ public class JoueurJDBC implements JoueurDAO{
 	public Optional<Joueur> getById(Integer id) throws Exception {
 		Optional<Joueur> opt = Optional.empty();
 		try {
+    		con = ConnectionJDBC.getConnection();
+
 			String req = "SELECT * FROM Joueur WHERE idJoueur = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -49,6 +50,7 @@ public class JoueurJDBC implements JoueurDAO{
 			
 			opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -59,6 +61,8 @@ public class JoueurJDBC implements JoueurDAO{
 	public Optional<Joueur> getByPseudo(String value) throws Exception {
 		Optional<Joueur> opt = Optional.empty();
 		try {
+    		con = ConnectionJDBC.getConnection();
+
 			String req = "SELECT * FROM Joueur WHERE pseudo = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -68,6 +72,7 @@ public class JoueurJDBC implements JoueurDAO{
 			
 			opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo")));
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -78,6 +83,8 @@ public class JoueurJDBC implements JoueurDAO{
 	public boolean add(Joueur value) throws Exception {
 		boolean res = false;
 		try {
+    		con = ConnectionJDBC.getConnection();
+
 			String addJoueur = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?)";
 			
 			PreparedStatement st  = con.prepareStatement(addJoueur);
@@ -89,6 +96,7 @@ public class JoueurJDBC implements JoueurDAO{
 			System.out.println("Le joueur "+ value.getPseudo().toUpperCase() +" a été ajouté.");
 			res = true;
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -99,6 +107,8 @@ public class JoueurJDBC implements JoueurDAO{
 	public boolean update(Joueur value) throws Exception {
 		boolean res = false;
 		try {
+    		con = ConnectionJDBC.getConnection();
+
 			String updateJoueur = "UPDATE Joueur "
 					   		   + "SET pseudo = ?"
 					   		   + "WHERE idJoueur = ?;";
@@ -112,6 +122,7 @@ public class JoueurJDBC implements JoueurDAO{
 			System.out.println("Le joueur " + value.getPseudo().toUpperCase() + " a été modifié.");
 			res = true;
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();;
 		}
@@ -122,6 +133,8 @@ public class JoueurJDBC implements JoueurDAO{
 	public boolean delete(Joueur value) throws Exception {
 		boolean res = false;
 		try {
+    		con = ConnectionJDBC.getConnection();
+
 			String updateJoueur = "DELETE FROM Joueur WHERE idJoueur = ?;";
 			
 			PreparedStatement st  = con.prepareStatement(updateJoueur);
@@ -132,6 +145,7 @@ public class JoueurJDBC implements JoueurDAO{
 			System.out.println("Le joueur " + value.getPseudo().toUpperCase() + " a été supprimé.");
 			res = true;
 			
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
