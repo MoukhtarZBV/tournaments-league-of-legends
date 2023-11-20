@@ -11,7 +11,6 @@ public class ConnectionJDBC {
 	private ConnectionJDBC(){}
 	
 	public synchronized static Connection getConnection () {
-		if (cn == null) {
 			String dirProjetJava = System.getProperty("user.dir");
 			System.setProperty("derby.system.home", dirProjetJava + "/BDD");
 			try {
@@ -24,7 +23,6 @@ public class ConnectionJDBC {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
 		return cn;
 	}
 	
