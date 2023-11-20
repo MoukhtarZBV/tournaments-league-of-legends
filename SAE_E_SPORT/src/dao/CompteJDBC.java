@@ -18,12 +18,14 @@ public class CompteJDBC implements CompteDAO{
 	
 	private static Connection con;
 
+	public CompteJDBC (Connection c) {
+		con = c;
+	}
+	
 	@Override
 	public List<Compte> getAll() throws Exception {
         List<Compte> listeComptes = new ArrayList<>();
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			Statement st = con.createStatement();
 	        ResultSet rs = st.executeQuery("select * from Compte");
 	        
@@ -31,10 +33,9 @@ public class CompteJDBC implements CompteDAO{
 	        	listeComptes.add(new Compte(rs.getInt("idCompte"),
 	            		                 rs.getString("login"),
 	            		                 rs.getString("motDePasse"),
-	            		                 TypeCompte.valueOf(rs.getString("type"))));  	        
+	            		                 TypeCompte.valueOf(rs.getString("type").toUpperCase())));  	        
 	        }
 	        
-	        con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -45,8 +46,6 @@ public class CompteJDBC implements CompteDAO{
 	public Optional<Compte> getById(Integer id) throws Exception {
 		Optional<Compte> compte = Optional.empty();
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String req = "SELECT * FROM Compte WHERE idCompte = ?;";
 			
 			PreparedStatement st = con.prepareStatement(req);
@@ -57,9 +56,8 @@ public class CompteJDBC implements CompteDAO{
 			compte = Optional.ofNullable(new Compte(rs.getInt("idCompte"),
 	                 rs.getString("login"),
 	                 rs.getString("motDePasse"),
-	                 TypeCompte.valueOf(rs.getString("type"))));
+	                 TypeCompte.valueOf(rs.getString("type").toUpperCase())));
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -67,25 +65,22 @@ public class CompteJDBC implements CompteDAO{
 	}
 
 	@Override
-	public boolean add(Compte value) throws Exception {
+	public boolean add(Compte c) throws Exception {
 		boolean res = false;
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String addCompte = "INSERT INTO Compte VALUES (NEXT VALUE FOR SEQ_Compte, ?, ?, ?)";
 			
 			PreparedStatement st  = con.prepareStatement(addCompte);
 			
-			st.setString(1, value.getLogin());
-			st.setString(2, value.getMotDePasse());
-			st.setString(3,value.getType().denomination());
+			st.setString(1, c.getLogin());
+			st.setString(2, c.getMotDePasse());
+			st.setString(3,c.getType().denomination());
 			
 			st.executeUpdate(addCompte);
 			
 			res = true;
-			System.out.println("Le compte "+ value.getLogin().toUpperCase() + " " + value.getMotDePasse() + value.getType() +" a été ajouté.");
+			System.out.println("Le compte "+ c.getLogin().toUpperCase() + " " + c.getMotDePasse() + c.getType() +" a été ajouté.");
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -93,27 +88,24 @@ public class CompteJDBC implements CompteDAO{
 	}
 
 	@Override
-	public boolean update(Compte value) throws Exception {
+	public boolean update(Compte c) throws Exception {
 		boolean res = false;
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String updateCompte = "UPDATE Compte "
 					   		   + "SET login = ?, motDePasse = ?, type = ?"
 					   		   + "WHERE idCompte = ?;";
 			
 			PreparedStatement st  = con.prepareStatement(updateCompte);
-			st.setString(1, value.getLogin());
-			st.setString(2, value.getMotDePasse());
-			st.setString(3,value.getType().toString());
-			st.setInt(4, value.getId());
+			st.setString(1, c.getLogin());
+			st.setString(2, c.getMotDePasse());
+			st.setString(3,c.getType().toString());
+			st.setInt(4, c.getId());
 
 			st.executeUpdate(updateCompte);
 			
-			System.out.println("Le compte "+ value.getLogin().toUpperCase() + " " + value.getMotDePasse() + value.getType() + " a été modifié.");
+			System.out.println("Le compte "+ c.getLogin().toUpperCase() + " " + c.getMotDePasse() + c.getType() + " a été modifié.");
 			res = true;
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -121,22 +113,19 @@ public class CompteJDBC implements CompteDAO{
 	}
 
 	@Override
-	public boolean delete(Compte value) throws Exception {
+	public boolean delete(Compte c) throws Exception {
 		boolean res = false;
 		try {
-		    con = ConnectionJDBC.getConnection();
-
 			String updateCompte = "DELETE FROM Compte WHERE idCompte = ?;";
 			
 			PreparedStatement st  = con.prepareStatement(updateCompte);
-			st.setInt(1, value.getId());
+			st.setInt(1, c.getId());
 			
 			st.executeUpdate();
 			
-			System.out.println("Le compte "+ value.getLogin().toUpperCase() + " " + value.getMotDePasse() + value.getType() + " a été supprimé.");
+			System.out.println("Le compte "+ c.getLogin().toUpperCase() + " " + c.getMotDePasse() + c.getType() + " a été supprimé.");
 			res = true;
 			
-			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

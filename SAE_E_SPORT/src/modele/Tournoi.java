@@ -14,8 +14,8 @@ public class Tournoi {
 	private Compte compte;
 	private Equipe vainqueur;
 	
-	public Tournoi(int idTournoi, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) {
-		this.idTournoi = idTournoi;
+	public Tournoi(int id, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) {
+		this.idTournoi = id;
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
 		this.dateDebut = dateDebut;
@@ -78,7 +78,9 @@ public class Tournoi {
 			return false;
 		if (obj instanceof Tournoi) {
 			Tournoi other = (Tournoi) obj;
-			return idTournoi == other.idTournoi;
+			return idTournoi == other.idTournoi && this.compte.equals(other.compte) && this.dateDebut == other.dateDebut
+					&& this.dateFin == other.dateFin && this.niveau.equals(other.niveau) && this.nomTournoi.equals(other.nomTournoi)
+					&& this.pays.equals(pays) && this.vainqueur.equals(other.vainqueur);
 		} 
 		return false;
 	}

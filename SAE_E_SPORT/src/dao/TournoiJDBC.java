@@ -16,21 +16,23 @@ import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO{
 
-	private static Connection cn;
+	private Connection cn;
+	
+	public TournoiJDBC (Connection c) {
+		this.cn = c;
+	}
 	
 	@Override
 	public List<Tournoi> getAll() throws Exception {
 		List<Tournoi> tournois = new ArrayList<>();
 		try {
-		    cn = ConnectionJDBC.getConnection();
 
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi");
 			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays"))));
+				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau").toUpperCase()), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays").toUpperCase())));
 			}
 			
-			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,15 +43,13 @@ public class TournoiJDBC implements TournoiDAO{
 	public Optional<Tournoi> getById(Integer id) throws Exception {
 		Optional<Tournoi> tournois = Optional.empty();
 		try {
-		    cn = ConnectionJDBC.getConnection();
 
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi where idTournoi = "+ id);
 			if(rs.next()) {
-				tournois = Optional.ofNullable(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays"))));
+				tournois = Optional.ofNullable(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau").toUpperCase()), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays").toUpperCase())));
 			}
 			
-			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -60,9 +60,7 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean add(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
-		    cn = ConnectionJDBC.getConnection();
-
-			CallableStatement cs = cn.prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, vainqueur) values (NEXT VALUE FOR idEquipe,?,?,?,?,?)");
+			CallableStatement cs = cn.prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, vainqueur) values (NEXT VALUE FOR SEQ_Tournoi,?,?,?,?,?)");
 			cs.setString(1, t.getNomTournoi());
 			cs.setString(2, t.getNiveau().denomination());
 			cs.setDate(3, t.getDateDebut());
@@ -71,7 +69,7 @@ public class TournoiJDBC implements TournoiDAO{
 			cs.executeUpdate();
 			res = true;
 			
-			cn.close();
+			System.out.println("Tournoi "+t.getNomTournoi().toUpperCase()+" ajoute.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -82,7 +80,6 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean update(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
-		    cn = ConnectionJDBC.getConnection();
 
 			CallableStatement cs = cn.prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, dateDebut = ?, dateFin = ?, vainqueur =? where idEquipe = ?");
 			cs.setString(1, t.getNomTournoi());
@@ -94,7 +91,8 @@ public class TournoiJDBC implements TournoiDAO{
 			cs.executeUpdate();
 			res = true;
 			
-			cn.close();
+			System.out.println("Tournoi "+t.getNomTournoi().toUpperCase()+" mis a jour.");
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -105,14 +103,14 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean delete(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
-		    cn = ConnectionJDBC.getConnection();
 
 			CallableStatement cs = cn.prepareCall("delete from Tournoi where idTournoi = ?");
 			cs.setInt(1, t.getIdTournoi());
 			res = true;
 			
-			cn.close();
+			System.out.println("Tournoi "+t.getNomTournoi().toUpperCase()+" supprime.");
 		} catch (SQLException e) {
+			System.out.println("Suppression echec !");
 			e.printStackTrace();
 		}
 		return res;

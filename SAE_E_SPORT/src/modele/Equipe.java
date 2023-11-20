@@ -28,8 +28,10 @@ public class Equipe {
 		return this.nom;
 	}
 	
-	public void ajouterJoueur(Joueur j) {
-		this.joueurs.add(j);
+	public void ajouterJoueur(Joueur... j) {
+		for (Joueur joueur : j) {
+			this.joueurs.add(joueur);
+		}
 	}
 
 	public List<Joueur> getJoueurs(){
@@ -50,7 +52,8 @@ public class Equipe {
 		if (o==null) return false;
 		if(o instanceof Equipe) {
 			Equipe e = (Equipe) o;
-			return this.idEquipe == e.getIdEquipe();
+			return this.idEquipe == e.getIdEquipe() && this.nom==e.nom && this.rang == e.rang
+					&& this.nationalite == e.nationalite && this.joueurs.equals(e.joueurs);
 		} else {
 			return false;
 		}
@@ -59,6 +62,12 @@ public class Equipe {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.idEquipe);
+	}
+	
+	@Override
+	public String toString() {
+		return "Equipe [ID : "+ this.idEquipe + ", nom=" + this.nom + ", rang=" + this.rang + ", nationalite=" + this.nationalite +
+				", joueurs=" + this.joueurs;
 	}
 	
 }

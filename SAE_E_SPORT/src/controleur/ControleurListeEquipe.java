@@ -33,6 +33,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener{
 			VueEquipe vue = new VueEquipe(equipes,new EquipeJDBC(ConnectionJDBC.getConnection()).getByNom((String)list.getSelectedValue()));
 			vue.setVisible(true);
 			this.vue.dispose();
+
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

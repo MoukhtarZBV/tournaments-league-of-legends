@@ -10,31 +10,35 @@ import java.util.List;
 import java.util.Optional;
 
 import modele.Equipe;
+import modele.Joueur;
 import modele.Pays;
 
 public class EquipeJDBC implements EquipeDAO{
 
 	private Connection cn;
 	
-	public EquipeJDBC(Connection cn) {
-		this.cn = cn;
+	public EquipeJDBC (Connection c) {
+		this.cn = c;
 	}
 	
 	@Override
 	public List<Equipe> getAll() throws Exception {
-	    cn = ConnectionJDBC.getConnection();
 		List<Equipe> equipes = new ArrayList<>();
 		try {
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe");
 			while(rs.next()) {
-				equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite").toUpperCase())));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+				JoueurJDBC j = new JoueurJDBC(this.cn);
+				for(Joueur joueur : j.getByEquipe(e)) {
+					e.ajouterJoueur(joueur);
+				};
+				equipes.add(e);
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		cn.close();
 		return equipes;
 	}
 
@@ -42,31 +46,37 @@ public class EquipeJDBC implements EquipeDAO{
 	public Optional<Equipe> getById(Integer id) throws Exception {
 		Optional<Equipe> equipes = Optional.empty();
 		try {
-			cn = ConnectionJDBC.getConnection();
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 			if(rs.next()) {
-				equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite"))));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+				JoueurJDBC j = new JoueurJDBC(this.cn);
+				for(Joueur jou : j.getByEquipe(e)) {
+					e.ajouterJoueur(jou);
+				};
+				equipes = Optional.ofNullable(e);
 			}
-			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return equipes;
 	}
 
+	//Test ok
 	@Override
 	public boolean add(Equipe e) throws Exception {
+		if (e.getJoueurs().size()!=5) {
+			throw new IllegalArgumentException("Nombre de joueurs d'une equipe doit etre 5 !");
+		}
 		boolean res = false;
 		try {
-			CallableStatement cs = cn.prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (?,?,?,?)");
-			cs.setInt(1, e.getIdEquipe());
-			cs.setString(2, e.getNom());
-			cs.setInt(3, e.getRang());
-			cs.setString(4, e.getNationalite().denomination());
+			CallableStatement cs = cn.prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (NEXT VALUE FOR SEQ_EQUIPE,?,?,?)");
+			cs.setString(1, e.getNom());
+			cs.setInt(2, e.getRang());
+			cs.setString(3, e.getNationalite().getNom());
 			cs.executeUpdate();
+			
 			res = true;
-			cn.close();
 		}catch (SQLException exp) {
 			exp.printStackTrace();
 		}
@@ -77,15 +87,13 @@ public class EquipeJDBC implements EquipeDAO{
 	public boolean update(Equipe e) throws Exception {
 		boolean res = false;
 		try {
-			cn = ConnectionJDBC.getConnection();
 			CallableStatement cs = cn.prepareCall("update Equipe set nomEquipe = ?, rang = ?, nationalite = ? where idEquipe = ?");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().denomination());
+			cs.setString(3, e.getNationalite().getNom());
 			cs.setInt(4, e.getIdEquipe());
 			cs.executeUpdate();
 			res = true;
-			cn.close();
 		}catch (SQLException exp) {
 			exp.printStackTrace();
 		}
@@ -93,16 +101,18 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public boolean delete(Equipe value) throws Exception {
+	public boolean delete(Equipe e) throws Exception {
 		boolean res = false;
 		try {
-			cn = ConnectionJDBC.getConnection();
+			JoueurJDBC jjdbc = new JoueurJDBC(this.cn);
+			for (Joueur joueur : e.getJoueurs()) {
+				jjdbc.update(joueur);
+			}
 			Statement st = cn.createStatement();
-			st.executeUpdate("delete from Equipe where idEquipe = "+value.getIdEquipe());
+			st.executeUpdate("delete from Equipe where idEquipe = "+e.getIdEquipe());
 			res = true;
-			cn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException exp) {
+			exp.printStackTrace();
 		}
 		return res;
 	}
@@ -111,13 +121,16 @@ public class EquipeJDBC implements EquipeDAO{
 	public Optional<Equipe> getByNom(String nom) throws Exception {
 		Optional<Equipe> equipe = Optional.empty();
 		try {
-			cn = ConnectionJDBC.getConnection();
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe where nomEquipe = '"+nom+"'");	
 			if (rs.next()) {
-				equipe = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite"))));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+				JoueurJDBC j = new JoueurJDBC(this.cn);
+				for(Joueur jou : j.getByEquipe(e)) {
+					e.ajouterJoueur(jou);
+				};
+				equipe = Optional.ofNullable(e);
 			}
-			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -125,19 +138,17 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 	
 	public int getIdByNom(String nom) throws Exception{
-		int id;
+		int id = -1;
 		try {
-			Statement st = cn.createStatement();
-			ResultSet rs = st.executeQuery("select idEquipe from Equipe where nomEquipe = '"+nom+"'");	
+			Statement st = this.cn.createStatement();
+			ResultSet rs = st.executeQuery("select idEquipe from Equipe where nomEquipe = '"+nom+"'");    
 			if (rs.next()) {
 				id = rs.getInt("idEquipe");
-				return id;
 			}
-			cn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return -1;
+		return id;
 	}
 
 }
