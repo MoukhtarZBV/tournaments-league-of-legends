@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modele.Niveau;
+import modele.Pays;
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -15,6 +19,9 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.sql.Date;
+import java.time.LocalDate;
+
 import javax.swing.JFormattedTextField;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
@@ -52,13 +59,11 @@ public class VueCreationTournoi extends JFrame {
 		setBounds(100, 100, 900, 600);
 		setTitle("Nouveau tournoi");
 		
-		
 		// Panel principal
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
 		
 		// Panel du haut
 		JPanel panelTop = new JPanel();
@@ -152,4 +157,56 @@ public class VueCreationTournoi extends JFrame {
 		panelDateDebut_1.add(formattedTextField_1);
 	}
 
+	public boolean champVide() {
+		boolean unChampVide = false;
+		if (this.inputNom.getText().equals("")) {
+			unChampVide = true;
+		} else if ((String) this.inputPays.getSelectedItem().equals("-- Pays --")) {
+			unChampVide = true;
+		} else if ((String) this.inputNiveau.getSelectedItem().equals("-- Niveau --")) {
+			unChampVide = true;
+		}
+		return unChampVide;
+	}
+	
+	public boolean nomTropLong() {
+		return this.inputNom.getText().length() > 100;
+	}
+	
+	public String getNom() {
+		return this.inputNom.getText();
+	}
+	
+	public Pays getPays() {
+		Pays.valueOf((String) this.inputPays.getSelectedItem());
+	}
+	
+	public Niveau getNiveau() {
+		Niveau.valueOf((String) this.inputNiveau.getSelectedItem());
+	}
+	
+	private static LocalDate getDate(String date) {
+		int indexSeparateur = date.indexOf('/');
+		int jour = Integer.valueOf(date.substring(0, indexSeparateur));
+		
+		date = date.substring(indexSeparateur + 1);
+		indexSeparateur = date.indexOf('/');
+		int mois = Integer.valueOf(date.substring(0, indexSeparateur));
+		
+		date = date.substring(indexSeparateur + 1);
+		int annee = Integer.valueOf(date.substring(1));
+		
+		LocalDate localDate = LocalDate.of(annee, mois, jour);
+		return localDate;
+	}
+	
+	public Date getDateDebut() {
+        Date date = Date.valueOf(getDate(this.inputDateDebut.getText()));
+        return date;
+	}
+	
+	public Date getDateFin() {
+        Date date = Date.valueOf(getDate(this.inputDateFin.getText()));
+        return date;
+	}
 }

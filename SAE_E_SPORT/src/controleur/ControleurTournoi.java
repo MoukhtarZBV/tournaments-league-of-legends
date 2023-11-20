@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import dao.TournoiJDBC;
+import ihm.VueCreationTournoi;
 import modele.Tournoi;
 
 public class ControleurTournoi implements ActionListener {
