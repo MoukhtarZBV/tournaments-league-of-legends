@@ -23,10 +23,6 @@ public class TournoiJDBC implements TournoiDAO{
 	    cn = connect;
 	}
 	
-	public static void main(String[] args) {
-		Date date = new Date();
-	}
-	
 	@Override
 	public List<Tournoi> getAll() throws Exception {
 		List<Tournoi> tournois = new ArrayList<>();

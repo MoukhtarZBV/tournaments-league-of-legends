@@ -373,9 +373,9 @@ public class VueCreationTournoi extends JFrame {
 		boolean unChampVide = false;
 		if (this.inputNom.getText().equals("")) {
 			unChampVide = true;
-		} else if ((String) this.inputPays.getSelectedItem().equals("-- Pays --")) {
+		} else if (((String) this.inputPays.getSelectedItem()).equals("-- Pays --")) {
 			unChampVide = true;
-		} else if ((String) this.inputNiveau.getSelectedItem().equals("-- Niveau --")) {
+		} else if (((String) this.inputNiveau.getSelectedItem()).equals("-- Niveau --")) {
 			unChampVide = true;
 		}
 		return unChampVide;
@@ -390,11 +390,11 @@ public class VueCreationTournoi extends JFrame {
 	}
 	
 	public Pays getPays() {
-		Pays.valueOf((String) this.inputPays.getSelectedItem());
+		return Pays.valueOf((String) this.inputPays.getSelectedItem());
 	}
 	
 	public Niveau getNiveau() {
-		Niveau.valueOf((String) this.inputNiveau.getSelectedItem());
+		return Niveau.valueOf((String) this.inputNiveau.getSelectedItem());
 	}
 	
 	private static LocalDate getDate(String date) {
