@@ -2,17 +2,23 @@ package ihm;
 
 import java.awt.EventQueue;
 
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import controleur.ControleurListeEquipe;
 import dao.EquipeJDBC;
 import modele.Equipe;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.JLabel;
@@ -21,11 +27,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import javax.swing.JScrollPane;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JTextField;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 
 public class VueListeEquipe extends JFrame {
 
 	private JPanel contentPane;
 	private List<Equipe> equipes;
+	private JTextField searchBar;
 
 	/**
 	 * Launch the application.
@@ -33,21 +48,14 @@ public class VueListeEquipe extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					String dirProjetJava = System.getProperty("user.dir");		
-					System.setProperty("derby.system.home", dirProjetJava+"/BDD");
-					DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-					String urlConnexion = "jdbc:derby:BDD;create=true";			
-																
-					// Création d'une connexion
-					Connection dbConnection = DriverManager.getConnection(urlConnexion);
-					
-					List<Equipe> equipes = (new EquipeJDBC(dbConnection).getAll());
-					VueListeEquipe frame = new VueListeEquipe(equipes);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+					try {
+						List<Equipe> equipes = (new EquipeJDBC().getAll());
+						VueListeEquipe frame = new VueListeEquipe(equipes);
+						frame.setVisible(true);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			}
 		});
 	}
@@ -56,6 +64,7 @@ public class VueListeEquipe extends JFrame {
 	 * Create the frame.
 	 */
 	public VueListeEquipe(List<Equipe> equipes) {
+		ControleurListeEquipe controleur = new ControleurListeEquipe(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -69,15 +78,48 @@ public class VueListeEquipe extends JFrame {
 				.collect(Collectors.toList());
 		
 		JList listeEquipes = new JList(nomEquipes.toArray());
+		listeEquipes.addMouseListener(controleur);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		scrollPane.setViewportView(listeEquipes);
 		
-		JLabel libFenetre_1 = new JLabel("Liste des équipes");
-		libFenetre_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		contentPane.add(libFenetre_1, BorderLayout.NORTH);
+		JPanel panelHeader = new JPanel();
+		contentPane.add(panelHeader, BorderLayout.NORTH);
+		panelHeader.setLayout(new GridLayout(2, 0, 0, 0));
+		
+		JLabel libFenetre = new JLabel("Liste des équipes");
+		libFenetre.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panelHeader.add(libFenetre);
+		
+		JPanel panelSearch = new JPanel();
+		panelHeader.add(panelSearch);
+		
+		searchBar = new JTextField();
+		Dimension preferredSize = new Dimension(searchBar.getPreferredSize().width, 25);
+        searchBar.setPreferredSize(preferredSize);
+		panelSearch.add(searchBar);
+		searchBar.setColumns(30);
+		
+		JButton validateBtn = new JButton("Valider");
+
+        validateBtn.setBackground(Color.WHITE);
+        validateBtn.setForeground(Color.BLACK);
+        
+        // Définition de la bordure
+        
+        // padding interieur
+        Border paddingBorder = BorderFactory.createEmptyBorder(0, 0, 0, 0);
+        // bordure exterieur
+        Border originalBorder = validateBtn.getBorder();
+        // Combinaison des bordures
+        Border compoundBorder = BorderFactory.createCompoundBorder(originalBorder, paddingBorder);
+        validateBtn.setBorder(compoundBorder);
+        
+        Font buttonFont = new Font("Arial", Font.PLAIN, 14);
+        validateBtn.setFont(buttonFont);
+		panelSearch.add(validateBtn);
 	}
 
 }

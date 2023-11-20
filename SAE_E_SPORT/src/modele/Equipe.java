@@ -40,7 +40,7 @@ public class Equipe {
 		return this.rang;
 	}
 
-	public Pays getNationnalité() {
+	public Pays getNationalite() {
 		return this.nationnalite;
 	}
 	

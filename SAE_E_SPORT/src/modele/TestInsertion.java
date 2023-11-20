@@ -16,13 +16,13 @@ public class TestInsertion {
 		// Création d'une connexion
 		Connection dbConnection = DriverManager.getConnection(urlConnexion);
 		
-		EquipeJDBC equipe = new EquipeJDBC(dbConnection);
+		EquipeJDBC equipe = new EquipeJDBC();
 		
 		Statement st = dbConnection.createStatement();
 		String req = "DELETE FROM EQUIPE";
 		st.executeUpdate(req);
 		
-		//String req2 = "INSERT INTO PAYS VALUES('FRANCE')";
+		//String req2 = "INSERT INTO PAYS VALUES('France')";
 		//st.executeUpdate(req2);
 
 		
