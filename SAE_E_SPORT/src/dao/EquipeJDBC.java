@@ -14,7 +14,11 @@ import modele.Pays;
 
 public class EquipeJDBC implements EquipeDAO{
 
-	private static Connection cn;
+	private Connection cn;
+	
+	public EquipeJDBC(Connection cn) {
+		this.cn = cn;
+	}
 	
 	@Override
 	public List<Equipe> getAll() throws Exception {
@@ -74,7 +78,7 @@ public class EquipeJDBC implements EquipeDAO{
 		boolean res = false;
 		try {
 			cn = ConnectionJDBC.getConnection();
-			CallableStatement cs = cn.prepareCall("update Equipe set nomEquipe = ?, rang = ?, pays = ? where idEquipe = ?");
+			CallableStatement cs = cn.prepareCall("update Equipe set nomEquipe = ?, rang = ?, nationalite = ? where idEquipe = ?");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
 			cs.setString(3, e.getNationalite().denomination());
@@ -118,6 +122,22 @@ public class EquipeJDBC implements EquipeDAO{
 			e.printStackTrace();
 		}
 		return equipe;
+	}
+	
+	public int getIdByNom(String nom) throws Exception{
+		int id;
+		try {
+			Statement st = cn.createStatement();
+			ResultSet rs = st.executeQuery("select idEquipe from Equipe where nomEquipe = '"+nom+"'");	
+			if (rs.next()) {
+				id = rs.getInt("idEquipe");
+				return id;
+			}
+			cn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 
 }

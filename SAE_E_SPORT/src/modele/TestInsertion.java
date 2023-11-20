@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 
 public class TestInsertion {
@@ -16,7 +17,7 @@ public class TestInsertion {
 		// Création d'une connexion
 		Connection dbConnection = DriverManager.getConnection(urlConnexion);
 		
-		EquipeJDBC equipe = new EquipeJDBC();
+		EquipeJDBC equipe = new EquipeJDBC(ConnectionJDBC.getConnection());
 		
 		// Statement st = dbConnection.createStatement();
 		// String req = "DELETE FROM EQUIPE";

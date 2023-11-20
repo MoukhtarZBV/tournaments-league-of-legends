@@ -28,7 +28,7 @@ public class PartieJDBC implements PartieDAO{
 			while(rs.next()) {
 				TournoiJDBC tournoiBDD = new TournoiJDBC();
 				Tournoi tournoi = tournoiBDD.getById(rs.getInt("idTournoi")).get();
-				EquipeJDBC equipeBDD = new EquipeJDBC();
+				EquipeJDBC equipeBDD = new EquipeJDBC(ConnectionJDBC.getConnection());
 				Equipe equipe = equipeBDD.getById(rs.getInt("equipe")).get();
 				
 				parties.add(new Partie(rs.getDate("dateDebut"), rs.getTime("heureDebut"), rs.getString("deroulement"), equipe, tournoi));
@@ -52,7 +52,7 @@ public class PartieJDBC implements PartieDAO{
 			if (rs.next()) {
 				TournoiJDBC tournoiBDD = new TournoiJDBC();
 				Tournoi tournoi = tournoiBDD.getById(rs.getInt("idTournoi")).get();
-				EquipeJDBC equipeBDD = new EquipeJDBC();
+				EquipeJDBC equipeBDD = new EquipeJDBC(ConnectionJDBC.getConnection());
 				Equipe equipe = equipeBDD.getById(rs.getInt("equipe")).get();
 				partie = Optional.ofNullable(new Partie(rs.getDate("dateDebut"), rs.getTime("heureDebut"), rs.getString("deroulement"), equipe, tournoi));
 			}
