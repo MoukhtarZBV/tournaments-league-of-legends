@@ -22,9 +22,11 @@ public class TestInsertion {
 		equipe.add(new Equipe(2,"Gnugnugnu",12,"Albanie"));
 		equipe.add(new Equipe(1,"RHHHHHHHHHHHH",1,"Brésil"));
 		*/
-		Statement st = dbConnection.createStatement();
-		String req = "DELETE FROM EQUIPE";
-		st.executeUpdate(req);
+		// EquipeJDBC equipe = new EquipeJDBC(dbConnection);
+		
+		// Statement st = dbConnection.createStatement();
+		// String req = "DELETE FROM EQUIPE";
+		// st.executeUpdate(req);
 		
 		//String req2 = "INSERT INTO PAYS VALUES('FRANCE')";
 		//st.executeUpdate(req2);
