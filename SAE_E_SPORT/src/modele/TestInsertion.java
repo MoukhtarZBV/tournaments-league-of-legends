@@ -4,19 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 
 public class TestInsertion {
-	public static void main (String[]args) throws Exception {
-		String dirProjetJava = System.getProperty("user.dir");		
-		System.setProperty("derby.system.home", dirProjetJava+"/BDD");
-		DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-		String urlConnexion = "jdbc:derby:BDD;create=true";			
+	public static void main (String[]args) throws Exception {	
 													
 		// Création d'une connexion
-		Connection dbConnection = DriverManager.getConnection(urlConnexion);
+		Connection dbConnection = ConnectionJDBC.createConnection();
 		
-		EquipeJDBC equipe = new EquipeJDBC();
+		EquipeJDBC equipe = new EquipeJDBC(dbConnection);
 		
 		// Statement st = dbConnection.createStatement();
 		// String req = "DELETE FROM EQUIPE";

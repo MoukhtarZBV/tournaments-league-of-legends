@@ -46,7 +46,8 @@ public class Partie {
 		if (o==this) return true;
 		if (o instanceof Partie) {
 			Partie p = (Partie) o;
-			return p.date==this.date && p.heure==this.heure && p.deroulement == this.deroulement && p.idEquipe == this.idEquipe && p.tournoi.equals(this.tournoi);
+			return p.date==this.date && p.heure==this.heure && p.deroulement == this.deroulement 
+					&& p.idEquipe == this.idEquipe && p.tournoi.equals(this.tournoi);
 		} else {
 			return false;
 		}

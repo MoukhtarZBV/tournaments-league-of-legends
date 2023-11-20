@@ -12,6 +12,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import controleur.ControleurListeEquipe;
+import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import modele.Equipe;
 
@@ -49,7 +50,8 @@ public class VueListeEquipe extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					List<Equipe> equipes = (new EquipeJDBC().getAll());
+					Connection c = ConnectionJDBC.createConnection();
+					List<Equipe> equipes = (new EquipeJDBC(c).getAll());
 					VueListeEquipe frame = new VueListeEquipe(equipes);
 					frame.setVisible(true);
 				} catch (Exception e) {

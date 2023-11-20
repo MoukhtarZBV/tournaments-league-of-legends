@@ -50,7 +50,7 @@ public class JoueurJDBC implements JoueurDAO{
 			PreparedStatement st = con.prepareStatement(req);
 			st.setInt(1, id);
 			
-			ResultSet rs = st.executeQuery(req);
+			ResultSet rs = st.executeQuery();
 			
 			if (rs.next()) {
 				EquipeJDBC e = new EquipeJDBC(this.con);
@@ -74,7 +74,7 @@ public class JoueurJDBC implements JoueurDAO{
 			PreparedStatement st = con.prepareStatement(req);
 			st.setString(1, j);
 			
-			ResultSet rs = st.executeQuery(req);
+			ResultSet rs = st.executeQuery();
 			
 			if (rs.next()) {
 				EquipeJDBC e = new EquipeJDBC(this.con);
