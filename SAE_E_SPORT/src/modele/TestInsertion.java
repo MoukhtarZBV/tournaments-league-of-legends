@@ -16,7 +16,7 @@ public class TestInsertion {
 		// Création d'une connexion
 		Connection dbConnection = DriverManager.getConnection(urlConnexion);
 		
-		EquipeJDBC equipe = new EquipeJDBC(dbConnection);
+		EquipeJDBC equipe = new EquipeJDBC();
 		/*
 		equipe.add(new Equipe(4,"Danois",11,"Portugal"));
 		equipe.add(new Equipe(2,"Gnugnugnu",12,"Albanie"));

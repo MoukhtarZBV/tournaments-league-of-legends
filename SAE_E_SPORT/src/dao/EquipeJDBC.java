@@ -27,7 +27,7 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe");
 			while(rs.next()) {
-				equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationnalite"))));
+				equipes.add(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -42,7 +42,7 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 			if(rs.next()) {
-				equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationnalite"))));
+				equipes = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,10 +54,10 @@ public class EquipeJDBC implements EquipeDAO{
 	public boolean add(Equipe e) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = cn.prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationnalite) values (NEXT VALUE FOR idEquipe,?,?,?)");
+			CallableStatement cs = cn.prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (NEXT VALUE FOR idEquipe,?,?,?)");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationnalité().denomination());
+			cs.setString(3, e.getNationalite().denomination());
 			cs.executeUpdate();
 			res = true;
 		}catch (SQLException exp) {
@@ -73,7 +73,7 @@ public class EquipeJDBC implements EquipeDAO{
 			CallableStatement cs = cn.prepareCall("update Equipe set nomEquipe = ?, rang = ?, pays = ? where idEquipe = ?");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationnalité().denomination());
+			cs.setString(3, e.getNationalite().denomination());
 			cs.setInt(4, e.getIdEquipe());
 			cs.executeUpdate();
 			res = true;
@@ -103,7 +103,7 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe where nomEquipe = "+nom);	
 			if (rs.next()) {
-				equipe = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationnalite"))));
+				equipe = Optional.ofNullable(new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.valueOf(rs.getString("nationalite"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

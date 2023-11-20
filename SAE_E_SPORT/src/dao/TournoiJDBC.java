@@ -29,7 +29,7 @@ public class TournoiJDBC implements TournoiDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi");
 			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nationnalite"))));
+				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -44,7 +44,7 @@ public class TournoiJDBC implements TournoiDAO{
 		Statement st = cn.createStatement();
 		ResultSet rs = st.executeQuery("select * from Tournoi where idTournoi = "+ id);
 		if(rs.next()) {
-			tournois = Optional.ofNullable(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nationnalite"))));
+			tournois = Optional.ofNullable(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays"))));
 		}
 		} catch (SQLException e) {
 			e.printStackTrace();
