@@ -53,7 +53,7 @@ public class EquipeJDBC implements EquipeDAO{
 				JoueurJDBC j = new JoueurJDBC(this.cn);
 				for(Joueur jou : j.getByEquipe(e)) {
 					e.ajouterJoueur(jou);
-				};
+				}
 				equipes = Optional.ofNullable(e);
 			}
 		} catch (SQLException e) {

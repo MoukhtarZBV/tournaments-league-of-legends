@@ -132,10 +132,10 @@ public class VueEquipe extends JFrame {
 		
 		comboPays = new JComboBox();
 		comboPays.setBackground(new Color(255, 255, 255));
-		comboPays.addItem(equipe.get().getNationalite());
+		comboPays.addItem(equipe.get().getNationalite().getNom());
 		for (Pays p  : Pays.values()) {
-			if (p != equipe.get().getNationalite()) {
-				comboPays.addItem(p);
+			if (p.getNom() != equipe.get().getNationalite().getNom()) {
+				comboPays.addItem(p.getNom());
 			}
 		}
 		panelPays.add(comboPays);
@@ -190,6 +190,6 @@ public class VueEquipe extends JFrame {
 	}
 	
 	public Pays getPaysEquipe() {
-		return (Pays) comboPays.getSelectedItem();
+		return Pays.getPays((String)comboPays.getSelectedItem());
 	}
 }

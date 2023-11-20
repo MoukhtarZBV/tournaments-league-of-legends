@@ -25,7 +25,7 @@ public class ControleurEquipe implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
-		EquipeJDBC equipesBD = new EquipeJDBC(ConnectionJDBC.getConnection());
+		EquipeJDBC equipesBD = new EquipeJDBC(ConnectionJDBC.createConnection());
 		if (bouton.getText().equals("Sauvegarder")) {
 			try {
 				equipesBD.update(new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe()));
