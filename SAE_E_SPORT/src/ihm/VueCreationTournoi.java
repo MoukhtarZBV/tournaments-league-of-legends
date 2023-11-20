@@ -19,7 +19,7 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalDate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +31,8 @@ import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
+
+import controleur.ControleurTournoi;
 
 public class VueCreationTournoi extends JFrame {
 	
@@ -61,6 +63,8 @@ public class VueCreationTournoi extends JFrame {
 	
 	// Création la fenêtre
 	public VueCreationTournoi() {
+		
+		ControleurTournoi controleur = new ControleurTournoi(this);
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -288,9 +292,12 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Input date début
 		inputDateDebut = new JFormattedTextField(dateFormat);
-		inputDateDebut.setText("JJ/MM/AAAA");
+		inputDateDebut.setForeground(Color.LIGHT_GRAY);
+		inputDateDebut.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		inputDateDebut.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		inputDateDebut.setColumns(10);
+		inputDateDebut.addActionListener(controleur);
+		inputDateDebut.addFocusListener(controleur);
 		panelDateDebut.add(inputDateDebut);
 		
 		
@@ -314,9 +321,12 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Input date fin
 		inputDateFin = new JFormattedTextField(dateFormat);
+		inputDateFin.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+		inputDateFin.setForeground(Color.LIGHT_GRAY);
 		inputDateFin.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		inputDateDebut.setText("JJ/MM/AAAA");
 		inputDateFin.setColumns(10);
+		inputDateFin.addActionListener(controleur);
+		inputDateFin.addFocusListener(controleur);
 		panelDateFin.add(inputDateFin);
 		
 		
@@ -344,6 +354,7 @@ public class VueCreationTournoi extends JFrame {
 		btnAnnuler.setBackground(new Color(255, 255, 255));
 		btnAnnuler.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
 		btnAnnuler.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnAnnuler.addActionListener(controleur);
 		panelBoutons.add(btnAnnuler);
 		
 		// Bouton valider
@@ -351,6 +362,7 @@ public class VueCreationTournoi extends JFrame {
 		btnValider.setBackground(new Color(255, 255, 255));
 		btnValider.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
 		btnValider.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnValider.addActionListener(controleur);
 		panelBoutons.add(btnValider);
 		
 		
