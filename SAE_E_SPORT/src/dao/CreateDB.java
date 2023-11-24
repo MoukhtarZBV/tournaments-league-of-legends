@@ -1,9 +1,11 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import modele.Niveau;
+import modele.Pays;
 
 public class CreateDB {
 	
@@ -12,14 +14,10 @@ public class CreateDB {
 	}
 
 	public CreateDB() {
-		String dirProjetJava = System.getProperty("user.dir");
-		System.setProperty("derby.system.home", dirProjetJava + "/BDD");		
-		String urlConnexion = "jdbc:derby:BDD;create=true";
-		
 		try {
-			DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-			Connection connection = DriverManager.getConnection(urlConnexion);
+			Connection connection = ConnectionJDBC.createConnection();
 			createTables(connection);
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -410,6 +408,29 @@ public class CreateDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(-1);
+		}
+		
+		// ==========================================
+		// ========== Initialiser Tables ============
+		// ==========================================
+		// Table Pays
+		PaysJDBC paysJDBC = new PaysJDBC(connection);
+		for (Pays pays : Pays.values()) {
+			try {
+				paysJDBC.add(pays);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// Table Niveau
+		NiveauJDBC niveauJDBC = new NiveauJDBC();
+		for (Niveau niveau : Niveau.values()) {
+			try {
+				niveauJDBC.add(niveau);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
