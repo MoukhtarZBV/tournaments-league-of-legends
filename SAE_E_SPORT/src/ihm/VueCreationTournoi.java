@@ -415,6 +415,11 @@ public class VueCreationTournoi extends JFrame {
 			unChampVide = true;
 		} else if (((String) this.inputNiveau.getSelectedItem()).equals("-- Niveau --")) {
 			unChampVide = true;
+		} else if (this.inputDateDebut.getForeground() == Color.LIGHT_GRAY ||
+				this.inputDateDebut.getForeground().equals("") ||
+				this.inputDateFin.getForeground() == Color.LIGHT_GRAY ||
+				this.inputDateFin.getForeground().equals("")) {
+			unChampVide = true;
 		}
 		return unChampVide;
 	}

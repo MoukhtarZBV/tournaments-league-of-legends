@@ -48,7 +48,7 @@ public class PaysJDBC implements PaysDAO {
 		boolean res = false;
 		try {
 			CallableStatement cs = this.cn.prepareCall("insert into Pays values (?)");
-			cs.setString(1, p.getNom());
+			cs.setString(1, p.denomination());
 			cs.execute();
 			res = true;
 		} catch (SQLException e) {
@@ -67,7 +67,7 @@ public class PaysJDBC implements PaysDAO {
 		boolean res = false;
 		try {
 			CallableStatement cs = this.cn.prepareCall("delete from Pays where nomPays = ?");
-			cs.setString(1, p.getNom());
+			cs.setString(1, p.denomination());
 			cs.execute();
 			res = true;
 		} catch (SQLException e) {
