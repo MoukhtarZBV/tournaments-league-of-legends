@@ -96,13 +96,5 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 	}
 
 	@Override
-	public void focusLost(FocusEvent e) {
-		JFormattedTextField txt = (JFormattedTextField)e.getSource();
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		
-		if(txt.getText().equals("") || txt.getValue() == null || dateFormat.format(txt.getValue()).equals(this.date)) {
-			txt.setForeground(Color.LIGHT_GRAY);
-			txt.setText(this.date);
-		}		
-	}
+	public void focusLost(FocusEvent e) {}
 }

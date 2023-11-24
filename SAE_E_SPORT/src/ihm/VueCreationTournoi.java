@@ -40,8 +40,8 @@ import controleur.ControleurTournoi;
 public class VueCreationTournoi extends JFrame {
 	
 	private 		 JTextField inputNom;
-	private 		  JComboBox inputNiveau;
-	private 		  JComboBox inputPays;
+	private 		  JComboBox<String> inputNiveau;
+	private 		  JComboBox<String> inputPays;
 	private JFormattedTextField inputDateDebut;
 	private JFormattedTextField inputDateFin;
 	
@@ -236,7 +236,7 @@ public class VueCreationTournoi extends JFrame {
 		panelNiveau.add(horizontalStrut_3);
 		
 		// Combo box Niveau
-		inputNiveau = new JComboBox();
+		inputNiveau = new JComboBox<String>();
 		inputNiveau.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		inputNiveau.setBackground(new Color(255, 255, 255));
 		panelNiveau.add(inputNiveau);
@@ -265,7 +265,7 @@ public class VueCreationTournoi extends JFrame {
 		panelPays.add(horizontalStrut_4);
 		
 		// Combo box pays
-		inputPays = new JComboBox();
+		inputPays = new JComboBox<String>();
 		inputPays.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		inputPays.setBackground(new Color(255, 255, 255));
 		panelPays.add(inputPays);
