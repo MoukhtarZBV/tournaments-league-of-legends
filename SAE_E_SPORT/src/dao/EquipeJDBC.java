@@ -13,14 +13,7 @@ import modele.Joueur;
 import modele.Pays;
 
 public class EquipeJDBC implements EquipeDAO{
-	
-	public static synchronized EquipeJDBC getInstance() {
-		if(equipeDB == null) {
-			equipeDB = new EquipeJDBC(ConnectionJDBC.getConnection());
-		}
-		return equipeDB;
-	}
-	
+
 	@Override
 	public List<Equipe> getAll() throws Exception {
 		List<Equipe> equipes = new ArrayList<>();

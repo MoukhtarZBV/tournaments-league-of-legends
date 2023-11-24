@@ -1,6 +1,8 @@
 package dao;
 
 import java.sql.CallableStatement;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,13 +17,6 @@ import modele.Pays;
 import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO{
-	
-	public static synchronized TournoiJDBC getInstance() {
-		if(tournoiDB == null) {
-			tournoiDB = new TournoiJDBC(ConnectionJDBC.getConnection());
-		}
-		return tournoiDB;
-	}
 	
 	@Override
 	public List<Tournoi> getAll() throws Exception {
@@ -115,7 +110,7 @@ public class TournoiJDBC implements TournoiDAO{
 			cs.setString(2, t.getNiveau().denomination());
 			cs.setDate(3, t.getDateDebut());
 			cs.setDate(4, t.getDateFin());
-			cs.setString(5, t.getPays().getNom());
+			cs.setString(5, t.getPays().denomination());
 			
 			cs.executeUpdate();
 			res = true;
@@ -165,7 +160,7 @@ public class TournoiJDBC implements TournoiDAO{
 			cs.setString(2, t.getNiveau().denomination());
 			cs.setDate(3, t.getDateDebut());
 			cs.setDate(4, t.getDateFin());
-			cs.setString(5, t.getPays().getNom());
+			cs.setString(5, t.getPays().denomination());
 			cs.executeUpdate();
 			res = true;
 			
@@ -197,7 +192,7 @@ public class TournoiJDBC implements TournoiDAO{
 	}
 	
 	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
-		PreparedStatement st = cn.prepareStatement("SELECT COUNT(*) FROM Tournoi WHERE dateDebut BETWEEN ? AND ?");
+		PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("SELECT COUNT(*) FROM Tournoi WHERE dateDebut BETWEEN ? AND ?");
 		st.setDate(1, dateDebut);
 		st.setDate(2, dateFin);
 		ResultSet res = st.executeQuery();

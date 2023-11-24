@@ -15,13 +15,6 @@ import modele.Tournoi;
 
 public class PartieJDBC implements PartieDAO{
 	
-	public static synchronized PartieJDBC getInstance() {
-		if(partieDB == null) {
-			partieDB = new PartieJDBC(ConnectionJDBC.getConnection());
-		}
-		return partieDB;
-	}
-	
 	@Override
 	public List<Partie> getAll() throws Exception {
 		List<Partie> parties = new ArrayList<>();

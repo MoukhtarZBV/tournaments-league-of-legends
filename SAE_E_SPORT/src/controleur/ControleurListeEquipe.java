@@ -46,7 +46,8 @@ public class ControleurListeEquipe implements MouseListener, ActionListener{
 	    JButton bouton = (JButton) e.getSource();
 	    List<Equipe> equipes;
 		try {
-			equipes = EquipeJDBC.getInstance().getAll();
+			EquipeJDBC ejdbc = new EquipeJDBC();
+			equipes = ejdbc.getAll();
 			List<String> nomEquipes = equipes.stream()
 		            .map(Equipe::getNom)
 		            .collect(Collectors.toList());

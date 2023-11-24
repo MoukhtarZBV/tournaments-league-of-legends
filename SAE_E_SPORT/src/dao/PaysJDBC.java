@@ -9,18 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import modele.Equipe;
-import modele.Joueur;
 import modele.Pays;
 
 public class PaysJDBC implements PaysDAO {
-	
-	public static synchronized PaysJDBC getInstance() {
-		if(paysDB == null) {
-			paysDB = new PaysJDBC(ConnectionJDBC.getConnection());
-		}
-		return paysDB;
-	}
 	
 	@Override
 	public List<Pays> getAll() throws Exception {
@@ -48,7 +39,7 @@ public class PaysJDBC implements PaysDAO {
 	public boolean add(Pays p) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = this.cn.prepareCall("insert into Pays values (?)");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Pays values (?)");
 			cs.setString(1, p.denomination());
 			cs.execute();
 			res = true;
@@ -67,7 +58,7 @@ public class PaysJDBC implements PaysDAO {
 	public boolean delete(Pays p) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = this.cn.prepareCall("delete from Pays where nomPays = ?");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("delete from Pays where nomPays = ?");
 			cs.setString(1, p.denomination());
 			cs.execute();
 			res = true;
