@@ -46,7 +46,9 @@ public class VueCreationTournoi extends JFrame {
 	private JFormattedTextField inputDateFin;
 	
 	private JPanel     panelErreur;
-	private JTextField txtBorder, txtErreur;
+	private JTextField txtBorderErreur, txtErreur;
+	private JPanel     panelSucces;
+	private JTextField txtBorderSucces, txtSucces;
 	
 	
 	// Main, lançant la fenêtre
@@ -132,6 +134,41 @@ public class VueCreationTournoi extends JFrame {
 		contentPane.add(panelMain, BorderLayout.CENTER);
 		
 		
+		///// PANEL SUCCES \\\\\
+		GridBagConstraints gbc_panelSucces = new GridBagConstraints();
+		gbc_panelSucces.insets = new Insets(0, 0, 5, 0);
+		gbc_panelSucces.fill   = GridBagConstraints.BOTH;
+		gbc_panelSucces.gridx  = 0;
+		gbc_panelSucces.gridy  = 0;
+		
+		panelSucces = new JPanel();
+		panelMain.add(panelSucces, gbc_panelSucces);
+		panelSucces.setLayout(new BorderLayout(0, 0));
+		
+		// Petite bordure verte
+		txtBorderSucces = new JTextField();
+		txtBorderSucces.setText(" ");
+		txtBorderSucces.setBorder(new EmptyBorder(0, 0, 0, 0));
+		txtBorderSucces.setEnabled(false);
+		txtBorderSucces.setEditable(false);
+		txtBorderSucces.setMargin(new Insets(5, 5, 5, 5));
+		txtBorderSucces.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		txtBorderSucces.setBackground(new Color(50, 155, 50));
+		panelSucces.add(txtBorderSucces, BorderLayout.WEST);
+		
+		// Label succes
+		txtSucces = new JTextField();
+		txtSucces.setText("TOURNOI CRÉÉ AVEC SUCCÈS");
+		txtSucces.setBorder(new EmptyBorder(2, 10, 2, 2));
+		txtSucces.setEditable(false);
+		txtSucces.setHorizontalAlignment(SwingConstants.LEFT);
+		txtSucces.setForeground(new Color(50, 155, 50));
+		txtSucces.setFont(new Font("Tahoma", Font.BOLD, 14));
+		txtSucces.setColumns(10);
+		txtSucces.setBackground(new Color(204, 255, 204));
+		panelSucces.add(txtSucces);
+		
+		
 		///// PANEL ERREUR \\\\\
 		GridBagConstraints gbc_panelErreur = new GridBagConstraints();
 		gbc_panelErreur.insets = new Insets(0, 0, 5, 0);
@@ -144,15 +181,15 @@ public class VueCreationTournoi extends JFrame {
 		panelErreur.setLayout(new BorderLayout(0, 0));
 		
 		// Petite bordure rouge
-		txtBorder = new JTextField();
-		txtBorder.setText(" ");
-		txtBorder.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtBorder.setEnabled(false);
-		txtBorder.setEditable(false);
-		txtBorder.setMargin(new Insets(5, 5, 5, 5));
-		txtBorder.setFont(new Font("Tahoma", Font.PLAIN, 5));
-		txtBorder.setBackground(new Color(255, 0, 0));
-		panelErreur.add(txtBorder, BorderLayout.WEST);
+		txtBorderErreur = new JTextField();
+		txtBorderErreur.setText(" ");
+		txtBorderErreur.setBorder(new EmptyBorder(0, 0, 0, 0));
+		txtBorderErreur.setEnabled(false);
+		txtBorderErreur.setEditable(false);
+		txtBorderErreur.setMargin(new Insets(5, 5, 5, 5));
+		txtBorderErreur.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		txtBorderErreur.setBackground(new Color(255, 0, 0));
+		panelErreur.add(txtBorderErreur, BorderLayout.WEST);
 		
 		// Label erreur
 		txtErreur = new JTextField();
@@ -165,6 +202,7 @@ public class VueCreationTournoi extends JFrame {
 		txtErreur.setColumns(10);
 		txtErreur.setBackground(new Color(255, 204, 204));
 		panelErreur.add(txtErreur);
+		
 		
 		
 		///// PANEL INFOS TOURNOIS \\\\\
@@ -393,6 +431,7 @@ public class VueCreationTournoi extends JFrame {
 		
 		
 		this.effacerMessageErreur();
+		this.effacerMessageSucces();
 	}
 	
 	
@@ -405,6 +444,17 @@ public class VueCreationTournoi extends JFrame {
 	// Effacer le message d'erreur
 	public void effacerMessageErreur() {
 		this.panelErreur.setVisible(false);
+	}
+	
+	// Afficher le message de succes
+	public void afficherMessageSucces(String text) {
+		this.panelSucces.setVisible(true);
+		this.txtSucces.setText(text);
+	}
+	
+	// Effacer le message de succes
+	public void effacerMessageSucces() {
+		this.panelSucces.setVisible(false);
 	}
 
 	public boolean champVide() {
