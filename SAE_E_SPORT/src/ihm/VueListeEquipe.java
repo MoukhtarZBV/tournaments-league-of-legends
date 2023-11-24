@@ -50,8 +50,8 @@ public class VueListeEquipe extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Connection c = ConnectionJDBC.createConnection();
-					List<Equipe> equipes = (new EquipeJDBC(c).getAll());
+					Connection c = ConnectionJDBC.getConnection();
+					List<Equipe> equipes = (new EquipeJDBC().getAll());
 					VueListeEquipe frame = new VueListeEquipe(equipes);
 					frame.setVisible(true);
 				} catch (Exception e) {

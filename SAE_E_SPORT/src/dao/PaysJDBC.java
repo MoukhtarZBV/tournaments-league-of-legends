@@ -14,18 +14,12 @@ import modele.Joueur;
 import modele.Pays;
 
 public class PaysJDBC implements PaysDAO {
-
-	private Connection cn;
-	
-	public PaysJDBC (Connection cn) {
-		this.cn = cn;
-	}
 	
 	@Override
 	public List<Pays> getAll() throws Exception {
 		List<Pays> pays = new ArrayList<>();
         try {
-			Statement st = cn.createStatement();
+			Statement st = ConnectionJDBC.getConnection().createStatement();
 	        ResultSet rs = st.executeQuery("select * from Pays");
         
 	        while (rs.next()) {
@@ -47,7 +41,7 @@ public class PaysJDBC implements PaysDAO {
 	public boolean add(Pays p) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = this.cn.prepareCall("insert into Pays values (?)");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Pays values (?)");
 			cs.setString(1, p.getNom());
 			cs.execute();
 			res = true;
@@ -66,7 +60,7 @@ public class PaysJDBC implements PaysDAO {
 	public boolean delete(Pays p) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = this.cn.prepareCall("delete from Pays where nomPays = ?");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("delete from Pays where nomPays = ?");
 			cs.setString(1, p.getNom());
 			cs.execute();
 			res = true;

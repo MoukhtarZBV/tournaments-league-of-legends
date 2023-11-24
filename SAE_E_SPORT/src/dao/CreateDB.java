@@ -12,7 +12,7 @@ public class CreateDB {
 
 	public CreateDB() {
 		try {
-			Connection connection = ConnectionJDBC.createConnection();
+			Connection connection = ConnectionJDBC.getConnection();
 			createTables(connection);
 			connection.close();
 		} catch (SQLException e) {

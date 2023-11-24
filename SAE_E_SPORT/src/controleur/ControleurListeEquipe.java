@@ -27,9 +27,8 @@ public class ControleurListeEquipe implements MouseListener {
 		JList list = (JList) e.getSource();
 		if (e.getClickCount() == 2) {
 			try {
-				Connection c = ConnectionJDBC.createConnection();
-				List<Equipe> equipes = (new EquipeJDBC(c).getAll());
-				VueEquipe vue = new VueEquipe(equipes,new EquipeJDBC(c).getByNom((String)list.getSelectedValue()));
+				List<Equipe> equipes = (new EquipeJDBC().getAll());
+				VueEquipe vue = new VueEquipe(equipes,new EquipeJDBC().getByNom((String)list.getSelectedValue()));
 				vue.setVisible(true);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block

@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,17 +12,11 @@ import modele.Administrateur;
 
 public class AdminJDBC implements AdminDAO {
 	
-	private Connection con;
-
-	public AdminJDBC (Connection c) {
-		con = c;
-	}
-	
 	@Override
 	public List<Administrateur> getAll() throws Exception {
 		List<Administrateur> list = new ArrayList<>();
 		try {			
-			Statement st = con.createStatement();
+			Statement st = ConnectionJDBC.getConnection().createStatement();
 			
 			String req   = "SELECT * FROM Administrateur";
 			ResultSet rs = st.executeQuery(req);
@@ -45,7 +38,7 @@ public class AdminJDBC implements AdminDAO {
 
 			String req = "SELECT * FROM Administrateur WHERE idAdministrateur = ?;";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setInt(1, id);
 			
 			ResultSet rs = st.executeQuery(req);
@@ -64,7 +57,7 @@ public class AdminJDBC implements AdminDAO {
 		try {
 			String addAdmin = "INSERT INTO Administrateur VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?)";
 			
-			PreparedStatement st  = con.prepareStatement(addAdmin);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addAdmin);
 			
 			st.setString(1, admin.getNom());
 			st.setString(2, admin.getPrenom());
@@ -88,7 +81,7 @@ public class AdminJDBC implements AdminDAO {
 					   		   + "SET nom = ?, prenom = ? "
 					   		   + "WHERE idAdministrateur = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateAdmin);
 			st.setString(1, admin.getNom());
 			st.setString(2, admin.getPrenom());
 
@@ -108,7 +101,7 @@ public class AdminJDBC implements AdminDAO {
 		try {
 			String updateAdmin = "DELETE FROM Administrateur WHERE idAdministrateur = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateAdmin);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateAdmin);
 			st.setInt(1, admin.getId());
 			
 			st.executeUpdate();
@@ -127,7 +120,7 @@ public class AdminJDBC implements AdminDAO {
 		try {
 			String req = "SELECT * FROM Administrateur WHERE nomAdmin = ?;";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setString(1,  nom);
 			
 			ResultSet rs = st.executeQuery();
@@ -146,7 +139,7 @@ public class AdminJDBC implements AdminDAO {
 		try {
 			String req = "SELECT * FROM Administrateur WHERE nomAdmin = ? AND prenomAdmin = ?;";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setString(1, nom);
 			st.setString(2, prenom);
 		

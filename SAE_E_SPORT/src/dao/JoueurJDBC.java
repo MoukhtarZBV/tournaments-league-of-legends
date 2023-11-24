@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,21 +13,15 @@ import modele.Joueur;
 
 public class JoueurJDBC implements JoueurDAO{
 	
-	private Connection con;
-
-	public JoueurJDBC (Connection c) {
-		this.con = c;
-	}
-	
 	@Override
 	public List<Joueur> getAll() throws Exception {
         List<Joueur> listeJoueurs = new ArrayList<Joueur>();
         try {
-			Statement st = con.createStatement();
+			Statement st = ConnectionJDBC.getConnection().createStatement();
 	        ResultSet rs = st.executeQuery("select * from joueur");
         
 	        while (rs.next()) {
-	        	EquipeJDBC e = new EquipeJDBC(this.con);
+	        	EquipeJDBC e = new EquipeJDBC();
 				Equipe equipe = e.getById(rs.getInt("idEquipe")).get();
 				
 	        	listeJoueurs.add(new Joueur(rs.getInt("idJoueur"),
@@ -47,13 +40,13 @@ public class JoueurJDBC implements JoueurDAO{
 		try {
 			String req = "SELECT * FROM Joueur WHERE idJoueur = ?";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setInt(1, id);
 			
 			ResultSet rs = st.executeQuery();
 			
 			if (rs.next()) {
-				EquipeJDBC e = new EquipeJDBC(this.con);
+				EquipeJDBC e = new EquipeJDBC();
 				Equipe equipe = e.getById(rs.getInt("idEquipe")).get();
 				
 				opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo"), equipe));
@@ -71,13 +64,13 @@ public class JoueurJDBC implements JoueurDAO{
 		try {
 			String req = "SELECT * FROM Joueur WHERE pseudo = ?";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setString(1, j);
 			
 			ResultSet rs = st.executeQuery();
 			
 			if (rs.next()) {
-				EquipeJDBC e = new EquipeJDBC(this.con);
+				EquipeJDBC e = new EquipeJDBC();
 				Equipe equipe = e.getById(rs.getInt("idEquipe")).get();
 				
 				opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo"), equipe));
@@ -94,7 +87,7 @@ public class JoueurJDBC implements JoueurDAO{
 		try {			
 			String req = "select * from Joueur where idEquipe = ?";
 			
-			PreparedStatement st  = con.prepareStatement(req);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setInt(1, equipe.getIdEquipe());
 			
 			ResultSet rs = st.executeQuery();
@@ -113,7 +106,7 @@ public class JoueurJDBC implements JoueurDAO{
 		try {
 			String addJoueur = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?, ?)";
 			
-			PreparedStatement st  = con.prepareStatement(addJoueur);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addJoueur);
 			
 			st.setString(1, j.getPseudo());
 			st.setInt(2, j.getEquipe().getIdEquipe());
@@ -137,7 +130,7 @@ public class JoueurJDBC implements JoueurDAO{
 					   		   + "SET pseudo = ?"
 					   		   + "WHERE idJoueur = ?";
 			
-			PreparedStatement st  = con.prepareStatement(updateJoueur);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateJoueur);
 			st.setString(1, j.getPseudo());
 			st.setInt(2, j.getId());
 
@@ -157,7 +150,7 @@ public class JoueurJDBC implements JoueurDAO{
 		try {
 			String updateJoueur = "DELETE FROM Joueur WHERE idJoueur = ?";
 			
-			PreparedStatement st  = con.prepareStatement(updateJoueur);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateJoueur);
 			st.setInt(1, j.getId());
 			
 			st.execute();
