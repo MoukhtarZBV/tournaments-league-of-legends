@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import modele.Niveau;
+import modele.Pays;
+
 public class CreateDB {
 	
 	public static void main(String[] args) {
@@ -405,6 +408,29 @@ public class CreateDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(-1);
+		}
+		
+		// ==========================================
+		// ========== Initialiser Tables ============
+		// ==========================================
+		// Table Pays
+		PaysJDBC paysJDBC = PaysJDBC.getInstance();
+		for (Pays pays : Pays.values()) {
+			try {
+				paysJDBC.add(pays);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// Table Niveau
+		NiveauJDBC niveauJDBC = new NiveauJDBC();
+		for (Niveau niveau : Niveau.values()) {
+			try {
+				niveauJDBC.add(niveau);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

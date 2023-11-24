@@ -16,6 +16,13 @@ import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO{
 	
+	public static synchronized TournoiJDBC getInstance() {
+		if(tournoiDB == null) {
+			tournoiDB = new TournoiJDBC(ConnectionJDBC.getConnection());
+		}
+		return tournoiDB;
+	}
+	
 	@Override
 	public List<Tournoi> getAll() throws Exception {
 		List<Tournoi> tournois = new ArrayList<>();
@@ -187,6 +194,16 @@ public class TournoiJDBC implements TournoiDAO{
 			e.printStackTrace();
 		}
 		return res;
+	}
+	
+	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
+		PreparedStatement st = cn.prepareStatement("SELECT COUNT(*) FROM Tournoi WHERE dateDebut BETWEEN ? AND ?");
+		st.setDate(1, dateDebut);
+		st.setDate(2, dateFin);
+		ResultSet res = st.executeQuery();
+		res.next();
+		int nb = res.getInt(1);
+		return nb > 0;
 	}
 
 }

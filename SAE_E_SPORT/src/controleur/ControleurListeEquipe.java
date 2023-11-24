@@ -1,10 +1,13 @@
 package controleur;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -15,8 +18,7 @@ import ihm.VueEquipe;
 import ihm.VueListeEquipe;
 import modele.Equipe;
 
-public class ControleurListeEquipe implements MouseListener {
-
+public class ControleurListeEquipe implements MouseListener, ActionListener{
 	private VueListeEquipe vue;
 
 	public ControleurListeEquipe(VueListeEquipe vue) {
@@ -30,6 +32,7 @@ public class ControleurListeEquipe implements MouseListener {
 				List<Equipe> equipes = (new EquipeJDBC().getAll());
 				VueEquipe vue = new VueEquipe(equipes,new EquipeJDBC().getByNom((String)list.getSelectedValue()));
 				vue.setVisible(true);
+				vue.dispose();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -37,6 +40,30 @@ public class ControleurListeEquipe implements MouseListener {
 		}
 		
 	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+	    JButton bouton = (JButton) e.getSource();
+	    List<Equipe> equipes;
+		try {
+			equipes = EquipeJDBC.getInstance().getAll();
+			List<String> nomEquipes = equipes.stream()
+		            .map(Equipe::getNom)
+		            .collect(Collectors.toList());
+
+		    List<String> nomEquipesTri = nomEquipes.stream()
+		            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+		            .collect(Collectors.toList());
+
+		    // Mise à jour du modèle de la JList dans la vue
+		    this.vue.updateListeEquipes(nomEquipesTri);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub

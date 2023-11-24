@@ -15,6 +15,13 @@ import modele.Pays;
 
 public class PaysJDBC implements PaysDAO {
 	
+	public static synchronized PaysJDBC getInstance() {
+		if(paysDB == null) {
+			paysDB = new PaysJDBC(ConnectionJDBC.getConnection());
+		}
+		return paysDB;
+	}
+	
 	@Override
 	public List<Pays> getAll() throws Exception {
 		List<Pays> pays = new ArrayList<>();
@@ -41,8 +48,8 @@ public class PaysJDBC implements PaysDAO {
 	public boolean add(Pays p) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Pays values (?)");
-			cs.setString(1, p.getNom());
+			CallableStatement cs = this.cn.prepareCall("insert into Pays values (?)");
+			cs.setString(1, p.denomination());
 			cs.execute();
 			res = true;
 		} catch (SQLException e) {
@@ -60,8 +67,8 @@ public class PaysJDBC implements PaysDAO {
 	public boolean delete(Pays p) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("delete from Pays where nomPays = ?");
-			cs.setString(1, p.getNom());
+			CallableStatement cs = this.cn.prepareCall("delete from Pays where nomPays = ?");
+			cs.setString(1, p.denomination());
 			cs.execute();
 			res = true;
 		} catch (SQLException e) {

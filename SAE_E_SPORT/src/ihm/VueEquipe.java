@@ -30,7 +30,13 @@ import java.awt.FlowLayout;
 import javax.swing.JComboBox;
 import javax.swing.table.TableModel;
 
+import controleur.ControleurEquipe;
+import controleur.ControleurListeEquipe;
+import dao.ConnectionJDBC;
+import dao.EquipeJDBC;
 import modele.Equipe;
+import modele.Joueur;
+import modele.Pays;
 
 public class VueEquipe extends JFrame {
 
@@ -51,13 +57,16 @@ public class VueEquipe extends JFrame {
 	private JButton btnBack;
 	private JComboBox comboPays;
 	private JTable table;
+	private Optional<Equipe> equipe;
 
 	/**
 	 * Launch the application.
 	 */
 	public VueEquipe(List<Equipe> equipes, Optional<Equipe> equipe) {
+		this.equipe = equipe;
+		ControleurEquipe controleur = new ControleurEquipe(this);
 		setMaximumSize(new Dimension(800, 800));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 563, 400);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -123,6 +132,13 @@ public class VueEquipe extends JFrame {
 		panelPays.setBorder(new EmptyBorder(30, 20, 0, 80));
 		
 		comboPays = new JComboBox();
+		comboPays.setBackground(new Color(255, 255, 255));
+		comboPays.addItem(equipe.get().getNationalite().denomination());
+		for (Pays p  : Pays.values()) {
+			if (p.denomination() != equipe.get().getNationalite().denomination()) {
+				comboPays.addItem(p.denomination());
+			}
+		}
 		panelPays.add(comboPays);
 		
 		panelButton = new JPanel();
@@ -133,9 +149,11 @@ public class VueEquipe extends JFrame {
 		btnSave = new JButton("Sauvegarder");
 		btnSave.setMinimumSize(new Dimension(63, 21));
 		btnSave.setMaximumSize(new Dimension(63, 21));
+		btnSave.addActionListener(controleur);
 		panelButton.add(btnSave);
 		
 		btnBack = new JButton("Retour");
+		btnBack.addActionListener(controleur);
 		panelButton.add(btnBack);
 		panelButton.setBorder(new EmptyBorder(20, 20, 0, 20));
 		
@@ -145,11 +163,17 @@ public class VueEquipe extends JFrame {
 		right.setLayout(new BorderLayout(0, 0));
 		
 		// Données du tableau (A RETIRER PLUS TARD)
-        String[] columnsName = new String [] {"", "Membres"};
+        Object[] columnsName = new Object [] {"", "Membres"};
         
-        // Création du DefaultTableModel avec les données et les en-têtes
-        DefaultTableModel model = new DefaultTableModel(columnsName, 6);
-		
+        DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] {"Image", "Produit"});
+        
+        int objetCourant = 0;
+        for (Joueur j : equipe.get().getJoueurs()) {
+        	model.addRow(new Object[] {objetCourant+1,j.getPseudo()});
+        	objetCourant ++;
+        }
+        
 		table = new JTable(model);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
 		table.setRowHeight(25);
@@ -159,5 +183,20 @@ public class VueEquipe extends JFrame {
 		columnModel.getColumn(0).setPreferredWidth(1);
 		columnModel.getColumn(1).setPreferredWidth(130);
 	}
+	
+	public String getNomEquipe() {
+		return fieldName.getText();
+	}
+	
+	public int getIdEquipe() {
+		return this.equipe.get().getIdEquipe();
+	}
 
+	public int getRangEquipe() {
+		return Integer.parseInt(fieldWR.getText());
+	}
+	
+	public Pays getPaysEquipe() {
+		return Pays.getPays((String)comboPays.getSelectedItem());
+	}
 }

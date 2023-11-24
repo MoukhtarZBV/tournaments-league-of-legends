@@ -16,7 +16,7 @@ public class TestPays {
 //		pjdbc.add(Pays.AD);
 		
 		for(Pays p : pjdbc.getAll()) {
-				System.out.println(p.getNom());
+			System.out.println(p.getNom());
 		}
 		
 	}

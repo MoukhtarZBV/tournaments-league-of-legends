@@ -14,6 +14,13 @@ import modele.Pays;
 
 public class EquipeJDBC implements EquipeDAO{
 	
+	public static synchronized EquipeJDBC getInstance() {
+		if(equipeDB == null) {
+			equipeDB = new EquipeJDBC(ConnectionJDBC.getConnection());
+		}
+		return equipeDB;
+	}
+	
 	@Override
 	public List<Equipe> getAll() throws Exception {
 		List<Equipe> equipes = new ArrayList<>();
@@ -46,7 +53,7 @@ public class EquipeJDBC implements EquipeDAO{
 				JoueurJDBC j = new JoueurJDBC();
 				for(Joueur jou : j.getByEquipe(e)) {
 					e.ajouterJoueur(jou);
-				};
+				}
 				equipes = Optional.ofNullable(e);
 			}
 		} catch (SQLException e) {
@@ -66,7 +73,7 @@ public class EquipeJDBC implements EquipeDAO{
 			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (NEXT VALUE FOR SEQ_EQUIPE,?,?,?)");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().getNom());
+			cs.setString(3, e.getNationalite().denomination());
 			cs.executeUpdate();
 			
 			res = true;
@@ -83,7 +90,7 @@ public class EquipeJDBC implements EquipeDAO{
 			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("update Equipe set nomEquipe = ?, rang = ?, nationalite = ? where idEquipe = ?");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().getNom());
+			cs.setString(3, e.getNationalite().denomination());
 			cs.setInt(4, e.getIdEquipe());
 			cs.executeUpdate();
 			res = true;

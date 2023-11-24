@@ -42,6 +42,7 @@ public class VueListeEquipe extends JFrame {
 	private JPanel contentPane;
 	private List<Equipe> equipes;
 	private JTextField searchBar;
+	private JList listeEquipes;
 
 	/**
 	 * Launch the application.
@@ -80,6 +81,7 @@ public class VueListeEquipe extends JFrame {
 				.collect(Collectors.toList());
 		
 		JList listeEquipes = new JList(nomEquipes.toArray());
+		this.listeEquipes = listeEquipes;
 		listeEquipes.addMouseListener(controleur);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -108,6 +110,7 @@ public class VueListeEquipe extends JFrame {
 
         validateBtn.setBackground(Color.WHITE);
         validateBtn.setForeground(Color.BLACK);
+        validateBtn.addActionListener(controleur);
         
         // Définition de la bordure
         
@@ -122,6 +125,14 @@ public class VueListeEquipe extends JFrame {
         Font buttonFont = new Font("Arial", Font.PLAIN, 14);
         validateBtn.setFont(buttonFont);
 		panelSearch.add(validateBtn);
+	}
+	
+	public String getSearch() {
+		return searchBar.getText();
+	}
+	public void updateListeEquipes(List<String> elementsFiltres) {
+	    this.listeEquipes.setListData(elementsFiltres.toArray(new String[0]));
+	    this.listeEquipes.repaint();
 	}
 
 }

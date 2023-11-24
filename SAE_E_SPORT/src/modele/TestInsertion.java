@@ -22,7 +22,7 @@ public class TestInsertion {
 		//String req2 = "INSERT INTO PAYS VALUES('FR')";
 		//st.executeUpdate(req2);
 
-		
+		/*
 		equipe.add(new Equipe(3,"DanFQFQFQois",11,Pays.FR));
 		equipe.add(new Equipe(5,"DanFQFDQDois",11,Pays.FR));
 		equipe.add(new Equipe(6,"DanoFQFis",11,Pays.FR));
@@ -36,5 +36,6 @@ public class TestInsertion {
 		equipe.add(new Equipe(14,"Dnis",11,Pays.FR));
 		equipe.add(new Equipe(15,"Dois",11,Pays.FR));
 		equipe.add(new Equipe(16,"Da",11,Pays.FR));
+		*/
 	}
 }
