@@ -38,61 +38,66 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 		this.modele = new ModeleCreationTournoi();
 		this.etat = Etat.FIN_SAISIE;
 		this.vue = vue;
-		this.jdbc = TournoiJDBC.getInstance();
+		this.jdbc = new TournoiJDBC();
 		
 		this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JButton bouton = (JButton) e.getSource();
-		switch (this.etat) {
-			case SAISIE:
-				if (bouton.getText() == "Annuler") {
-					System.exit(0);
-				}
-				break;
-			case FIN_SAISIE:
-				if (bouton.getText() == "Annuler") {
-					System.exit(0);
-				}
-				if (bouton.getText() == "Valider") {
-					if (vue.champVide()) {
-						vue.afficherMessageErreur("Veuillez remplir tous les champs");
-					} else if (vue.nomTropLong()) {
-						vue.afficherMessageErreur("Le nom ne doit pas dépasser les 100 caractères");
-					} else
-						try {
-							if (jdbc.existeTournoiEntreDates(vue.getDateDebut(), vue.getDateFin())) {
-								vue.afficherMessageErreur("Un tournoi existe déjà sur ce créneau");
-							} else {
-								Tournoi tournoi = new Tournoi(0, 
-										vue.getNom(), 
-										vue.getNiveau(), 
-										vue.getDateDebut(), 
-										vue.getDateFin(), 
-										vue.getPays());		
-								System.out.println(vue.getNiveau() + " - " + vue.getPays());
-								jdbc.add(tournoi);
-								for (Tournoi t : jdbc.getAll()) {
-									System.out.println(t);
+		if (e.getSource() instanceof JButton) {
+			JButton bouton = (JButton) e.getSource();
+			switch (this.etat) {
+				case SAISIE:
+					if (bouton.getText() == "Annuler") {
+						System.exit(0);
+					}
+					break;
+				case FIN_SAISIE:
+					if (bouton.getText() == "Annuler") {
+						System.exit(0);
+					}
+					if (bouton.getText() == "Valider") {
+						if (vue.champVide()) {
+							vue.afficherMessageErreur("Veuillez remplir tous les champs");
+						} else if (vue.nomTropLong()) {
+							vue.afficherMessageErreur("Le nom ne doit pas dépasser les 100 caractères");
+						} else
+							try {
+								if (jdbc.existeTournoiEntreDates(vue.getDateDebut(), vue.getDateFin())) {
+									vue.afficherMessageErreur("Un tournoi existe déjà sur ce créneau");
+								} else {
+									Tournoi tournoi = new Tournoi(0, 
+											vue.getNom(), 
+											vue.getNiveau(), 
+											vue.getDateDebut(), 
+											vue.getDateFin(), 
+											vue.getPays());		
+									System.out.println(vue.getNiveau().denomination() + " - " + vue.getPays());
+									jdbc.add(tournoi);
+									for (Tournoi t : jdbc.getAll()) {
+										System.out.println("Tournoi : " + t.getNomTournoi() + " | Du " + t.getDateDebut() + " au " + t.getDateFin());
+									}
+									vue.effacerMessageErreur();
 								}
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							} catch (Exception e1) {
+								e1.printStackTrace();
 							}
-						} catch (SQLException e1) {
-							e1.printStackTrace();
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-				}
-				break;
+					}
+					break;
+			}
 		}
 	}
 
 	@Override
 	public void focusGained(FocusEvent e) {
 		JFormattedTextField txt = (JFormattedTextField)e.getSource();
-		txt.setForeground(Color.BLACK);
-		txt.setText("");
+		if (txt.getForeground() == Color.LIGHT_GRAY) {
+			txt.setForeground(Color.BLACK);
+			txt.setText("");
+		}
 	}
 
 	@Override

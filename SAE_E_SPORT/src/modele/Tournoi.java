@@ -85,6 +85,11 @@ public class Tournoi {
 		return false;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "Tournoi [id="+ this.idTournoi + ", name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
+				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +"]";
+				
+	}
 	
 }

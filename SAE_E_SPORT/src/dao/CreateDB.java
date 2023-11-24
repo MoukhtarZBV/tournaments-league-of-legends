@@ -411,10 +411,27 @@ public class CreateDB {
 		}
 		
 		// ==========================================
+		// ========== Creation fonctions ============
+		// ==========================================
+		/*
+		try {
+			stmt.executeUpdate("CREATE OR REPLACE FUNCTION EstTournoiDisjoint"
+					+ "(T1_DATEDEBUT Date,"
+					+ "T1_DATEFIN Date,"
+					+ "T2_DATEDEBUT Date,"
+					+ "T2_DATEDEBUT Date) RETURN VARCHAR2 AS"
+					+ "BEGIN"
+					);
+			System.out.println("Drop Associer effectué");
+		} catch (SQLException e) {
+			
+		}*/
+		
+		// ==========================================
 		// ========== Initialiser Tables ============
 		// ==========================================
 		// Table Pays
-		PaysJDBC paysJDBC = PaysJDBC.getInstance();
+		PaysJDBC paysJDBC = new PaysJDBC();
 		for (Pays pays : Pays.values()) {
 			try {
 				paysJDBC.add(pays);
@@ -424,7 +441,7 @@ public class CreateDB {
 		}
 		
 		// Table Niveau
-		NiveauJDBC niveauJDBC = new NiveauJDBC();
+		NiveauJDBC niveauJDBC = NiveauJDBC.getInstance();
 		for (Niveau niveau : Niveau.values()) {
 			try {
 				niveauJDBC.add(niveau);

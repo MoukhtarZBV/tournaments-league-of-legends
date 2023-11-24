@@ -498,7 +498,7 @@ public class VueCreationTournoi extends JFrame {
 		indexSeparateur = date.indexOf('/');
 		int mois = Integer.valueOf(date.substring(0, indexSeparateur));
 		
-		date = date.substring(indexSeparateur + 1);
+		date = date.substring(indexSeparateur);
 		int annee = Integer.valueOf(date.substring(1));
 		
 		LocalDate localDate = LocalDate.of(annee, mois, jour);

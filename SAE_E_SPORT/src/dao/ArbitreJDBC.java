@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,25 +12,11 @@ import modele.Arbitre;
 
 public class ArbitreJDBC implements ArbitreDAO{
 	
-	private Connection con;
-	private static ArbitreJDBC arbitreDB;
-
-	private ArbitreJDBC (Connection c) {
-		con = c;
-	}
-	
-	public static synchronized ArbitreJDBC getInstance() {
-		if(arbitreDB == null) {
-			arbitreDB = new ArbitreJDBC(ConnectionJDBC.getConnection());
-		}
-		return arbitreDB;
-	}
-	
 	@Override
 	public List<Arbitre> getAll() throws Exception {
         List<Arbitre> listeArbitres = new ArrayList<>();
 		try {
-			Statement st = con.createStatement();
+			Statement st = ConnectionJDBC.getConnection().createStatement();
 	        ResultSet rs = st.executeQuery("select * from Arbitre");
 	        
 	        while (rs.next()) {
@@ -52,7 +37,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 		try {
 			String req = "SELECT * FROM Arbitre WHERE idArbitre = ?;";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setInt(1, id);
 			
 			ResultSet rs = st.executeQuery(req);
@@ -71,7 +56,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 		try {
 			String req = "SELECT * FROM Arbitre WHERE nom = ? AND prenom = ?;";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setString(1, nom);
 			st.setString(2, prenom);
 			
@@ -91,7 +76,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 		try {
 			String addArbitre = "INSERT INTO Arbitre VALUES (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
 			
-			PreparedStatement st  = con.prepareStatement(addArbitre);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addArbitre);
 			
 			st.setString(1, value.getNom());
 			st.setString(2, value.getPrenom());
@@ -115,7 +100,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 					   		   + "SET nom = ?, prenom = ?"
 					   		   + "WHERE idArbitre = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateArbitre);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateArbitre);
 			st.setString(1, value.getNom());
 			st.setString(2, value.getPrenom());
 			st.setInt(3, value.getId());
@@ -137,7 +122,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 		try {
 			String updateArbitre = "DELETE FROM Arbitre WHERE idArbitre = ?;";
 			
-			PreparedStatement st  = con.prepareStatement(updateArbitre);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateArbitre);
 			st.setInt(1, value.getId());
 			
 			st.executeUpdate();
