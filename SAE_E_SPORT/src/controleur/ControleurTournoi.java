@@ -38,7 +38,7 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 		this.modele = new ModeleCreationTournoi();
 		this.etat = Etat.FIN_SAISIE;
 		this.vue = vue;
-		this.jdbc = new TournoiJDBC(cn);
+		this.jdbc = TournoiJDBC.getInstance();
 		
 		this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 	}

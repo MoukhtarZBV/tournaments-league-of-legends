@@ -81,7 +81,7 @@ public class EquipeJDBC implements EquipeDAO{
 			CallableStatement cs = cn.prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (NEXT VALUE FOR SEQ_EQUIPE,?,?,?)");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().getNom());
+			cs.setString(3, e.getNationalite().denomination());
 			cs.executeUpdate();
 			
 			res = true;
@@ -98,7 +98,7 @@ public class EquipeJDBC implements EquipeDAO{
 			CallableStatement cs = cn.prepareCall("update Equipe set nomEquipe = ?, rang = ?, nationalite = ? where idEquipe = ?");
 			cs.setString(1, e.getNom());
 			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().getNom());
+			cs.setString(3, e.getNationalite().denomination());
 			cs.setInt(4, e.getIdEquipe());
 			cs.executeUpdate();
 			res = true;

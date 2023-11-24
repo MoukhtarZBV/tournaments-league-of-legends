@@ -133,10 +133,10 @@ public class VueEquipe extends JFrame {
 		
 		comboPays = new JComboBox();
 		comboPays.setBackground(new Color(255, 255, 255));
-		comboPays.addItem(equipe.get().getNationalite().getNom());
+		comboPays.addItem(equipe.get().getNationalite().denomination());
 		for (Pays p  : Pays.values()) {
-			if (p.getNom() != equipe.get().getNationalite().getNom()) {
-				comboPays.addItem(p.getNom());
+			if (p.denomination() != equipe.get().getNationalite().denomination()) {
+				comboPays.addItem(p.denomination());
 			}
 		}
 		panelPays.add(comboPays);

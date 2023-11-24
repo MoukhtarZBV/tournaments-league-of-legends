@@ -23,7 +23,7 @@ public class TestPays {
 		
 		for(Pays p : pjdbc.getAll()) {
 			if (p != null) {
-				System.out.println(p.getNom());
+				System.out.println(p.denomination());
 			}
 		}
 		

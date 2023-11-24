@@ -414,7 +414,7 @@ public class CreateDB {
 		// ========== Initialiser Tables ============
 		// ==========================================
 		// Table Pays
-		PaysJDBC paysJDBC = new PaysJDBC(connection);
+		PaysJDBC paysJDBC = PaysJDBC.getInstance();
 		for (Pays pays : Pays.values()) {
 			try {
 				paysJDBC.add(pays);
