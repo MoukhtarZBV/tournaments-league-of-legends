@@ -39,7 +39,7 @@ public class TournoiJDBC implements TournoiDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi");
 			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.valueOf(rs.getString("niveau").toUpperCase()), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.valueOf(rs.getString("nomPays").toUpperCase())));
+				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
 			}
 			
 		} catch (SQLException e) {
@@ -69,16 +69,15 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean add(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = cn.prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, vainqueur) values (NEXT VALUE FOR SEQ_Tournoi,?,?,?,?,?)");
+			CallableStatement cs = cn.prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, idCompte, idEquipe) values (NEXT VALUE FOR SEQ_Tournoi, ?, ?, ?, ?, NULL, NULL)");
 			cs.setString(1, t.getNomTournoi());
 			cs.setString(2, t.getNiveau().denomination());
 			cs.setDate(3, t.getDateDebut());
 			cs.setDate(4, t.getDateFin());
-			cs.setInt(5, t.getVainqueur().getIdEquipe());
 			cs.executeUpdate();
 			res = true;
 			
-			System.out.println("Tournoi "+t.getNomTournoi().toUpperCase()+" ajoute.");
+			System.out.println("Tournoi "+t.getNomTournoi()+" ajoute.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
