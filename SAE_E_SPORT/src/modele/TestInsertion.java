@@ -11,11 +11,13 @@ public class TestInsertion {
 	public static void main (String[]args) throws Exception {	
 													
 		// Création d'une connexion
-		EquipeJDBC equipe = EquipeJDBC.getInstance();
+		Connection dbConnection = ConnectionJDBC.getConnection();
 		
-		 //Statement st = dbConnection.createStatement();
-		 //String req = "DELETE FROM EQUIPE";
-		 //st.executeUpdate(req);
+		EquipeJDBC equipe = new EquipeJDBC();
+		
+		// Statement st = dbConnection.createStatement();
+		// String req = "DELETE FROM EQUIPE";
+		// st.executeUpdate(req);
 		
 		//String req2 = "INSERT INTO PAYS VALUES('FR')";
 		//st.executeUpdate(req2);

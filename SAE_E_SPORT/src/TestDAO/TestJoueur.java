@@ -14,13 +14,12 @@ import modele.Pays;
 public class TestJoueur {
 
 	public static void main (String[] args) throws Exception {
-		Connection c = ConnectionJDBC.getConnection();
 		
-		EquipeJDBC eJDBC = EquipeJDBC.getInstance();
-		JoueurJDBC jJDBC = JoueurJDBC.getInstance();
+		EquipeJDBC eJDBC = new EquipeJDBC();
+		JoueurJDBC jJDBC = new JoueurJDBC();
 
-		c.createStatement().execute("insert into Pays values('France')");
-		c.createStatement().execute("insert into Pays values('Taiwan')");
+		ConnectionJDBC.getConnection().createStatement().execute("insert into Pays values('France')");
+		ConnectionJDBC.getConnection().createStatement().execute("insert into Pays values('Taiwan')");
 		
 		Equipe e1 = new Equipe(1, "T1", 1000, Pays.FR);
 		
@@ -82,7 +81,7 @@ public class TestJoueur {
 		int id2 = eJDBC.getIdByNom("GenG");
 		System.out.println("Team 2 : " + id2);
 		
-		c.close();
+		ConnectionJDBC.getConnection().close();
 	}
 	
 }

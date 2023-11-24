@@ -33,6 +33,10 @@ public class Joueur {
 		this.pseudo = pseudo;
 	}
 	
+	public void setEquipe(Equipe e) {
+		this.equipe = e;
+	}
+	
 	// Overrides
 	@Override
 	public boolean equals(Object o) {
