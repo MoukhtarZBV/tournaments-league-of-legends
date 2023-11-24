@@ -3,6 +3,7 @@ package dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -122,6 +123,16 @@ public class TournoiJDBC implements TournoiDAO{
 			e.printStackTrace();
 		}
 		return res;
+	}
+	
+	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
+		PreparedStatement st = cn.prepareStatement("SELECT COUNT(*) FROM Tournoi WHERE dateDebut BETWEEN ? AND ?");
+		st.setDate(1, dateDebut);
+		st.setDate(2, dateFin);
+		ResultSet res = st.executeQuery();
+		res.next();
+		int nb = res.getInt(1);
+		return nb > 0;
 	}
 
 }
