@@ -14,10 +14,10 @@ import modele.Pays;
 public class TestJoueur {
 
 	public static void main (String[] args) throws Exception {
-		Connection c = ConnectionJDBC.createConnection();
+		Connection c = ConnectionJDBC.getConnection();
 		
-		EquipeJDBC eJDBC = new EquipeJDBC(c);
-		JoueurJDBC jJDBC = new JoueurJDBC(c);
+		EquipeJDBC eJDBC = EquipeJDBC.getInstance();
+		JoueurJDBC jJDBC = JoueurJDBC.getInstance();
 
 		c.createStatement().execute("insert into Pays values('France')");
 		c.createStatement().execute("insert into Pays values('Taiwan')");

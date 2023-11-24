@@ -17,9 +17,17 @@ import modele.Tournoi;
 public class TournoiJDBC implements TournoiDAO{
 
 	private Connection cn;
+	private static TournoiJDBC tournoiDB;
 	
-	public TournoiJDBC (Connection c) {
+	private TournoiJDBC (Connection c) {
 		this.cn = c;
+	}
+	
+	public static synchronized TournoiJDBC getInstance() {
+		if(tournoiDB == null) {
+			tournoiDB = new TournoiJDBC(ConnectionJDBC.getConnection());
+		}
+		return tournoiDB;
 	}
 	
 	@Override

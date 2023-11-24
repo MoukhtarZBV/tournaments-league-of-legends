@@ -16,9 +16,17 @@ import modele.Tournoi;
 public class PartieJDBC implements PartieDAO{
 
 	private Connection cn;
+	private static PartieJDBC partieDB;
 	
-	public PartieJDBC (Connection c) {
+	private PartieJDBC (Connection c) {
 		this.cn = c;
+	}
+	
+	public static synchronized PartieJDBC getInstance() {
+		if(partieDB == null) {
+			partieDB = new PartieJDBC(ConnectionJDBC.getConnection());
+		}
+		return partieDB;
 	}
 	
 	@Override
@@ -28,9 +36,9 @@ public class PartieJDBC implements PartieDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Partie");
 			while(rs.next()) {
-				TournoiJDBC tournoiBDD = new TournoiJDBC(this.cn);
+				TournoiJDBC tournoiBDD = TournoiJDBC.getInstance();
 				Tournoi tournoi = tournoiBDD.getById(rs.getInt("idTournoi")).get();
-				EquipeJDBC equipeBDD = new EquipeJDBC(this.cn);
+				EquipeJDBC equipeBDD = EquipeJDBC.getInstance();
 				Equipe equipe = equipeBDD.getById(rs.getInt("equipe")).get();
 				
 				parties.add(new Partie(rs.getDate("dateDebut"), rs.getTime("heureDebut"), rs.getString("deroulement"), equipe, tournoi));
@@ -50,9 +58,9 @@ public class PartieJDBC implements PartieDAO{
 			Statement st = cn.createStatement();
 			ResultSet rs = st.executeQuery("select * from Partie where idPartie = "+id);
 			if (rs.next()) {
-				TournoiJDBC tournoiBDD = new TournoiJDBC(this.cn);
+				TournoiJDBC tournoiBDD = TournoiJDBC.getInstance();
 				Tournoi tournoi = tournoiBDD.getById(rs.getInt("idTournoi")).get();
-				EquipeJDBC equipeBDD = new EquipeJDBC(this.cn);
+				EquipeJDBC equipeBDD = EquipeJDBC.getInstance();
 				Equipe equipe = equipeBDD.getById(rs.getInt("equipe")).get();
 				partie = Optional.ofNullable(new Partie(rs.getDate("dateDebut"), rs.getTime("heureDebut"), rs.getString("deroulement"), equipe, tournoi));
 			}

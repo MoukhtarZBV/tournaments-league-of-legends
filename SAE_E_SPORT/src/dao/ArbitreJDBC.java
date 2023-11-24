@@ -14,9 +14,17 @@ import modele.Arbitre;
 public class ArbitreJDBC implements ArbitreDAO{
 	
 	private Connection con;
+	private static ArbitreJDBC arbitreDB;
 
-	public ArbitreJDBC (Connection c) {
+	private ArbitreJDBC (Connection c) {
 		con = c;
+	}
+	
+	public static synchronized ArbitreJDBC getInstance() {
+		if(arbitreDB == null) {
+			arbitreDB = new ArbitreJDBC(ConnectionJDBC.getConnection());
+		}
+		return arbitreDB;
 	}
 	
 	@Override

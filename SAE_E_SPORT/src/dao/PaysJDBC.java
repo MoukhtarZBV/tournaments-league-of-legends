@@ -16,9 +16,17 @@ import modele.Pays;
 public class PaysJDBC implements PaysDAO {
 
 	private Connection cn;
+	private static PaysJDBC paysDB;
 	
-	public PaysJDBC (Connection cn) {
+	private PaysJDBC (Connection cn) {
 		this.cn = cn;
+	}
+	
+	public static synchronized PaysJDBC getInstance() {
+		if(paysDB == null) {
+			paysDB = new PaysJDBC(ConnectionJDBC.getConnection());
+		}
+		return paysDB;
 	}
 	
 	@Override

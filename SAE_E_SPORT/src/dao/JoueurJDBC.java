@@ -15,9 +15,17 @@ import modele.Joueur;
 public class JoueurJDBC implements JoueurDAO{
 	
 	private Connection con;
+	private static JoueurJDBC joueurDB;
 
-	public JoueurJDBC (Connection c) {
+	private JoueurJDBC (Connection c) {
 		this.con = c;
+	}
+	
+	public static synchronized JoueurJDBC getInstance() {
+		if(joueurDB == null) {
+			joueurDB = new JoueurJDBC(ConnectionJDBC.getConnection());
+		}
+		return joueurDB;
 	}
 	
 	@Override
@@ -28,7 +36,7 @@ public class JoueurJDBC implements JoueurDAO{
 	        ResultSet rs = st.executeQuery("select * from joueur");
         
 	        while (rs.next()) {
-	        	EquipeJDBC e = new EquipeJDBC(this.con);
+	        	EquipeJDBC e = EquipeJDBC.getInstance();
 				Equipe equipe = e.getById(rs.getInt("idEquipe")).get();
 				
 	        	listeJoueurs.add(new Joueur(rs.getInt("idJoueur"),
@@ -53,7 +61,7 @@ public class JoueurJDBC implements JoueurDAO{
 			ResultSet rs = st.executeQuery();
 			
 			if (rs.next()) {
-				EquipeJDBC e = new EquipeJDBC(this.con);
+				EquipeJDBC e = EquipeJDBC.getInstance();
 				Equipe equipe = e.getById(rs.getInt("idEquipe")).get();
 				
 				opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo"), equipe));
@@ -77,7 +85,7 @@ public class JoueurJDBC implements JoueurDAO{
 			ResultSet rs = st.executeQuery();
 			
 			if (rs.next()) {
-				EquipeJDBC e = new EquipeJDBC(this.con);
+				EquipeJDBC e = EquipeJDBC.getInstance();
 				Equipe equipe = e.getById(rs.getInt("idEquipe")).get();
 				
 				opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo"), equipe));

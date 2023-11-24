@@ -16,9 +16,17 @@ import modele.Pays;
 public class EquipeJDBC implements EquipeDAO{
 
 	private Connection cn;
+	private static EquipeJDBC equipeDB;
 	
-	public EquipeJDBC (Connection c) {
+	private EquipeJDBC (Connection c) {
 		this.cn = c;
+	}
+	
+	public static synchronized EquipeJDBC getInstance() {
+		if(equipeDB == null) {
+			equipeDB = new EquipeJDBC(ConnectionJDBC.getConnection());
+		}
+		return equipeDB;
 	}
 	
 	@Override
@@ -29,7 +37,7 @@ public class EquipeJDBC implements EquipeDAO{
 			ResultSet rs = st.executeQuery("select * from Equipe");
 			while(rs.next()) {
 				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
-				JoueurJDBC j = new JoueurJDBC(this.cn);
+				JoueurJDBC j = JoueurJDBC.getInstance();
 				for(Joueur joueur : j.getByEquipe(e)) {
 					e.ajouterJoueur(joueur);
 				};
@@ -50,7 +58,7 @@ public class EquipeJDBC implements EquipeDAO{
 			ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 			if(rs.next()) {
 				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
-				JoueurJDBC j = new JoueurJDBC(this.cn);
+				JoueurJDBC j = JoueurJDBC.getInstance();
 				for(Joueur jou : j.getByEquipe(e)) {
 					e.ajouterJoueur(jou);
 				}
@@ -104,7 +112,7 @@ public class EquipeJDBC implements EquipeDAO{
 	public boolean delete(Equipe e) throws Exception {
 		boolean res = false;
 		try {
-			JoueurJDBC jjdbc = new JoueurJDBC(this.cn);
+			JoueurJDBC jjdbc = JoueurJDBC.getInstance();
 			for (Joueur joueur : e.getJoueurs()) {
 				jjdbc.update(joueur);
 			}
@@ -125,7 +133,7 @@ public class EquipeJDBC implements EquipeDAO{
 			ResultSet rs = st.executeQuery("select * from Equipe where nomEquipe = '"+nom+"'");	
 			if (rs.next()) {
 				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
-				JoueurJDBC j = new JoueurJDBC(this.cn);
+				JoueurJDBC j = JoueurJDBC.getInstance();
 				for(Joueur jou : j.getByEquipe(e)) {
 					e.ajouterJoueur(jou);
 				};

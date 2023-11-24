@@ -16,10 +16,18 @@ import modele.TypeCompte;
 
 public class CompteJDBC implements CompteDAO{
 	
-	private static Connection con;
+	private Connection con;
+	private static CompteJDBC compteDB;
 
-	public CompteJDBC (Connection c) {
-		con = c;
+	private CompteJDBC (Connection c) {
+		this.con = c;
+	}
+	
+	public static synchronized CompteJDBC getInstance() {
+		if(compteDB == null) {
+			compteDB = new CompteJDBC(ConnectionJDBC.getConnection());
+		}
+		return compteDB;
 	}
 	
 	@Override

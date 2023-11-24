@@ -14,9 +14,17 @@ import modele.Administrateur;
 public class AdminJDBC implements AdminDAO {
 	
 	private Connection con;
+	private static AdminJDBC adminDB;
 
-	public AdminJDBC (Connection c) {
+	private AdminJDBC (Connection c) {
 		con = c;
+	}
+	
+	public static synchronized AdminJDBC getInstance() {
+		if(adminDB == null) {
+			adminDB = new AdminJDBC(ConnectionJDBC.getConnection());
+		}
+		return adminDB;
 	}
 	
 	@Override

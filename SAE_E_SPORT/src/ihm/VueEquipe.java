@@ -35,6 +35,7 @@ import controleur.ControleurListeEquipe;
 import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import modele.Equipe;
+import modele.Joueur;
 import modele.Pays;
 
 public class VueEquipe extends JFrame {
@@ -162,11 +163,17 @@ public class VueEquipe extends JFrame {
 		right.setLayout(new BorderLayout(0, 0));
 		
 		// Données du tableau (A RETIRER PLUS TARD)
-        String[] columnsName = new String [] {"", "Membres"};
+        Object[] columnsName = new Object [] {"", "Membres"};
         
-        // Création du DefaultTableModel avec les données et les en-têtes
-        DefaultTableModel model = new DefaultTableModel(columnsName, 6);
-		
+        DefaultTableModel model = new DefaultTableModel(new Object[][] {},
+				new String[] {"Image", "Produit"});
+        
+        int objetCourant = 0;
+        for (Joueur j : equipe.get().getJoueurs()) {
+        	model.addRow(new Object[] {objetCourant+1,j.getPseudo()});
+        	objetCourant ++;
+        }
+        
 		table = new JTable(model);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
 		table.setRowHeight(25);

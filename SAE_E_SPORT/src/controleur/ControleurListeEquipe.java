@@ -29,8 +29,8 @@ public class ControleurListeEquipe implements MouseListener, ActionListener{
 		JList list = (JList) e.getSource();
 		if (e.getClickCount() == 2) {
 			try {
-			List<Equipe> equipes = (new EquipeJDBC(ConnectionJDBC.createConnection()).getAll());
-			VueEquipe vue = new VueEquipe(equipes,new EquipeJDBC(ConnectionJDBC.createConnection()).getByNom((String)list.getSelectedValue()));
+			List<Equipe> equipes = (EquipeJDBC.getInstance().getAll());
+			VueEquipe vue = new VueEquipe(equipes,EquipeJDBC.getInstance().getByNom((String)list.getSelectedValue()));
 			vue.setVisible(true);
 			this.vue.dispose();
 
@@ -47,7 +47,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener{
 	    JButton bouton = (JButton) e.getSource();
 	    List<Equipe> equipes;
 		try {
-			equipes = new EquipeJDBC(ConnectionJDBC.createConnection()).getAll();
+			equipes = EquipeJDBC.getInstance().getAll();
 			List<String> nomEquipes = equipes.stream()
 		            .map(Equipe::getNom)
 		            .collect(Collectors.toList());

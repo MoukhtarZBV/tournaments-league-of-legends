@@ -11,9 +11,7 @@ public class TestInsertion {
 	public static void main (String[]args) throws Exception {	
 													
 		// Création d'une connexion
-		Connection dbConnection = ConnectionJDBC.createConnection();
-		
-		EquipeJDBC equipe = new EquipeJDBC(dbConnection);
+		EquipeJDBC equipe = EquipeJDBC.getInstance();
 		
 		 //Statement st = dbConnection.createStatement();
 		 //String req = "DELETE FROM EQUIPE";

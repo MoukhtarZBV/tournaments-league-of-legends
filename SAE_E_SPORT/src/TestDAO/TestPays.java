@@ -11,8 +11,8 @@ import modele.Pays;
 public class TestPays {
 
 	public static void main(String[] args) throws Exception {
-		Connection c = ConnectionJDBC.createConnection();
-		PaysJDBC pjdbc = new PaysJDBC(c);
+		Connection c = ConnectionJDBC.getConnection();
+		PaysJDBC pjdbc = PaysJDBC.getInstance();
 		
 		pjdbc.add(Pays.AD);
 		

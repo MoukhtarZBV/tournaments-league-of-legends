@@ -25,12 +25,11 @@ public class ControleurEquipe implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
-		EquipeJDBC equipesBD = new EquipeJDBC(ConnectionJDBC.createConnection());
 		if (bouton.getText().equals("Sauvegarder")) {
 			try {
-				equipesBD.update(new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe()));
+				EquipeJDBC.getInstance().update(new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe()));
 				this.vue.dispose();
-				VueListeEquipe vue = new VueListeEquipe(equipesBD.getAll());
+				VueListeEquipe vue = new VueListeEquipe(EquipeJDBC.getInstance().getAll());
 				vue.setVisible(true);
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -40,7 +39,7 @@ public class ControleurEquipe implements ActionListener{
 			this.vue.dispose();
 			VueListeEquipe vue;
 			try {
-				vue = new VueListeEquipe(equipesBD.getAll());
+				vue = new VueListeEquipe(EquipeJDBC.getInstance().getAll());
 				vue.setVisible(true);
 			} catch (Exception e1) {
 				e1.printStackTrace();
