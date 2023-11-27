@@ -12,7 +12,7 @@ public class Arbitre {
 	public Arbitre(int id, String nomArbitre, String prenomArbitre) {
 		this.idArbitre = id;
 		this.nomArbitre = nomArbitre;
-		this.prenomArbitre = nomArbitre;
+		this.prenomArbitre = prenomArbitre;
 	}
 	
 	// Get
@@ -52,7 +52,7 @@ public class Arbitre {
 	
 	@Override 
 	public int hashCode() {
-		return Objects.hash(this.idArbitre);
+		return Objects.hash(this.idArbitre, this.nomArbitre, this.prenomArbitre);
 	}
 	
 	@Override

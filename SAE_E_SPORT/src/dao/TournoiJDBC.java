@@ -26,7 +26,9 @@ public class TournoiJDBC implements TournoiDAO{
 			Statement st = ConnectionJDBC.getConnection().createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi");
 			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
+				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
+						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
+						rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -47,15 +49,12 @@ public class TournoiJDBC implements TournoiDAO{
 
 				EquipeJDBC ejdbc = new EquipeJDBC();
 				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
-				if (e.isPresent()) {
-					t.setVainqueur(e.get());
-				}
+				t.setVainqueur(e.orElse(null));
 				
 				CompteJDBC cjdbc = new CompteJDBC();
 				Optional<Compte> opt = cjdbc.getById(rs.getInt("idCompte"));
-				if (opt.isPresent()) {
-					t.setCompte(opt.get());
-				}
+				t.setCompte(opt.orElse(null));
+				
 				tournois = Optional.ofNullable(t);
 			}
 		} catch (SQLException e) {

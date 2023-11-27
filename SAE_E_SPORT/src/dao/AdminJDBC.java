@@ -7,8 +7,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import modele.Administrateur;
+import modele.Compte;
 
 public class AdminJDBC implements AdminDAO {
 	
@@ -22,7 +24,9 @@ public class AdminJDBC implements AdminDAO {
 			ResultSet rs = st.executeQuery(req);
 			
 			while(rs.next()) {
-				list.add(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
+				CompteJDBC cbdd = new CompteJDBC();
+				Compte c = cbdd.getById(rs.getInt("idCompte")).orElse(null);
+				list.add(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin"), c));
 			}
 			
 		} catch (SQLException e) {
@@ -36,15 +40,17 @@ public class AdminJDBC implements AdminDAO {
 		Optional<Administrateur> opt = Optional.empty();
 		try {
 
-			String req = "SELECT * FROM Administrateur WHERE idAdministrateur = ?;";
+			String req = "SELECT * FROM Administrateur WHERE idAdministrateur = ?";
 			
 			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setInt(1, id);
 			
-			ResultSet rs = st.executeQuery(req);
-			
-			opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
-			
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				CompteJDBC cbdd = new CompteJDBC();
+				Compte c = cbdd.getById(rs.getInt("idCompte")).orElse(null);
+				opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin"), c));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -55,14 +61,20 @@ public class AdminJDBC implements AdminDAO {
 	public boolean add(Administrateur admin) throws Exception {
 		boolean res = false;
 		try {
-			String addAdmin = "INSERT INTO Administrateur VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?)";
-			
-			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addAdmin);
-			
+			PreparedStatement st = null;
+			if (admin.getCompte()!= null) {
+				st  = ConnectionJDBC.getConnection()
+						.prepareStatement("INSERT INTO Administrateur(idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
+										+ "VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?, ?)");
+				st.setInt(3, admin.getCompte().getId());
+			} else {
+				st  = ConnectionJDBC.getConnection()
+						.prepareStatement("INSERT INTO Administrateur (idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
+										+ "VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?, null)");
+			}
 			st.setString(1, admin.getNom());
 			st.setString(2, admin.getPrenom());
-			
-			st.executeUpdate(addAdmin);
+			st.executeUpdate();
 			
 			System.out.println("L'administrateur "+ admin.getNom().toUpperCase() +" a été ajouté.");
 			res = true;
@@ -77,15 +89,23 @@ public class AdminJDBC implements AdminDAO {
 	public boolean update(Administrateur admin) throws Exception {
 		boolean res = false;
 		try {
-			String updateAdmin = "UPDATE Administrateur "
-					   		   + "SET nom = ?, prenom = ? "
-					   		   + "WHERE idAdministrateur = ?;";
-			
-			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateAdmin);
+			PreparedStatement st = null;
+			if (admin.getCompte()!=null) {
+				st  = ConnectionJDBC.getConnection().prepareStatement("UPDATE Administrateur "
+														   		   + "SET nomAdmin = ?, prenomAdmin = ?, idCompte = ? "
+														   		   + "WHERE idAdministrateur = ?");
+				st.setInt(3, admin.getCompte().getId());
+				st.setInt(4, admin.getId());
+			} else {
+				st  = ConnectionJDBC.getConnection().prepareStatement("UPDATE Administrateur "
+													   		   + "SET nomAdmin = ?, prenomAdmin = ?, idCompte = null "
+													   		   + "WHERE idAdministrateur = ?");
+				st.setInt(3, admin.getId());
+			}
 			st.setString(1, admin.getNom());
 			st.setString(2, admin.getPrenom());
 
-			st.executeUpdate(updateAdmin);
+			st.executeUpdate();
 			
 			System.out.println("L'Administrateur " + admin.getNom().toUpperCase() + " a été modifié.");
 			res = true;
@@ -99,7 +119,7 @@ public class AdminJDBC implements AdminDAO {
 	public boolean delete(Administrateur admin) throws Exception {
 		boolean res = false;
 		try {
-			String updateAdmin = "DELETE FROM Administrateur WHERE idAdministrateur = ?;";
+			String updateAdmin = "DELETE FROM Administrateur WHERE idAdministrateur = ?";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateAdmin);
 			st.setInt(1, admin.getId());
@@ -115,42 +135,19 @@ public class AdminJDBC implements AdminDAO {
 	}
 
 	@Override
-	public Optional<Administrateur> getByNom(String nom) throws Exception {
-		Optional<Administrateur> opt = Optional.empty();
-		try {
-			String req = "SELECT * FROM Administrateur WHERE nomAdmin = ?;";
-			
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
-			st.setString(1,  nom);
-			
-			ResultSet rs = st.executeQuery();
-			
-			opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return opt;
+	public List<Administrateur> getByNom(String nom) throws Exception {
+		List<Administrateur> admins = this.getAll().stream()
+											.filter(e->e.getNom()==nom)
+											.collect(Collectors.toList());
+		return admins;	
 	}
 
 	@Override
-	public Optional<Administrateur> getByNomPrenom(String nom, String prenom) throws Exception {
-		Optional<Administrateur> opt = Optional.empty();
-		try {
-			String req = "SELECT * FROM Administrateur WHERE nomAdmin = ? AND prenomAdmin = ?;";
-			
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
-			st.setString(1, nom);
-			st.setString(2, prenom);
-		
-			ResultSet rs = st.executeQuery(req);
-			
-			opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin")));
-			
-		} catch (SQLException e) {
-			e.printStackTrace();;
-		}
-		return opt;
+	public List<Administrateur> getByNomPrenom(String nom, String prenom) throws Exception {
+		List<Administrateur> admins = this.getAll().stream()
+										.filter(e->e.getNom()==nom && e.getPrenom()==prenom)
+										.collect(Collectors.toList());
+		return admins;
 	}
 
 }

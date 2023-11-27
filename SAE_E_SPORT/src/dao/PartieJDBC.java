@@ -27,15 +27,13 @@ public class PartieJDBC implements PartieDAO{
 				TournoiJDBC tournoiBDD = new TournoiJDBC();
 				Tournoi tournoi = null;
 				Optional<Tournoi> opt = tournoiBDD.getById(rs.getInt("idTournoi"));
-				if (opt.isPresent()) {
-					tournoi = opt.get();
-				}
+				tournoi = opt.orElse(null);
+				
 				EquipeJDBC equipeBDD = new EquipeJDBC();
 				Optional<Equipe> opte = equipeBDD.getById(rs.getInt("idEquipe"));
 				Equipe equipe = null;
-				if(opte.isPresent()) {
-					equipe = opte.get();
-				}
+				equipe = opte.orElse(null);
+				
 				Partie p = new Partie(rs.getDate("datePartie"), rs.getString("heureDebut"), rs.getString("deroulement"), tournoi);
 				p.setEquipeGagnant(equipe);
 				parties.add(p);

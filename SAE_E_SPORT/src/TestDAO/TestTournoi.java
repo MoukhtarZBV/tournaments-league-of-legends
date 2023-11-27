@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import dao.CompteJDBC;
 import dao.ConnectionJDBC;
+import dao.CreateDB;
 import dao.PaysJDBC;
 import dao.TournoiJDBC;
 import modele.Compte;
@@ -21,10 +22,8 @@ import modele.TypeCompte;
 public class TestTournoi {
 
 	public static void main(String[] args) throws Exception {
-//		ConnectionJDBC.getConnection().setAutoCommit(false);
-//		ConnectionJDBC.getConnection().createStatement().executeUpdate("insert into niveauTournoi values('Local')");
-//		ConnectionJDBC.getConnection().createStatement().executeUpdate("insert into niveauTournoi values('International')");
-		ConnectionJDBC.getConnection().setAutoCommit(true);
+		CreateDB.main(args);
+
 		TournoiJDBC tjdbc = new TournoiJDBC();
 		
 		Tournoi t1 = new Tournoi(1, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 11, 23)), 
@@ -33,30 +32,24 @@ public class TestTournoi {
 				Date.valueOf(LocalDate.of(2023, 10, 31)), Pays.FR);
 		
 		// ajouter bon 
-//		tjdbc.add(t1);
-//		tjdbc.add(t2);
+		tjdbc.add(t1);
+		tjdbc.add(t2);
 
 		for(Tournoi tournoi : tjdbc.getAll()) {
 			System.out.println(tournoi);
 		}
 		
+		System.out.println("\n###getAll Tournoi OK###\n");
+		System.out.println("###add Tournoi OK###\n");
+		
 		Optional<Tournoi> opt = tjdbc.getById(1);
-		if (opt.isPresent()) {
-			System.out.println("\n"+opt.get());
+		System.out.println(opt.orElse(null));
+		System.out.println("\n###getById Tournoi OK###\n");
+		
+		tjdbc.delete(t1);
+		for(Tournoi tournoi : tjdbc.getAll()) {
+			System.out.println(tournoi);
 		}
-		
-//		tjdbc.delete(t1);
-//		tournois = tjdbc.getAll();
-//		for(Tournoi tournoi : tournois) {
-//			System.out.println(tournoi);
-//		}
-		
-//		ConnectionJDBC.getConnection().createStatement().executeUpdate("insert into Pays values('"+Pays.US.getNom()+"')");
-		
-//		PaysJDBC pjdbc = new PaysJDBC();
-//		for(Pays p : pjdbc.getAll()) {
-//			System.out.println(p);
-//		};
 		
 		t2 = new Tournoi(2, "Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 5, 10)), 
 				Date.valueOf(LocalDate.of(2023, 10, 31)), Pays.US);
@@ -70,13 +63,11 @@ public class TestTournoi {
 		Joueur j5 = new Joueur(5, "Keria", e1);
 		
 		e1.ajouterJoueur(j1, j2, j3, j4, j5);
-		
-//		ConnectionJDBC.getConnection().createStatement().executeUpdate("insert into TypeCompte values('Administrateur')");
-		
+				
 		Compte compte = new Compte(6, "kyc88IUT", "$iutinfo", TypeCompte.ADMINISTRATEUR);
 		
 		CompteJDBC cjdbc = new CompteJDBC();
-//		cjdbc.add(compte);
+		cjdbc.add(compte);
 		
 		for(Compte c : cjdbc.getAll()) {
 			System.out.println(c);
