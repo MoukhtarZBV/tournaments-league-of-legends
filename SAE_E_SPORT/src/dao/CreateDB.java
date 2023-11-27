@@ -6,6 +6,7 @@ import java.sql.Statement;
 
 import modele.Niveau;
 import modele.Pays;
+import modele.TypeCompte;
 
 public class CreateDB {
 	
@@ -415,17 +416,34 @@ public class CreateDB {
 		// ==========================================
 		/*
 		try {
-			stmt.executeUpdate("CREATE OR REPLACE FUNCTION EstTournoiDisjoint"
-					+ "(T1_DATEDEBUT Date,"
-					+ "T1_DATEFIN Date,"
-					+ "T2_DATEDEBUT Date,"
-					+ "T2_DATEDEBUT Date) RETURN VARCHAR2 AS"
-					+ "BEGIN"
-					);
-			System.out.println("Drop Associer effectué");
+			stmt.execute("CREATE OR REPLACE FUNCTION EstTournoiDisjoint "
+			        + "(T1_DATEDEBUT Date, "
+			        + "T1_DATEFIN Date, "
+			        + "T2_DATEDEBUT Date, "
+			        + "T2_DATEFIN Date) RETURN VARCHAR2 AS "
+			        + "BEGIN "
+			        + "    IF T1_DATEDEBUT IS NULL OR T1_DATEFIN IS NULL OR T2_DATEDEBUT IS NULL OR T2_DATEFIN IS NULL THEN "
+			        + "        RETURN NULL "
+			        + "    END IF "
+			        + "    IF T1_DATEDEBUT > T1_DATEFIN THEN "
+			        + "        RAISE_APPLICATION_ERROR(-20100, 'La date de début du premier tournoi doit être inférieure à sa date de fin') "
+			        + "    END IF "
+			        + "    IF T2_DATEDEBUT > T2_DATEFIN THEN "
+			        + "        RAISE_APPLICATION_ERROR(-20101, 'La date de début du second tournoi doit être inférieure à sa date de fin') "
+			        + "    END IF "
+			        + "    IF (T1_DATEDEBUT >= T2_DATEDEBUT AND T1_DATEDEBUT < T2_DATEFIN) "
+			        + "    OR (T1_DATEFIN > T2_DATEDEBUT AND T1_DATEFIN <= T2_DATEFIN) "
+			        + "    OR (T2_DATEDEBUT >= T1_DATEDEBUT AND T2_DATEDEBUT < T1_DATEFIN) THEN "
+			        + "        RETURN 'FALSE' "
+			        + "    END IF "
+			        + "    RETURN 'TRUE' "
+			        + "END;"
+			);
+		    System.out.println("Function EstTournoiDisjoint created");
 		} catch (SQLException e) {
-			
+		    e.printStackTrace();
 		}*/
+
 		
 		// ==========================================
 		// ========== Initialiser Tables ============
@@ -441,10 +459,20 @@ public class CreateDB {
 		}
 		
 		// Table Niveau
-		NiveauJDBC niveauJDBC = NiveauJDBC.getInstance();
+		NiveauJDBC niveauJDBC = new NiveauJDBC();
 		for (Niveau niveau : Niveau.values()) {
 			try {
 				niveauJDBC.add(niveau);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// Table TypeCompte
+		TypeCompteJDBC typeCompteJDBC = new TypeCompteJDBC();
+		for (TypeCompte typeCompte : TypeCompte.values()) {
+			try {
+			    typeCompteJDBC.add(typeCompte);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -14,25 +14,11 @@ import modele.Pays;
 
 public class NiveauJDBC implements NiveauDAO{
 	
-	private Connection cn;
-	private static NiveauJDBC niveauDB;
-	
-	private NiveauJDBC (Connection cn) {
-		this.cn = cn;
-	}
-
-	public static synchronized NiveauJDBC getInstance() {
-		if(niveauDB == null) {
-			niveauDB = new NiveauJDBC(ConnectionJDBC.getConnection());
-		}
-		return niveauDB;
-	}
-	
 	@Override
 	public List<Niveau> getAll() throws Exception {
 		List<Niveau> niveaux = new ArrayList<>();
         try {
-			Statement st = cn.createStatement();
+			Statement st = ConnectionJDBC.getConnection().createStatement();
 	        ResultSet rs = st.executeQuery("select * from NiveauTournoi");
         
 	        while (rs.next()) {
@@ -53,7 +39,7 @@ public class NiveauJDBC implements NiveauDAO{
 	public boolean add(Niveau niveau) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = this.cn.prepareCall("insert into NiveauTournoi values (?)");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into NiveauTournoi values (?)");
 			cs.setString(1, niveau.denomination());
 			cs.execute();
 			res = true;
