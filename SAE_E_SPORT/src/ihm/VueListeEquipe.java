@@ -33,16 +33,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
 public class VueListeEquipe extends JFrame {
 
-	private JPanel contentPane;
 	private List<Equipe> equipes;
 	private JTextField searchBar;
-	private JList listeEquipes;
+	private JList<Object> listeEquipes;
 
 	/**
 	 * Launch the application.
@@ -67,20 +67,56 @@ public class VueListeEquipe extends JFrame {
 	 * Create the frame.
 	 */
 	public VueListeEquipe(List<Equipe> equipes) {
-		ControleurListeEquipe controleur = new ControleurListeEquipe(this);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
 		
+		ControleurListeEquipe controleur = new ControleurListeEquipe(this);
+		
+		///// FENÊTRE \\\\\
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 900, 600);
+		setTitle("Liste des équipes");
+		
+		
+
+		///// PANEL PRINCIPAL  \\\\\
+		JPanel contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
+		
+		
+		///// PANEL TITRE \\\\\
+		JPanel panelTop = new JPanel();
+		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panelTop.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panelTop, BorderLayout.NORTH);
+		
+		// Label titre
+		JLabel lblTitre = new JLabel("Nouveau tournoi");
+		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
+		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setFont(new Font("DejaVu Sans", Font.PLAIN, 40));
+		panelTop.add(lblTitre, BorderLayout.CENTER);
+		
+		// Ligne colorée séparatrice
+		JTextField ligneColoree = new JTextField();
+		ligneColoree.setBackground(new Color(25, 25, 112));
+		ligneColoree.setEnabled(false);
+		ligneColoree.setEditable(false);
+		ligneColoree.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		panelTop.add(ligneColoree, BorderLayout.SOUTH);
+		
+		
+		
+		/// PANEL MAIN \\\
+		
+		
+		// Liste des équipes
 		List<String> nomEquipes = equipes.stream()
 				.map(e -> e.getNom())
 				.collect(Collectors.toList());
 		
-		JList listeEquipes = new JList(nomEquipes.toArray());
+		JList listeEquipes = new JList<Object>(nomEquipes.toArray());
 		this.listeEquipes = listeEquipes;
 		listeEquipes.addMouseListener(controleur);
 		
@@ -89,16 +125,13 @@ public class VueListeEquipe extends JFrame {
 		
 		scrollPane.setViewportView(listeEquipes);
 		
-		JPanel panelHeader = new JPanel();
-		contentPane.add(panelHeader, BorderLayout.NORTH);
-		panelHeader.setLayout(new GridLayout(2, 0, 0, 0));
 		
 		JLabel libFenetre = new JLabel("Liste des équipes");
 		libFenetre.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		panelHeader.add(libFenetre);
+		panelTop.add(libFenetre);
 		
 		JPanel panelSearch = new JPanel();
-		panelHeader.add(panelSearch);
+		panelTop.add(panelSearch);
 		
 		searchBar = new JTextField();
 		Dimension preferredSize = new Dimension(searchBar.getPreferredSize().width, 25);
@@ -130,6 +163,7 @@ public class VueListeEquipe extends JFrame {
 	public String getSearch() {
 		return searchBar.getText();
 	}
+	
 	public void updateListeEquipes(List<String> elementsFiltres) {
 	    this.listeEquipes.setListData(elementsFiltres.toArray(new String[0]));
 	    this.listeEquipes.repaint();
