@@ -15,13 +15,9 @@ public class CreateDB {
 	}
 
 	public CreateDB() {
-		try {
-			Connection connection = ConnectionJDBC.getConnection();
-			createTables(connection);
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		Connection connection = ConnectionJDBC.getConnection();
+		createTables(connection);
+		ConnectionJDBC.closeConnection();
 	}
 	
 	private static void createTables(Connection connection) {
