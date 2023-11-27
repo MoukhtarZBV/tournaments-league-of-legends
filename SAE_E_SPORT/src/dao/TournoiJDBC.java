@@ -196,4 +196,17 @@ public class TournoiJDBC implements TournoiDAO{
 		}
 		return tournois;
 	}
+	
+	public int getNextSequenceValue() {
+		int res = -1;
+		try {
+			ResultSet rs = ConnectionJDBC.getConnection().createStatement().executeQuery("VALUES NEXT VALUE FOR SEQ_Tournoi");
+			if (rs.next()) {
+				res = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 }

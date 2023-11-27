@@ -108,8 +108,11 @@ public class JoueurJDBC implements JoueurDAO{
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addJoueur);
 			
+			EquipeJDBC ejdbc = new EquipeJDBC();
+			Equipe e = ejdbc.getByNom(j.getEquipe().getNom()).orElse(null);
+			
 			st.setString(1, j.getPseudo());
-			st.setInt(2, j.getEquipe().getIdEquipe());
+			st.setInt(2, e.getIdEquipe());
 			
 			st.executeUpdate();
 			
