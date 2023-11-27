@@ -18,4 +18,5 @@ public interface DAO <T, T1> {
 
     boolean delete(T value) throws Exception;
 
+
 }

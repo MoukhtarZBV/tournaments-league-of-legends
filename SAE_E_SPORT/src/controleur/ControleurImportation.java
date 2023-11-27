@@ -9,12 +9,18 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
+import dao.EquipeJDBC;
+import dao.JoueurJDBC;
 import ihm.VueImportation;
+import modele.Equipe;
+import modele.Joueur;
 import modele.LireCSV;
+import modele.Pays;
 
 public class ControleurImportation implements ActionListener{
 	
 	private VueImportation vue;
+	private List<String[]> data = null;
 
 	public ControleurImportation(VueImportation vue) {
 		this.vue = vue;
@@ -31,14 +37,14 @@ public class ControleurImportation implements ActionListener{
 	            	String chemin = fc.getSelectedFile().getAbsolutePath();
 	            	 
 	 	            LireCSV read = new LireCSV(chemin);
-		            List<String[]> data = read.getData();
+		            this.data = read.getData();
 
 		            // Récupération modèle de la JTable
 		            DefaultTableModel model = (DefaultTableModel) this.vue.getModel();
 
 		            // Ajout des colonnes au modèle
 		            for (int i = 1; i < data.size(); i = i + 5) {
-		                if (i == 1 || i == 6 || i == 11 || i == 16 || i == 21) {
+		                if (i%5 == 1) {
 		                    model.addColumn(data.get(i)[4]);
 		                }
 		            }
@@ -47,7 +53,7 @@ public class ControleurImportation implements ActionListener{
 		            Object[] titreColonne = new Object[10];
 		            int indice = 0;
 		            for (int i = 1; i < data.size();i++) {
-		            	if (i == 1 || i == 6 || i == 11 || i == 16 || i == 21) {
+		            	if (i%5 == 1) {
 		            		titreColonne[indice] = (data.get(i)[4]);
 		            		indice++;
 		            	}
@@ -82,6 +88,29 @@ public class ControleurImportation implements ActionListener{
 	        } catch (Exception e1) {
 	            e1.printStackTrace();
 	        }
+	    }
+	    if(bouton.getText().equals("Valider") && this.data != null) {
+	    	EquipeJDBC equipeDB = new EquipeJDBC();
+	    	JoueurJDBC joueurDB = new JoueurJDBC();
+	    	for(int i = 1; i<this.data.size();i=i+5) {
+	    		try {
+	    			Equipe equipe = new Equipe(equipeDB.getNextValueSequence(), this.data.get(i)[4], Integer.parseInt(this.data.get(i)[5]), Pays.getPays(data.get(i)[6]));
+	    			for (int j = i; j<i+5; j++) {
+	    				Joueur joueur = new Joueur(joueurDB.getNextValueSequence(), this.data.get(j)[7], equipe);
+	    				equipe.ajouterJoueur(joueur);
+	    			}
+					equipeDB.add(equipe);
+					for (Joueur j : equipe.getJoueurs()) {
+						joueurDB.add(j);
+					}
+					equipeDB.getAll().toString();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+	    	}
+	    }
+	    if(bouton.getText().equals("Retour")) {
+	    	this.vue.dispose();
 	    }
 	}
 
