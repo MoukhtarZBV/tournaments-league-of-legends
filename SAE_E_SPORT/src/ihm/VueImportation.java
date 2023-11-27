@@ -98,6 +98,12 @@ public class VueImportation extends JFrame {
 		panelNorth.setBackground(new Color(255, 255, 255));
 		panelCenter.add(panelNorth, BorderLayout.NORTH);
 		
+		JButton btnRetour = new JButton("Retour");
+		btnRetour.setBackground(Color.WHITE);
+        btnRetour.setForeground(Color.BLACK);
+		panelNorth.add(btnRetour);
+		btnRetour.addActionListener(controleur);
+		
 		JButton btnImportation = new JButton("Importer");
 		btnImportation.setBackground(Color.WHITE);
         btnImportation.setForeground(Color.BLACK);
@@ -109,6 +115,7 @@ public class VueImportation extends JFrame {
         btnValider.setForeground(Color.BLACK);
 		panelNorth.add(btnValider);
 		btnValider.addActionListener(controleur);
+		
 		
 	}
 	

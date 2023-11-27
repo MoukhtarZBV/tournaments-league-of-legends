@@ -44,7 +44,7 @@ public class ControleurImportation implements ActionListener{
 
 		            // Ajout des colonnes au modèle
 		            for (int i = 1; i < data.size(); i = i + 5) {
-		                if (i == 1 || i == 6 || i == 11 || i == 16 || i == 21) {
+		                if (i%5 == 1) {
 		                    model.addColumn(data.get(i)[4]);
 		                }
 		            }
@@ -53,7 +53,7 @@ public class ControleurImportation implements ActionListener{
 		            Object[] titreColonne = new Object[10];
 		            int indice = 0;
 		            for (int i = 1; i < data.size();i++) {
-		            	if (i == 1 || i == 6 || i == 11 || i == 16 || i == 21) {
+		            	if (i%5 == 1) {
 		            		titreColonne[indice] = (data.get(i)[4]);
 		            		indice++;
 		            	}
@@ -108,6 +108,9 @@ public class ControleurImportation implements ActionListener{
 					e1.printStackTrace();
 				}
 	    	}
+	    }
+	    if(bouton.getText().equals("Retour")) {
+	    	this.vue.dispose();
 	    }
 	}
 
