@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,31 +12,17 @@ import modele.Arbitre;
 
 public class ArbitreJDBC implements ArbitreDAO{
 	
-	private Connection con;
-	private static ArbitreJDBC arbitreDB;
-
-	private ArbitreJDBC (Connection c) {
-		con = c;
-	}
-	
-	public static synchronized ArbitreJDBC getInstance() {
-		if(arbitreDB == null) {
-			arbitreDB = new ArbitreJDBC(ConnectionJDBC.getConnection());
-		}
-		return arbitreDB;
-	}
-	
 	@Override
 	public List<Arbitre> getAll() throws Exception {
         List<Arbitre> listeArbitres = new ArrayList<>();
 		try {
-			Statement st = con.createStatement();
+			Statement st = ConnectionJDBC.getConnection().createStatement();
 	        ResultSet rs = st.executeQuery("select * from Arbitre");
 	        
 	        while (rs.next()) {
 	        	listeArbitres.add(new Arbitre(rs.getInt("idArbitre"),
-	            		                 rs.getString("nom"),
-	            		                 rs.getString("prenom")));  	        
+	            		                 rs.getString("nomArbitre"),
+	            		                 rs.getString("prenomArbitre")));  	        
 	        }
 	        
 		} catch (SQLException e) {
@@ -50,15 +35,15 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public Optional<Arbitre> getById(Integer id) throws Exception {
 		Optional<Arbitre> opt = Optional.empty();
 		try {
-			String req = "SELECT * FROM Arbitre WHERE idArbitre = ?;";
+			String req = "SELECT * FROM Arbitre WHERE idArbitre = ?";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setInt(1, id);
 			
-			ResultSet rs = st.executeQuery(req);
-			
-			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
-			
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre")));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -69,15 +54,15 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public Optional<Arbitre> getByNomPrenom(String nom, String prenom) throws Exception {
 		Optional<Arbitre> opt = Optional.empty();
 		try {
-			String req = "SELECT * FROM Arbitre WHERE nom = ? AND prenom = ?;";
+			String req = "SELECT * FROM Arbitre WHERE nomArbitre = ? AND prenomArbitre = ?";
 			
-			PreparedStatement st = con.prepareStatement(req);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setString(1, nom);
 			st.setString(2, prenom);
 			
-			ResultSet rs = st.executeQuery(req);
+			ResultSet rs = st.executeQuery();
 			
-			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nom"),rs.getString("prenom")));
+			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre")));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -86,63 +71,63 @@ public class ArbitreJDBC implements ArbitreDAO{
 	}
 
 	@Override
-	public boolean add(Arbitre value) throws Exception {
+	public boolean add(Arbitre a) throws Exception {
 		boolean res = false;
 		try {
-			String addArbitre = "INSERT INTO Arbitre VALUES (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
+			String addArbitre = "INSERT INTO Arbitre values (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
 			
-			PreparedStatement st  = con.prepareStatement(addArbitre);
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addArbitre);
 			
-			st.setString(1, value.getNom());
-			st.setString(2, value.getPrenom());
-			
-			st.executeUpdate(addArbitre);
-			
-			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom()  +" a été ajouté.");
-			res = true;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-
-	@Override
-	public boolean update(Arbitre value) throws Exception {
-		boolean res = false;
-		try {
-			String updateArbitre = "UPDATE Arbitre "
-					   		   + "SET nom = ?, prenom = ?"
-					   		   + "WHERE idArbitre = ?;";
-			
-			PreparedStatement st  = con.prepareStatement(updateArbitre);
-			st.setString(1, value.getNom());
-			st.setString(2, value.getPrenom());
-			st.setInt(3, value.getId());
-
-			st.executeUpdate(updateArbitre);
-			
-			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom() + " a été modifié.");
-			res = true;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-
-	@Override
-	public boolean delete(Arbitre value) throws Exception {
-		boolean res = false;
-		try {
-			String updateArbitre = "DELETE FROM Arbitre WHERE idArbitre = ?;";
-			
-			PreparedStatement st  = con.prepareStatement(updateArbitre);
-			st.setInt(1, value.getId());
+			st.setString(1, a.getNom());
+			st.setString(2, a.getPrenom());
 			
 			st.executeUpdate();
 			
-			System.out.println("L'arbitre "+ value.getNom().toUpperCase() + " " + value.getPrenom() + " a été supprimé.");
+			System.out.println("L'arbitre "+ a.getNom().toUpperCase() + " " + a.getPrenom()  +" a été ajouté.");
+			res = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public boolean update(Arbitre a) throws Exception {
+		boolean res = false;
+		try {
+			String updateArbitre = "UPDATE Arbitre "
+					   		   + "SET nomArbitre = ?, prenomArbitre = ?"
+					   		   + "WHERE idArbitre = ?";
+			
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateArbitre);
+			st.setString(1, a.getNom());
+			st.setString(2, a.getPrenom());
+			st.setInt(3, a.getId());
+
+			st.executeUpdate();
+			
+			System.out.println("L'arbitre "+ a.getNom().toUpperCase() + " " + a.getPrenom() + " a été modifié.");
+			res = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public boolean delete(Arbitre a) throws Exception {
+		boolean res = false;
+		try {
+			String updateArbitre = "DELETE FROM Arbitre WHERE idArbitre = ?";
+			
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateArbitre);
+			st.setInt(1, a.getId());
+			
+			st.executeUpdate();
+			
+			System.out.println("L'arbitre "+ a.getNom().toUpperCase() + " " + a.getPrenom() + " a été supprimé.");
 			res = true;
 			
 		} catch (SQLException e) {

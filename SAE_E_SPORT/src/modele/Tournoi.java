@@ -14,7 +14,12 @@ public class Tournoi {
 	private Compte compte;
 	private Equipe vainqueur;
 	
-	public Tournoi(int id, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) {
+	public Tournoi(int id, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) throws IllegalArgumentException {
+		if (dateDebut.compareTo(dateFin) > 0) {
+			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
+		} else if (dateDebut.compareTo(new Date(System.currentTimeMillis())) < 0) {
+			throw new IllegalArgumentException("La date de début doit être supérieure à la date du jour");
+		}
 		this.idTournoi = id;
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
@@ -22,7 +27,7 @@ public class Tournoi {
 		this.dateFin = dateFin;
 		this.pays = pays;
 		this.compte = null;
-		this.niveau = null;
+		this.vainqueur = null;
 	}
 
 	public Compte getCompte() {
@@ -85,6 +90,11 @@ public class Tournoi {
 		return false;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "Tournoi [id="+ this.idTournoi + ", name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
+				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +"]";
+				
+	}
 	
 }

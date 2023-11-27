@@ -7,24 +7,24 @@ import java.util.Objects;
 public class Partie {
 
 	private Date date;
-	private Time heure;
+	private String heure;
 	private String deroulement;
-	private Equipe idEquipe;
+	private Equipe gagnant;
 	private Tournoi tournoi;
 	
-	public Partie(Date date, Time heure, String deroulement, Equipe idEquipe, Tournoi tournoi) {
+	public Partie(Date date, String heure, String deroulement, Tournoi tournoi) {
 		this.date = date;
 		this.heure = heure;
 		this.deroulement = deroulement;
-		this.idEquipe = idEquipe;
 		this.tournoi = tournoi;
+		this.gagnant = null;
 	}
 
 	public Date getDate() {
 		return date;
 	}
 
-	public Time getHeure() {
+	public String getHeure() {
 		return heure;
 	}
 
@@ -33,7 +33,11 @@ public class Partie {
 	}
 
 	public Equipe getEquipeGagnant() {
-		return idEquipe;
+		return this.gagnant;
+	}
+	
+	public void setEquipeGagnant(Equipe e) {
+		this.gagnant = e;
 	}
 	
 	public Tournoi getTournoi() {
@@ -47,7 +51,7 @@ public class Partie {
 		if (o instanceof Partie) {
 			Partie p = (Partie) o;
 			return p.date==this.date && p.heure==this.heure && p.deroulement == this.deroulement 
-					&& p.idEquipe == this.idEquipe && p.tournoi.equals(this.tournoi);
+					&& p.gagnant.equals(this.gagnant) && p.tournoi.equals(this.tournoi);
 		} else {
 			return false;
 		}
@@ -56,6 +60,12 @@ public class Partie {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.date, this.heure);
+	}
+
+	@Override
+	public String toString() {
+		return "Partie [date=" + this.date + ", heure=" + this.heure + ", deroulement=" + 
+				this.deroulement + ", tournoi=" + this.tournoi + ", gagnant=" + this.gagnant + ']';
 	}
 	
 }

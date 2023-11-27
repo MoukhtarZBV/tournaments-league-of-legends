@@ -11,23 +11,14 @@ import modele.Pays;
 public class TestPays {
 
 	public static void main(String[] args) throws Exception {
-		Connection c = ConnectionJDBC.getConnection();
-		PaysJDBC pjdbc = PaysJDBC.getInstance();
+		PaysJDBC pjdbc = new PaysJDBC();
 		
-		pjdbc.add(Pays.AD);
-		
-		ResultSet rs = c.createStatement().executeQuery("select * from pays");
-		while (rs.next()) {
-			System.out.println(rs.getString(1));
-		}
+//		pjdbc.add(Pays.AD);
 		
 		for(Pays p : pjdbc.getAll()) {
-			if (p != null) {
-				System.out.println(p.getNom());
-			}
+			System.out.println(p.denomination());
 		}
 		
-		c.close();
 	}
 
 }

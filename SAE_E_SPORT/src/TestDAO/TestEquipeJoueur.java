@@ -1,26 +1,21 @@
 package TestDAO;
 
-import java.sql.Connection;
-
-import org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource40;
-
 import dao.ConnectionJDBC;
+import dao.CreateDB;
 import dao.EquipeJDBC;
 import dao.JoueurJDBC;
 import modele.Equipe;
 import modele.Joueur;
 import modele.Pays;
 
-public class TestJoueur {
+public class TestEquipeJoueur {
 
 	public static void main (String[] args) throws Exception {
-		Connection c = ConnectionJDBC.getConnection();
 		
-		EquipeJDBC eJDBC = EquipeJDBC.getInstance();
-		JoueurJDBC jJDBC = JoueurJDBC.getInstance();
-
-		c.createStatement().execute("insert into Pays values('France')");
-		c.createStatement().execute("insert into Pays values('Taiwan')");
+		CreateDB.main(args);
+		
+		EquipeJDBC eJDBC = new EquipeJDBC();
+		JoueurJDBC jJDBC = new JoueurJDBC();
 		
 		Equipe e1 = new Equipe(1, "T1", 1000, Pays.FR);
 		
@@ -43,6 +38,8 @@ public class TestJoueur {
 		eJDBC.add(e1);
 		eJDBC.add(e2);
 		
+		System.out.println("\n###add Equipe OK###\n");
+		
 		jJDBC.add(j1);
 		jJDBC.add(j2);
 		jJDBC.add(j3);
@@ -55,34 +52,49 @@ public class TestJoueur {
 		jJDBC.add(j41);
 		jJDBC.add(j51);
 		
+		System.out.println("\n###add Joueur OK###\n");
+		
 		for(Joueur j : jJDBC.getAll()) {
 			System.out.println(j.toString());
 		}
+		System.out.println("\n###getAll Joueur OK###\n");
 		
 		for(Equipe e : eJDBC.getAll()) {
 			System.out.println(e.toString());
 		}
+		System.out.println("\n###getAll Equipe OK###\n");
 		
 		for (Joueur j : jJDBC.getByEquipe(e2)) {
 			System.out.println(j.toString());
-		};
+		}
+		System.out.println("\n###getByEquipe Joueur OK###\n");
 				
-		System.out.println(jJDBC.getById(5).toString());
+		System.out.println(jJDBC.getById(5).orElse(null));
+		System.out.println("\n###getById Joueur OK###\n");
 		
-		System.out.println(jJDBC.getByPseudo("Faker"));
-
-		System.out.println();
-		
+		System.out.println(jJDBC.getByPseudo("Faker").orElse(null));
+		System.out.println("\n###getByPseudo Joueur OK###\n");
+				
 		for (Equipe e : eJDBC.getAll()) {
 			System.out.println(e.toString());
 		}
+		
 		int id1 = eJDBC.getIdByNom("T1");
 		System.out.println("Team 1 : " + id1);
 		
 		int id2 = eJDBC.getIdByNom("GenG");
 		System.out.println("Team 2 : " + id2);
 		
-		c.close();
+		System.out.println("\n###getIdByNom Equipe OK###\n");
+		
+		e2 = new Equipe(2, "GenG", 500, Pays.FR);
+		eJDBC.update(e2);
+		for(Equipe e : eJDBC.getAll()) {
+			System.out.println(e);
+		}
+		System.out.println("\n###update Equipe OK###\n");
+		
+		ConnectionJDBC.closeConnection();
 	}
 	
 }

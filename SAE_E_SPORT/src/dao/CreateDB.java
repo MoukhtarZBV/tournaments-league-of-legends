@@ -4,23 +4,23 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import modele.Niveau;
+import modele.Pays;
+import modele.TypeCompte;
+
 public class CreateDB {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		CreateDB db = new CreateDB();
 	}
 
-	public CreateDB() {
-		try {
-			Connection connection = ConnectionJDBC.getConnection();
-			createTables(connection);
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public CreateDB() throws Exception {
+		Connection connection = ConnectionJDBC.getConnection();
+		createTables(connection);
+		ConnectionJDBC.closeConnection();
 	}
 	
-	private static void createTables(Connection connection) {
+	private static void createTables(Connection connection) throws Exception {
 		
 		Statement stmt = null;
 		
@@ -405,6 +405,69 @@ public class CreateDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(-1);
+		}
+		
+		// ==========================================
+		// ========== Creation fonctions ============
+		// ==========================================
+		/*
+		try {
+			stmt.execute("CREATE OR REPLACE FUNCTION EstTournoiDisjoint "
+			        + "(T1_DATEDEBUT Date, "
+			        + "T1_DATEFIN Date, "
+			        + "T2_DATEDEBUT Date, "
+			        + "T2_DATEFIN Date) RETURN VARCHAR2 AS "
+			        + "BEGIN "
+			        + "    IF T1_DATEDEBUT IS NULL OR T1_DATEFIN IS NULL OR T2_DATEDEBUT IS NULL OR T2_DATEFIN IS NULL THEN "
+			        + "        RETURN NULL "
+			        + "    END IF "
+			        + "    IF T1_DATEDEBUT > T1_DATEFIN THEN "
+			        + "        RAISE_APPLICATION_ERROR(-20100, 'La date de début du premier tournoi doit être inférieure à sa date de fin') "
+			        + "    END IF "
+			        + "    IF T2_DATEDEBUT > T2_DATEFIN THEN "
+			        + "        RAISE_APPLICATION_ERROR(-20101, 'La date de début du second tournoi doit être inférieure à sa date de fin') "
+			        + "    END IF "
+			        + "    IF (T1_DATEDEBUT >= T2_DATEDEBUT AND T1_DATEDEBUT < T2_DATEFIN) "
+			        + "    OR (T1_DATEFIN > T2_DATEDEBUT AND T1_DATEFIN <= T2_DATEFIN) "
+			        + "    OR (T2_DATEDEBUT >= T1_DATEDEBUT AND T2_DATEDEBUT < T1_DATEFIN) THEN "
+			        + "        RETURN 'FALSE' "
+			        + "    END IF "
+			        + "    RETURN 'TRUE' "
+			        + "END;"
+			);
+		    System.out.println("Function EstTournoiDisjoint created");
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}*/
+
+		
+		// ==========================================
+		// ========== Initialiser Tables ============
+		// ==========================================
+		// Table Pays
+		PaysJDBC paysJDBC = new PaysJDBC();
+		for (Pays pays : Pays.values()) {
+			try {
+				paysJDBC.add(pays);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// Table Niveau
+		NiveauJDBC niveauJDBC = new NiveauJDBC();
+		for (Niveau niveau : Niveau.values()) {
+				niveauJDBC.add(niveau);
+		}
+		
+		// Table TypeCompte
+		TypeCompteJDBC typeCompteJDBC = new TypeCompteJDBC();
+		for (TypeCompte typeCompte : TypeCompte.values()) {
+			try {
+			    typeCompteJDBC.add(typeCompte);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
