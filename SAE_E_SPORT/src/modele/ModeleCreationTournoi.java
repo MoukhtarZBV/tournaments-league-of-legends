@@ -6,9 +6,7 @@ import java.util.Calendar;
 
 public class ModeleCreationTournoi {
 
-	public ModeleCreationTournoi() {
-		
-	}
+	public ModeleCreationTournoi() {}
 	
 	public boolean moinsDeDeuxSemainesEntreDates(Date dateDebut, Date dateFin) {
 		return Math.abs(dateFin.getTime() - dateDebut.getTime()) < 1.21e+9; 
