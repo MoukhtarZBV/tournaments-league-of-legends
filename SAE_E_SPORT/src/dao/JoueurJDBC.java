@@ -71,7 +71,7 @@ public class JoueurJDBC implements JoueurDAO{
 			
 			if (rs.next()) {
 				EquipeJDBC e = new EquipeJDBC();
-				Equipe equipe = e.getById(rs.getInt("idEquipe")).get();
+				Equipe equipe = e.getById(rs.getInt("idEquipe")).orElse(null);
 				
 				opt = Optional.ofNullable(new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo"), equipe));
 			}
@@ -111,7 +111,7 @@ public class JoueurJDBC implements JoueurDAO{
 			st.setString(1, j.getPseudo());
 			st.setInt(2, j.getEquipe().getIdEquipe());
 			
-			st.execute();
+			st.executeUpdate();
 			
 			System.out.println("Le joueur "+ j.getPseudo().toUpperCase() +" a été ajouté.");
 			res = true;
@@ -134,7 +134,7 @@ public class JoueurJDBC implements JoueurDAO{
 			st.setString(1, j.getPseudo());
 			st.setInt(2, j.getId());
 
-			st.execute();
+			st.executeUpdate();
 			
 			System.out.println("Le joueur " + j.getPseudo().toUpperCase() + " a été modifié.");
 			res = true;
@@ -153,7 +153,7 @@ public class JoueurJDBC implements JoueurDAO{
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateJoueur);
 			st.setInt(1, j.getId());
 			
-			st.execute();
+			st.executeUpdate();
 			
 			System.out.println("Le joueur " + j.getPseudo().toUpperCase() + " a été supprimé.");
 			res = true;

@@ -21,7 +21,8 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = ConnectionJDBC.getConnection().createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe");
 			while(rs.next()) {
-				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), 
+										rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
 				JoueurJDBC j = new JoueurJDBC();
 				for(Joueur joueur : j.getByEquipe(e)) {
 					e.ajouterJoueur(joueur);
@@ -42,7 +43,8 @@ public class EquipeJDBC implements EquipeDAO{
 			Statement st = ConnectionJDBC.getConnection().createStatement();
 			ResultSet rs = st.executeQuery("select * from Equipe where idEquipe = "+id);
 			if(rs.next()) {
-				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), 
+										rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
 				JoueurJDBC j = new JoueurJDBC();
 				for(Joueur jou : j.getByEquipe(e)) {
 					e.ajouterJoueur(jou);
@@ -115,8 +117,9 @@ public class EquipeJDBC implements EquipeDAO{
 	public Optional<Equipe> getByNom(String nom) throws Exception {
 		Optional<Equipe> equipe = Optional.empty();
 		try {
-			Statement st = ConnectionJDBC.getConnection().createStatement();
-			ResultSet rs = st.executeQuery("select * from Equipe where nomEquipe = '"+nom+"'");	
+			CallableStatement st = ConnectionJDBC.getConnection().prepareCall("select * from Equipe where nomEquipe = ?");
+			st.setString(1, nom);
+			ResultSet rs = st.executeQuery();	
 			if (rs.next()) {
 				Equipe e = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
 				JoueurJDBC j = new JoueurJDBC();
@@ -134,8 +137,9 @@ public class EquipeJDBC implements EquipeDAO{
 	public int getIdByNom(String nom) throws Exception{
 		int id = -1;
 		try {
-			Statement st = ConnectionJDBC.getConnection().createStatement();
-			ResultSet rs = st.executeQuery("select idEquipe from Equipe where nomEquipe = '"+nom+"'");    
+			CallableStatement st = ConnectionJDBC.getConnection().prepareCall("select idEquipe from Equipe where nomEquipe = ?");
+			st.setString(1, nom);
+			ResultSet rs = st.executeQuery();    
 			if (rs.next()) {
 				id = rs.getInt("idEquipe");
 			}

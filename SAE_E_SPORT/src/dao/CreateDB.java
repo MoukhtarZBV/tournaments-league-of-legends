@@ -6,20 +6,21 @@ import java.sql.Statement;
 
 import modele.Niveau;
 import modele.Pays;
+import modele.TypeCompte;
 
 public class CreateDB {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		CreateDB db = new CreateDB();
 	}
 
-	public CreateDB() {
+	public CreateDB() throws Exception {
 		Connection connection = ConnectionJDBC.getConnection();
 		createTables(connection);
 		ConnectionJDBC.closeConnection();
 	}
 	
-	private static void createTables(Connection connection) {
+	private static void createTables(Connection connection) throws Exception {
 		
 		Statement stmt = null;
 		
@@ -439,11 +440,12 @@ public class CreateDB {
 		// Table Niveau
 		NiveauJDBC niveauJDBC = NiveauJDBC.getInstance();
 		for (Niveau niveau : Niveau.values()) {
-			try {
 				niveauJDBC.add(niveau);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
+		
+		// Table Type Compte
+		TypeCompteJDBC tbdd = new TypeCompteJDBC();
+		tbdd.add(TypeCompte.ADMINISTRATEUR);
+		tbdd.add(TypeCompte.ARBITRE);
 	}
 }

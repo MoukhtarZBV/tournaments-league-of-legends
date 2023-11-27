@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,9 +25,8 @@ public class CompteJDBC implements CompteDAO{
 	        	listeComptes.add(new Compte(rs.getInt("idCompte"),
 	            		                 rs.getString("login"),
 	            		                 rs.getString("motDePasse"),
-	            		                 TypeCompte.valueOf(rs.getString("type").toUpperCase())));  	        
+	            		                 TypeCompte.getTypeCompte(rs.getString("type"))));
 	        }
-	        
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -37,17 +37,18 @@ public class CompteJDBC implements CompteDAO{
 	public Optional<Compte> getById(Integer id) throws Exception {
 		Optional<Compte> compte = Optional.empty();
 		try {
-			String req = "SELECT * FROM Compte WHERE idCompte = " + id;
+			String req = "SELECT * FROM Compte WHERE idCompte = ?";
 			
-			ResultSet rs = ConnectionJDBC.getConnection().createStatement().executeQuery(req);
-			
+			 CallableStatement cs = ConnectionJDBC.getConnection().prepareCall(req);
+			 cs.setInt(1, id);
+			 
+			 ResultSet rs = cs.executeQuery();
 			if(rs.next()) {
 				compte = Optional.ofNullable(new Compte(rs.getInt("idCompte"),
-		                 rs.getString("login"),
-		                 rs.getString("motDePasse"),
-		                 TypeCompte.valueOf(rs.getString("type").toUpperCase())));
+										                 rs.getString("login"),
+										                 rs.getString("motDePasse"),
+										                 TypeCompte.getTypeCompte(rs.getString("type"))));
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +59,8 @@ public class CompteJDBC implements CompteDAO{
 	public boolean add(Compte c) throws Exception {
 		boolean res = false;
 		try {
-			String addCompte = "INSERT INTO Compte VALUES (NEXT VALUE FOR SEQ_Compte, ?, ?, ?)";
+			String addCompte = "INSERT INTO Compte (idCompte, login, motDePasse, type) "
+							 + "VALUES (NEXT VALUE FOR SEQ_Compte, ?, ?, ?)";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addCompte);
 			
@@ -66,7 +68,7 @@ public class CompteJDBC implements CompteDAO{
 			st.setString(2, c.getMotDePasse());
 			st.setString(3,c.getType().denomination());
 			
-			st.execute();
+			st.executeUpdate();
 			
 			res = true;
 			System.out.println("Le compte "+ c.getLogin().toUpperCase() + " " + c.getMotDePasse() + " " + c.getType() +" a été ajouté.");
@@ -83,15 +85,15 @@ public class CompteJDBC implements CompteDAO{
 		try {
 			String updateCompte = "UPDATE Compte "
 					   		   + "SET login = ?, motDePasse = ?, type = ?"
-					   		   + "WHERE idCompte = ?;";
+					   		   + "WHERE idCompte = ?";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateCompte);
 			st.setString(1, c.getLogin());
 			st.setString(2, c.getMotDePasse());
-			st.setString(3,c.getType().toString());
+			st.setString(3,c.getType().denomination());
 			st.setInt(4, c.getId());
 
-			st.execute();
+			st.executeUpdate();
 			
 			System.out.println("Le compte "+ c.getLogin().toUpperCase() + " " + c.getMotDePasse() + c.getType() + " a été modifié.");
 			res = true;
@@ -111,7 +113,7 @@ public class CompteJDBC implements CompteDAO{
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateCompte);
 			st.setInt(1, c.getId());
 			
-			st.execute();
+			st.executeUpdate();
 			
 			System.out.println("Le compte "+ c.getLogin().toUpperCase() + " " + c.getMotDePasse() + c.getType() + " a été supprimé.");
 			res = true;
