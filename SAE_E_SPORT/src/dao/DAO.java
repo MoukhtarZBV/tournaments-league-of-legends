@@ -1,7 +1,10 @@
 package dao;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+
+import modele.Partie;
 
 public interface DAO <T, T1> {
 	   
@@ -14,4 +17,5 @@ public interface DAO <T, T1> {
     boolean update(T value) throws Exception;
 
     boolean delete(T value) throws Exception;
+
 }
