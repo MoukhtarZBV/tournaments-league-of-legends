@@ -72,6 +72,7 @@ public class EquipeJDBC implements EquipeDAO{
 			cs.executeUpdate();
 			
 			res = true;
+			System.out.println("L'équipe "+ e.getNom().toUpperCase() +" a été ajouté.");
 		}catch (SQLException exp) {
 			exp.printStackTrace();
 		}
@@ -148,5 +149,18 @@ public class EquipeJDBC implements EquipeDAO{
 		}
 		return id;
 	}
+	
+	@Override
+    public int getNextValueSequence() throws Exception {
+        int res = -1;
+        Statement st = ConnectionJDBC.getConnection().createStatement();
+        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Equipe");
+        if (rs.next()) {
+            res = rs.getInt(1);
+        }
+        return res;
+    }
+	
+	
 
 }

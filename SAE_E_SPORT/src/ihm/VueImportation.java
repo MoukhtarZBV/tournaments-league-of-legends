@@ -102,12 +102,14 @@ public class VueImportation extends JFrame {
 		btnImportation.setBackground(Color.WHITE);
         btnImportation.setForeground(Color.BLACK);
 		panelNorth.add(btnImportation);
+		btnImportation.addActionListener(controleur);
 		
 		btnValider = new JButton("Valider");
 		btnValider.setBackground(Color.WHITE);
         btnValider.setForeground(Color.BLACK);
 		panelNorth.add(btnValider);
-		btnImportation.addActionListener(controleur);
+		btnValider.addActionListener(controleur);
+		
 	}
 	
 	public DefaultTableModel getModel() {
