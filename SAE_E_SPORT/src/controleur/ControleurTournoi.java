@@ -22,26 +22,15 @@ import modele.ModeleCreationTournoi;
 import modele.Tournoi;
 
 public class ControleurTournoi implements ActionListener, FocusListener {
-
-	public enum Etat{
-		SAISIE, FIN_SAISIE
-	}
-	
-	private Etat etat;
 	
 	private VueCreationTournoi vue;
 	private ModeleCreationTournoi modele;
 	private TournoiJDBC jdbc;
 	
-	private String date;
-	
 	public ControleurTournoi(VueCreationTournoi vue, Connection cn) {
 		this.modele = new ModeleCreationTournoi();
-		this.etat = Etat.FIN_SAISIE;
 		this.vue = vue;
 		this.jdbc = new TournoiJDBC();
-		
-		this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 	}
 
 	@Override
