@@ -182,7 +182,7 @@ public class TournoiJDBC implements TournoiDAO{
 		return tournois;
 	}
 	
-	public List<Tournoi> getTournoisEtat(String etat){
+	public List<Tournoi> getTournoisEtat(String etat) {
 		List<Tournoi> tournois = new ArrayList<>();
 		String req = null;
 		switch (etat) {
@@ -221,4 +221,21 @@ public class TournoiJDBC implements TournoiDAO{
 		}
 		return res;
 	}
+	
+	public static int nombreEquipesTournoi(Tournoi tournoi) {
+		int nombreEquipes = 0;
+		try {
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select count(*) as nombreEquipes from Participer where idTournoi = ?");
+			st.setInt(1, tournoi.getIdTournoi());
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				nombreEquipes = rs.getInt("nombreEquipes");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nombreEquipes;
+	}
+		
+		
 }
