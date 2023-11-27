@@ -99,6 +99,17 @@ public class JoueurJDBC implements JoueurDAO{
 		}
 		return joueurs;
 	}
+	
+	@Override
+    public int getNextValueSequence() throws Exception {
+        int res = -1;
+        Statement st = ConnectionJDBC.getConnection().createStatement();
+        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Joueur");
+        if (rs.next()) {
+            res = rs.getInt(1);
+        }
+        return res;
+    }
 
 	@Override
 	public boolean add(Joueur j) throws Exception {
