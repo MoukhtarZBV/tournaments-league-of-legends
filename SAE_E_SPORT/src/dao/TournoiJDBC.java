@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import modele.Compte;
 import modele.Equipe;
+import modele.ModeleCreationTournoi;
 import modele.Niveau;
 import modele.Pays;
 import modele.Tournoi;
@@ -151,13 +152,48 @@ public class TournoiJDBC implements TournoiDAO{
 	}
 	
 	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
-		PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("SELECT COUNT(*) FROM Tournoi WHERE dateDebut BETWEEN ? AND ?");
-		st.setDate(1, dateDebut);
-		st.setDate(2, dateFin);
-		ResultSet res = st.executeQuery();
-		res.next();
-		int nb = res.getInt(1);
-		return nb > 0;
+		Tournoi tournoi = null;
+		try {
+			Statement st = ConnectionJDBC.getConnection().createStatement();
+			ResultSet rs = st.executeQuery("select dateDebut, dateFin from Tournoi");
+			while(rs.next()) {
+				if (!ModeleCreationTournoi.estTournoiDisjoint(dateDebut, dateFin, rs.getDate("dateDebut"), rs.getDate("dateFin"))) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public List<Tournoi> getTournoisDeNiveau(Niveau niveau){
+		List<Tournoi> tournois = new ArrayList<>();
+		try {
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where niveau = ?");
+			st.setString(1, niveau.denomination());
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tournois;
 	}
 
+	public List<Tournoi> getTournois(Niveau niveau){
+		List<Tournoi> tournois = new ArrayList<>();
+		try {
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where niveau = ?");
+			st.setString(1, niveau.denomination());
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tournois;
+	}
 }

@@ -3,40 +3,55 @@ package ihm;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import dao.EquipeJDBC;
-import modele.Equipe;
-
+import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
-import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.awt.Dimension;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+
+import java.awt.GridLayout;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.BoxLayout;
+import java.awt.Insets;
+import java.awt.FlowLayout;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class FenetreListeDesTournois extends JFrame {
-
-	private JPanel contentPane;
-	private JTextField search_field;
-	private JTable table;
+	
+	private JTextField champRecherche;
+	private JTable     table;
 
 	public static void main (String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {											
-					// Création d'une connexion
-					FenetreListeDesTournois fenetre = new FenetreListeDesTournois();
-					fenetre.setVisible(true);
+					String dirProjetJava = System.getProperty("user.dir");
+					System.setProperty("derby.system.home", dirProjetJava + "/BDD");		
+					String urlConnexion = "jdbc:derby:BDD;create=true";
+					
+					try {
+						DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
+						Connection cn = DriverManager.getConnection(urlConnexion);
+						FenetreListeDesTournois frame = new FenetreListeDesTournois(cn);
+						frame.setVisible(true);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -44,51 +59,162 @@ public class FenetreListeDesTournois extends JFrame {
 		});
 	}
 	
-	/**
-	 * Create the frame.
-	 */
-	public FenetreListeDesTournois() {
+	
+	public FenetreListeDesTournois(Connection cn) {
+		
+		//ControleurListeTournois controleur = new ControleurListeTournois(this, cn);
+		
+		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
+		setBounds(100, 100, 900, 600);
+		setTitle("Tournois");
+		
+		
+		
+		///// PANEL PRINCIPAL \\\\\
+		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
-		JLabel lblPage = new JLabel("Liste des tournois");
-		lblPage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPage.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		contentPane.add(lblPage, BorderLayout.NORTH);
 		
-		JPanel panel_body = new JPanel();
-		contentPane.add(panel_body, BorderLayout.CENTER);
-		panel_body.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_search = new JPanel();
-		panel_body.add(panel_search, BorderLayout.NORTH);
+		///// PANEL TITRE \\\\\
+		JPanel panelTop = new JPanel();
+		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panelTop.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panelTop, BorderLayout.NORTH);
 		
-		search_field = new JTextField();
-		panel_search.add(search_field);
-		search_field.setColumns(25);
+		// Label titre
+		JLabel lblTitre = new JLabel("Tournois");
+		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
+		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setFont(new Font("DejaVu Sans", Font.PLAIN, 40));
+		panelTop.add(lblTitre, BorderLayout.CENTER);
 		
-		JButton searchButton = new JButton();
-		searchButton.setIconTextGap(4);
-		searchButton.setIcon(new ImageIcon("src/Images/Search_Icon3.jpg"));
-		searchButton.setBackground(Color.WHITE);
-		panel_search.add(searchButton);
+		// Ligne colorée séparatrice
+		JTextField ligneColoree = new JTextField();
+		ligneColoree.setBackground(new Color(25, 25, 112));
+		ligneColoree.setEnabled(false);
+		ligneColoree.setEditable(false);
+		ligneColoree.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		panelTop.add(ligneColoree, BorderLayout.SOUTH);
 		
-		table = new JTable();
-		JScrollPane scrollPane = new JScrollPane(table);
-		panel_body.add(scrollPane, BorderLayout.CENTER);
 		
-		JPanel panel = new JPanel();
-		panel_body.add(panel, BorderLayout.SOUTH);
-		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
-		JButton btnRetour = new JButton("");
-		panel.add(btnRetour);
+		///// PANEL MAIN \\\\\
+		JPanel panelMain = new JPanel();
+		panelMain.setBackground(new Color(255, 255, 255));
+		panelMain.setBorder(new EmptyBorder(10, 10, 10, 10));
+		contentPane.add(panelMain, BorderLayout.CENTER);
+		panelMain.setLayout(new BorderLayout(10, 10));
 		
+		
+		///// PANEL RECHERCHE ET TRIS \\\\\
+		JPanel panelSearch = new JPanel();
+		panelSearch.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelMain.add(panelSearch, BorderLayout.NORTH);
+		panelSearch.setLayout(new GridLayout(0, 2, 10, 0));
+		
+		// Barre de recherche
+		JTextField champRecherche = new JTextField();
+		champRecherche.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panelSearch.add(champRecherche);
+		champRecherche.setColumns(20);
+		
+		
+		// Panel des tris
+		JPanel panelTris = new JPanel();
+		panelSearch.add(panelTris);
+		panelTris.setLayout(new GridLayout(1, 0, 5, 0));
+		
+		// Combo box niveau
+		JComboBox triNiveau = new JComboBox();
+		triNiveau.setModel(new DefaultComboBoxModel(new String[] {"-- Tri Niveau --", "OUAIS", "OUAAAAAAIS", "jsp", "Stinger"}));
+		triNiveau.setMaximumRowCount(10);
+		triNiveau.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panelTris.add(triNiveau);
+		
+		// Combo box etats
+		JComboBox triEtat = new JComboBox();
+		triEtat.setModel(new DefaultComboBoxModel(new String[] {"-- Tri État --", "Pas commencé", "En cours", "Terminé"}));
+		triEtat.setMaximumRowCount(10);
+		triEtat.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panelTris.add(triEtat);
+		
+		
+		
+		///// PANEL LISTE TOURNOIS \\\\\
+		JPanel panelListe = new JPanel();
+		panelListe.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelListe.setLayout(new BoxLayout(panelListe, BoxLayout.X_AXIS));
+		panelMain.add(panelListe, BorderLayout.CENTER);
+		
+		// Tableau
+		JTable table = new JTable();
+		table.setSelectionBackground(new Color(0, 0, 128, 100));
+		table.setRowMargin(5);
+		table.setRowHeight(20);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		table.setShowGrid(false);
+		
+		// Modele de la table
+		table.setModel(new DefaultTableModel(
+				new Object[][] { {"non", "jsp", "jsp nn plus", new Integer(2)}, {"a", "a", "a", new Integer(1)},},
+				new String[] {"Nom", "Niveau", "\u00C9tat", "\u00C9quipes"} ) {
+			
+					// Types des colonnes
+					Class[] columnTypes = new Class[] {
+						String.class, String.class, String.class, Integer.class
+					};
+					public Class getColumnClass(int columnIndex) {
+						return columnTypes[columnIndex];
+					}
+					
+					// Non éditables
+					boolean[] columnEditables = new boolean[] {
+						false, false, false, false
+					};
+					public boolean isCellEditable(int row, int column) {
+						return columnEditables[column];
+					}
+		});
+		table.getColumnModel().getColumn(0).setResizable(false);
+		table.getColumnModel().getColumn(1).setResizable(false);
+		table.getColumnModel().getColumn(2).setResizable(false);
+		table.getColumnModel().getColumn(3).setResizable(false);
+		
+		// Table Header
+		table.getTableHeader().setBackground(new Color(25, 25, 112));
+		table.getTableHeader().setForeground(Color.WHITE);
+		table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 15));
+		
+		// Scroll pane de la table
+		JScrollPane tableScroll = new JScrollPane(table);
+		panelListe.add(tableScroll);
+		
+		
+		///// PANEL BOUTONS \\\\\
+		JPanel panelBoutons = new JPanel();
+		panelBoutons.setBorder(new EmptyBorder(10, 100, 10, 100));
+		panelMain.add(panelBoutons, BorderLayout.SOUTH);
+		panelBoutons.setLayout(new GridLayout(0, 2, 15, 0));
+		
+		// Bouton annuler
+		JButton btnRetour = new JButton("Retour");
+		btnRetour.setBackground(new Color(255, 255, 255));
+		btnRetour.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnRetour.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		//btnRetour.addActionListener(controleur);
+		panelBoutons.add(btnRetour);
+		
+		// Bouton valider
+		JButton btnCreer = new JButton("Créer Tournoi");
+		btnCreer.setBackground(new Color(255, 255, 255));
+		btnCreer.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnCreer.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		//btnValider.addActionListener(controleur);
+		panelBoutons.add(btnCreer);
 		
 	}
 

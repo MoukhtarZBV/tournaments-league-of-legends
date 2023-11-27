@@ -2,6 +2,7 @@ package controleur;
 
 import java.awt.Color;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -47,46 +48,47 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
-			switch (this.etat) {
-				case SAISIE:
-					if (bouton.getText() == "Annuler") {
-						System.exit(0);
-					}
-					break;
-				case FIN_SAISIE:
-					if (bouton.getText() == "Annuler") {
-						System.exit(0);
-					}
-					if (bouton.getText() == "Valider") {
-						if (vue.champVide()) {
-							vue.afficherMessageErreur("Veuillez remplir tous les champs");
-						} else if (vue.nomTropLong()) {
-							vue.afficherMessageErreur("Le nom ne doit pas dépasser les 100 caractères");
-						} else
+			if (bouton.getText() == "Annuler") {
+				System.exit(0);
+			}
+			if (bouton.getText() == "Valider") {
+				if (vue.champVide()) {
+					vue.afficherMessageErreur("Veuillez remplir tous les champs");
+				} else if (vue.nomTropLong()) {
+					vue.afficherMessageErreur("Le nom ne doit pas dépasser les 100 caractères");
+				} else if (!modele.moinsDeDeuxSemainesEntreDates(vue.getDateDebut(), vue.getDateFin())){
+					vue.afficherMessageErreur("Le tournoi ne peut durer plus de deux semaines");
+				} else if (!modele.anneePourSaisonEnCours(vue.getDateDebut()) &&
+						   !modele.anneePourSaisonEnCours(vue.getDateFin())){
+					vue.afficherMessageErreur("Le tournoi doit avoir lieu cette année");
+				} else {
+					try {
+						if (jdbc.existeTournoiEntreDates(vue.getDateDebut(), vue.getDateFin())) {
+							vue.afficherMessageErreur("Un tournoi existe déjà sur ce créneau");
+						} else {
 							try {
-								if (jdbc.existeTournoiEntreDates(vue.getDateDebut(), vue.getDateFin())) {
-									vue.afficherMessageErreur("Un tournoi existe déjà sur ce créneau");
-								} else {
-									Tournoi tournoi = new Tournoi(0, 
-											vue.getNom(), 
-											vue.getNiveau(), 
-											vue.getDateDebut(), 
-											vue.getDateFin(), 
-											vue.getPays());		
-									System.out.println(vue.getNiveau().denomination() + " - " + vue.getPays());
-									jdbc.add(tournoi);
-									for (Tournoi t : jdbc.getAll()) {
-										System.out.println("Tournoi : " + t.getNomTournoi() + " | Du " + t.getDateDebut() + " au " + t.getDateFin());
-									}
-									vue.effacerMessageErreur();
+								Tournoi tournoi = new Tournoi(0, 
+										vue.getNom(), 
+										vue.getNiveau(), 
+										vue.getDateDebut(), 
+										vue.getDateFin(), 
+										vue.getPays());
+								System.out.println(vue.getNiveau().denomination() + " - " + vue.getPays());
+								jdbc.add(tournoi);
+								for (Tournoi t : jdbc.getAll()) {
+									System.out.println("Tournoi : " + t.getNomTournoi() + " | Du " + t.getDateDebut() + " au " + t.getDateFin());
 								}
-							} catch (SQLException e1) {
-								e1.printStackTrace();
-							} catch (Exception e1) {
-								e1.printStackTrace();
+								vue.effacerMessageErreur();
+							} catch (IllegalArgumentException iae) {
+								vue.afficherMessageErreur(iae.getMessage());
 							}
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-					break;
+				}
 			}
 		}
 	}
