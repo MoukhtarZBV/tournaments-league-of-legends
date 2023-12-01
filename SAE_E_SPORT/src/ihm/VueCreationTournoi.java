@@ -36,6 +36,7 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 import controleur.ControleurTournoi;
+import dao.ConnectionJDBC;
 
 public class VueCreationTournoi extends JFrame {
 	
@@ -56,19 +57,8 @@ public class VueCreationTournoi extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					String dirProjetJava = System.getProperty("user.dir");
-					System.setProperty("derby.system.home", dirProjetJava + "/BDD");		
-					String urlConnexion = "jdbc:derby:BDD;create=true";
-					
-					try {
-						DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
-						Connection cn = DriverManager.getConnection(urlConnexion);
-						VueCreationTournoi frame = new VueCreationTournoi(cn);
-						frame.setVisible(true);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-					
+					VueCreationTournoi frame = new VueCreationTournoi();
+					frame.setVisible(true);				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -78,9 +68,9 @@ public class VueCreationTournoi extends JFrame {
 
 	
 	// Création la fenêtre
-	public VueCreationTournoi(Connection cn) {
+	public VueCreationTournoi() {
 		
-		ControleurTournoi controleur = new ControleurTournoi(this, cn);
+		ControleurTournoi controleur = new ControleurTournoi(this);
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

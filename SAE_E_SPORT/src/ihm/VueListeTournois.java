@@ -1,6 +1,7 @@
 package ihm;
 
 import javax.swing.JFrame;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -28,7 +29,6 @@ import javax.swing.table.DefaultTableModel;
 
 import controleur.ControleurListeTournois;
 import dao.TournoiJDBC;
-import modele.ModeleListeTournois;
 import modele.Niveau;
 import modele.Tournoi;
 
@@ -38,7 +38,7 @@ import java.awt.FlowLayout;
 import java.awt.Component;
 import javax.swing.Box;
 
-public class FenetreListeDesTournois extends JFrame {
+public class VueListeTournois extends JFrame {
 	
 	private JTextField 		champRecherche;
 	private JTable     		table;
@@ -54,7 +54,7 @@ public class FenetreListeDesTournois extends JFrame {
 					try {
 						DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
 						Connection cn = DriverManager.getConnection(urlConnexion);
-						FenetreListeDesTournois frame = new FenetreListeDesTournois();
+						VueListeTournois frame = new VueListeTournois();
 						frame.setVisible(true);
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -68,7 +68,7 @@ public class FenetreListeDesTournois extends JFrame {
 	}
 	
 	
-	public FenetreListeDesTournois() {
+	public VueListeTournois() {
 		ControleurListeTournois controleur = new ControleurListeTournois(this);
 		
 		///// FENÊTRE \\\\\
@@ -162,7 +162,7 @@ public class FenetreListeDesTournois extends JFrame {
 		panelMain.add(panelListe, BorderLayout.CENTER);
 		
 		// Tableau
-		table = new JTable();
+		this.table = new JTable();
 		table.setSelectionBackground(new Color(0, 0, 128, 100));
 		table.setRowMargin(5);
 		table.setRowHeight(20);
@@ -219,7 +219,7 @@ public class FenetreListeDesTournois extends JFrame {
 		btnCreer.setBackground(new Color(255, 255, 255));
 		btnCreer.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
 		btnCreer.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		//btnValider.addActionListener(controleur);
+		btnCreer.addActionListener(controleur);
 		panelBoutons.add(btnCreer);
 		
 	}
@@ -228,8 +228,7 @@ public class FenetreListeDesTournois extends JFrame {
 		DefaultTableModel modele = ((DefaultTableModel) table.getModel());
 		modele.setRowCount(0);
 		for (Tournoi tournoi : tournois) {
-			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), ModeleListeTournois.etatTournoi(tournoi)});
+			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), Tournoi.etatTournoi(tournoi)});
 		}
 	}
-
 }

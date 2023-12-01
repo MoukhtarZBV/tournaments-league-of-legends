@@ -1,6 +1,8 @@
 package modele;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Objects;
 
 public class Tournoi {
@@ -29,6 +31,8 @@ public class Tournoi {
 		this.compte = null;
 		this.vainqueur = null;
 	}
+	
+	public Tournoi() {}
 
 	public Compte getCompte() {
 		return this.compte;
@@ -94,7 +98,36 @@ public class Tournoi {
 	public String toString() {
 		return "Tournoi [id="+ this.idTournoi + ", name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
 				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +"]";
-				
 	}
 	
+	public boolean moinsDeDeuxSemainesEntreDates(Date dateDebut, Date dateFin) {
+		return Math.abs(dateFin.getTime() - dateDebut.getTime()) < 1.21e+9; 
+	}
+	
+	public boolean anneePourSaisonEnCours(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		return calendar.get(Calendar.YEAR) == LocalDate.now().getYear();
+	}
+	
+	public static boolean estTournoiDisjoint(Date dateDebutT1, Date dateFinT1, Date dateDebutT2, Date dateFinT2) {
+		if ((dateDebutT1.compareTo(dateDebutT2) >= 0 && dateDebutT1.compareTo(dateFinT2) < 0) ||
+			(dateFinT1.compareTo(dateDebutT2) > 0 && dateFinT1.compareTo(dateFinT2) <= 0) ||
+			(dateDebutT2.compareTo(dateDebutT1) >= 0 && dateDebutT2.compareTo(dateFinT1) < 0)) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static String etatTournoi(Tournoi tournoi) {
+		if (tournoi.getDateFin().compareTo(new Date(System.currentTimeMillis())) < 0) {
+			return "Terminé";
+		} else if (tournoi.getDateDebut().compareTo(new Date(System.currentTimeMillis())) < 0) {
+			return "En cours";
+		}
+		return "À venir";
+	}
+	
+	
+
 }
