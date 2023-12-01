@@ -1,6 +1,7 @@
 package controleur;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -10,18 +11,19 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import dao.TournoiJDBC;
-import ihm.VueListeDesTournois;
-import modele.ModeleListeTournois;
+import ihm.VueCreationTournoi;
+import ihm.VueListeTournois;
 import modele.Niveau;
+import modele.Tournoi;
 
 public class ControleurListeTournois implements ActionListener, ItemListener {
 
-	private VueListeDesTournois vue;
-	private ModeleListeTournois modele;
+	private VueListeTournois vue;
+	private Tournoi modele;
 	private TournoiJDBC jdbc;
 	
-	public ControleurListeTournois(VueListeDesTournois vue) {
-		this.modele = new ModeleListeTournois();
+	public ControleurListeTournois(VueListeTournois vue) {
+		this.modele = new Tournoi();
 		this.vue = vue;
 		this.jdbc = new TournoiJDBC();
 	}
@@ -30,7 +32,10 @@ public class ControleurListeTournois implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
-			
+			if (bouton.getText().equals("Créer Tournoi")) {
+				VueCreationTournoi vue = new VueCreationTournoi();
+				vue.setVisible(true);
+			}
 		}
 	}
 
@@ -40,6 +45,12 @@ public class ControleurListeTournois implements ActionListener, ItemListener {
 			JComboBox comboBox = (JComboBox) e.getSource();
 			if (!((String) comboBox.getSelectedItem()).equals("-- Tri Niveau --")) {
 				vue.afficherTournois(jdbc.getTournoisDeNiveau(Niveau.getNiveau((String) comboBox.getSelectedItem())));
+			} else {
+				try {
+					vue.afficherTournois(jdbc.getAll());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

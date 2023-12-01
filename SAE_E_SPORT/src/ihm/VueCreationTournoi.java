@@ -35,8 +35,8 @@ import controleur.ControleurTournoi;
 public class VueCreationTournoi extends JFrame {
 	
 	private 		 JTextField inputNom;
-	private 		  JComboBox<String> inputNiveau;
-	private 		  JComboBox<String> inputPays;
+	private   JComboBox<String> inputNiveau;
+	private   JComboBox<String> inputPays;
 	private JFormattedTextField inputDateDebut;
 	private JFormattedTextField inputDateFin;
 	
