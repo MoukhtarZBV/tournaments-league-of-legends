@@ -47,7 +47,7 @@ public class VueListeTournois extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {											
-				VueListeDesTournois frame = new VueListeDesTournois();
+				VueListeTournois frame = new VueListeTournois();
 					frame.setVisible(true);
 					
 				} catch (Exception e) {
@@ -59,6 +59,7 @@ public class VueListeTournois extends JFrame {
 	
 	
 	public VueListeTournois() {
+		
 		ControleurListeTournois controleur = new ControleurListeTournois(this);
 		
 		///// FENÊTRE \\\\\
@@ -159,7 +160,7 @@ public class VueListeTournois extends JFrame {
 		panelMain.add(panelListe, BorderLayout.CENTER);
 		
 		// Tableau
-		JTable table = new JTable();
+		table = new JTable();
 		table.setSelectionBackground(Palette.COOL);
 		table.setRowMargin(5);
 		table.setRowHeight(20);
