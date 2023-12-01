@@ -10,17 +10,17 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import dao.TournoiJDBC;
-import ihm.FenetreListeDesTournois;
+import ihm.VueListeDesTournois;
 import modele.ModeleListeTournois;
 import modele.Niveau;
 
 public class ControleurListeTournois implements ActionListener, ItemListener {
 
-	private FenetreListeDesTournois vue;
+	private VueListeDesTournois vue;
 	private ModeleListeTournois modele;
 	private TournoiJDBC jdbc;
 	
-	public ControleurListeTournois(FenetreListeDesTournois vue) {
+	public ControleurListeTournois(VueListeDesTournois vue) {
 		this.modele = new ModeleListeTournois();
 		this.vue = vue;
 		this.jdbc = new TournoiJDBC();

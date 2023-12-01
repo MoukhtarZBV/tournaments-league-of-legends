@@ -27,7 +27,9 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 	private ModeleCreationTournoi modele;
 	private TournoiJDBC jdbc;
 	
-	public ControleurTournoi(VueCreationTournoi vue, Connection cn) {
+	private String date;
+	
+	public ControleurTournoi(VueCreationTournoi vue) {
 		this.modele = new ModeleCreationTournoi();
 		this.vue = vue;
 		this.jdbc = new TournoiJDBC();
