@@ -168,6 +168,15 @@ public class FenetreListeDesTournois extends JFrame {
 		table.setRowHeight(20);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		table.setShowGrid(false);
+		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
+				new String[] { "Nom", "Niveau", "Date début", "Nombre d'équipes", "État" }) {
+				
+				// Non éditables
+				boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false
+				};;
+		};
+		table.setModel(modele);
 		
 		// Modele de la table
 		TournoiJDBC jdbc = new TournoiJDBC();
@@ -216,18 +225,11 @@ public class FenetreListeDesTournois extends JFrame {
 	}
 	
 	public void afficherTournois(List<Tournoi> tournois) {
-		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
-			new String[] { "Nom", "Niveau", "Date début", "Nombre d'équipes", "État" }) {
-			
-			// Non éditables
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false, false
-			};;
-		};
+		DefaultTableModel modele = ((DefaultTableModel) table.getModel());
+		modele.setRowCount(0);
 		for (Tournoi tournoi : tournois) {
 			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), ModeleListeTournois.etatTournoi(tournoi)});
 		}
-		this.table.setModel(modele);
 	}
 
 }
