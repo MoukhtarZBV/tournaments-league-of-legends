@@ -57,7 +57,7 @@ public class VueImportation extends JFrame {
 		ControleurImportation controleur = new ControleurImportation(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 629, 402);
+		setBounds(100, 100, 850, 564);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -114,13 +114,14 @@ public class VueImportation extends JFrame {
 		btnValider.setBackground(Color.WHITE);
         btnValider.setForeground(Color.BLACK);
 		panelNorth.add(btnValider);
-		btnValider.addActionListener(controleur);
-		
-		
+		btnValider.addActionListener(controleur);	
 	}
 	
 	public DefaultTableModel getModel() {
 		return modele;
+	}
+	public void newModel() {
+		this.modele = new DefaultTableModel();
 	}
 
 }

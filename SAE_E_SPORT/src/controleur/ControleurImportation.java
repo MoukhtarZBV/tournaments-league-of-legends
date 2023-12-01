@@ -41,6 +41,10 @@ public class ControleurImportation implements ActionListener{
 
 		            // Récupération modèle de la JTable
 		            DefaultTableModel model = (DefaultTableModel) this.vue.getModel();
+		            
+		            // Efface les lignes et colonnes
+		            model.setRowCount(0);
+		            model.setColumnCount(0);
 
 		            // Ajout des colonnes au modèle
 		            for (int i = 1; i < data.size(); i = i + 5) {
@@ -61,24 +65,21 @@ public class ControleurImportation implements ActionListener{
 		            // Ajout du nom des équipes
 		            model.addRow(titreColonne);
 		            
-		            // Récupération des joueurs
+		            // Récupération des joueurs dans une liste
 		            List<String> joueurs = new ArrayList<>();
 		            for (int i = 1; i < data.size();i++) {
 		            	joueurs.add(data.get(i)[7]);
 		            } 
 		            
-		            // Récupération des joueurs par lignes 
-		            Object [][] joueursRow = new Object[6][6];
+		            // Récupération et affichage des joueurs par lignes 
+		            Object [][] joueursRow = new Object[5][8];
 		            for (int i = 0; i<5;i++) {
-		            	joueursRow[i][0] = joueurs.get(i);
-		            	joueursRow[i][1] = joueurs.get(i+5);
-		            	joueursRow[i][2] = joueurs.get(i+10);
-		            	joueursRow[i][3] = joueurs.get(i+15);
-		            }
-		            
-		            // Ajout des joueurs
-		            for (int i = 0; i < 5; i++) {
-		                model.addRow(joueursRow[i]);
+		            	int k = i;
+		            	for (int j = 0; j<(this.data.size()-1)/5; j++) {
+		            		joueursRow[i][j] = joueurs.get(k);
+		            		k += 5;
+		            	}
+		            	model.addRow(joueursRow[i]);
 		            }
 
 		            // Mise à jour de l'affichage de la vue
@@ -99,11 +100,14 @@ public class ControleurImportation implements ActionListener{
 	    				Joueur joueur = new Joueur(joueurDB.getNextValueSequence(), this.data.get(j)[7], equipe);
 	    				equipe.ajouterJoueur(joueur);
 	    			}
-					equipeDB.add(equipe);
+	    			// Ajout dans la base si équipe non présente
+	    			if (equipe.verifierEquipe()) {
+	    				equipeDB.add(equipe);
+	    			}
 					for (Joueur j : equipe.getJoueurs()) {
+						// Ajout dans la base si joueur non présent
 						joueurDB.add(j);
 					}
-					equipeDB.getAll().toString();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -113,6 +117,4 @@ public class ControleurImportation implements ActionListener{
 	    	this.vue.dispose();
 	    }
 	}
-
 }
-

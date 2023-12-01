@@ -2,6 +2,8 @@ package modele;
 
 import java.util.Objects;
 
+import dao.EquipeJDBC;
+
 public class Joueur {
 	
 	private int idJoueur;
@@ -37,6 +39,16 @@ public class Joueur {
 		this.equipe = e;
 	}
 	
+	public boolean verifierJoueur() throws Exception {
+		EquipeJDBC edb = new EquipeJDBC();
+		for (Equipe e : edb.getAll()) {
+			if (e.getJoueurs().contains(this)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	// Overrides
 	@Override
 	public boolean equals(Object o) {
@@ -44,11 +56,12 @@ public class Joueur {
 		if (o==null) return false;
 		if(o instanceof Joueur) {
 			Joueur j = (Joueur) o;
-			return this.idJoueur == j.idJoueur && this.pseudo == j.pseudo;
+			return this.pseudo == j.pseudo;
 		} else {
 			return false;
 		}
 	}
+	
 	
 	@Override
 	public int hashCode() {
