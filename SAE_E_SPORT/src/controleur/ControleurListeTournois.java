@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,6 +15,7 @@ import dao.TournoiJDBC;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
 import modele.Niveau;
+import modele.Status;
 import modele.Tournoi;
 
 public class ControleurListeTournois implements ActionListener, ItemListener {
@@ -35,7 +37,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener {
 			if (bouton.getText().equals("Créer Tournoi")) {
 				VueCreationTournoi vue = new VueCreationTournoi();
 				vue.setVisible(true);
-			}
+			} 
 		}
 	}
 
@@ -43,14 +45,16 @@ public class ControleurListeTournois implements ActionListener, ItemListener {
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() instanceof JComboBox) {
 			JComboBox comboBox = (JComboBox) e.getSource();
-			if (!((String) comboBox.getSelectedItem()).equals("-- Tri Niveau --")) {
-				vue.afficherTournois(jdbc.getTournoisDeNiveau(Niveau.getNiveau((String) comboBox.getSelectedItem())));
+			Niveau niveau = Niveau.getNiveau((String) comboBox.getSelectedItem());
+			Status status = Status.getStatus((String) comboBox.getSelectedItem()); 
+			if (niveau == null && status == null) {
+				vue.afficherTournois(jdbc.getAll());
+			} else if (niveau != null && status == null) {
+				vue.afficherTournois(jdbc.getAll().stream().filter(tournoi -> tournoi.getNiveau() == niveau).collect(Collectors.toList()));
+			} else if (niveau == null && status != null) {
+				vue.afficherTournois(jdbc.getAll().stream().filter(tournoi -> Tournoi.etatTournoi(tournoi) == status).collect(Collectors.toList()));
 			} else {
-				try {
-					vue.afficherTournois(jdbc.getAll());
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				vue.afficherTournois(jdbc.getAll().stream().filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList()));
 			}
 		}
 	}

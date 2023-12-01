@@ -119,13 +119,13 @@ public class Tournoi {
 		return true;
 	}
 	
-	public static String etatTournoi(Tournoi tournoi) {
+	public static Status etatTournoi(Tournoi tournoi) {
 		if (tournoi.getDateFin().compareTo(new Date(System.currentTimeMillis())) < 0) {
-			return "Terminé";
+			return Status.TERMINE;
 		} else if (tournoi.getDateDebut().compareTo(new Date(System.currentTimeMillis())) < 0) {
-			return "En cours";
+			return Status.EN_COURS;
 		}
-		return "À venir";
+		return Status.A_VENIR;
 	}
 	
 	

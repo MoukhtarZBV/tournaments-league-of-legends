@@ -20,7 +20,7 @@ import modele.Tournoi;
 public class TournoiJDBC implements TournoiDAO{
 	
 	@Override
-	public List<Tournoi> getAll() throws Exception {
+	public List<Tournoi> getAll() {
 		List<Tournoi> tournois = new ArrayList<>();
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();

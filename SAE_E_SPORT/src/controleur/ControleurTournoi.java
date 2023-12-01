@@ -84,7 +84,7 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		JFormattedTextField txt = (JFormattedTextField)e.getSource();
+		JFormattedTextField txt = (JFormattedTextField) e.getSource();
 		if (txt.getForeground() == Color.LIGHT_GRAY) {
 			txt.setForeground(Color.BLACK);
 			txt.setText("");
