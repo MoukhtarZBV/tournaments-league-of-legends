@@ -118,8 +118,10 @@ public class JoueurJDBC implements JoueurDAO{
 			String addJoueur = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?, ?)";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addJoueur);
-			EquipeJDBC edb = new EquipeJDBC();
-			Equipe e = edb.getByNom(j.getEquipe().getNom()).orElse(null);
+			
+			EquipeJDBC ejdbc = new EquipeJDBC();
+			Equipe e = ejdbc.getByNom(j.getEquipe().getNom()).orElse(null);
+			
 			st.setString(1, j.getPseudo());
 			st.setInt(2, e.getIdEquipe());
 			

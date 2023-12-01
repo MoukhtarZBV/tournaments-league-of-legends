@@ -3,6 +3,7 @@ package controleur;
 import java.awt.Color;
 
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -18,30 +19,18 @@ import javax.swing.JFormattedTextField;
 
 import dao.TournoiJDBC;
 import ihm.VueCreationTournoi;
-import modele.ModeleCreationTournoi;
 import modele.Tournoi;
 
 public class ControleurTournoi implements ActionListener, FocusListener {
-
-	public enum Etat{
-		SAISIE, FIN_SAISIE
-	}
-	
-	private Etat etat;
 	
 	private VueCreationTournoi vue;
-	private ModeleCreationTournoi modele;
+	private Tournoi modele;
 	private TournoiJDBC jdbc;
 	
-	private String date;
-	
-	public ControleurTournoi(VueCreationTournoi vue, Connection cn) {
-		this.modele = new ModeleCreationTournoi();
-		this.etat = Etat.FIN_SAISIE;
+	public ControleurTournoi(VueCreationTournoi vue) {
+		this.modele = new Tournoi();
 		this.vue = vue;
 		this.jdbc = new TournoiJDBC();
-		
-		this.date = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 	}
 
 	@Override
@@ -49,7 +38,7 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			if (bouton.getText() == "Annuler") {
-				System.exit(0);
+				vue.dispose();
 			}
 			if (bouton.getText() == "Valider") {
 				if (vue.champVide()) {
@@ -95,7 +84,7 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		JFormattedTextField txt = (JFormattedTextField)e.getSource();
+		JFormattedTextField txt = (JFormattedTextField) e.getSource();
 		if (txt.getForeground() == Color.LIGHT_GRAY) {
 			txt.setForeground(Color.BLACK);
 			txt.setText("");

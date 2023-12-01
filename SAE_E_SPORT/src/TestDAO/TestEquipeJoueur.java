@@ -94,6 +94,8 @@ public class TestEquipeJoueur {
 		}
 		System.out.println("\n###update Equipe OK###\n");
 		
+		System.out.println(eJDBC.getNextValueSequence());
+		
 		ConnectionJDBC.closeConnection();
 	}
 	
