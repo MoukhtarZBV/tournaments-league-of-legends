@@ -27,6 +27,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 	private Tournoi modele;
 	private TournoiJDBC jdbc;
 	
+	private String nom;
 	private Niveau niveau;
 	private Status status;
 	
@@ -34,6 +35,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 		this.modele = new Tournoi();
 		this.vue = vue;
 		this.jdbc = new TournoiJDBC();
+		this.nom = "";
 		this.niveau = null;
 		this.status = null;
 	}
@@ -47,6 +49,9 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 				vue.setVisible(true);
 			} else if (bouton.getText().equals("Retour")) {
 				vue.dispose();
+			} else if (bouton.getText().equals("Rechercher")) {
+				this.nom = vue.saisieChamp();
+				vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));
 			}
 		}
 	}
@@ -63,7 +68,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 				this.status = Status.getStatus(option);
 			}
 			System.out.println(niveau + " " + status);
-			vue.afficherTournois(modele.getTournoisNiveauStatus(niveau, status));
+			vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));
 		}
 	}
 

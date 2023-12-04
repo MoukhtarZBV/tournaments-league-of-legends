@@ -47,6 +47,7 @@ public class VueListeTournois extends JFrame {
 	private JTable     	table;
 	private JComboBox   triNiveau;
 	private JComboBox   triStatus;
+	private JTextField textField;
 
 	public static void main (String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -122,13 +123,19 @@ public class VueListeTournois extends JFrame {
 		panelSearch.setLayout(new GridLayout(0, 2, 10, 0));
 		panelMain.add(panelSearch, BorderLayout.NORTH);
 		
-		// Barre de recherche
-		JTextField champRecherche = new JTextField();
-		champRecherche.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		champRecherche.setColumns(20);
-		champRecherche.setBackground(Color.WHITE);
-		champRecherche.setForeground(Palette.WARDEN);
-		panelSearch.add(champRecherche);
+		JPanel panel = new JPanel();
+		panelSearch.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		// Champ de recherche
+		champRecherche = new JTextField();
+		champRecherche.setText("");
+		panel.add(champRecherche, BorderLayout.CENTER);
+		champRecherche.setColumns(10);
+		
+		JButton btnRecherche = new JButton("Rechercher");
+		panel.add(btnRecherche, BorderLayout.EAST); 
+		btnRecherche.addActionListener(controleur);
 		
 		
 		// Panel des tris
@@ -184,19 +191,19 @@ public class VueListeTournois extends JFrame {
 		table.setShowGrid(false);
 		table.setBackground(Color.WHITE);
 		table.setForeground(Palette.WARDEN);
-		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
-            new String[] { "Nom", "Niveau", "Date début", "Nombre d'équipes", "État" }) {
-                
-			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
-		};
-		table.setModel(modele);
 		
 		// Modele de la table
+		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
+	            new String[] { "Nom", "Niveau", "Date début", "Nombre d'équipes", "État" }) {
+	                
+				@Override
+			    public boolean isCellEditable(int row, int column) {
+			       return false;
+			    }
+			};
+		table.setModel(modele);
 		TournoiJDBC jdbc = new TournoiJDBC();
-			afficherTournois(jdbc.getAll());
+		afficherTournois(jdbc.getAll());
 		
 		// Table Header
 		table.getTableHeader().setBackground(Palette.WARDEN);
@@ -232,6 +239,10 @@ public class VueListeTournois extends JFrame {
 		btnCreer.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnCreer.addActionListener(controleur);
 		panelBoutons.add(btnCreer);
+	}
+	
+	public String saisieChamp() {
+		return this.champRecherche.getText();
 	}
 	
 	public void afficherTournois(List<Tournoi> tournois) {

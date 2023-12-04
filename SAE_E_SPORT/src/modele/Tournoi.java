@@ -137,15 +137,17 @@ public class Tournoi {
 		return Status.A_VENIR;
 	}
 	
-	public List<Tournoi> getTournoisNiveauStatus(Niveau niveau, Status status){
-		if (niveau == null && status == null) {
+	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
+		if (niveau == null && status == null && nom == "") {
 			return jdbc.getAll();
+		} else if (niveau == null && status == null) {
+			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).collect(Collectors.toList());
 		} else if (niveau != null && status == null) {
-			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNiveau() == niveau).collect(Collectors.toList());
+			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getNiveau() == niveau).collect(Collectors.toList());
 		} else if (niveau == null && status != null) {
-			return jdbc.getAll().stream().filter(tournoi -> Tournoi.etatTournoi(tournoi) == status).collect(Collectors.toList());
+			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status).collect(Collectors.toList());
 		}
-		return jdbc.getAll().stream().filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
+		return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
 	}
 
 }
