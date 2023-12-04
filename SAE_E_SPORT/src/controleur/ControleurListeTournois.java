@@ -49,7 +49,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 				vue.setVisible(true);
 			} else if (bouton.getText().equals("Retour")) {
 				vue.dispose();
-			} else if (bouton.getText().equals("Rechercher")) {
+			} else if (bouton.getFont().getFamily().equals("Gigi")) {
 				this.nom = vue.saisieChamp();
 				vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));
 			}
@@ -83,26 +83,14 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 }
