@@ -39,11 +39,13 @@ public class Joueur {
 		this.equipe = e;
 	}
 	
-	public boolean verifierJoueur() throws Exception {
+	public boolean verifierJoueur(Equipe eq) throws Exception {
 		EquipeJDBC edb = new EquipeJDBC();
 		for (Equipe e : edb.getAll()) {
-			if (e.getJoueurs().contains(this)) {
-				return false;
+			for (Joueur j : e.getJoueurs()) {
+				if (j.equals(this) && !(j.getEquipe().equals(eq))) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -56,7 +58,7 @@ public class Joueur {
 		if (o==null) return false;
 		if(o instanceof Joueur) {
 			Joueur j = (Joueur) o;
-			return this.pseudo == j.pseudo;
+			return this.pseudo.equals(j.pseudo);
 		} else {
 			return false;
 		}
