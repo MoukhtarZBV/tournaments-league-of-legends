@@ -20,7 +20,7 @@ import modele.Tournoi;
 public class TournoiJDBC implements TournoiDAO{
 	
 	@Override
-	public List<Tournoi> getAll() throws Exception {
+	public List<Tournoi> getAll() {
 		List<Tournoi> tournois = new ArrayList<>();
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -165,48 +165,6 @@ public class TournoiJDBC implements TournoiDAO{
 			e.printStackTrace();
 		}
 		return false;
-	}
-	
-	public List<Tournoi> getTournoisDeNiveau(Niveau niveau){
-		List<Tournoi> tournois = new ArrayList<>();
-		try {
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where niveau = ?");
-			st.setString(1, niveau.denomination());
-			ResultSet rs = st.executeQuery();
-			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tournois;
-	}
-	
-	public List<Tournoi> getTournoisEtat(String etat) {
-		List<Tournoi> tournois = new ArrayList<>();
-		String req = null;
-		switch (etat) {
-		case "Terminé":
-			req = "select * from Tournoi where dateFin < ?";
-			break;
-		case "En cours":
-			req = "select * from Tournoi where ? between dateDebut and dateFin";
-			break;
-		case "À venir":
-			req = "select * from Tournoi where dateDebut > ?";
-			break;
-		}
-		try {
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
-			st.setDate(1, new Date(System.currentTimeMillis()));
-			ResultSet rs = st.executeQuery();
-			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tournois;
 	}
 	
 	public int getNextSequenceValue() {

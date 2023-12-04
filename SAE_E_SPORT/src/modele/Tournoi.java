@@ -3,7 +3,11 @@ package modele;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
+import dao.TournoiJDBC;
 
 public class Tournoi {
 
@@ -15,6 +19,8 @@ public class Tournoi {
 	private Pays pays;
 	private Compte compte;
 	private Equipe vainqueur;
+	
+	private TournoiJDBC jdbc;
 	
 	public Tournoi(int id, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) throws IllegalArgumentException {
 		if (dateDebut.compareTo(dateFin) > 0) {
@@ -30,9 +36,12 @@ public class Tournoi {
 		this.pays = pays;
 		this.compte = null;
 		this.vainqueur = null;
+		this.jdbc = new TournoiJDBC();
 	}
 	
-	public Tournoi() {}
+	public Tournoi() {
+		this.jdbc = new TournoiJDBC();
+	}
 
 	public Compte getCompte() {
 		return this.compte;
@@ -119,15 +128,24 @@ public class Tournoi {
 		return true;
 	}
 	
-	public static String etatTournoi(Tournoi tournoi) {
+	public static Status etatTournoi(Tournoi tournoi) {
 		if (tournoi.getDateFin().compareTo(new Date(System.currentTimeMillis())) < 0) {
-			return "Terminé";
+			return Status.TERMINE;
 		} else if (tournoi.getDateDebut().compareTo(new Date(System.currentTimeMillis())) < 0) {
-			return "En cours";
+			return Status.EN_COURS;
 		}
-		return "À venir";
+		return Status.A_VENIR;
 	}
 	
-	
+	public List<Tournoi> getTournoisNiveauStatus(Niveau niveau, Status status){
+		if (niveau == null && status == null) {
+			return jdbc.getAll();
+		} else if (niveau != null && status == null) {
+			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNiveau() == niveau).collect(Collectors.toList());
+		} else if (niveau == null && status != null) {
+			return jdbc.getAll().stream().filter(tournoi -> Tournoi.etatTournoi(tournoi) == status).collect(Collectors.toList());
+		}
+		return jdbc.getAll().stream().filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
+	}
 
 }
