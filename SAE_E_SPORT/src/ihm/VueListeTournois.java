@@ -30,9 +30,12 @@ import javax.swing.table.DefaultTableModel;
 import controleur.ControleurListeTournois;
 import dao.TournoiJDBC;
 import modele.Niveau;
+import modele.Status;
 import modele.Tournoi;
 
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
+
 import java.awt.Insets;
 import java.awt.FlowLayout;
 import java.awt.Component;
@@ -42,6 +45,9 @@ public class VueListeTournois extends JFrame {
 	
 	private JTextField 	champRecherche;
 	private JTable     	table;
+	private JComboBox   triNiveau;
+	private JComboBox   triStatus;
+	private JTextField textField;
 
 	public static void main (String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -117,13 +123,19 @@ public class VueListeTournois extends JFrame {
 		panelSearch.setLayout(new GridLayout(0, 2, 10, 0));
 		panelMain.add(panelSearch, BorderLayout.NORTH);
 		
-		// Barre de recherche
-		JTextField champRecherche = new JTextField();
-		champRecherche.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		champRecherche.setColumns(20);
-		champRecherche.setBackground(Palette.COOL);
-		champRecherche.setForeground(Palette.WARDEN);
-		panelSearch.add(champRecherche);
+		JPanel panel = new JPanel();
+		panelSearch.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		// Champ de recherche
+		champRecherche = new JTextField();
+		champRecherche.setText("");
+		panel.add(champRecherche, BorderLayout.CENTER);
+		champRecherche.setColumns(10);
+		
+		JButton btnRecherche = new JButton("Rechercher");
+		panel.add(btnRecherche, BorderLayout.EAST); 
+		btnRecherche.addActionListener(controleur);
 		
 		
 		// Panel des tris
@@ -133,22 +145,33 @@ public class VueListeTournois extends JFrame {
 		panelSearch.add(panelTris);
 		
 		// Combo box niveau
-		JComboBox triNiveau = new JComboBox();
-		triNiveau.addItemListener(controleur);
+		triNiveau = new JComboBox<String>();
 		triNiveau.setMaximumRowCount(10);
 		triNiveau.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		triNiveau.setBackground(Palette.COOL);
+		triNiveau.setBackground(Color.WHITE);
 		triNiveau.setForeground(Palette.WARDEN);
+		triNiveau.addItem("-- Niveau --");
+		for (Niveau niveau : Niveau.values()) {
+        	triNiveau.addItem(niveau.denomination());
+        }
+		triNiveau.addItemListener(controleur);
 		panelTris.add(triNiveau);
 		
+		
+		
+		
 		// Combo box etats
-		JComboBox triEtat = new JComboBox();
-		triEtat.setModel(new DefaultComboBoxModel(new String[] {"-- Tri État --", "Pas commencé", "En cours", "Terminé"}));
-		triEtat.setMaximumRowCount(10);
-		triEtat.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		triEtat.setBackground(Palette.COOL);
-		triEtat.setForeground(Palette.WARDEN);
-		panelTris.add(triEtat);
+		triStatus = new JComboBox<String>();
+		triStatus.setMaximumRowCount(10);
+		triStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		triStatus.setBackground(Color.WHITE);
+		triStatus.setForeground(Palette.WARDEN);
+		triStatus.addItem("-- Status --");
+		for (Status status : Status.values()) {
+        	triStatus.addItem(status.denomination());
+        }
+		triStatus.addItemListener(controleur);
+		panelTris.add(triStatus);
 		
 		
 		
@@ -166,21 +189,27 @@ public class VueListeTournois extends JFrame {
 		table.setRowHeight(20);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		table.setShowGrid(false);
-		table.setBackground(Palette.COOL);
+		table.setBackground(Color.WHITE);
 		table.setForeground(Palette.WARDEN);
 		
 		// Modele de la table
+		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
+	            new String[] { "Nom", "Niveau", "Date début", "Nombre d'équipes", "État" }) {
+	                
+				@Override
+			    public boolean isCellEditable(int row, int column) {
+			       return false;
+			    }
+			};
+		table.setModel(modele);
 		TournoiJDBC jdbc = new TournoiJDBC();
-		try {
-			afficherTournois(jdbc.getAll());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		afficherTournois(jdbc.getAll());
 		
 		// Table Header
 		table.getTableHeader().setBackground(Palette.WARDEN);
 		table.getTableHeader().setForeground(Color.WHITE);
 		table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 15));
+		table.addMouseListener(controleur);
 		
 		// Scroll pane de la table
 		JScrollPane tableScroll = new JScrollPane(table);
@@ -198,7 +227,7 @@ public class VueListeTournois extends JFrame {
 		// Bouton annuler
 		JButton btnRetour = new JButton("Retour");
 		btnRetour.setBackground(new Color(255, 255, 255));
-		btnRetour.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnRetour.setBorder(new LineBorder(Palette.WARDEN, 2, true));
 		btnRetour.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnRetour.addActionListener(controleur);
 		panelBoutons.add(btnRetour);
@@ -206,11 +235,14 @@ public class VueListeTournois extends JFrame {
 		// Bouton valider
 		JButton btnCreer = new JButton("Créer Tournoi");
 		btnCreer.setBackground(new Color(255, 255, 255));
-		btnCreer.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnCreer.setBorder(new LineBorder(Palette.WARDEN, 2, true));
 		btnCreer.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnCreer.addActionListener(controleur);
 		panelBoutons.add(btnCreer);
-		
+	}
+	
+	public String saisieChamp() {
+		return this.champRecherche.getText();
 	}
 	
 	public void afficherTournois(List<Tournoi> tournois) {
@@ -219,5 +251,25 @@ public class VueListeTournois extends JFrame {
 		for (Tournoi tournoi : tournois) {
 			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), Tournoi.etatTournoi(tournoi).denomination()});
 		}
+	}
+	
+	public boolean estOptionComboboxNiveau(String option){
+		ComboBoxModel model = triNiveau.getModel();
+		for (int i = 0; i < model.getSize(); i++) {
+			if (((String) model.getElementAt(i)).equals(option)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean estOptionComboboxStatus(String option){
+		ComboBoxModel model = triStatus.getModel();
+		for (int i = 0; i < model.getSize(); i++) {
+			if (((String) model.getElementAt(i)).equals(option)){
+				return true;
+			}
+		}
+		return false;
 	}
 }
