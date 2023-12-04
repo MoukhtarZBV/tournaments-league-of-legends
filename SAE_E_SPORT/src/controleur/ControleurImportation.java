@@ -126,15 +126,15 @@ public class ControleurImportation implements ActionListener{
 	    			for (int j = i; j<i+5; j++) {
 	    				Joueur joueur = new Joueur(joueurDB.getNextValueSequence(), this.data.get(j)[7], equipe);
 	    				equipe.ajouterJoueur(joueur);
-	    				// Si un joueur est dans une mauvaise équipe
+	    				// Si un joueur est déjà dans une autre équipe
 	    				if (!joueur.verifierJoueur(equipe)) {
 	    					roll = true;
-	    					this.vue.setMsgErreur("La composition d'une ou plusieurs équipes ne correspond pas");
+	    					this.vue.setMsgErreur("Un ou plusieurs joueurs appartiennent à plus d'une équipe");
 	    				}
 	    			}
 	    			// si la composition a changé
 	    			if(equipeDB.getByNom(equipe.getNom()).orElse(null) != null) {
-	    				if (equipe.getJoueurs().equals(equipeDB.getByNom(equipe.getNom()).orElse(null).getJoueurs())) {
+	    				if (!(equipe.getJoueurs().equals(equipeDB.getByNom(equipe.getNom()).get().getJoueurs()))) {
 	    					roll = true;
 	    					this.vue.setMsgErreur("La composition d'une ou plusieurs équipes ne correspond pas");
 	    				}
