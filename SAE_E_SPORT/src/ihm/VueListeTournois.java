@@ -198,7 +198,7 @@ public class VueListeTournois extends JFrame {
 		// Bouton annuler
 		JButton btnRetour = new JButton("Retour");
 		btnRetour.setBackground(new Color(255, 255, 255));
-		btnRetour.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnRetour.setBorder(new LineBorder(Palette.WARDEN, 2, true));
 		btnRetour.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnRetour.addActionListener(controleur);
 		panelBoutons.add(btnRetour);
@@ -206,7 +206,7 @@ public class VueListeTournois extends JFrame {
 		// Bouton valider
 		JButton btnCreer = new JButton("Créer Tournoi");
 		btnCreer.setBackground(new Color(255, 255, 255));
-		btnCreer.setBorder(new LineBorder(new Color(0, 0, 102, 100), 2, true));
+		btnCreer.setBorder(new LineBorder(Palette.WARDEN, 2, true));
 		btnCreer.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnCreer.addActionListener(controleur);
 		panelBoutons.add(btnCreer);
