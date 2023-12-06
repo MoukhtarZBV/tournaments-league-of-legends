@@ -157,8 +157,7 @@ public class EquipeJDBC implements EquipeDAO{
 		return id;
 	}
 
-	@Override
-	public int getNextValueSequence(){
+	public static int getNextValueSequence() throws Exception{
 		int res = -1;
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();

@@ -100,8 +100,7 @@ public class JoueurJDBC implements JoueurDAO{
 		return joueurs;
 	}
 	
-	@Override
-    public int getNextValueSequence() throws Exception {
+    public static int getNextValueSequence() throws Exception {
         int res = -1;
         Statement st = ConnectionJDBC.getConnection().createStatement();
         ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Joueur");

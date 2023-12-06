@@ -142,9 +142,6 @@ public class ControleurImportation implements ActionListener{
 	    			// On ajoute l'équipe à la base si elle n'est pas déjà présente
 	    			if (equipe.verifierEquipe() && !roll) {
 	    				equipeDB.add(equipe);
-	    				for (Joueur j : equipe.getJoueurs()) {
-							joueurDB.add(j);
-						}
 	    			}
 					// si composition ne correspond pas rollaback
 					if (roll == true) {
