@@ -52,7 +52,7 @@ public class Equipe {
 		if (o==null) return false;
 		if(o instanceof Equipe) {
 			Equipe e = (Equipe) o;
-			return this.idEquipe == e.getIdEquipe() && this.nom==e.nom && this.rang == e.rang
+			return this.idEquipe == e.getIdEquipe() && this.nom.equals(e.nom) && this.rang == e.rang
 					&& this.nationalite == e.nationalite && this.joueurs.equals(e.joueurs);
 		} else {
 			return false;

@@ -30,12 +30,7 @@ public class ConnectionJDBC {
 	
 	public static void closeConnection() {
 		if (connection != null) {
-			try {
-				connection.close();
-				connection = null;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			connection = null;
 		}
 	}
 	

@@ -65,15 +65,16 @@ public class AdminJDBC implements AdminDAO {
 			if (admin.getCompte()!= null) {
 				st  = ConnectionJDBC.getConnection()
 						.prepareStatement("INSERT INTO Administrateur(idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
-										+ "VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?, ?)");
-				st.setInt(3, admin.getCompte().getId());
+										+ "VALUES (?, ?, ?, ?)");
+				st.setInt(4, admin.getCompte().getId());
 			} else {
 				st  = ConnectionJDBC.getConnection()
 						.prepareStatement("INSERT INTO Administrateur (idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
 										+ "VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?, null)");
 			}
-			st.setString(1, admin.getNom());
-			st.setString(2, admin.getPrenom());
+			st.setInt(1, admin.getId());
+			st.setString(2, admin.getNom());
+			st.setString(3, admin.getPrenom());
 			st.executeUpdate();
 			
 			System.out.println("L'administrateur "+ admin.getNom().toUpperCase() +" a été ajouté.");

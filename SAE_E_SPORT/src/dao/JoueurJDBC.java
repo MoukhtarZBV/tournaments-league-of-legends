@@ -115,15 +115,16 @@ public class JoueurJDBC implements JoueurDAO{
 	public boolean add(Joueur j) throws Exception {
 		boolean res = false;
 		try {
-			String addJoueur = "INSERT INTO Joueur VALUES (NEXT VALUE FOR SEQ_Joueur, ?, ?)";
+			String addJoueur = "INSERT INTO Joueur VALUES (?, ?, ?)";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addJoueur);
 			
 			EquipeJDBC ejdbc = new EquipeJDBC();
 			Equipe e = ejdbc.getByNom(j.getEquipe().getNom()).orElse(null);
 			
-			st.setString(1, j.getPseudo());
-			st.setInt(2, e.getIdEquipe());
+			st.setInt(1, j.getId());
+			st.setString(2, j.getPseudo());
+			st.setInt(3, e.getIdEquipe());
 			
 			st.executeUpdate();
 			

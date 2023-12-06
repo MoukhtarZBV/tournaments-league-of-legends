@@ -74,12 +74,13 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public boolean add(Arbitre a) throws Exception {
 		boolean res = false;
 		try {
-			String addArbitre = "INSERT INTO Arbitre values (NEXT VALUE FOR SEQ_Arbitre, ?, ?)";
+			String addArbitre = "INSERT INTO Arbitre values (?, ?, ?)";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addArbitre);
 			
-			st.setString(1, a.getNom());
-			st.setString(2, a.getPrenom());
+			st.setInt(1, a.getId());
+			st.setString(2, a.getNom());
+			st.setString(3, a.getPrenom());
 			
 			st.executeUpdate();
 			

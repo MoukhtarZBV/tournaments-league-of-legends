@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import modele.Equipe;
+import modele.Jouer;
 import modele.Partie;
 import modele.Tournoi;
 
@@ -31,12 +32,20 @@ public class PartieJDBC implements PartieDAO{
 				
 				EquipeJDBC equipeBDD = new EquipeJDBC();
 				Optional<Equipe> opte = equipeBDD.getById(rs.getInt("idEquipe"));
-				Equipe equipe = null;
-				equipe = opte.orElse(null);
+				Equipe equipe1 = null;
+				equipe1 = opte.orElse(null);
 				
-				Partie p = new Partie(rs.getDate("datePartie"), rs.getString("heureDebut"), rs.getString("deroulement"), tournoi);
-				p.setEquipeGagnant(equipe);
-				parties.add(p);
+				JouerJDBC jdb = new JouerJDBC();
+				Jouer j = jdb.getByDateHeure(rs.getDate("datePartie"), rs.getString("heureDebut")).orElse(null);
+				Equipe equipe2 = null;
+				if (j != null) {
+					equipe2 = j.getEquipe();	
+				}
+                
+                Partie p = new Partie(rs.getDate("datePartie"), rs.getString("heureDebut"), rs.getString("deroulement"), equipe1, tournoi);
+                p.setEquipe2(equipe2);
+                p.setEquipeGagnant(rs.getInt("gagnant"));
+                parties.add(p);
 			}
 			
 		} catch (SQLException e) {
@@ -68,10 +77,14 @@ public class PartieJDBC implements PartieDAO{
 
                 EquipeJDBC equipeBDD = new EquipeJDBC();
                 Optional<Equipe> opte = equipeBDD.getById(rs.getInt("idEquipe"));
-                Equipe equipe = opte.orElse(null);
+                Equipe equipe1 = opte.orElse(null);
 
-                Partie p = new Partie(rs.getDate("datePartie"), rs.getString("heureDebut"), rs.getString("deroulement"), t);
-                p.setEquipeGagnant(equipe);
+                opte = equipeBDD.getById(rs.getInt("idEquipe"));
+                Equipe equipe2 = opte.orElse(null);
+                
+                Partie p = new Partie(rs.getDate("datePartie"), rs.getString("heureDebut"), rs.getString("deroulement"), equipe1, t);
+                p.setEquipe2(equipe2);
+                p.setEquipeGagnant(rs.getInt("gagnant"));
                 opt = Optional.ofNullable(p);
             }
         } catch (SQLException e) {
@@ -86,18 +99,20 @@ public class PartieJDBC implements PartieDAO{
 		boolean res = false;
 		try {
 			CallableStatement cs;
-			if (p.getEquipeGagnant() != null) {
-				cs = ConnectionJDBC.getConnection().prepareCall("insert into Partie (datePartie, heureDebut, deroulement, idTournoi, idEquipe) values (?,?,?,?,?)");
-				cs.setInt(5, p.getEquipeGagnant().getIdEquipe());
-			} else {
-				cs = ConnectionJDBC.getConnection().prepareCall("insert into Partie (datePartie, heureDebut, deroulement, idTournoi) values (?,?,?,?)");
-			}
+			cs = ConnectionJDBC.getConnection().prepareCall("insert into Partie (datePartie, heureDebut, deroulement, idTournoi, idEquipe, gagnant) values (?,?,?,?,?,?)");
 			cs.setDate(1, p.getDate());
 			cs.setString(2, p.getHeure());
 			cs.setString(3, p.getDeroulement());
 			cs.setInt(4, p.getTournoi().getIdTournoi());
+			cs.setInt(5, p.getEquipe1().getIdEquipe());
+			cs.setInt(6, p.getEquipeGagnant());
+			cs.executeUpdate();
 			
-			cs.execute();
+			if (p.getEquipe2()!=null) {
+				JouerJDBC jdb = new JouerJDBC();
+				jdb.add(new Jouer(p.getEquipe2(), p));
+			}
+			
 			res = true;
 			
 			System.out.println("Partie ajoute");
@@ -115,26 +130,24 @@ public class PartieJDBC implements PartieDAO{
 	    try {
 	        Connection connection = ConnectionJDBC.getConnection();
 	        String query;
-
-	        if (p.getEquipeGagnant() != null) {
-	            query = "UPDATE Partie SET datePartie = ?, heureDebut = ?, deroulement = ?, idEquipe = ? WHERE idTournoi = ?";
-	        } else {
-	            query = "UPDATE Partie SET datePartie = ?, heureDebut = ?, deroulement = ? WHERE idTournoi = ?";
-	        }
+  
+	        query = "UPDATE Partie SET deroulement = ?, idEquipe = ?, gagnant = ?, idTournoi = ? WHERE datePartie = ? and heureDebut = ?";
 
         	CallableStatement cs = connection.prepareCall(query);
-            cs.setDate(1, p.getDate());
-            cs.setString(2, p.getHeure());
-            cs.setString(3, p.getDeroulement());
+            cs.setString(1, p.getDeroulement());
+            cs.setInt(2, p.getEquipe1().getIdEquipe());
+            cs.setInt(3, p.getEquipeGagnant());
+            cs.setInt(4, p.getTournoi().getIdTournoi());
+            cs.setDate(5, p.getDate());
+            cs.setString(6, p.getHeure());
 
-            if (p.getEquipeGagnant() != null) {
-                cs.setInt(4, p.getEquipeGagnant().getIdEquipe());
-                cs.setInt(5, p.getTournoi().getIdTournoi());
-            } else {
-                cs.setInt(4, p.getTournoi().getIdTournoi());
-            }
-
-            cs.execute();
+            cs.executeUpdate();
+            
+            if (p.getEquipe2()!=null) {
+				JouerJDBC jdb = new JouerJDBC();
+				jdb.update(new Jouer(p.getEquipe2(), p));
+			}
+            
             res = true;
 
             System.out.println("Partie mise à jour");
@@ -148,10 +161,14 @@ public class PartieJDBC implements PartieDAO{
 	public boolean delete(Partie p) throws Exception {
 		boolean res = false;
 		try {
+			if (p.getEquipe2()!=null) {
+				JouerJDBC jdb = new JouerJDBC();
+				jdb.delete(new Jouer(p.getEquipe2(), p));
+			}
 			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("delete from Partie where datePartie = ? and heureDebut = ?");
 			cs.setDate(1, p.getDate());
 			cs.setString(2, p.getHeure());
-			cs.execute();
+			cs.executeUpdate();
 			res = true;
 			
 			System.out.println("Partie supprime.");

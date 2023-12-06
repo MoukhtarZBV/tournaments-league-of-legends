@@ -65,11 +65,17 @@ public class EquipeJDBC implements EquipeDAO{
 		}
 		boolean res = false;
 		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (NEXT VALUE FOR SEQ_EQUIPE,?,?,?)");
-			cs.setString(1, e.getNom());
-			cs.setInt(2, e.getRang());
-			cs.setString(3, e.getNationalite().denomination());
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Equipe (idEquipe, nomEquipe, rang, nationalite) values (?,?,?,?)");
+			cs.setInt(1, e.getIdEquipe());
+			cs.setString(2, e.getNom());
+			cs.setInt(3, e.getRang());
+			cs.setString(4, e.getNationalite().denomination());
 			cs.executeUpdate();
+			
+			JoueurJDBC jdb = new JoueurJDBC();
+			for (Joueur j : e.getJoueurs()) {
+				jdb.add(j);
+			}
 			
 			res = true;
 			System.out.println("L'équipe "+ e.getNom().toUpperCase() +" a été ajouté.");
@@ -150,32 +156,18 @@ public class EquipeJDBC implements EquipeDAO{
 		return id;
 	}
 	
-	@Override
-    public int getNextValueSequence() throws Exception {
+	public static int getNextValueSequence() throws Exception {
         int res = -1;
-        Statement st = ConnectionJDBC.getConnection().createStatement();
-        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Equipe");
-        if (rs.next()) {
-            res = rs.getInt(1);
+        try {
+	        Statement st = ConnectionJDBC.getConnection().createStatement();
+	        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Equipe");
+	        if (rs.next()) {
+	            res = rs.getInt(1);
+	        }
+        } catch (SQLException e) {
+        	e.printStackTrace();
         }
         return res;
     }
-	
-	
-
-	@Override
-	public int getNextValueSequence() throws Exception {
-		int res = -1;
-		try {
-			Statement st = ConnectionJDBC.getConnection().createStatement();
-			ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Equipe");
-			if (rs.next()) {
-				res = rs.getInt(1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
 
 }

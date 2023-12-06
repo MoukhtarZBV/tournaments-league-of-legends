@@ -67,11 +67,13 @@ public class TournoiJDBC implements TournoiDAO{
 	public boolean add(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, idCompte, idEquipe) values (NEXT VALUE FOR SEQ_Tournoi, ?, ?, ?, ?, NULL, NULL)");
-			cs.setString(1, t.getNomTournoi());
-			cs.setString(2, t.getNiveau().denomination());
-			cs.setDate(3, t.getDateDebut());
-			cs.setDate(4, t.getDateFin());
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe) values (?, ?, ?, ?, ?, ?, NULL, NULL)");
+			cs.setInt(1, t.getIdTournoi());
+			cs.setString(2, t.getNomTournoi());
+			cs.setString(3, t.getNiveau().denomination());
+			cs.setDate(4, t.getDateDebut());
+			cs.setDate(5, t.getDateFin());
+			cs.setString(6, t.getPays().denomination());
 			cs.executeUpdate();
 			res = true;
 			
@@ -167,6 +169,34 @@ public class TournoiJDBC implements TournoiDAO{
 		return false;
 	}
 	
+	public Optional<Tournoi> getTournoiByName(String nom) throws Exception{
+		Optional<Tournoi> tournois = Optional.empty();
+		try {
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("select * from Tournoi where nomTournoi = ?");
+			cs.setString(1, nom);
+			ResultSet rs = cs.executeQuery();
+			if (rs.next()) {
+				Tournoi t = new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
+						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
+						rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays")));
+
+				EquipeJDBC ejdbc = new EquipeJDBC();
+				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
+				t.setVainqueur(e.orElse(null));
+				
+				CompteJDBC cjdbc = new CompteJDBC();
+				Optional<Compte> opt = cjdbc.getById(rs.getInt("idCompte"));
+				t.setCompte(opt.orElse(null));
+				
+				tournois = Optional.ofNullable(t);
+			}
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tournois;
+	}
+	
 	public List<Tournoi> getTournoisDeNiveau(Niveau niveau){
 		List<Tournoi> tournois = new ArrayList<>();
 		try {
@@ -209,7 +239,7 @@ public class TournoiJDBC implements TournoiDAO{
 		return tournois;
 	}
 	
-	public int getNextSequenceValue() {
+	public static int getNextSequenceValue() {
 		int res = -1;
 		try {
 			ResultSet rs = ConnectionJDBC.getConnection().createStatement().executeQuery("VALUES NEXT VALUE FOR SEQ_Tournoi");

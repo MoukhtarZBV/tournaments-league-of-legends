@@ -2,6 +2,7 @@ package TestDAO;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,8 +10,13 @@ import java.util.Optional;
 
 import dao.ConnectionJDBC;
 import dao.CreateDB;
+import dao.EquipeJDBC;
+import dao.JoueurJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
+import modele.Equipe;
+import modele.Jouer;
+import modele.Joueur;
 import modele.Niveau;
 import modele.Partie;
 import modele.Pays;
@@ -19,19 +25,18 @@ import modele.Tournoi;
 public class TestPartie {
 
 	public static void main(String[] args) throws Exception {
+		CreateDB.main(args);
+		
 		PartieJDBC pjdbc = new PartieJDBC();
 		TournoiJDBC tjdbc = new TournoiJDBC();
 		
 		CreateDB.main(args);
 		System.out.println("Table tournoi, partie, niveauTournoi vide\n");
 		
-		ConnectionJDBC.getConnection().createStatement().executeUpdate("insert into niveauTournoi values('Local')");
-		ConnectionJDBC.getConnection().createStatement().executeUpdate("insert into niveauTournoi values('International')");
-		
-		Tournoi t1 = new Tournoi(1, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 11, 23)), 
+		Tournoi t1 = new Tournoi(1, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 12, 28)), 
+				Date.valueOf(LocalDate.of(2023, 12, 29)), Pays.FR);
+		Tournoi t2 = new Tournoi(2, "Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 12, 30)), 
 				Date.valueOf(LocalDate.of(2023, 12, 31)), Pays.FR);
-		Tournoi t2 = new Tournoi(2, "Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 5, 10)), 
-				Date.valueOf(LocalDate.of(2023, 10, 31)), Pays.FR);
 		
 		tjdbc.add(t1);
 		tjdbc.add(t2);
@@ -39,10 +44,44 @@ public class TestPartie {
 		for (Tournoi t : tjdbc.getAll()) {
 			System.out.println(t);
 		}
+
+		JoueurJDBC jdb = new JoueurJDBC();
 		
-		Partie p1 = new Partie(Date.valueOf(LocalDate.of(2023, 11, 23)), "12:00", "Final", t1);
-		Partie p2 = new Partie(Date.valueOf(LocalDate.of(2023, 11, 23)), "13:00", "Final", t2);
+		Equipe e1 = new Equipe(EquipeJDBC.getNextValueSequence(), "T1", 1000, Pays.FR);
+		Joueur j1 = new Joueur(jdb.getNextValueSequence(), "Zeus", e1);
+		Joueur j2 = new Joueur(jdb.getNextValueSequence(), "Oner", e1);
+		Joueur j3 = new Joueur(jdb.getNextValueSequence(), "Faker", e1);
+		Joueur j4 = new Joueur(jdb.getNextValueSequence(), "Gumayusi", e1);
+		Joueur j5 = new Joueur(jdb.getNextValueSequence(), "Keria", e1);
 		
+		e1.ajouterJoueur(j1, j2, j3, j4, j5);
+		
+		EquipeJDBC eJDBC = new EquipeJDBC();
+		eJDBC.add(e1);
+		
+		Equipe e2 = new Equipe(2, "GenG", 1000, Pays.FR);
+		Joueur j11 = new Joueur(jdb.getNextValueSequence(), "Doran", e2);
+		Joueur j21 = new Joueur(jdb.getNextValueSequence(), "Peanut", e2);
+		Joueur j31 = new Joueur(jdb.getNextValueSequence(), "Chovy", e2);
+		Joueur j41 = new Joueur(jdb.getNextValueSequence(), "Adc", e2);
+		Joueur j51 = new Joueur(jdb.getNextValueSequence(), "Sp", e2);
+		e2.ajouterJoueur(j11,j21,j31,j41,j51);
+		
+		eJDBC.add(e2);
+		
+		for (Equipe e : eJDBC.getAll()) {
+			System.out.println(e);
+		}
+		
+		for (Joueur joueur : jdb.getAll()) {
+			System.out.println(joueur);
+		}
+		
+		Partie p1 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 28)), "12:00", "Final", e1, t1);
+		p1.setEquipeGagnant(1);
+		p1.setEquipe2(e2);
+		Partie p2 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 30)), "13:00", "Final", e1, t2);
+		p2.setEquipe2(e2);
 		pjdbc.add(p1);
 		pjdbc.add(p2);
 		System.out.println("Add partie OK\n");
@@ -52,15 +91,8 @@ public class TestPartie {
 		}
 		System.out.println("\ngetAll Partie OK\n");
 		
-		p2 = new Partie(Date.valueOf(LocalDate.of(2023, 11, 24)), "15:00", "Final", t2);
-		pjdbc.update(p2);
-		for(Partie partie : pjdbc.getAll()) {
-			System.out.println(partie);
-		}
-		System.out.println("\nupdate Partie OK\n");
-		
-		Optional<Partie> opt = pjdbc.getByDateHeure(Date.valueOf(LocalDate.of(2023, 11, 24)), "15:00");
-		System.out.println(opt.orElseGet(null));
+		Optional<Partie> opt = pjdbc.getByDateHeure(Date.valueOf(LocalDate.of(2023, 12, 30)), "13:00");
+		System.out.println(opt.orElse(null));
 		System.out.println("\ngetByDateHeure OK\n");
 	
 		pjdbc.delete(p2);
@@ -69,13 +101,7 @@ public class TestPartie {
 		}
 		System.out.println("\ndelete Partie OK\n");
 		
-		ConnectionJDBC.getConnection().createStatement().execute("delete from Partie");
-		ConnectionJDBC.getConnection().createStatement().execute("delete from Tournoi");
-		ConnectionJDBC.getConnection().createStatement().execute("delete from niveauTournoi");
-		System.out.println("\nTable tournoi, partie, niveauTournoi vide\n");
-		
-		Connection c = ConnectionJDBC.getConnection();
-		c.close();
+		ConnectionJDBC.closeConnection();
 	}
 
 }
