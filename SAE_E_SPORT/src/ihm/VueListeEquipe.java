@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import controleur.ControleurListeEquipe;
 import dao.ConnectionJDBC;
@@ -29,6 +30,7 @@ import java.sql.DriverManager;
 
 import javax.swing.JScrollPane;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -37,6 +39,16 @@ import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.FlowLayout;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
 
 public class VueListeEquipe extends JFrame {
 
@@ -56,7 +68,6 @@ public class VueListeEquipe extends JFrame {
 					VueListeEquipe frame = new VueListeEquipe(equipes);
 					frame.setVisible(true);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -72,14 +83,14 @@ public class VueListeEquipe extends JFrame {
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 600);
-		setTitle("Liste des équipes");
+		setBounds(510, 240, 900, 600);
+		setTitle("Équipes");
 		
 		
 
 		///// PANEL PRINCIPAL  \\\\\
 		JPanel contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
@@ -87,20 +98,22 @@ public class VueListeEquipe extends JFrame {
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
+		panelTop.setBackground(Palette.COOL);
 		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelTop.setLayout(new BorderLayout(0, 0));
 		contentPane.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
-		JLabel lblTitre = new JLabel("Nouveau tournoi");
+		JLabel lblTitre = new JLabel("Équipes");
+		lblTitre.setForeground(Palette.WARDEN);
 		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitre.setFont(new Font("DejaVu Sans", Font.PLAIN, 40));
+		lblTitre.setFont(new Font("DejaVu Sans", Font.BOLD | Font.ITALIC, 40));
 		panelTop.add(lblTitre, BorderLayout.CENTER);
 		
 		// Ligne colorée séparatrice
 		JTextField ligneColoree = new JTextField();
-		ligneColoree.setBackground(new Color(25, 25, 112));
+		ligneColoree.setBackground(Palette.WARDEN);
 		ligneColoree.setEnabled(false);
 		ligneColoree.setEditable(false);
 		ligneColoree.setFont(new Font("Tahoma", Font.PLAIN, 5));
@@ -109,55 +122,58 @@ public class VueListeEquipe extends JFrame {
 		
 		
 		/// PANEL MAIN \\\
+		JPanel panelMain = new JPanel();
+		panelMain.setBackground(Color.WHITE);
+		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
+		panelMain.setLayout(new BorderLayout(10, 10));
+		contentPane.add(panelMain, BorderLayout.CENTER);
 		
+		
+		/// PANEL RECHERCHE \\\
+		JPanel panelSearch = new JPanel();
+		panelSearch.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelSearch.setBackground(Palette.COOL);
+		panelSearch.setLayout(new BorderLayout(5, 0));
+		panelMain.add(panelSearch, BorderLayout.NORTH);
+		
+		// Bouton valider
+		JPanel panelValider = new JPanel();
+		panelValider.setBackground(Palette.COOL);
+		panelValider.setLayout(new BoxLayout(panelValider, BoxLayout.X_AXIS));
+		panelSearch.add(panelValider, BorderLayout.EAST);
+		
+		ImageIcon icon = new ImageIcon(VueListeEquipe.class.getResource("/Images/Search_Icon.png"));
+		Image img = icon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+		icon = new ImageIcon(img);
+		
+		JButton validateBtn = new JButton("");
+		validateBtn.setIcon(icon);
+		validateBtn.setBorder(new EmptyBorder(5, 5, 5, 5));
+		validateBtn.setBackground(Palette.WHITE);
+		validateBtn.addActionListener(controleur);
+		validateBtn.addMouseListener(controleur);
+		panelValider.add(validateBtn);
+
+		// Barre recherche
+		searchBar = new JTextField();
+		searchBar.setPreferredSize(new Dimension(searchBar.getPreferredSize().width, 25));
+		searchBar.setColumns(30);
+		panelSearch.add(searchBar);
 		
 		// Liste des équipes
 		List<String> nomEquipes = equipes.stream()
-				.map(e -> e.getNom())
+				.map(e -> String.format("%-70s %6d", e.getNom(), e.getRang()))
 				.collect(Collectors.toList());
 		
 		JList listeEquipes = new JList<Object>(nomEquipes.toArray());
+		listeEquipes.setFont(new Font("Consolas", Font.PLAIN, 20));
+		listeEquipes.setBackground(Palette.COOL);
 		this.listeEquipes = listeEquipes;
 		listeEquipes.addMouseListener(controleur);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-		
 		scrollPane.setViewportView(listeEquipes);
-		
-		
-		JLabel libFenetre = new JLabel("Liste des équipes");
-		libFenetre.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		panelTop.add(libFenetre);
-		
-		JPanel panelSearch = new JPanel();
-		panelTop.add(panelSearch);
-		
-		searchBar = new JTextField();
-		Dimension preferredSize = new Dimension(searchBar.getPreferredSize().width, 25);
-        searchBar.setPreferredSize(preferredSize);
-		panelSearch.add(searchBar);
-		searchBar.setColumns(30);
-		
-		JButton validateBtn = new JButton("Valider");
-
-        validateBtn.setBackground(Color.WHITE);
-        validateBtn.setForeground(Color.BLACK);
-        validateBtn.addActionListener(controleur);
-        
-        // Définition de la bordure
-        
-        // padding interieur
-        Border paddingBorder = BorderFactory.createEmptyBorder(0, 0, 0, 0);
-        // bordure exterieur
-        Border originalBorder = validateBtn.getBorder();
-        // Combinaison des bordures
-        Border compoundBorder = BorderFactory.createCompoundBorder(originalBorder, paddingBorder);
-        validateBtn.setBorder(compoundBorder);
-        
-        Font buttonFont = new Font("Arial", Font.PLAIN, 14);
-        validateBtn.setFont(buttonFont);
-		panelSearch.add(validateBtn);
+		panelMain.add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	public String getSearch() {

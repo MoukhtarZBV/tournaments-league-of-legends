@@ -1,14 +1,20 @@
 package controleur;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import dao.JoueurJDBC;
 import ihm.VueImportation;
@@ -41,6 +47,11 @@ public class ControleurImportation implements ActionListener{
 
 		            // Récupération modèle de la JTable
 		            DefaultTableModel model = (DefaultTableModel) this.vue.getModel();
+		            JTable table = (JTable) this.vue.getTable();
+		            
+		            // Efface les lignes et colonnes
+		            model.setRowCount(0);
+		            model.setColumnCount(0);
 
 		            // Ajout des colonnes au modèle
 		            for (int i = 1; i < data.size(); i = i + 5) {
@@ -60,27 +71,38 @@ public class ControleurImportation implements ActionListener{
 		            } 
 		            // Ajout du nom des équipes
 		            model.addRow(titreColonne);
+		            // changer la couleur de fond de la première ligne
+		            table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+		                @Override
+		                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		                    Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		                    if (row == 0) {
+		                        cell.setBackground(new Color (56,111,215));
+		                        cell.setForeground(new Color (255,255,255));
+		                    }else {
+		                    	cell.setBackground(Color.WHITE);
+		                    	cell.setForeground(new Color (0,0,0));
+		                    }
+		                    return cell;
+		                }
+		            });
 		            
-		            // Récupération des joueurs
+		            // Récupération des joueurs dans une liste
 		            List<String> joueurs = new ArrayList<>();
 		            for (int i = 1; i < data.size();i++) {
 		            	joueurs.add(data.get(i)[7]);
 		            } 
 		            
-		            // Récupération des joueurs par lignes 
-		            Object [][] joueursRow = new Object[6][6];
+		            // Récupération et affichage des joueurs par lignes 
+		            Object [][] joueursRow = new Object[5][8];
 		            for (int i = 0; i<5;i++) {
-		            	joueursRow[i][0] = joueurs.get(i);
-		            	joueursRow[i][1] = joueurs.get(i+5);
-		            	joueursRow[i][2] = joueurs.get(i+10);
-		            	joueursRow[i][3] = joueurs.get(i+15);
+		            	int k = i;
+		            	for (int j = 0; j<(this.data.size()-1)/5; j++) {
+		            		joueursRow[i][j] = joueurs.get(k);
+		            		k += 5;
+		            	}
+		            	model.addRow(joueursRow[i]);
 		            }
-		            
-		            // Ajout des joueurs
-		            for (int i = 0; i < 5; i++) {
-		                model.addRow(joueursRow[i]);
-		            }
-
 		            // Mise à jour de l'affichage de la vue
 		            vue.setVisible(true);
 	             }
@@ -90,6 +112,12 @@ public class ControleurImportation implements ActionListener{
 	        }
 	    }
 	    if(bouton.getText().equals("Valider") && this.data != null) {
+	    	boolean roll = false;
+	    	try {
+				ConnectionJDBC.getConnection().setAutoCommit(false);
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
 	    	EquipeJDBC equipeDB = new EquipeJDBC();
 	    	JoueurJDBC joueurDB = new JoueurJDBC();
 	    	for(int i = 1; i<this.data.size();i=i+5) {
@@ -98,12 +126,36 @@ public class ControleurImportation implements ActionListener{
 	    			for (int j = i; j<i+5; j++) {
 	    				Joueur joueur = new Joueur(joueurDB.getNextValueSequence(), this.data.get(j)[7], equipe);
 	    				equipe.ajouterJoueur(joueur);
+	    				// Si un joueur est déjà dans une autre équipe
+	    				if (!joueur.verifierJoueur(equipe)) {
+	    					roll = true;
+	    					this.vue.setMsgErreur("Un ou plusieurs joueurs appartiennent à plus d'une équipe");
+	    				}
 	    			}
-					equipeDB.add(equipe);
-					for (Joueur j : equipe.getJoueurs()) {
-						joueurDB.add(j);
+	    			// si la composition a changé
+	    			if(equipeDB.getByNom(equipe.getNom()).orElse(null) != null) {
+	    				if (!(equipe.getJoueurs().equals(equipeDB.getByNom(equipe.getNom()).get().getJoueurs()))) {
+	    					roll = true;
+	    					this.vue.setMsgErreur("La composition d'une ou plusieurs équipes ne correspond pas");
+	    				}
+	    			}
+	    			// On ajoute l'équipe à la base si elle n'est pas déjà présente
+	    			if (equipe.verifierEquipe() && !roll) {
+	    				equipeDB.add(equipe);
+	    				for (Joueur j : equipe.getJoueurs()) {
+							joueurDB.add(j);
+						}
+	    			}
+					// si composition ne correspond pas rollaback
+					if (roll == true) {
+						ConnectionJDBC.getConnection().rollback();
+						this.vue.setColorMessage(new Color(255, 204, 204));
+					// sinon succès de l'importation
+					}else {
+						ConnectionJDBC.getConnection().commit();
+						this.vue.setColorMessage(new Color(204, 255, 204));
+						this.vue.setMsgErreur("Les équipes ont bien été importées");
 					}
-					equipeDB.getAll().toString();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -113,6 +165,4 @@ public class ControleurImportation implements ActionListener{
 	    	this.vue.dispose();
 	    }
 	}
-
 }
-

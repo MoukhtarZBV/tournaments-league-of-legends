@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import dao.EquipeJDBC;
+
 public class Equipe {
 
 	private int idEquipe;
@@ -46,14 +48,18 @@ public class Equipe {
 		return this.nationalite;
 	}
 	
+	public boolean verifierEquipe() throws Exception {
+		EquipeJDBC edb = new EquipeJDBC();
+		return !(edb.getAll().contains(this));
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o==this) return true;
 		if (o==null) return false;
 		if(o instanceof Equipe) {
 			Equipe e = (Equipe) o;
-			return this.idEquipe == e.getIdEquipe() && this.nom.equals(e.nom) && this.rang == e.rang
-					&& this.nationalite == e.nationalite && this.joueurs.equals(e.joueurs);
+			return this.nom.equals(e.nom);
 		} else {
 			return false;
 		}
@@ -61,7 +67,7 @@ public class Equipe {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(this.idEquipe);
+		return Objects.hash(this.nom);
 	}
 	
 	@Override

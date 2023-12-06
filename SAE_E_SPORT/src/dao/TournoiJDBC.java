@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.CallableStatement;
+
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +13,6 @@ import java.util.Optional;
 
 import modele.Compte;
 import modele.Equipe;
-import modele.ModeleCreationTournoi;
 import modele.Niveau;
 import modele.Pays;
 import modele.Tournoi;
@@ -20,7 +20,7 @@ import modele.Tournoi;
 public class TournoiJDBC implements TournoiDAO{
 	
 	@Override
-	public List<Tournoi> getAll() throws Exception {
+	public List<Tournoi> getAll() {
 		List<Tournoi> tournois = new ArrayList<>();
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -159,7 +159,7 @@ public class TournoiJDBC implements TournoiDAO{
 			Statement st = ConnectionJDBC.getConnection().createStatement();
 			ResultSet rs = st.executeQuery("select dateDebut, dateFin from Tournoi");
 			while(rs.next()) {
-				if (!ModeleCreationTournoi.estTournoiDisjoint(dateDebut, dateFin, rs.getDate("dateDebut"), rs.getDate("dateFin"))) {
+				if (!Tournoi.estTournoiDisjoint(dateDebut, dateFin, rs.getDate("dateDebut"), rs.getDate("dateFin"))) {
 					return true;
 				}
 			}
