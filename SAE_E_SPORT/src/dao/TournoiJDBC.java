@@ -194,6 +194,4 @@ public class TournoiJDBC implements TournoiDAO{
 		}
 		return nombreEquipes;
 	}
-		
-		
 }

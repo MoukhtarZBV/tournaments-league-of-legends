@@ -56,7 +56,8 @@ public class VueListeTournois extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {											
-				VueListeTournois frame = new VueListeTournois();
+					List<Tournoi> tournois = new TournoiJDBC().getAll();
+					VueListeTournois frame = new VueListeTournois(tournois);
 					frame.setVisible(true);
 					
 				} catch (Exception e) {
@@ -67,7 +68,7 @@ public class VueListeTournois extends JFrame {
 	}
 	
 	
-	public VueListeTournois() {
+	public VueListeTournois(List<Tournoi> tournois) {
 		
 		ControleurListeTournois controleur = new ControleurListeTournois(this);
 		
@@ -212,8 +213,7 @@ public class VueListeTournois extends JFrame {
 			    }
 			};
 		table.setModel(modele);
-		TournoiJDBC jdbc = new TournoiJDBC();
-		afficherTournois(jdbc.getAll());
+		afficherTournois(tournois);
 		
 		// Table Header
 		table.getTableHeader().setBackground(Palette.WARDEN);

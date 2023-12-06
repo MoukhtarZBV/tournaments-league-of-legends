@@ -50,6 +50,8 @@ public class ControleurTournoi implements ActionListener, FocusListener {
 				} else if (!modele.anneePourSaisonEnCours(vue.getDateDebut()) &&
 						   !modele.anneePourSaisonEnCours(vue.getDateFin())){
 					vue.afficherMessageErreur("Le tournoi doit avoir lieu cette année");
+				} else if (vue.getDateDebut().compareTo(new Date(System.currentTimeMillis())) < 0) {
+					vue.afficherMessageErreur("La date de début doit être supérieure à la date du jour");
 				} else {
 					try {
 						if (jdbc.existeTournoiEntreDates(vue.getDateDebut(), vue.getDateFin())) {
