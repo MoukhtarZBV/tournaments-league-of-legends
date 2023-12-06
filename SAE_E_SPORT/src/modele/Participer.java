@@ -48,6 +48,10 @@ public class Participer {
 		return tournoi;
 	}
 	
-	
+	@Override 
+	public String toString() {
+		return "Participer = [equipe=" + this.equipe + ", tournoi=" + this.tournoi + ", nbMatchsJoues=" + this.nbMatchsJoues +
+				", nbMatchsGagnes=" + this.nbMatchsGagnes + ", nbPointsGagnes=" + this.nbPointsGagnes;
+	}
 	
 }

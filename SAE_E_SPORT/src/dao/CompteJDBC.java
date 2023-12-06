@@ -60,10 +60,11 @@ public class CompteJDBC implements CompteDAO{
 		boolean res = false;
 		try {
 			String addCompte = "INSERT INTO Compte (idCompte, login, motDePasse, type) "
-							 + "VALUES (NEXT VALUE FOR SEQ_Compte, ?, ?, ?)";
+							 + "VALUES (?, ?, ?, ?)";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addCompte);
 			
+			st.setInt(1, c.getId());
 			st.setString(1, c.getLogin());
 			st.setString(2, c.getMotDePasse());
 			st.setString(3,c.getType().denomination());

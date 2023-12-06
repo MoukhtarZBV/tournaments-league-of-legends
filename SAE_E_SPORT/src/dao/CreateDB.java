@@ -309,9 +309,11 @@ public class CreateDB {
 					+ "deroulement VARCHAR(15),"
 					+ "idEquipe INTEGER,"
 					+ "idTournoi INTEGER,"
+					+ "gagnant INTEGER,"
 					+ "CONSTRAINT PK_Partie_date_heureDebut PRIMARY KEY (datePartie, heureDebut),"
 					+ "CONSTRAINT FK_Partie_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
-					+ "CONSTRAINT FK_Partie_idTournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi))");
+					+ "CONSTRAINT FK_Partie_idTournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi),"
+					+ "CONSTRAINT CHK_Partie_Gagnant check(gagnant in (-1,1,2)))");
 			System.out.println("-- Table Partie créée");
 		} catch (SQLException e) {
 			e.printStackTrace();

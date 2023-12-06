@@ -9,15 +9,19 @@ public class Partie {
 	private Date date;
 	private String heure;
 	private String deroulement;
-	private Equipe gagnant;
+	private Equipe equipe1;
+	private Equipe equipe2;
 	private Tournoi tournoi;
+	private int gagnant;
 	
-	public Partie(Date date, String heure, String deroulement, Tournoi tournoi) {
+	public Partie(Date date, String heure, String deroulement, Equipe equipe1, Tournoi tournoi) {
 		this.date = date;
 		this.heure = heure;
 		this.deroulement = deroulement;
 		this.tournoi = tournoi;
-		this.gagnant = null;
+		this.equipe1 = equipe1;
+		this.gagnant = -1;
+		this.equipe2 = null;
 	}
 
 	public Date getDate() {
@@ -32,16 +36,28 @@ public class Partie {
 		return deroulement;
 	}
 
-	public Equipe getEquipeGagnant() {
+	public Equipe getEquipe1 () {
+		return this.equipe1;
+	}
+	
+	public int getEquipeGagnant() {
 		return this.gagnant;
 	}
 	
-	public void setEquipeGagnant(Equipe e) {
-		this.gagnant = e;
+	public void setEquipeGagnant(int gagnant) {
+		this.gagnant = gagnant;
 	}
 	
 	public Tournoi getTournoi() {
 		return this.tournoi;
+	}
+	
+	public Equipe getEquipe2 () {
+		return this.equipe2;
+	}
+	
+	public void setEquipe2(Equipe equipe2) {
+		this.equipe2 = equipe2;
 	}
 	
 	@Override
@@ -51,7 +67,7 @@ public class Partie {
 		if (o instanceof Partie) {
 			Partie p = (Partie) o;
 			return p.date==this.date && p.heure==this.heure && p.deroulement == this.deroulement 
-					&& p.gagnant.equals(this.gagnant) && p.tournoi.equals(this.tournoi);
+					&& p.gagnant==this.gagnant && p.tournoi.equals(this.tournoi);
 		} else {
 			return false;
 		}
@@ -65,7 +81,8 @@ public class Partie {
 	@Override
 	public String toString() {
 		return "Partie [date=" + this.date + ", heure=" + this.heure + ", deroulement=" + 
-				this.deroulement + ", tournoi=" + this.tournoi + ", gagnant=" + this.gagnant + ']';
+				this.deroulement + ", equipe1=" + this.equipe1 + "equipe2=" + this.equipe2 +
+				", tournoi=" + this.tournoi + ", gagnant=" + this.gagnant + ']';
 	}
 	
 }
