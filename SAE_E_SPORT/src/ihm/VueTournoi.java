@@ -12,7 +12,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import components.JTextFieldArrondi;
+import dao.ParticiperJDBC;
 import modele.Equipe;
+import modele.Joueur;
+import modele.Tournoi;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,26 +37,9 @@ public class VueTournoi extends JFrame {
 	private JTable table;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					
-					VueTournoi frame = new VueTournoi();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public VueTournoi() {
+	public VueTournoi(Tournoi tournoi) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(510, 240, 900, 600);
 		contentPane = new JPanel();
@@ -204,13 +190,16 @@ public class VueTournoi extends JFrame {
 			    }
 			};
 		table.setModel(modele);
+		afficherEquipes(tournoi);
 	}
 
-	public void afficherEquipes(List<Equipe> equipes) {
+	public void afficherEquipes(Tournoi tournoi) {
 		DefaultTableModel modele = (DefaultTableModel) table.getModel();
+		List<Equipe> equipes = new ParticiperJDBC().listeEquipes(tournoi);
 		for (Equipe equipe : equipes) {
-			modele.addRow(new Object[][] {
-				
+			List<Joueur> joueursEquipe = equipe.getJoueurs();
+			modele.addRow(new Object[] {
+				equipe.getNom(), joueursEquipe.get(0).getPseudo(), joueursEquipe.get(1).getPseudo(), joueursEquipe.get(2).getPseudo(), joueursEquipe.get(3).getPseudo(), joueursEquipe.get(4).getPseudo(),  
 			});
 		}
 	}

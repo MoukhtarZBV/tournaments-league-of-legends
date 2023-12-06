@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import dao.TournoiJDBC;
@@ -148,4 +149,7 @@ public class Tournoi {
 		return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
 	}
 
+	public Tournoi getByDateDebut(Date dateDebut) throws Exception{
+		return jdbc.getByDateDebut(dateDebut).get();
+	}
 }
