@@ -8,6 +8,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -17,6 +18,7 @@ import javax.swing.JTable;
 import dao.TournoiJDBC;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
+import ihm.VueTournoi;
 import modele.Niveau;
 import modele.Status;
 import modele.Tournoi;
@@ -75,10 +77,16 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
-            JTable target = (JTable) e.getSource();
-            int row = target.getSelectedRow();
-            VueCreationTournoi vue = new VueCreationTournoi();
-			vue.setVisible(true);
+            JTable table = (JTable) e.getSource();
+            int row = table.getSelectedRow();
+            Tournoi tournoi = null;
+            try {
+				tournoi = modele.getByDateDebut((Date) table.getValueAt(row, 2));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+            VueTournoi vueTournoi = new VueTournoi(tournoi);
+			vueTournoi.setVisible(true);
          }
 	}
 
