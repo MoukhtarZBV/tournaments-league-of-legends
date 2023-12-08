@@ -1,6 +1,7 @@
 package modele;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
@@ -151,5 +152,17 @@ public class Tournoi {
 
 	public Tournoi getByDateDebut(Date dateDebut) throws Exception{
 		return jdbc.getByDateDebut(dateDebut).get();
+	}
+	
+	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
+		return jdbc.existeTournoiEntreDates(dateDebut, dateFin);
+	}
+	
+	public List<Tournoi> tousLesTournois(){
+		return jdbc.getAll();
+	}
+	
+	public void ajouterTournoi(Tournoi tournoi) throws Exception {
+		jdbc.add(tournoi);
 	}
 }

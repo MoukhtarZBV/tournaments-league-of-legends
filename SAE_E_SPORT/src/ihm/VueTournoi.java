@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import components.JTextFieldArrondi;
+import controleur.ControleurDetailsTournoi;
 import dao.ParticiperJDBC;
 import modele.Equipe;
 import modele.Joueur;
@@ -28,6 +29,7 @@ import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JButton;
 
 public class VueTournoi extends JFrame {
 
@@ -35,11 +37,17 @@ public class VueTournoi extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTable table;
+	
+	private Tournoi tournoi;
 
 	/**
 	 * Create the frame.
 	 */
 	public VueTournoi(Tournoi tournoi) {
+		this.tournoi = tournoi;
+		ControleurDetailsTournoi controleur = new ControleurDetailsTournoi(this);
+		
+		System.out.println(tournoi.getNomTournoi());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(510, 240, 900, 600);
 		contentPane = new JPanel();
@@ -190,17 +198,29 @@ public class VueTournoi extends JFrame {
 			    }
 			};
 		table.setModel(modele);
+		
+		JPanel panel_5 = new JPanel();
+		panel_3.add(panel_5, BorderLayout.SOUTH);
+		
+		JButton btnImporter = new JButton("Importer des équipes");
+		btnImporter.addActionListener(controleur);
+		panel_5.add(btnImporter);
 		afficherEquipes(tournoi);
 	}
 
 	public void afficherEquipes(Tournoi tournoi) {
 		DefaultTableModel modele = (DefaultTableModel) table.getModel();
 		List<Equipe> equipes = new ParticiperJDBC().listeEquipes(tournoi);
+		System.out.println(equipes);
 		for (Equipe equipe : equipes) {
 			List<Joueur> joueursEquipe = equipe.getJoueurs();
 			modele.addRow(new Object[] {
 				equipe.getNom(), joueursEquipe.get(0).getPseudo(), joueursEquipe.get(1).getPseudo(), joueursEquipe.get(2).getPseudo(), joueursEquipe.get(3).getPseudo(), joueursEquipe.get(4).getPseudo(),  
 			});
 		}
+	}
+	
+	public Tournoi getTournoi() {
+		return this.tournoi;
 	}
 }

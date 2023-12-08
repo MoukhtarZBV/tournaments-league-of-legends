@@ -77,7 +77,10 @@ public class ParticiperJDBC implements ParticiperDAO{
             st.setInt(1, tournoi.getIdTournoi());
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                Equipe equipe = new Equipe(rs.getInt("idEquipe"), rs.getString("nom"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+                Equipe equipe = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+                for (Joueur j : new EquipeJDBC().listeJoueurs(equipe)) {
+                	equipe.ajouterJoueur(j);
+                }
                 listeEquipes.add(equipe);
             }
         } catch (SQLException e) {
