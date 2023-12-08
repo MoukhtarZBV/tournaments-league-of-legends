@@ -8,46 +8,24 @@ import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
 import controleur.ControleurListeEquipe;
 import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import modele.Equipe;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JList;
-import javax.swing.JScrollBar;
 import javax.swing.JLabel;
-import java.awt.Font;
 import java.sql.Connection;
-import java.sql.DriverManager;
-
 import javax.swing.JScrollPane;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.FlowLayout;
-import java.awt.Component;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 
 public class VueListeEquipe extends JFrame {
@@ -85,12 +63,12 @@ public class VueListeEquipe extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(510, 240, 900, 600);
 		setTitle("Équipes");
-		
+		setResizable(false);
 		
 
 		///// PANEL PRINCIPAL  \\\\\
 		JPanel contentPane = new JPanel();
-		contentPane.setBackground(Color.WHITE);
+		contentPane.setBackground(Palette.WHITE);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
@@ -108,7 +86,7 @@ public class VueListeEquipe extends JFrame {
 		lblTitre.setForeground(Palette.WARDEN);
 		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitre.setFont(new Font("DejaVu Sans", Font.BOLD | Font.ITALIC, 40));
+		lblTitre.setFont(Police.GROS_TITRE);
 		panelTop.add(lblTitre, BorderLayout.CENTER);
 		
 		// Ligne colorée séparatrice
@@ -116,14 +94,14 @@ public class VueListeEquipe extends JFrame {
 		ligneColoree.setBackground(Palette.WARDEN);
 		ligneColoree.setEnabled(false);
 		ligneColoree.setEditable(false);
-		ligneColoree.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		ligneColoree.setFont(Police.LIGNE);
 		panelTop.add(ligneColoree, BorderLayout.SOUTH);
 		
 		
 		
 		/// PANEL MAIN \\\
 		JPanel panelMain = new JPanel();
-		panelMain.setBackground(Color.WHITE);
+		panelMain.setBackground(Palette.WHITE);
 		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelMain.setLayout(new BorderLayout(10, 10));
 		contentPane.add(panelMain, BorderLayout.CENTER);
@@ -162,14 +140,14 @@ public class VueListeEquipe extends JFrame {
 		
 		// Liste des équipes
 		List<String> nomEquipes = equipes.stream()
-				.map(e -> String.format("%-70s %6d", e.getNom(), e.getRang()))
+				.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
 				.collect(Collectors.toList());
 		
-		JList listeEquipes = new JList<Object>(nomEquipes.toArray());
-		listeEquipes.setFont(new Font("Consolas", Font.PLAIN, 20));
+		JList<Object> listeEquipes = new JList<Object>(nomEquipes.toArray());
+		listeEquipes.setFont(Police.TABLEAU);
 		listeEquipes.setBackground(Palette.COOL);
-		this.listeEquipes = listeEquipes;
 		listeEquipes.addMouseListener(controleur);
+		this.listeEquipes = listeEquipes;
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeEquipes);
