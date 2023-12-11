@@ -43,6 +43,7 @@ public class ControleurImportation implements ActionListener{
 	            if (fc.showOpenDialog(this.vue) == JFileChooser.APPROVE_OPTION) {
 	            	// Récupération du chemin absolu vers le fichier
 	            	String chemin = fc.getSelectedFile().getAbsolutePath();
+	            	 
 	 	            LireCSV read = new LireCSV(chemin);
 		            this.data = read.getData();
 
@@ -55,23 +56,55 @@ public class ControleurImportation implements ActionListener{
 		            model.setColumnCount(0);
 
 		            // Ajout des colonnes au modèle
-		            ajouterColonnes(model);
+		            for (int i = 1; i < data.size(); i = i + 5) {
+		                if (i%5 == 1) {
+		                    model.addColumn(data.get(i)[4]);
+		                }
+		            }
 		            
 		            // Récupération des noms des équipes
-		            Object[] titreColonne = recupNomEquipes(); 
-		            
+		            Object[] titreColonne = new Object[10];
+		            int indice = 0;
+		            for (int i = 1; i < data.size();i++) {
+		            	if (i%5 == 1) {
+		            		titreColonne[indice] = (data.get(i)[4]);
+		            		indice++;
+		            	}
+		            } 
 		            // Ajout du nom des équipes
 		            model.addRow(titreColonne);
-		            
 		            // changer la couleur de fond de la première ligne
-		            changerBackgroundColorTableau(table);
+		            table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+		                @Override
+		                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		                    Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		                    if (row == 0) {
+		                        cell.setBackground(new Color (56,111,215));
+		                        cell.setForeground(new Color (255,255,255));
+		                    } else {
+		                    	cell.setBackground(Color.WHITE);
+		                    	cell.setForeground(new Color (0,0,0));
+		                    }
+		                    return cell;
+		                }
+		            });
 		            
 		            // Récupération des joueurs dans une liste
-		            List<String> joueurs = recupJoueurListe(); 
+		            List<String> joueurs = new ArrayList<>();
+		            for (int i = 1; i < data.size();i++) {
+		            	joueurs.add(data.get(i)[7]);
+		            } 
 		            
 		            // Récupération et affichage des joueurs par lignes 
-		            affichageListeJoueurTableau(model, joueurs);
-		            
+		            Object [][] joueursRow = new Object[5][8];
+		            for (int i = 0; i<5;i++) {
+		            	int k = i;
+		            	for (int j = 0; j<(this.data.size()-1)/5; j++) {
+		            		joueursRow[i][j] = joueurs.get(k);
+		            		k += 5;
+		            	}
+		            	model.addRow(joueursRow[i]);
+		            }
 		            // Mise à jour de l'affichage de la vue
 		            vue.setVisible(true);
 	             }
