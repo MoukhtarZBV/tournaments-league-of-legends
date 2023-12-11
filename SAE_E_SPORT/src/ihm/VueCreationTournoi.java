@@ -73,8 +73,8 @@ public class VueCreationTournoi extends JFrame {
 		
 		///// MENU BAR \\\\\
 		JPanel panelSide = new JPanel();
-		panelSide.setBackground(Palette.DARK_BLUE);
-		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Palette.BLUE));
+		panelSide.setBackground(Palette.DARK_GRAY);
+		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Palette.GRAY));
 		panelSide.setPreferredSize(new Dimension(100, 600));
 		contentPane.add(panelSide, BorderLayout.WEST);
 		
@@ -83,20 +83,20 @@ public class VueCreationTournoi extends JFrame {
 		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
 		panelMain.setLayout(new BorderLayout(0, 0));
-		panelMain.setBackground(Palette.DARK_BLUE);
+		panelMain.setBackground(Palette.DARK_GRAY);
 		contentPane.add(panelMain, BorderLayout.CENTER);
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
 		panelTop.setPreferredSize(new Dimension(800, 120));
-		panelTop.setBackground(Palette.DARK_BLUE);
+		panelTop.setBackground(Palette.DARK_GRAY);
 		panelTop.setBorder(new EmptyBorder(0, 30, 0, 30));
 		panelTop.setLayout(new GridLayout());
 		panelMain.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
 		JLabel lblTitre = new JLabel("Nouveau tournoi");
-		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.LIGHT_BLUE));
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.GRAY));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitre.setForeground(Palette.WHITE);
 		lblTitre.setFont(Police.GROS_TITRE);
@@ -113,7 +113,7 @@ public class VueCreationTournoi extends JFrame {
 
 		JPanel panelCenter = new JPanel();
 		panelCenter.setLayout(gb_panelCenter);
-		panelCenter.setBackground(Palette.DARK_BLUE);
+		panelCenter.setBackground(Palette.DARK_GRAY);
 		panelCenter.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelMain.add(panelCenter, BorderLayout.CENTER);
 		
