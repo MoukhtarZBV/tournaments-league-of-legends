@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -155,19 +156,34 @@ public class EquipeJDBC implements EquipeDAO{
 		}
 		return id;
 	}
-	
-	public static int getNextValueSequence() throws Exception {
-        int res = -1;
-        try {
-	        Statement st = ConnectionJDBC.getConnection().createStatement();
-	        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Equipe");
-	        if (rs.next()) {
-	            res = rs.getInt(1);
-	        }
-        } catch (SQLException e) {
-        	e.printStackTrace();
-        }
-        return res;
-    }
 
+	public static int getNextValueSequence() throws Exception{
+		int res = -1;
+		try {
+			Statement st = ConnectionJDBC.getConnection().createStatement();
+			ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Equipe");
+			if (rs.next()) {
+				res = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public List<Joueur> listeJoueurs(Equipe equipe){
+		List<Joueur> listeJoueurs = new ArrayList<>();
+        try {
+            PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select joueur.* from Equipe, Joueur where joueur.idEquipe = ?");
+            st.setInt(1, equipe.getIdEquipe());
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Joueur joueur = new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo"), equipe);
+                listeJoueurs.add(joueur);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listeJoueurs;
+	}
 }

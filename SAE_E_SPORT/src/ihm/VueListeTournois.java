@@ -22,9 +22,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.table.DefaultTableModel;
 
 import controleur.ControleurListeTournois;
@@ -53,7 +56,8 @@ public class VueListeTournois extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {											
-				VueListeTournois frame = new VueListeTournois();
+					List<Tournoi> tournois = new TournoiJDBC().getAll();
+					VueListeTournois frame = new VueListeTournois(tournois);
 					frame.setVisible(true);
 					
 				} catch (Exception e) {
@@ -64,9 +68,10 @@ public class VueListeTournois extends JFrame {
 	}
 	
 	
-	public VueListeTournois() {
+	public VueListeTournois(List<Tournoi> tournois) {
 		
 		ControleurListeTournois controleur = new ControleurListeTournois(this);
+		
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,6 +121,7 @@ public class VueListeTournois extends JFrame {
 		contentPane.add(panelMain, BorderLayout.CENTER);
 		
 		
+		
 		///// PANEL RECHERCHE ET TRIS \\\\\
 		JPanel panelSearch = new JPanel();
 		panelSearch.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -129,14 +135,22 @@ public class VueListeTournois extends JFrame {
 		
 		// Champ de recherche
 		champRecherche = new JTextField();
+		champRecherche.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		champRecherche.setText("");
 		panel.add(champRecherche, BorderLayout.CENTER);
 		champRecherche.setColumns(10);
 		
-		JButton btnRecherche = new JButton("Rechercher");
-		panel.add(btnRecherche, BorderLayout.EAST); 
+		// Bouton rechercher
+		JButton btnRecherche = new JButton();
+		btnRecherche.setFont(new Font("Gigi", Font.PLAIN, 12));
+		btnRecherche.setBackground(Palette.WHITE);
 		btnRecherche.addActionListener(controleur);
 		
+		ImageIcon icon = new ImageIcon(VueListeEquipe.class.getResource("/Images/Search_Icon.png"));
+		Image img = icon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+		icon = new ImageIcon(img);
+		btnRecherche.setIcon(icon);
+		panel.add(btnRecherche, BorderLayout.EAST); 
 		
 		// Panel des tris
 		JPanel panelTris = new JPanel();
@@ -156,9 +170,6 @@ public class VueListeTournois extends JFrame {
         }
 		triNiveau.addItemListener(controleur);
 		panelTris.add(triNiveau);
-		
-		
-		
 		
 		// Combo box etats
 		triStatus = new JComboBox<String>();
@@ -202,8 +213,7 @@ public class VueListeTournois extends JFrame {
 			    }
 			};
 		table.setModel(modele);
-		TournoiJDBC jdbc = new TournoiJDBC();
-		afficherTournois(jdbc.getAll());
+		afficherTournois(tournois);
 		
 		// Table Header
 		table.getTableHeader().setBackground(Palette.WARDEN);
@@ -215,6 +225,7 @@ public class VueListeTournois extends JFrame {
 		JScrollPane tableScroll = new JScrollPane(table);
 		tableScroll.getViewport().setBackground(Palette.COOL);
 		panelListe.add(tableScroll);
+		
 		
 		
 		///// PANEL BOUTONS \\\\\

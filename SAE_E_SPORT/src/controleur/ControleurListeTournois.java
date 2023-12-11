@@ -8,6 +8,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -17,6 +18,7 @@ import javax.swing.JTable;
 import dao.TournoiJDBC;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
+import ihm.VueTournoi;
 import modele.Niveau;
 import modele.Status;
 import modele.Tournoi;
@@ -49,7 +51,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 				vue.setVisible(true);
 			} else if (bouton.getText().equals("Retour")) {
 				vue.dispose();
-			} else if (bouton.getText().equals("Rechercher")) {
+			} else if (bouton.getFont().getFamily().equals("Gigi")) {
 				this.nom = vue.saisieChamp();
 				vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));
 			}
@@ -75,34 +77,28 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
-            JTable target = (JTable) e.getSource();
-            int row = target.getSelectedRow();
-            VueCreationTournoi vue = new VueCreationTournoi();
-			vue.setVisible(true);
+            JTable table = (JTable) e.getSource();
+            int row = table.getSelectedRow();
+            Tournoi tournoi = null;
+            try {
+				tournoi = modele.getByDateDebut((Date) table.getValueAt(row, 2));
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+            VueTournoi vueTournoi = new VueTournoi(tournoi);
+			vueTournoi.setVisible(true);
          }
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 }

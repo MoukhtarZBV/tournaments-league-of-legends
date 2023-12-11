@@ -1,14 +1,18 @@
 package dao;
 
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import modele.Equipe;
+import modele.Joueur;
 import modele.Participer;
+import modele.Pays;
 import modele.Tournoi;
 
 public class ParticiperJDBC implements ParticiperDAO{
@@ -79,6 +83,23 @@ public class ParticiperJDBC implements ParticiperDAO{
 		return false;
 	}
 
-	
+	public List<Equipe> listeEquipes(Tournoi tournoi){
+		List<Equipe> listeEquipes = new ArrayList<>();
+		try {
+            PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select equipe.* from Equipe, Tournoi, Participer where participer.idTournoi = ? and equipe.idEquipe = participer.idEquipe");
+            st.setInt(1, tournoi.getIdTournoi());
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Equipe equipe = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
+                for (Joueur j : new EquipeJDBC().listeJoueurs(equipe)) {
+                	equipe.ajouterJoueur(j);
+                }
+                listeEquipes.add(equipe);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listeEquipes;
+	}
 	
 }

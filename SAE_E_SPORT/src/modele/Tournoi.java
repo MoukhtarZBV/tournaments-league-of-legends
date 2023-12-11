@@ -1,10 +1,12 @@
 package modele;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import dao.TournoiJDBC;
@@ -25,9 +27,7 @@ public class Tournoi {
 	public Tournoi(int id, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) throws IllegalArgumentException {
 		if (dateDebut.compareTo(dateFin) > 0) {
 			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
-		} else if (dateDebut.compareTo(new Date(System.currentTimeMillis())) < 0) {
-			throw new IllegalArgumentException("La date de début doit être supérieure à la date du jour");
-		}
+		} 
 		this.idTournoi = id;
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
@@ -150,4 +150,19 @@ public class Tournoi {
 		return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
 	}
 
+	public Tournoi getByDateDebut(Date dateDebut) throws Exception{
+		return jdbc.getByDateDebut(dateDebut).get();
+	}
+	
+	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
+		return jdbc.existeTournoiEntreDates(dateDebut, dateFin);
+	}
+	
+	public List<Tournoi> tousLesTournois(){
+		return jdbc.getAll();
+	}
+	
+	public void ajouterTournoi(Tournoi tournoi) throws Exception {
+		jdbc.add(tournoi);
+	}
 }

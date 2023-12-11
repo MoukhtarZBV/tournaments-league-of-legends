@@ -17,7 +17,7 @@ import modele.Niveau;
 import modele.Pays;
 import modele.Tournoi;
 
-public class TournoiJDBC implements TournoiDAO{
+public class TournoiJDBC implements TournoiDAO {
 	
 	@Override
 	public List<Tournoi> getAll() {
@@ -38,10 +38,11 @@ public class TournoiJDBC implements TournoiDAO{
 
 	@Override
 	public Optional<Tournoi> getById(Integer id) throws Exception {
-		Optional<Tournoi> tournois = Optional.empty();
+		Optional<Tournoi> tournoi = Optional.empty();
 		try {
-			Statement st = ConnectionJDBC.getConnection().createStatement();
-			ResultSet rs = st.executeQuery("select * from Tournoi where idTournoi = "+ id);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where idTournoi = ?");
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
 			if(rs.next()) {
 				Tournoi t = new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
 						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
@@ -55,12 +56,39 @@ public class TournoiJDBC implements TournoiDAO{
 				Optional<Compte> opt = cjdbc.getById(rs.getInt("idCompte"));
 				t.setCompte(opt.orElse(null));
 				
-				tournois = Optional.ofNullable(t);
+				tournoi = Optional.ofNullable(t);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return tournois;
+		return tournoi;
+	}
+	
+	public Optional<Tournoi> getByDateDebut(Date dateDebut) throws Exception {
+		Optional<Tournoi> tournoi = Optional.empty();
+		try {
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where dateDebut = ?");
+			st.setDate(1, dateDebut);
+			ResultSet rs = st.executeQuery();
+			if(rs.next()) {
+				Tournoi t = new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
+						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
+						rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays")));
+
+				EquipeJDBC ejdbc = new EquipeJDBC();
+				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
+				t.setVainqueur(e.orElse(null));
+				
+				CompteJDBC cjdbc = new CompteJDBC();
+				Optional<Compte> opt = cjdbc.getById(rs.getInt("idCompte"));
+				t.setCompte(opt.orElse(null));
+				
+				tournoi = Optional.ofNullable(t);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tournoi;
 	}
 
 	@Override
@@ -266,6 +294,4 @@ public class TournoiJDBC implements TournoiDAO{
 		}
 		return nombreEquipes;
 	}
-		
-		
 }
