@@ -1,120 +1,126 @@
 package ihm;
 
-import java.awt.EventQueue;
-
-
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
-import java.awt.Font;
 import javax.swing.JTable;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.List;
 import java.util.Optional;
 
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.Dimension;
 import javax.swing.JButton;
-import java.awt.FlowLayout;
 import javax.swing.JComboBox;
-import javax.swing.table.TableModel;
 
 import controleur.ControleurEquipe;
-import controleur.ControleurListeEquipe;
-import dao.ConnectionJDBC;
-import dao.EquipeJDBC;
 import modele.Equipe;
 import modele.Joueur;
 import modele.Pays;
 
 public class VueEquipe extends JFrame {
 
-	private JPanel contentPane;
-	private JPanel body;
-	private JPanel left;
-	private JPanel right;
-	private JPanel panelName;
-	private JPanel panelRank;
-	private JPanel panelPays;
-	private JPanel panelButton;
-	private JLabel libName;
 	private JTextField fieldName;
-	private JLabel libWR;
 	private JTextField fieldWR;
-	private JLabel libPays;
-	private JButton btnSave;
-	private JButton btnBack;
-	private JComboBox comboPays;
-	private JTable table;
+	private JComboBox<String> comboPays;
 	private Optional<Equipe> equipe;
 
 	/**
 	 * Launch the application.
 	 */
 	public VueEquipe(List<Equipe> equipes, Optional<Equipe> equipe) {
+		
 		this.equipe = equipe;
 		ControleurEquipe controleur = new ControleurEquipe(this);
-		setMaximumSize(new Dimension(800, 800));
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 563, 400);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-		setContentPane(contentPane);
+		
+		///// FENÊTRE \\\\\
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(510, 240, 900, 600);
+		setTitle(equipe.get().getNom());
+		setResizable(false);
+		
+		
+		///// PANEL PRINCIPAL  \\\\\
+		JPanel contentPane = new JPanel();
+		contentPane.setBackground(Palette.WHITE);
 		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
-		JLabel titreFenModif = new JLabel("Modification Equipe");
-		titreFenModif.setHorizontalAlignment(SwingConstants.CENTER);
-		titreFenModif.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		titreFenModif.setBorder(new EmptyBorder(5, 0, 20, 20));
 		
-		contentPane.add(titreFenModif, BorderLayout.NORTH);
+		///// PANEL TITRE \\\\\
+		JPanel panelTop = new JPanel();
+		panelTop.setBackground(Palette.COOL);
+		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panelTop.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panelTop, BorderLayout.NORTH);
 		
-		body = new JPanel();
-		body.setBackground(new Color(255, 255, 255));
-		body.setBorder(new LineBorder(new Color(0, 0, 0)));
-		contentPane.add(body, BorderLayout.CENTER);
-		body.setLayout(new GridLayout(0, 2, 0, 0));
+		// Label titre
+		JLabel lblTitre = new JLabel(equipe.get().getNom());
+		lblTitre.setForeground(Palette.WARDEN);
+		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
+		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setFont(Police.GROS_TITRE);
+		panelTop.add(lblTitre, BorderLayout.CENTER);
 		
-		left = new JPanel();
-		body.add(left);
-		left.setLayout(new GridLayout(4, 1, 0, 0));
+		// Ligne colorée séparatrice
+		JTextField ligneColoree = new JTextField();
+		ligneColoree.setBackground(Palette.WARDEN);
+		ligneColoree.setEnabled(false);
+		ligneColoree.setEditable(false);
+		ligneColoree.setFont(Police.LIGNE);
+		panelTop.add(ligneColoree, BorderLayout.SOUTH);
 		
-		panelName = new JPanel();
-		panelName.setBackground(new Color(255, 255, 255));
-		left.add(panelName);
+		
+		
+		/// PANEL MAIN \\\
+		JPanel panelMain = new JPanel();
+		panelMain.setBackground(Palette.WHITE);
+		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
+		panelMain.setLayout(new GridLayout(0, 2, 0, 0));
+		contentPane.add(panelMain, BorderLayout.CENTER);
+		
+		
+		/// LEFT SIDE \\\
+		JPanel leftPanel = new JPanel();
+		leftPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
+		leftPanel.setLayout(new GridLayout(4, 1, 0, 0));
+		leftPanel.setBackground(Palette.WHITE);
+		panelMain.add(leftPanel);
+		
+		
+		// Nom de l'équipe
+		JPanel panelName = new JPanel();
+		panelName.setBackground(Palette.COOL);
 		panelName.setLayout(new GridLayout(0, 1, 0, 0));
+		panelName.setBorder(new EmptyBorder(15, 15, 15, 15));
+		leftPanel.add(panelName);
 		
-		libName = new JLabel("Nom Equipe");
+		JLabel libName = new JLabel("Nom Équipe");
+		libName.setFont(Police.LABEL);
 		panelName.add(libName);
-		panelName.setBorder(new EmptyBorder(30, 20, 0, 80));
 		
 		fieldName = new JTextField();
 		fieldName.setHorizontalAlignment(SwingConstants.LEFT);
-		panelName.add(fieldName);
 		fieldName.setColumns(10);
 		fieldName.setText(equipe.get().getNom());
+		panelName.add(fieldName);
 		
-		panelRank = new JPanel();
-		panelRank.setBackground(new Color(255, 255, 255));
-		left.add(panelRank);
+		
+		// Rank de l'équipe 
+		JPanel panelRank = new JPanel();
+		panelRank.setBackground(Palette.COOL);
 		panelRank.setLayout(new GridLayout(0, 1, 0, 0));
+		panelRank.setBorder(new EmptyBorder(15, 15, 15, 15));
+		leftPanel.add(panelRank);
 		
-		libWR = new JLabel("World Ranking");
+		JLabel libWR = new JLabel("World Ranking");
+		libWR.setFont(Police.LABEL);
 		panelRank.add(libWR);
-		panelRank.setBorder(new EmptyBorder(30, 20, 0, 80));
 		
 		fieldWR = new JTextField();
 		fieldWR.setHorizontalAlignment(SwingConstants.LEFT);
@@ -122,17 +128,20 @@ public class VueEquipe extends JFrame {
 		fieldWR.setText(String.valueOf(equipe.get().getRang()));
 		panelRank.add(fieldWR);
 		
-		panelPays = new JPanel();
-		panelPays.setBackground(new Color(255, 255, 255));
-		left.add(panelPays);
+		
+		// Pays de l'équipe
+		JPanel panelPays = new JPanel();
+		panelPays.setBackground(Palette.COOL);
 		panelPays.setLayout(new GridLayout(0, 1, 0, 0));
+		panelPays.setBorder(new EmptyBorder(15, 15, 15, 15));
+		leftPanel.add(panelPays);
 		
-		libPays = new JLabel("Pays Equipe");
+		JLabel libPays = new JLabel("Pays Équipe");
+		libPays.setFont(Police.LABEL);
 		panelPays.add(libPays);
-		panelPays.setBorder(new EmptyBorder(30, 20, 0, 80));
 		
-		comboPays = new JComboBox();
-		comboPays.setBackground(new Color(255, 255, 255));
+		comboPays = new JComboBox<String>();
+		comboPays.setBackground(Palette.WHITE);
 		comboPays.addItem(equipe.get().getNationalite().denomination());
 		for (Pays p  : Pays.values()) {
 			if (p.denomination() != equipe.get().getNationalite().denomination()) {
@@ -141,36 +150,53 @@ public class VueEquipe extends JFrame {
 		}
 		panelPays.add(comboPays);
 		
-		panelButton = new JPanel();
-		panelButton.setBackground(new Color(255, 255, 255));
-		left.add(panelButton);
-		panelButton.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		btnSave = new JButton("Sauvegarder");
-		btnSave.setMinimumSize(new Dimension(63, 21));
-		btnSave.setMaximumSize(new Dimension(63, 21));
+		// Boutons
+		JPanel panelButton = new JPanel();
+		panelButton.setBackground(Palette.COOL);
+		panelButton.setBorder(new EmptyBorder(35, 25, 35, 25));
+		panelButton.setLayout(new GridLayout(0, 2, 25, 0));
+		leftPanel.add(panelButton);
+		
+		JButton btnSave = new JButton("Sauvegarder");
 		btnSave.addActionListener(controleur);
 		panelButton.add(btnSave);
 		btnSave.setBackground(Color.WHITE);
 		btnSave.setFocusable(false);
 		
-		btnBack = new JButton("Retour");
+		JButton btnBack = new JButton("Retour");
 		btnBack.addActionListener(controleur);
 		panelButton.add(btnBack);
 		panelButton.setBorder(new EmptyBorder(20, 20, 0, 20));
 		btnBack.setBackground(Color.WHITE);
 		btnBack.setFocusable(false);
 		
-		right = new JPanel();
-		right.setBackground(new Color(255, 255, 255));
-		body.add(right);
-		right.setLayout(new BorderLayout(0, 0));
+		
+		/// RIGHT SIDE \\\
+		JPanel rightPanel = new JPanel();
+		rightPanel.setBackground(Palette.WHITE);
+		rightPanel.setLayout(new BorderLayout(0, 10));
+		rightPanel.setBorder(new EmptyBorder(15, 15, 15, 15));
+		panelMain.add(rightPanel);
+		
+		// Titre compo
+		JPanel panelTitreCompo = new JPanel();
+		panelTitreCompo.setBackground(Palette.COOL);
+		panelTitreCompo.setBorder(new EmptyBorder(15, 1, 15, 15));
+		panelTitreCompo.setLayout(new GridLayout(0, 1, 0, 0));
+		rightPanel.add(panelTitreCompo, BorderLayout.NORTH);
+		
+		JLabel titreCompo = new JLabel("Composition");
+		titreCompo.setFont(Police.SOUS_TITRE);
+		titreCompo.setHorizontalAlignment(SwingConstants.CENTER);
+		panelTitreCompo.add(titreCompo);
+		
 		
 		// Données du tableau (A RETIRER PLUS TARD)
-        Object[] columnsName = new Object [] {"", "Membres"};
+        Object[] columnsName = new Object [] {"Num", "Joueur"};
         
         DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] {"Image", "Produit"});
+				new String[] {"Num", "Joueur"});
         
         int objetCourant = 0;
         for (Joueur j : equipe.get().getJoueurs()) {
@@ -178,15 +204,17 @@ public class VueEquipe extends JFrame {
         	objetCourant ++;
         }
         
-		table = new JTable(model);
-		table.setBorder(new LineBorder(new Color(0, 0, 0)));
+		JTable table = new JTable(model);
+		table.setEnabled(false);
 		table.setRowHeight(25);
-		right.add(table, BorderLayout.NORTH);
-		right.setBorder(new EmptyBorder(50, 20, 0, 20));
+		
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(1);
 		columnModel.getColumn(1).setPreferredWidth(130);
+		
+		rightPanel.add(table, BorderLayout.CENTER);
 	}
+	
 	
 	public String getNomEquipe() {
 		return fieldName.getText();

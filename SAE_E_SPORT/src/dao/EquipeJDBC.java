@@ -170,4 +170,20 @@ public class EquipeJDBC implements EquipeDAO{
 		}
 		return res;
 	}
+	
+	public List<Joueur> listeJoueurs(Equipe equipe){
+		List<Joueur> listeJoueurs = new ArrayList<>();
+        try {
+            PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select joueur.* from Equipe, Joueur where joueur.idEquipe = ?");
+            st.setInt(1, equipe.getIdEquipe());
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Joueur joueur = new Joueur(rs.getInt("idJoueur"), rs.getString("pseudo"), equipe);
+                listeJoueurs.add(joueur);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listeJoueurs;
+	}
 }

@@ -17,7 +17,7 @@ import modele.Niveau;
 import modele.Pays;
 import modele.Tournoi;
 
-public class TournoiJDBC implements TournoiDAO{
+public class TournoiJDBC implements TournoiDAO {
 	
 	@Override
 	public List<Tournoi> getAll() {

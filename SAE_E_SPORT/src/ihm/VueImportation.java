@@ -18,6 +18,7 @@ import javax.swing.table.TableColumnModel;
 
 import controleur.ControleurImportation;
 import modele.Joueur;
+import modele.Tournoi;
 
 import java.awt.Color;
 import javax.swing.table.TableModel;
@@ -34,28 +35,14 @@ public class VueImportation extends JFrame {
 	private JButton btnValider;
 	private JLabel msgErreur;
 	private JPanel panelMessage;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VueImportation frame = new VueImportation();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
+	private Tournoi tournoi;
 
 	/**
 	 * Create the frame.
 	 */
-	public VueImportation() {
-		
+	public VueImportation(Tournoi tournoi) {
+		this.tournoi = tournoi;
 		ControleurImportation controleur = new ControleurImportation(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -134,17 +121,24 @@ public class VueImportation extends JFrame {
 	public DefaultTableModel getModel() {
 		return modele;
 	}
+	
 	public void newModel() {
 		this.modele = new DefaultTableModel();
 	}
+	
 	public void setMsgErreur(String erreur){
 		msgErreur.setText(erreur);
 	}
+	
 	public void setColorMessage(Color color) {
 		panelMessage.setBackground(color);
 	}
+	
 	public JTable getTable() {
 		return table;
 	}
 
+	public Tournoi getTournoi() {
+		return this.tournoi;
+	}
 }

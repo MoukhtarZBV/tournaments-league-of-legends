@@ -15,31 +15,30 @@ public class TestEquipeJoueur {
 		CreateDB.main(args);
 		
 		EquipeJDBC eJDBC = new EquipeJDBC();
-        JoueurJDBC jJDBC = new JoueurJDBC();
-        
-        Equipe e1 = new Equipe(EquipeJDBC.getNextValueSequence(), "T1", 1000, Pays.FR);
-        
-        Joueur j1 = new Joueur(JoueurJDBC.getNextValueSequence(), "Zeus", e1);
-        Joueur j2 = new Joueur(JoueurJDBC.getNextValueSequence(), "Oner", e1);
-        Joueur j3 = new Joueur(JoueurJDBC.getNextValueSequence(), "Faker", e1);
-        Joueur j4 = new Joueur(JoueurJDBC.getNextValueSequence(), "Gumayusi", e1);
-        Joueur j5 = new Joueur(JoueurJDBC.getNextValueSequence(), "Keria", e1);
-        
-        e1.ajouterJoueur(j1, j2, j3, j4, j5);
-        
-        Equipe e2 = new Equipe(EquipeJDBC.getNextValueSequence(), "GenG", 1000, Pays.FR);
-        Joueur j11 = new Joueur(JoueurJDBC.getNextValueSequence(), "Doran", e2);
-        Joueur j21 = new Joueur(JoueurJDBC.getNextValueSequence(), "Peanut", e2);
-        Joueur j31 = new Joueur(JoueurJDBC.getNextValueSequence(), "Chovy", e2);
-        Joueur j41 = new Joueur(JoueurJDBC.getNextValueSequence(), "Adc", e2);
-        Joueur j51 = new Joueur(JoueurJDBC.getNextValueSequence(), "Sp", e2);
-        e2.ajouterJoueur(j11,j21,j31,j41,j51);
-        
-        eJDBC.add(e1);
-        eJDBC.add(e2);
+		JoueurJDBC jJDBC = new JoueurJDBC();
+		
+		Equipe e1 = new Equipe(EquipeJDBC.getNextValueSequence(), "T1", 1000, Pays.FR);
+		
+		Joueur j1 = new Joueur(JoueurJDBC.getNextValueSequence(), "Zeus", e1);
+		Joueur j2 = new Joueur(JoueurJDBC.getNextValueSequence(), "Oner", e1);
+		Joueur j3 = new Joueur(JoueurJDBC.getNextValueSequence(), "Faker", e1);
+		Joueur j4 = new Joueur(JoueurJDBC.getNextValueSequence(), "Gumayusi", e1);
+		Joueur j5 = new Joueur(JoueurJDBC.getNextValueSequence(), "Keria", e1);
+		
+		e1.ajouterJoueur(j1, j2, j3, j4, j5);
+		
+		Equipe e2 = new Equipe(EquipeJDBC.getNextValueSequence(), "GenG", 1000, Pays.FR);
+		Joueur j11 = new Joueur(JoueurJDBC.getNextValueSequence(), "Doran", e2);
+		Joueur j21 = new Joueur(JoueurJDBC.getNextValueSequence(), "Peanut", e2);
+		Joueur j31 = new Joueur(JoueurJDBC.getNextValueSequence(), "Chovy", e2);
+		Joueur j41 = new Joueur(JoueurJDBC.getNextValueSequence(), "Adc", e2);
+		Joueur j51 = new Joueur(JoueurJDBC.getNextValueSequence(), "Sp", e2);
+		e2.ajouterJoueur(j11,j21,j31,j41,j51);
+		
+		eJDBC.add(e1);
+		eJDBC.add(e2);
 		
 		System.out.println("\n###add Equipe OK###\n");
-		
 		
 		System.out.println("\n###add Joueur OK###\n");
 		

@@ -30,7 +30,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
-import controleur.ControleurTournoi;
+import controleur.ControleurCreationTournoi;
 
 public class VueCreationTournoi extends JFrame {
 	
@@ -49,12 +49,13 @@ public class VueCreationTournoi extends JFrame {
 	// Création la fenêtre
 	public VueCreationTournoi() {
 		
-		ControleurTournoi controleur = new ControleurTournoi(this);
+		ControleurCreationTournoi controleur = new ControleurCreationTournoi(this);
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(510, 240, 900, 600);
 		setTitle("Nouveau tournoi");
+		setResizable(false);
 		
 		
 		
@@ -62,7 +63,7 @@ public class VueCreationTournoi extends JFrame {
 		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
-		contentPane.setBackground(Color.WHITE);
+		contentPane.setBackground(Palette.WHITE);
 		setContentPane(contentPane);
 		
 		
@@ -79,7 +80,7 @@ public class VueCreationTournoi extends JFrame {
 		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitre.setForeground(Palette.WARDEN);
-		lblTitre.setFont(new Font("DejaVu Sans", Font.BOLD | Font.ITALIC, 40));
+		lblTitre.setFont(Police.GROS_TITRE);
 		panelTop.add(lblTitre, BorderLayout.CENTER);
 		
 		// Ligne colorée séparatrice
@@ -87,7 +88,7 @@ public class VueCreationTournoi extends JFrame {
 		ligneColoree.setBackground(Palette.WARDEN);
 		ligneColoree.setEnabled(false);
 		ligneColoree.setEditable(false);
-		ligneColoree.setFont(new Font("Tahoma", Font.PLAIN, 5));
+		ligneColoree.setFont(Police.LIGNE);
 		panelTop.add(ligneColoree, BorderLayout.SOUTH);
 		
 		
@@ -101,7 +102,7 @@ public class VueCreationTournoi extends JFrame {
 
 		JPanel panelMain = new JPanel();
 		panelMain.setLayout(gb_panelMain);
-		panelMain.setBackground(Color.WHITE);
+		panelMain.setBackground(Palette.WHITE);
 		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
 		contentPane.add(panelMain, BorderLayout.CENTER);
 		
@@ -124,8 +125,8 @@ public class VueCreationTournoi extends JFrame {
 		txtBorderSucces.setEnabled(false);
 		txtBorderSucces.setEditable(false);
 		txtBorderSucces.setMargin(new Insets(5, 5, 5, 5));
-		txtBorderSucces.setFont(new Font("Tahoma", Font.PLAIN, 5));
-		txtBorderSucces.setBackground(new Color(50, 155, 50));
+		txtBorderSucces.setFont(Police.LIGNE);
+		txtBorderSucces.setBackground(Palette.VERT);
 		panelSucces.add(txtBorderSucces, BorderLayout.WEST);
 		
 		// Label succes
@@ -134,10 +135,10 @@ public class VueCreationTournoi extends JFrame {
 		txtSucces.setBorder(new EmptyBorder(2, 10, 2, 2));
 		txtSucces.setEditable(false);
 		txtSucces.setHorizontalAlignment(SwingConstants.LEFT);
-		txtSucces.setForeground(new Color(50, 155, 50));
-		txtSucces.setFont(new Font("Tahoma", Font.BOLD, 14));
+		txtSucces.setForeground(Palette.VERT);
+		txtSucces.setFont(Police.POPUPS);
 		txtSucces.setColumns(10);
-		txtSucces.setBackground(new Color(204, 255, 204));
+		txtSucces.setBackground(Palette.FOND_VERT);
 		panelSucces.add(txtSucces);
 		
 		
@@ -159,8 +160,8 @@ public class VueCreationTournoi extends JFrame {
 		txtBorderErreur.setEnabled(false);
 		txtBorderErreur.setEditable(false);
 		txtBorderErreur.setMargin(new Insets(5, 5, 5, 5));
-		txtBorderErreur.setFont(new Font("Tahoma", Font.PLAIN, 5));
-		txtBorderErreur.setBackground(new Color(255, 0, 0));
+		txtBorderErreur.setFont(Police.LIGNE);
+		txtBorderErreur.setBackground(Palette.ROUGE);
 		panelErreur.add(txtBorderErreur, BorderLayout.WEST);
 		
 		// Label erreur
@@ -169,10 +170,10 @@ public class VueCreationTournoi extends JFrame {
 		txtErreur.setBorder(new EmptyBorder(2, 10, 2, 2));
 		txtErreur.setEditable(false);
 		txtErreur.setHorizontalAlignment(SwingConstants.LEFT);
-		txtErreur.setForeground(Color.RED);
-		txtErreur.setFont(new Font("Tahoma", Font.BOLD, 14));
+		txtErreur.setForeground(Palette.ROUGE);
+		txtErreur.setFont(Police.POPUPS);
 		txtErreur.setColumns(10);
-		txtErreur.setBackground(new Color(255, 204, 204));
+		txtErreur.setBackground(Palette.FOND_ROUGE);
 		panelErreur.add(txtErreur);
 		
 		
@@ -192,7 +193,7 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Titre infos
 		JLabel lblTitreInfos = new JLabel("  -- Infos Tournoi -------------");
-		lblTitreInfos.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		lblTitreInfos.setFont(Police.SOUS_TITRE);
 		panelInfosTournoi.add(lblTitreInfos, BorderLayout.NORTH);
 		
 		
@@ -213,8 +214,8 @@ public class VueCreationTournoi extends JFrame {
 		// Label Nom
 		JLabel lblNom = new JLabel("Nom :");
 		lblNom.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNom.setForeground(new Color(0, 0, 0));
-		lblNom.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		lblNom.setForeground(Palette.BLACK);
+		lblNom.setFont(Police.LABEL);
 		panelNomTournoi.add(lblNom);
 		
 		Component horizontalStrut = Box.createHorizontalStrut(53);
@@ -222,7 +223,7 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Text field Nom
 		inputNom = new JTextField();
-		inputNom.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		inputNom.setFont(Police.INPUT);
 		inputNom.setColumns(35);
 		panelNomTournoi.add(inputNom);
 		
@@ -244,7 +245,7 @@ public class VueCreationTournoi extends JFrame {
 		// Label Niveau
 		JLabel lblNiveau = new JLabel("Niveau :");
 		lblNiveau.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNiveau.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		lblNiveau.setFont(Police.LABEL);
 		panelNiveau.add(lblNiveau);
 		
 		Component horizontalStrut_3 = Box.createHorizontalStrut(30);
@@ -252,7 +253,7 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Combo box Niveau
 		inputNiveau = new JComboBox<String>();
-		inputNiveau.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		inputNiveau.setFont(Police.COMBO);
 		inputNiveau.setBackground(new Color(255, 255, 255));
 		panelNiveau.add(inputNiveau);
 		inputNiveau.addItem("-- Niveau --");
@@ -264,9 +265,9 @@ public class VueCreationTournoi extends JFrame {
 		// Panel Pays
 		JPanel panelPays = new JPanel();
 		panelPays.setBorder(new EmptyBorder(25, 5, 25, 35));
-		panelNiveauPays.add(panelPays);
 		panelPays.setLayout(new BoxLayout(panelPays, BoxLayout.X_AXIS));
 		panelPays.setBackground(Palette.COOL);
+		panelNiveauPays.add(panelPays);
 		
 		Component horizontalStrut_5 = Box.createHorizontalStrut(20);
 		panelPays.add(horizontalStrut_5);
@@ -274,7 +275,7 @@ public class VueCreationTournoi extends JFrame {
 		// Label Pays
 		JLabel lblPays = new JLabel("Pays :");
 		lblPays.setHorizontalAlignment(SwingConstants.LEFT);
-		lblPays.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		lblPays.setFont(Police.LABEL);
 		panelPays.add(lblPays);
 		
 		Component horizontalStrut_4 = Box.createHorizontalStrut(30);
@@ -282,8 +283,8 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Combo box pays
 		inputPays = new JComboBox<String>();
-		inputPays.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		inputPays.setBackground(new Color(255, 255, 255));
+		inputPays.setFont(Police.COMBO);
+		inputPays.setBackground(Palette.WHITE);
 		panelPays.add(inputPays);
 		inputPays.addItem("-- Pays --");
 		for (Pays pays : Pays.values()) {
@@ -306,7 +307,7 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Titre dates
 		JLabel lblTitresDates = new JLabel("  -- Dates --------------------");
-		lblTitresDates.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		lblTitresDates.setFont(Police.SOUS_TITRE);
 		panelDatesTournoi.add(lblTitresDates, BorderLayout.NORTH);
 	
 		
@@ -327,7 +328,7 @@ public class VueCreationTournoi extends JFrame {
 		// Label date début
 		JLabel lblDateDeDebut = new JLabel("Début :");
 		lblDateDeDebut.setHorizontalAlignment(SwingConstants.LEFT);
-		lblDateDeDebut.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		lblDateDeDebut.setFont(Police.LABEL);
 		panelDateDebut.add(lblDateDeDebut);
 		
 		Component horizontalStrut_1 = Box.createHorizontalStrut(38);
@@ -339,7 +340,7 @@ public class VueCreationTournoi extends JFrame {
 		inputDateDebut = new JFormattedTextField(dateFormat);
 		inputDateDebut.setForeground(Color.LIGHT_GRAY);
 		inputDateDebut.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-		inputDateDebut.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		inputDateDebut.setFont(Police.INPUT);
 		inputDateDebut.setColumns(10);
 		inputDateDebut.addActionListener(controleur);
 		inputDateDebut.addFocusListener(controleur);
@@ -359,7 +360,7 @@ public class VueCreationTournoi extends JFrame {
 		// Label date fin
 		JLabel lblDateDeFin = new JLabel("Fin :");
 		lblDateDeFin.setHorizontalAlignment(SwingConstants.LEFT);
-		lblDateDeFin.setFont(new Font("DejaVu Sans", Font.PLAIN, 20));
+		lblDateDeFin.setFont(Police.LABEL);
 		panelDateFin.add(lblDateDeFin);
 		
 		Component horizontalStrut_2 = Box.createHorizontalStrut(45);
@@ -369,7 +370,7 @@ public class VueCreationTournoi extends JFrame {
 		inputDateFin = new JFormattedTextField(dateFormat);
 		inputDateFin.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		inputDateFin.setForeground(Color.LIGHT_GRAY);
-		inputDateFin.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		inputDateFin.setFont(Police.INPUT);
 		inputDateFin.setColumns(10);
 		inputDateFin.addActionListener(controleur);
 		inputDateFin.addFocusListener(controleur);
@@ -400,15 +401,15 @@ public class VueCreationTournoi extends JFrame {
 		JButton btnAnnuler = new JButton("Annuler");
 		btnAnnuler.setBackground(new Color(255, 255, 255));
 		btnAnnuler.setBorder(new LineBorder(Palette.WARDEN, 2, true));
-		btnAnnuler.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnAnnuler.setFont(Police.LABEL);
 		btnAnnuler.addActionListener(controleur);
 		panelBoutons.add(btnAnnuler);
 		
 		// Bouton valider
 		JButton btnValider = new JButton("Valider");
-		btnValider.setBackground(new Color(255, 255, 255));
+		btnValider.setBackground(Palette.WHITE);
 		btnValider.setBorder(new LineBorder(Palette.WARDEN, 2, true));
-		btnValider.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnValider.setFont(Police.LABEL);
 		btnValider.addActionListener(controleur);
 		panelBoutons.add(btnValider);
 		
