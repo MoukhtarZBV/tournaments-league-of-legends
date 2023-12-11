@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +13,7 @@ import javax.swing.JList;
 
 import dao.EquipeJDBC;
 import ihm.Palette;
+import ihm.VueAccueilAdmin;
 import ihm.VueEquipe;
 import ihm.VueListeEquipe;
 import modele.Equipe;
@@ -30,7 +32,6 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			JList list = (JList) e.getSource();
 			if (e.getClickCount() == 2) {
 				try {
-					
 					List<Equipe> equipes = (new EquipeJDBC().getAll());
 					String nomEq = ((String) list.getSelectedValue()).substring(6, 55);
 					
@@ -50,6 +51,16 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    JButton bouton = (JButton) e.getSource();
 	    List<Equipe> equipes;
+	    if(bouton.getName().equals("Retour")) {
+	    	this.vue.dispose();
+	    	try {
+				VueAccueilAdmin vue = new VueAccueilAdmin();
+				vue.setVisible(true);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+	    }
+	    else {
 		try {
 			EquipeJDBC ejdbc = new EquipeJDBC();
 			equipes = ejdbc.getAll();
@@ -67,6 +78,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	    }
 	}
 
 	

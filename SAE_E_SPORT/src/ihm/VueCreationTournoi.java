@@ -4,13 +4,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import components.JTextFieldArrondi;
 import modele.Niveau;
 import modele.Pays;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
@@ -25,12 +25,15 @@ import java.text.SimpleDateFormat;
 import javax.swing.JFormattedTextField;
 import javax.swing.BoxLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
-import javax.swing.border.LineBorder;
 
 import controleur.ControleurCreationTournoi;
+import java.awt.FlowLayout;
 
 public class VueCreationTournoi extends JFrame {
 	
@@ -50,10 +53,11 @@ public class VueCreationTournoi extends JFrame {
 	public VueCreationTournoi() {
 		
 		ControleurCreationTournoi controleur = new ControleurCreationTournoi(this);
+		Ecran.setup();
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(510, 240, 900, 600);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Nouveau tournoi");
 		setResizable(false);
 		
@@ -61,50 +65,57 @@ public class VueCreationTournoi extends JFrame {
 		
 		///// PANEL PRINCIPAL \\\\\
 		JPanel contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
-		contentPane.setBackground(Palette.WHITE);
 		setContentPane(contentPane);
 		
 		
 		
+		///// MENU BAR \\\\\
+		JPanel panelSide = new JPanel();
+		panelSide.setBackground(Palette.DARK_GRAY);
+		panelSide.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Palette.GRAY));
+		panelSide.setPreferredSize(new Dimension(125, 600));
+		contentPane.add(panelSide, BorderLayout.WEST);
+		
+		
+		
+		///// MAIN \\\\\
+		JPanel panelMain = new JPanel();
+		panelMain.setBorder(new EmptyBorder(25, 0, 25, 0));
+		panelMain.setLayout(new BorderLayout(0, 0));
+		panelMain.setBackground(Palette.DARK_GRAY);
+		contentPane.add(panelMain, BorderLayout.CENTER);
+		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
-		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
-		panelTop.setLayout(new BorderLayout(0, 0));
-		panelTop.setBackground(Palette.COOL);
-		contentPane.add(panelTop, BorderLayout.NORTH);
+		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setBackground(Palette.DARK_GRAY);
+		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setLayout(new GridLayout());
+		panelMain.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
 		JLabel lblTitre = new JLabel("Nouveau tournoi");
-		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitre.setForeground(Palette.WARDEN);
+		lblTitre.setForeground(Palette.WHITE);
 		lblTitre.setFont(Police.GROS_TITRE);
-		panelTop.add(lblTitre, BorderLayout.CENTER);
-		
-		// Ligne colorée séparatrice
-		JTextField ligneColoree = new JTextField();
-		ligneColoree.setBackground(Palette.WARDEN);
-		ligneColoree.setEnabled(false);
-		ligneColoree.setEditable(false);
-		ligneColoree.setFont(Police.LIGNE);
-		panelTop.add(ligneColoree, BorderLayout.SOUTH);
+		panelTop.add(lblTitre);
 		
 		
 		
 		///// MAN PANEL MILIEU \\\\\
-		GridBagLayout gb_panelMain = new GridBagLayout();
-		gb_panelMain.columnWidths  = new int[]   {774, 0};
-		gb_panelMain.rowHeights    = new int[]   {0, 100, 100, 0, 0, 0};
-		gb_panelMain.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gb_panelMain.rowWeights    = new double[]{1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		GridBagLayout gb_panelCenter = new GridBagLayout();
+		gb_panelCenter.columnWidths  = new int[]   {774, 0};
+		gb_panelCenter.rowHeights    = new int[]   {0, 100, 100, 0, 0, 0};
+		gb_panelCenter.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gb_panelCenter.rowWeights    = new double[]{1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 
-		JPanel panelMain = new JPanel();
-		panelMain.setLayout(gb_panelMain);
-		panelMain.setBackground(Palette.WHITE);
-		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
-		contentPane.add(panelMain, BorderLayout.CENTER);
+		JPanel panelCenter = new JPanel();
+		panelCenter.setLayout(gb_panelCenter);
+		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
+		panelMain.add(panelCenter, BorderLayout.CENTER);
 		
 		
 		///// PANEL SUCCES \\\\\
@@ -115,8 +126,8 @@ public class VueCreationTournoi extends JFrame {
 		gbc_panelSucces.gridy  = 0;
 		
 		panelSucces = new JPanel();
-		panelMain.add(panelSucces, gbc_panelSucces);
 		panelSucces.setLayout(new BorderLayout(0, 0));
+		panelCenter.add(panelSucces, gbc_panelSucces);
 		
 		// Petite bordure verte
 		txtBorderSucces = new JTextField();
@@ -150,8 +161,8 @@ public class VueCreationTournoi extends JFrame {
 		gbc_panelErreur.gridy  = 0;
 		
 		panelErreur = new JPanel();
-		panelMain.add(panelErreur, gbc_panelErreur);
 		panelErreur.setLayout(new BorderLayout(0, 0));
+		panelCenter.add(panelErreur, gbc_panelErreur);
 		
 		// Petite bordure rouge
 		txtBorderErreur = new JTextField();
@@ -186,21 +197,22 @@ public class VueCreationTournoi extends JFrame {
 		gbc_panelInfosTournoi.gridy  = 1;		
 
 		JPanel panelInfosTournoi = new JPanel();
-		panelInfosTournoi.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelInfosTournoi.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Palette.GRAY), BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 		panelInfosTournoi.setLayout(new BorderLayout(0, 0));
-		panelInfosTournoi.setBackground(Palette.COOL);
-		panelMain.add(panelInfosTournoi, gbc_panelInfosTournoi);
+		panelInfosTournoi.setBackground(Palette.DARK_GRAY);
+		panelCenter.add(panelInfosTournoi, gbc_panelInfosTournoi);
 		
 		// Titre infos
-		JLabel lblTitreInfos = new JLabel("  -- Infos Tournoi -------------");
+		JLabel lblTitreInfos = new JLabel("Infos Tournoi");
+		lblTitreInfos.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Palette.WHITE));
 		lblTitreInfos.setFont(Police.SOUS_TITRE);
+		lblTitreInfos.setForeground(Palette.WHITE);
 		panelInfosTournoi.add(lblTitreInfos, BorderLayout.NORTH);
 		
 		
 		// Panel Inputs informations
 		JPanel panelInfos = new JPanel();
 		panelInfos.setLayout(new GridLayout(2, 0, 0, 0));
-		panelInfos.setBackground(Palette.COOL);
 		panelInfosTournoi.add(panelInfos, BorderLayout.CENTER);
 		
 		
@@ -208,13 +220,13 @@ public class VueCreationTournoi extends JFrame {
 		JPanel panelNomTournoi = new JPanel();
 		panelNomTournoi.setBorder(new EmptyBorder(25, 35, 25, 35));
 		panelNomTournoi.setLayout(new BoxLayout(panelNomTournoi, BoxLayout.X_AXIS));
-		panelNomTournoi.setBackground(Palette.COOL);
+		panelNomTournoi.setBackground(Palette.DARK_GRAY);
 		panelInfos.add(panelNomTournoi);
 		
 		// Label Nom
 		JLabel lblNom = new JLabel("Nom :");
 		lblNom.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNom.setForeground(Palette.BLACK);
+		lblNom.setForeground(Palette.WHITE);
 		lblNom.setFont(Police.LABEL);
 		panelNomTournoi.add(lblNom);
 		
@@ -225,13 +237,16 @@ public class VueCreationTournoi extends JFrame {
 		inputNom = new JTextField();
 		inputNom.setFont(Police.INPUT);
 		inputNom.setColumns(35);
+		inputNom.setBackground(Palette.GRAY);
+		inputNom.setForeground(Palette.WHITE);
+		inputNom.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Palette.WHITE));
 		panelNomTournoi.add(inputNom);
 		
 		
 		// Panel Niveau et Pays
 		JPanel panelNiveauPays = new JPanel();
 		panelNiveauPays.setLayout(new GridLayout(0, 2, 0, 0));
-		panelNiveauPays.setBackground(Palette.COOL);
+		panelNiveauPays.setBackground(Palette.DARK_GRAY);
 		panelInfos.add(panelNiveauPays);
 		
 		
@@ -239,12 +254,13 @@ public class VueCreationTournoi extends JFrame {
 		JPanel panelNiveau = new JPanel();
 		panelNiveau.setBorder(new EmptyBorder(25, 35, 25, 5));
 		panelNiveau.setLayout(new BoxLayout(panelNiveau, BoxLayout.X_AXIS));
-		panelNiveau.setBackground(Palette.COOL);
+		panelNiveau.setBackground(Palette.DARK_GRAY);
 		panelNiveauPays.add(panelNiveau);
 		
 		// Label Niveau
 		JLabel lblNiveau = new JLabel("Niveau :");
 		lblNiveau.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNiveau.setForeground(Palette.WHITE);
 		lblNiveau.setFont(Police.LABEL);
 		panelNiveau.add(lblNiveau);
 		
@@ -254,19 +270,21 @@ public class VueCreationTournoi extends JFrame {
 		// Combo box Niveau
 		inputNiveau = new JComboBox<String>();
 		inputNiveau.setFont(Police.COMBO);
-		inputNiveau.setBackground(new Color(255, 255, 255));
-		panelNiveau.add(inputNiveau);
+		inputNiveau.setBackground(Palette.GRAY);
+		inputNiveau.setForeground(Palette.WHITE);
+		inputNiveau.setFocusable(false);
 		inputNiveau.addItem("-- Niveau --");
 		for (Niveau niveau : Niveau.values()) {
 			inputNiveau.addItem(niveau.denomination());
 		}
+		panelNiveau.add(inputNiveau);
 		
 		
 		// Panel Pays
 		JPanel panelPays = new JPanel();
 		panelPays.setBorder(new EmptyBorder(25, 5, 25, 35));
 		panelPays.setLayout(new BoxLayout(panelPays, BoxLayout.X_AXIS));
-		panelPays.setBackground(Palette.COOL);
+		panelPays.setBackground(Palette.DARK_GRAY);
 		panelNiveauPays.add(panelPays);
 		
 		Component horizontalStrut_5 = Box.createHorizontalStrut(20);
@@ -275,6 +293,7 @@ public class VueCreationTournoi extends JFrame {
 		// Label Pays
 		JLabel lblPays = new JLabel("Pays :");
 		lblPays.setHorizontalAlignment(SwingConstants.LEFT);
+		lblPays.setForeground(Palette.WHITE);
 		lblPays.setFont(Police.LABEL);
 		panelPays.add(lblPays);
 		
@@ -284,12 +303,14 @@ public class VueCreationTournoi extends JFrame {
 		// Combo box pays
 		inputPays = new JComboBox<String>();
 		inputPays.setFont(Police.COMBO);
-		inputPays.setBackground(Palette.WHITE);
-		panelPays.add(inputPays);
+		inputPays.setBackground(Palette.GRAY);
+		inputPays.setForeground(Palette.WHITE);
+		inputPays.setFocusable(false);
 		inputPays.addItem("-- Pays --");
 		for (Pays pays : Pays.values()) {
 			inputPays.addItem(pays.denomination());
 		}
+		panelPays.add(inputPays);
 		
 		
 		///// PANEL DATES \\\\\
@@ -300,34 +321,37 @@ public class VueCreationTournoi extends JFrame {
 		gbc_panelDatesTournoi.gridy = 2;
 		
 		JPanel panelDatesTournoi = new JPanel();
-		panelDatesTournoi.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelDatesTournoi.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Palette.GRAY), BorderFactory.createEmptyBorder(15, 15, 15, 15)));
 		panelDatesTournoi.setLayout(new BorderLayout(0, 0));
-		panelDatesTournoi.setBackground(Palette.COOL);
-		panelMain.add(panelDatesTournoi, gbc_panelDatesTournoi);
+		panelDatesTournoi.setBackground(Palette.DARK_GRAY);
+		panelCenter.add(panelDatesTournoi, gbc_panelDatesTournoi);
 		
 		// Titre dates
-		JLabel lblTitresDates = new JLabel("  -- Dates --------------------");
-		lblTitresDates.setFont(Police.SOUS_TITRE);
-		panelDatesTournoi.add(lblTitresDates, BorderLayout.NORTH);
+		JLabel lblTitreDates = new JLabel(String.format("%-25s", "Dates"));
+		lblTitreDates.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Palette.WHITE));
+		lblTitreDates.setForeground(Palette.WHITE);
+		lblTitreDates.setFont(Police.SOUS_TITRE);
+		panelDatesTournoi.add(lblTitreDates, BorderLayout.NORTH);
 	
 		
 		// Panel inputs dates
 		JPanel panelDatesInputs = new JPanel();
-		panelDatesTournoi.add(panelDatesInputs, BorderLayout.CENTER);
 		panelDatesInputs.setLayout(new GridLayout(1, 0, 0, 0));
-		panelDatesInputs.setBackground(Palette.COOL);
+		panelDatesInputs.setBackground(Palette.DARK_GRAY);
+		panelDatesTournoi.add(panelDatesInputs, BorderLayout.CENTER);
 		
 		
 		// Panel dates début
 		JPanel panelDateDebut = new JPanel();
 		panelDateDebut.setBorder(new EmptyBorder(25, 35, 25, 5));
 		panelDateDebut.setLayout(new BoxLayout(panelDateDebut, BoxLayout.X_AXIS));
-		panelDateDebut.setBackground(Palette.COOL);
+		panelDateDebut.setBackground(Palette.DARK_GRAY);
 		panelDatesInputs.add(panelDateDebut);
 		
 		// Label date début
 		JLabel lblDateDeDebut = new JLabel("Début :");
 		lblDateDeDebut.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDateDeDebut.setForeground(Palette.WHITE);
 		lblDateDeDebut.setFont(Police.LABEL);
 		panelDateDebut.add(lblDateDeDebut);
 		
@@ -338,12 +362,14 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Input date début
 		inputDateDebut = new JFormattedTextField(dateFormat);
-		inputDateDebut.setForeground(Color.LIGHT_GRAY);
+		inputDateDebut.setForeground(Palette.WHITE);
 		inputDateDebut.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		inputDateDebut.setFont(Police.INPUT);
 		inputDateDebut.setColumns(10);
 		inputDateDebut.addActionListener(controleur);
 		inputDateDebut.addFocusListener(controleur);
+		inputDateDebut.setBackground(Palette.GRAY);
+		inputDateDebut.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Palette.WHITE));
 		panelDateDebut.add(inputDateDebut);
 		
 		
@@ -351,7 +377,7 @@ public class VueCreationTournoi extends JFrame {
 		JPanel panelDateFin = new JPanel();
 		panelDateFin.setBorder(new EmptyBorder(25, 5, 25, 35));
 		panelDateFin.setLayout(new BoxLayout(panelDateFin, BoxLayout.X_AXIS));
-		panelDateFin.setBackground(Palette.COOL);
+		panelDateFin.setBackground(Palette.DARK_GRAY);
 		panelDatesInputs.add(panelDateFin);
 		
 		Component horizontalStrut_6 = Box.createHorizontalStrut(20);
@@ -360,6 +386,7 @@ public class VueCreationTournoi extends JFrame {
 		// Label date fin
 		JLabel lblDateDeFin = new JLabel("Fin :");
 		lblDateDeFin.setHorizontalAlignment(SwingConstants.LEFT);
+		lblDateDeFin.setForeground(Palette.WHITE);
 		lblDateDeFin.setFont(Police.LABEL);
 		panelDateFin.add(lblDateDeFin);
 		
@@ -369,11 +396,13 @@ public class VueCreationTournoi extends JFrame {
 		// Input date fin
 		inputDateFin = new JFormattedTextField(dateFormat);
 		inputDateFin.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-		inputDateFin.setForeground(Color.LIGHT_GRAY);
+		inputDateFin.setForeground(Palette.WHITE);
 		inputDateFin.setFont(Police.INPUT);
 		inputDateFin.setColumns(10);
 		inputDateFin.addActionListener(controleur);
 		inputDateFin.addFocusListener(controleur);
+		inputDateFin.setBackground(Palette.GRAY);
+		inputDateFin.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Palette.WHITE));
 		panelDateFin.add(inputDateFin);
 		
 		
@@ -382,7 +411,7 @@ public class VueCreationTournoi extends JFrame {
 		gbc_verticalStrut.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalStrut.gridx = 0;
 		gbc_verticalStrut.gridy = 3;
-		panelMain.add(verticalStrut, gbc_verticalStrut);
+		panelCenter.add(verticalStrut, gbc_verticalStrut);
 		
 		
 		///// PANEL BOUTONS \\\\\
@@ -391,26 +420,38 @@ public class VueCreationTournoi extends JFrame {
 		gbc_panelBoutons.gridx = 0;
 		gbc_panelBoutons.gridy = 4;
 		
+		FlowLayout fl_panelBoutons = new FlowLayout(FlowLayout.RIGHT, 5, 5);
+		
 		JPanel panelBoutons = new JPanel();
-		panelBoutons.setLayout(new GridLayout(1, 2, 50, 0));
-		panelBoutons.setBorder(new EmptyBorder(10, 100, 10, 100));
-		panelBoutons.setBackground(Palette.COOL);
-		panelMain.add(panelBoutons, gbc_panelBoutons);
+		panelBoutons.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panelBoutons.setBackground(Palette.DARK_GRAY);
+		panelBoutons.setLayout(fl_panelBoutons);
+		panelCenter.add(panelBoutons, gbc_panelBoutons);
 		
 		// Bouton annuler
-		JButton btnAnnuler = new JButton("Annuler");
-		btnAnnuler.setBackground(new Color(255, 255, 255));
-		btnAnnuler.setBorder(new LineBorder(Palette.WARDEN, 2, true));
+		JButton btnAnnuler = new JButton("<html><body style='padding: 5px 25px;'>Annuler</body></html>");
+		btnAnnuler.setName("Annuler");
+		btnAnnuler.setBackground(Palette.GRAY);
+		btnAnnuler.setForeground(Palette.WHITE);
+		btnAnnuler.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnAnnuler.setFont(Police.LABEL);
 		btnAnnuler.addActionListener(controleur);
+		btnAnnuler.setFocusable(false);
 		panelBoutons.add(btnAnnuler);
 		
 		// Bouton valider
-		JButton btnValider = new JButton("Valider");
-		btnValider.setBackground(Palette.WHITE);
-		btnValider.setBorder(new LineBorder(Palette.WARDEN, 2, true));
+		JButton btnValider = new JButton("<html><body style='padding: 5px 25px;'>Valider</body></html>");
+		btnValider.setName("Valider");
+		btnValider.setBackground(Palette.GRAY);
+		btnValider.setForeground(Palette.WHITE);
+		btnValider.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnValider.setFont(Police.LABEL);
+		btnValider.setFocusable(false);
 		btnValider.addActionListener(controleur);
+		
+		Component horizontalStrut_7 = Box.createHorizontalStrut(20);
+		panelBoutons.add(horizontalStrut_7);
+		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
 		
 		
