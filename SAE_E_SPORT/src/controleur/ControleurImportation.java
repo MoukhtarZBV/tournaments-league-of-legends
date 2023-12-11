@@ -114,7 +114,7 @@ public class ControleurImportation implements ActionListener{
 	        }
 	    }
 	    if (bouton.getText().equals("Valider") && this.data != null) {
-	    	boolean roll = false;
+	    	boolean rollback = false;
 	    	try {
 				ConnectionJDBC.getConnection().setAutoCommit(false);
 			} catch (SQLException e2) {
@@ -123,19 +123,42 @@ public class ControleurImportation implements ActionListener{
 	    	EquipeJDBC equipeDB = new EquipeJDBC();
 	    	JoueurJDBC joueurDB = new JoueurJDBC();
 	    	ParticiperJDBC participerDB = new ParticiperJDBC();
+	    	
+	    	
 	    	for (int ligne = 1; ligne<this.data.size(); ligne += 5) {
 	    		try {
-	    			Equipe equipe = new Equipe(equipeDB.getNextValueSequence(), this.data.get(ligne)[4], Integer.parseInt(this.data.get(ligne)[5]), Pays.getPays(data.get(ligne)[6]));
-	    			roll = ajouterJoueursAUneEquipe(roll, joueurDB, ligne, equipe);
-	    			roll = compositionAChangee(roll, equipeDB, equipe);
-	    			ajouterEquipeALaBase(roll, equipeDB, equipe);
-					confirmerAjout(roll);
-					if (!roll) {
-						System.out.println(equipe);
-						Participer participer = new Participer(equipe, vue.getTournoi());
+	    			String messageErreur = "";
+	    			System.out.println(ligne);
+	    			Equipe equipe = equipeDB.getByNom(this.data.get(ligne)[4]).orElse(null);
+	    			if (equipe == null) {
+	    				System.out.println("Equipe pas presente");
+	    				// Creer l'equipe et lui attribuer les joueurs
+		    			equipe = new Equipe(EquipeJDBC.getNextValueSequence(), this.data.get(ligne)[4], Integer.parseInt(this.data.get(ligne)[5]), Pays.getPays(data.get(ligne)[6]));
+		    			for (int j = ligne; j<ligne+5; j++) {
+		    				Joueur joueur = new Joueur(JoueurJDBC.getNextValueSequence(), this.data.get(j)[7], equipe);
+		    				if (!joueur.presentDansAutreEquipe()) {
+		    					equipe.ajouterJoueur(joueur);
+		    				} else {
+		    					rollback = true;
+		    				}
+		    			}
+		    			if (!rollback) {
+		    				equipeDB.add(equipe);
+		    			}
+		    			System.out.println("--- Equipe ajoutee ---\n" + equipe);
+	    			}
+	    			System.out.println("Equipe presente");
+	    			if (rollback) {
+	    				ConnectionJDBC.getConnection().rollback();
+	    				this.vue.setColorMessage(new Color(255, 204, 204));
+	    				this.vue.setMsgErreur("Un ou plusieurs joueurs appartiennent à plus d'une équipe");
+	    			} else {
+	    				ConnectionJDBC.getConnection().commit();
+	    				this.vue.setColorMessage(new Color(204, 255, 204));
+	    				this.vue.setMsgErreur("Les équipes ont bien été importées");
+	    				Participer participer = new Participer(equipe, vue.getTournoi());
 						participerDB.add(participer);
-					}
-					
+	    			}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -144,56 +167,5 @@ public class ControleurImportation implements ActionListener{
 	    if (bouton.getText().equals("Retour")) {
 	    	this.vue.dispose();
 	    }
-	}
-	private void confirmerAjout(boolean roll) throws SQLException {
-		if (roll == true) {
-			ConnectionJDBC.getConnection().rollback();
-			this.vue.setColorMessage(new Color(255, 204, 204));
-		} else {
-			ConnectionJDBC.getConnection().commit();
-			this.vue.setColorMessage(new Color(204, 255, 204));
-			this.vue.setMsgErreur("Les équipes ont bien été importées");
-		}
-	}
-	
-	private void ajouterEquipeALaBase(boolean roll, EquipeJDBC equipeDB, Equipe equipe) throws Exception {
-		if (equipe.verifierEquipe() && !roll) {
-			equipeDB.add(equipe);
-		}
-	}
-	
-	private boolean compositionAChangee(boolean roll, EquipeJDBC equipeDB, Equipe equipe) throws Exception {
-		// si la composition a changé
-		/**
-		 * *
-		 * *
-		 * *
-		 * *
-		 * * NE PAS OUBLIERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-		 * *
-		 * *
-		 * *
-		 * *
-		 * *
-		 */
-		if(equipeDB.getByNom(equipe.getNom()).orElse(null) != null) {
-			if (!(equipe.getJoueurs().equals(equipeDB.getByNom(equipe.getNom()).get().getJoueurs()))) {
-				roll = true;
-				this.vue.setMsgErreur("La composition d'une ou plusieurs équipes ne correspond pas");
-			}
-		}
-		return roll;
-	}
-	private boolean ajouterJoueursAUneEquipe(boolean roll, JoueurJDBC joueurDB, int i, Equipe equipe) throws Exception {
-		for (int j = i; j<i+5; j++) {
-			Joueur joueur = new Joueur(joueurDB.getNextValueSequence(), this.data.get(j)[7], equipe);
-			equipe.ajouterJoueur(joueur);
-			// Si un joueur est déjà dans une autre équipe
-			if (!joueur.verifierJoueur(equipe)) {
-				roll = true;
-				this.vue.setMsgErreur("Un ou plusieurs joueurs appartiennent à plus d'une équipe");
-			}
-		}
-		return roll;
 	}
 }

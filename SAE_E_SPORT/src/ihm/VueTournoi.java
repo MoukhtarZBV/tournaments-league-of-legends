@@ -16,6 +16,7 @@ import controleur.ControleurDetailsTournoi;
 import dao.ParticiperJDBC;
 import modele.Equipe;
 import modele.Joueur;
+import modele.Participer;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
@@ -23,6 +24,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JSeparator;
 import java.awt.Component;
@@ -205,12 +207,16 @@ public class VueTournoi extends JFrame {
 		JButton btnImporter = new JButton("Importer des équipes");
 		btnImporter.addActionListener(controleur);
 		panel_5.add(btnImporter);
-		afficherEquipes(tournoi);
+		try {
+			afficherEquipes(tournoi);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void afficherEquipes(Tournoi tournoi) {
+	public void afficherEquipes(Tournoi tournoi) throws Exception {
 		DefaultTableModel modele = (DefaultTableModel) table.getModel();
-		List<Equipe> equipes = new ParticiperJDBC().listeEquipes(tournoi);
+		List<Equipe> equipes = new ParticiperJDBC().getAll().stream().peek(p -> p.getTournoi().getNomTournoi()).filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).collect(Collectors.toList());
 		System.out.println(equipes);
 		for (Equipe equipe : equipes) {
 			List<Joueur> joueursEquipe = equipe.getJoueurs();

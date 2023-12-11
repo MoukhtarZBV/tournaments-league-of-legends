@@ -68,25 +68,5 @@ public class ParticiperJDBC implements ParticiperDAO{
 	public boolean delete(Participer value) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	public List<Equipe> listeEquipes(Tournoi tournoi){
-		List<Equipe> listeEquipes = new ArrayList<>();
-		try {
-            PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select equipe.* from Equipe, Tournoi, Participer where participer.idTournoi = ? and equipe.idEquipe = participer.idEquipe");
-            st.setInt(1, tournoi.getIdTournoi());
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                Equipe equipe = new Equipe(rs.getInt("idEquipe"), rs.getString("nomEquipe"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
-                for (Joueur j : new EquipeJDBC().listeJoueurs(equipe)) {
-                	equipe.ajouterJoueur(j);
-                }
-                listeEquipes.add(equipe);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return listeEquipes;
-	}
-	
+	}	
 }
