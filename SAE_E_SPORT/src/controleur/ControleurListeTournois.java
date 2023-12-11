@@ -7,6 +7,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 
 import dao.TournoiJDBC;
+import ihm.VueAccueilAdmin;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
 import ihm.VueTournoi;
@@ -49,8 +51,15 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			if (bouton.getText().equals("Créer Tournoi")) {
 				VueCreationTournoi vue = new VueCreationTournoi();
 				vue.setVisible(true);
+				this.vue.dispose(); // pour actualiser la page en fond
 			} else if (bouton.getText().equals("Retour")) {
 				vue.dispose();
+				try {
+					VueAccueilAdmin vue = new VueAccueilAdmin();
+					vue.setVisible(true);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			} else if (bouton.getFont().getFamily().equals("Gigi")) {
 				this.nom = vue.saisieChamp();
 				vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));

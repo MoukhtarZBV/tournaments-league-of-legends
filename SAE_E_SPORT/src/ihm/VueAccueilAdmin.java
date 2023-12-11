@@ -15,6 +15,9 @@ import java.io.IOException;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
+
+import controleur.ControleurAccueil;
+
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.imageio.ImageIO;
@@ -46,6 +49,9 @@ public class VueAccueilAdmin extends JFrame {
 	 * @throws IOException 
 	 */
 	public VueAccueilAdmin() throws IOException {
+		
+		ControleurAccueil controleur = new ControleurAccueil(this);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 791, 502);
 		contentPane = new JPanel();
@@ -112,6 +118,7 @@ public class VueAccueilAdmin extends JFrame {
 		btnEquipe.setBackground(Color.WHITE);
 		panelCadreEquipe.add(btnEquipe);
 		btnEquipe.setFocusable(false);
+		btnEquipe.addActionListener(controleur);
 		
 		JPanel panelTournoi = new JPanel();
 		panelTournoi.setBackground(new Color(255, 255, 255));
@@ -135,6 +142,7 @@ public class VueAccueilAdmin extends JFrame {
 		btnTournoi.setBackground(Color.WHITE);
 		panelCadreTournoi.add(btnTournoi);
 		btnTournoi.setFocusable(false);
+		btnTournoi.addActionListener(controleur);
 		
 		
 		

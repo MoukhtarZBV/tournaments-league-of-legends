@@ -27,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import java.awt.Color;
 
 public class VueListeEquipe extends JFrame {
 
@@ -152,6 +153,14 @@ public class VueListeEquipe extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeEquipes);
 		panelMain.add(scrollPane, BorderLayout.CENTER);
+		
+		JPanel panelBottom = new JPanel();
+		panelBottom.setBackground(new Color(255, 255, 255));
+		contentPane.add(panelBottom, BorderLayout.SOUTH);
+		
+		JButton btnRetour = new JButton("Retour");
+		panelBottom.add(btnRetour);
+		btnRetour.addActionListener(controleur);
 	}
 	
 	public String getSearch() {

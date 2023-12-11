@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import dao.EquipeJDBC;
+import dao.TournoiJDBC;
 
 public class Equipe {
 
@@ -14,12 +15,18 @@ public class Equipe {
 	private Pays nationalite;
 	private List<Joueur> joueurs;
 	
+	private EquipeJDBC jdbc;
+	
 	public Equipe(int id, String nom, int rang, Pays nationalite) {
 		this.idEquipe = id;
 		this.nom = nom;
 		this.rang = rang;
 		this.nationalite = nationalite;
 		this.joueurs = new LinkedList<>();
+	}
+	
+	public Equipe() {
+		this.jdbc = new EquipeJDBC();
 	}
 
 	public int getIdEquipe() {
@@ -51,6 +58,18 @@ public class Equipe {
 	public boolean equipeExistante() throws Exception {
 		EquipeJDBC edb = new EquipeJDBC();
 		return edb.getAll().contains(this);
+	}
+	
+	public List<Equipe> toutesLesEquipes(){
+		List<Equipe> eq = null;
+		try {
+			eq =  jdbc.getAll();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return eq;
+		
 	}
 	
 	@Override
