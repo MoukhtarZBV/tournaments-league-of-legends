@@ -2,22 +2,19 @@ package ihm;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import Fonctions.BufferedImageResize;
-import Fonctions.PanelRenderer;
-import Fonctions.RoundedBorder;
+import components.BufferedImageResize;
+import components.PanelRenderer;
+import components.RoundedBorder;
 import controleur.ControleurGestionPoule;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -25,7 +22,6 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
@@ -41,12 +37,15 @@ public class VueGestionDeLaPoule extends JFrame {
 	private JPanel contentPane;
 	private JTable tableClassement;
 	private JTable tableMatches;
+	private Tournoi tournoi;
 	
 	/**
 	 * Create the frame.
 	 * @throws Exception 
 	 */
 	public VueGestionDeLaPoule(Tournoi tournoi) throws Exception {
+		
+		this.tournoi = tournoi;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 601, 425);
@@ -97,7 +96,7 @@ public class VueGestionDeLaPoule extends JFrame {
 			
         };
         
-        ControleurGestionPoule controleur = new ControleurGestionPoule(this, tournoi);
+        ControleurGestionPoule controleur = new ControleurGestionPoule(this);
         
 		this.tableMatches = new JTable(modeleMatches);
 		this.tableMatches.getColumnModel().getColumn(1).setCellRenderer(new PanelRenderer());
@@ -198,6 +197,10 @@ public class VueGestionDeLaPoule extends JFrame {
 		JLabel lblTitreTournoi = new JLabel(sb.toString());
 		lblTitreTournoi.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTitle.add(lblTitreTournoi, BorderLayout.SOUTH);
+	}
+	
+	public Tournoi getTournoi() {
+		return this.tournoi;
 	}
 	
 	public void setJTableMatches (Object[][] datas) throws IOException {

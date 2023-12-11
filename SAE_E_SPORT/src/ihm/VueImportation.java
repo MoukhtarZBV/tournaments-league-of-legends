@@ -1,33 +1,35 @@
 package ihm;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 import controleur.ControleurImportation;
-import modele.Joueur;
 import modele.Tournoi;
 
 import java.awt.Color;
-import javax.swing.table.TableModel;
+import java.awt.Component;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
 public class VueImportation extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel contentPane;
 	private DefaultTableModel modele;
 	public static List<String[]> data;
@@ -67,9 +69,7 @@ public class VueImportation extends JFrame {
 		JPanel panelCenter = new JPanel();
 		panelCenter.setBackground(new Color(255, 255, 255));
 		contentPane.add(panelCenter, BorderLayout.CENTER);
-		
-        Object[] columnsName = new Object [] {"", "Membres"};
-        
+		        
         this.modele = new DefaultTableModel();
 		panelCenter.setBorder(new EmptyBorder(50, 10, 0, 10));
 		panelCenter.setLayout(new BorderLayout(0, 0));
@@ -79,10 +79,17 @@ public class VueImportation extends JFrame {
 		panelCenter.add(panelTable, BorderLayout.CENTER);
 		panelTable.setLayout(new BorderLayout(0, 0));
 		
+		JPanel panelJTable = new JPanel();
+		panelJTable.setBorder(new EmptyBorder(0, 20, 20, 20));
+		panelJTable.setBackground(new Color(255, 255, 255));
+		panelJTable.setLayout(new BorderLayout());
+		panelTable.add(panelJTable, BorderLayout.CENTER);
+		
 		table = new JTable(modele);
 		table.setRowHeight(25);
 		table.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelTable.add(table, BorderLayout.CENTER);
+		this.couleurModeleTable();
+		panelJTable.add(table, BorderLayout.CENTER);
 		
 		this.panelMessage = new JPanel();
 		panelMessage.setBackground(new Color(255, 255, 255));
@@ -111,11 +118,42 @@ public class VueImportation extends JFrame {
 		btnImportation.setFocusable(false);
 		
 		btnValider = new JButton("Valider");
+		btnValider.setEnabled(false);
 		btnValider.setBackground(Color.WHITE);
         btnValider.setForeground(Color.BLACK);
 		panelNorth.add(btnValider);
 		btnValider.addActionListener(controleur);	
 		btnValider.setFocusable(false);
+	}
+	
+	public void setModeleTable () {
+		
+	}
+	
+	public void couleurModeleTable () {
+		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (row == 0) {
+                    cell.setBackground(new Color (56,111,215));
+                    cell.setForeground(new Color (255,255,255));
+                } else {
+                	cell.setBackground(Color.WHITE);
+                	cell.setForeground(new Color (0,0,0));
+                }
+                return cell;
+            }
+        });
+	}
+	
+	public void changerBtnValider(boolean etat) {
+		this.btnValider.setEnabled(etat);
 	}
 	
 	public DefaultTableModel getModel() {

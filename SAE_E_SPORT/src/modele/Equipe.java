@@ -48,9 +48,9 @@ public class Equipe {
 		return this.nationalite;
 	}
 	
-	public boolean equipeExistante() throws Exception {
+	public static boolean equipeExistante(Equipe e) throws Exception {
 		EquipeJDBC edb = new EquipeJDBC();
-		return edb.getAll().contains(this);
+		return edb.getAll().contains(e);
 	}
 	
 	@Override
