@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import Fonctions.LireCSV;
 import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import dao.JoueurJDBC;
@@ -21,8 +22,6 @@ import dao.ParticiperJDBC;
 import ihm.VueImportation;
 import modele.Equipe;
 import modele.Joueur;
-import modele.LireCSV;
-import modele.Participer;
 import modele.Pays;
 
 public class ControleurImportation implements ActionListener{
