@@ -12,6 +12,15 @@ public class Palette {
 	public static final Color WARDEN = new Color( 17,  55,  59);
 	public static final Color COOL   = new Color(229, 239, 239);
 	
+	public static final Color ULTRA_DARK = new Color( 17,  17,  17);
+	public static final Color DARK_GRAY  = new Color( 25,  25,  25);
+	public static final Color GRAY       = new Color( 40,  40,  40);
+	public static final Color LIGHT_GRAY = new Color(200, 200, 200);
+	
+	public static final Color DARK_BLUE  = new Color( 35,  43,  69);
+	public static final Color BLUE       = new Color( 44,  55,  86);
+	public static final Color LIGHT_BLUE = new Color( 63,  78, 125);
+	
 	// Couleurs erreurs et succes
 	public static final Color VERT      = new Color( 50, 155,  50);
 	public static final Color FOND_VERT = new Color(204, 255, 204);
