@@ -173,7 +173,7 @@ public class VueTournoi extends JFrame {
 		panel_4.setBackground(new Color(3, 54, 49));
 		panel_1.add(panel_4, BorderLayout.EAST);
 		
-		textField = new JTextFieldArrondi(5);
+		textField = new JTextFieldArrondi();
 		textField.setCaretColor(new Color(3, 54, 49));
 		textField.setBackground(new Color(227, 166, 64));
 		textField.setFont(new Font("Dubai", Font.PLAIN, 0));

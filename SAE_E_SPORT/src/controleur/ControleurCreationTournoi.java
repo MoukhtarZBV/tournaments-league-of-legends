@@ -37,13 +37,13 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
-			if (bouton.getText() == "Annuler") {
+			if (bouton.getName().equals("Annuler")) {
 				vue.dispose();
 				Tournoi t = new Tournoi();
 				VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
 				vue.setVisible(true);
 			}
-			if (bouton.getText() == "Valider") {
+			if (bouton.getName().equals("Valider")) {
 				if (vue.champVide()) {
 					vue.afficherMessageErreur("Veuillez remplir tous les champs");
 				} else if (vue.nomTropLong()) {
