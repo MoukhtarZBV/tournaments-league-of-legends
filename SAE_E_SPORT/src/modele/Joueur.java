@@ -39,16 +39,16 @@ public class Joueur {
 		this.equipe = e;
 	}
 	
-	public boolean verifierJoueur(Equipe eq) throws Exception {
+	public boolean presentDansAutreEquipe() throws Exception {
 		EquipeJDBC edb = new EquipeJDBC();
 		for (Equipe e : edb.getAll()) {
 			for (Joueur j : e.getJoueurs()) {
-				if (j.equals(this) && !(j.getEquipe().equals(eq))) {
-					return false;
+				if (j.equals(this) && !(j.getEquipe().equals(this.equipe))) {
+					return true;
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	// Overrides
@@ -72,6 +72,6 @@ public class Joueur {
 	
 	@Override
 	public String toString() {
-		return String.format("Joueur ID[%d], %s", this.getId(), this.getPseudo());
+		return String.format("Joueur ID[%d] : %s", this.getId(), this.getPseudo());
 	}
 }

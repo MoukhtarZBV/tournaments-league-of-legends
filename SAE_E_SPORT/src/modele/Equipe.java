@@ -48,9 +48,9 @@ public class Equipe {
 		return this.nationalite;
 	}
 	
-	public static boolean verifierEquipe(Equipe e) throws Exception {
+	public boolean equipeExistante() throws Exception {
 		EquipeJDBC edb = new EquipeJDBC();
-		return !(edb.getAll().contains(e));
+		return edb.getAll().contains(this);
 	}
 	
 	@Override
@@ -73,7 +73,7 @@ public class Equipe {
 	@Override
 	public String toString() {
 		return "Equipe [ID : "+ this.idEquipe + ", nom=" + this.nom + ", rang=" + this.rang + ", nationalite=" + this.nationalite +
-				", joueurs=" + this.joueurs;
+				", joueurs=" + this.joueurs + "\n";
 	}
 	
 }
