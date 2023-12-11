@@ -1,5 +1,6 @@
 package components;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
@@ -17,13 +18,13 @@ public class JTextFieldArrondi extends JTextField {
 	    
 	    protected void paintComponent(Graphics g) {
 	         g.setColor(getBackground());
-	         g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 20, 20);
+	         g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 10, 10);
 	         super.paintComponent(g);
 	    }
 	    
 	    protected void paintBorder(Graphics g) {
-	         g.setColor(getBackground());
-	         g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 20, 20);
+	         g.setColor(Color.WHITE);
+	         g.drawLine(3, getHeight()-1, getWidth()-3, getHeight()-1);
 	    }
 	    
 	    public boolean contains(int x, int y) {

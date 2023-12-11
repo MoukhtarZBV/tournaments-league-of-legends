@@ -19,6 +19,8 @@ import javax.swing.JFormattedTextField;
 
 import dao.TournoiJDBC;
 import ihm.VueCreationTournoi;
+import ihm.VueListeEquipe;
+import ihm.VueListeTournois;
 import modele.Tournoi;
 
 public class ControleurCreationTournoi implements ActionListener, FocusListener {
@@ -35,10 +37,13 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
-			if (bouton.getText() == "Annuler") {
+			if (bouton.getName().equals("Annuler")) {
 				vue.dispose();
+				Tournoi t = new Tournoi();
+				VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
+				vue.setVisible(true);
 			}
-			if (bouton.getText() == "Valider") {
+			if (bouton.getName().equals("Valider")) {
 				if (vue.champVide()) {
 					vue.afficherMessageErreur("Veuillez remplir tous les champs");
 				} else if (vue.nomTropLong()) {
@@ -68,6 +73,11 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 									System.out.println("Tournoi : " + t.getNomTournoi() + " | Du " + t.getDateDebut() + " au " + t.getDateFin());
 								}
 								vue.effacerMessageErreur();
+								// maj dans la vue liste des tournois 
+								Tournoi t = new Tournoi();
+								VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
+								vue.setVisible(true);
+								this.vue.dispose();
 							} catch (IllegalArgumentException iae) {
 								vue.afficherMessageErreur(iae.getMessage());
 							}
