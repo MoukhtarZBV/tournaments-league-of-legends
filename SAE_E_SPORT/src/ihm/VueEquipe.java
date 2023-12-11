@@ -151,11 +151,15 @@ public class VueEquipe extends JFrame {
 		btnSave.setMaximumSize(new Dimension(63, 21));
 		btnSave.addActionListener(controleur);
 		panelButton.add(btnSave);
+		btnSave.setBackground(Color.WHITE);
+		btnSave.setFocusable(false);
 		
 		btnBack = new JButton("Retour");
 		btnBack.addActionListener(controleur);
 		panelButton.add(btnBack);
 		panelButton.setBorder(new EmptyBorder(20, 20, 0, 20));
+		btnBack.setBackground(Color.WHITE);
+		btnBack.setFocusable(false);
 		
 		right = new JPanel();
 		right.setBackground(new Color(255, 255, 255));

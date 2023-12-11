@@ -114,18 +114,21 @@ public class VueImportation extends JFrame {
         btnRetour.setForeground(Color.BLACK);
 		panelNorth.add(btnRetour);
 		btnRetour.addActionListener(controleur);
+		btnRetour.setFocusable(false);
 		
 		JButton btnImportation = new JButton("Importer");
 		btnImportation.setBackground(Color.WHITE);
         btnImportation.setForeground(Color.BLACK);
 		panelNorth.add(btnImportation);
 		btnImportation.addActionListener(controleur);
+		btnImportation.setFocusable(false);
 		
 		btnValider = new JButton("Valider");
 		btnValider.setBackground(Color.WHITE);
         btnValider.setForeground(Color.BLACK);
 		panelNorth.add(btnValider);
 		btnValider.addActionListener(controleur);	
+		btnValider.setFocusable(false);
 	}
 	
 	public DefaultTableModel getModel() {
