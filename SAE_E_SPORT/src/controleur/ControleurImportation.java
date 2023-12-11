@@ -14,13 +14,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import Fonctions.LireCSV;
 import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import dao.JoueurJDBC;
 import ihm.VueImportation;
 import modele.Equipe;
 import modele.Joueur;
-import modele.LireCSV;
 import modele.Pays;
 
 public class ControleurImportation implements ActionListener{
@@ -140,7 +140,7 @@ public class ControleurImportation implements ActionListener{
 	    				}
 	    			}
 	    			// On ajoute l'équipe à la base si elle n'est pas déjà présente
-	    			if (equipe.verifierEquipe() && !roll) {
+	    			if (Equipe.verifierEquipe(equipe) && !roll) {
 	    				equipeDB.add(equipe);
 	    				for (Joueur j : equipe.getJoueurs()) {
 							joueurDB.add(j);
