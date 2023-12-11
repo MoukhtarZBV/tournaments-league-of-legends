@@ -25,6 +25,7 @@ import java.awt.Image;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
@@ -68,18 +69,31 @@ public class VueListeEquipe extends JFrame {
 
 		///// PANEL PRINCIPAL  \\\\\
 		JPanel contentPane = new JPanel();
-		contentPane.setBackground(Palette.WHITE);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		
+		///// MENU BAR \\\\\
+		JPanel panelSide = new JPanel();
+		panelSide.setBackground(Palette.DARK_GRAY);
+		panelSide.setPreferredSize(new Dimension(100, 600));
+		contentPane.add(panelSide, BorderLayout.WEST);
+		
+		
+
+		///// PANEL MAIN \\\\\
+		JPanel panelMain = new JPanel();
+		panelMain.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panelMain, BorderLayout.CENTER);
 		
 		
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
-		panelTop.setBackground(Palette.COOL);
-		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
-		panelTop.setLayout(new BorderLayout(0, 0));
-		contentPane.add(panelTop, BorderLayout.NORTH);
+		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setBackground(Palette.DARK_GRAY);
+		panelTop.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
+		panelMain.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
 		JLabel lblTitre = new JLabel("Équipes");
@@ -89,22 +103,12 @@ public class VueListeEquipe extends JFrame {
 		lblTitre.setFont(Police.GROS_TITRE);
 		panelTop.add(lblTitre, BorderLayout.CENTER);
 		
-		// Ligne colorée séparatrice
-		JTextField ligneColoree = new JTextField();
-		ligneColoree.setBackground(Palette.WARDEN);
-		ligneColoree.setEnabled(false);
-		ligneColoree.setEditable(false);
-		ligneColoree.setFont(Police.LIGNE);
-		panelTop.add(ligneColoree, BorderLayout.SOUTH);
 		
 		
-		
-		/// PANEL MAIN \\\
-		JPanel panelMain = new JPanel();
-		panelMain.setBackground(Palette.WHITE);
-		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
-		panelMain.setLayout(new BorderLayout(10, 10));
-		contentPane.add(panelMain, BorderLayout.CENTER);
+		///// PANEL CENTER \\\\\
+		JPanel panelCenter = new JPanel();
+		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelMain.add(panelCenter, BorderLayout.CENTER);
 		
 		
 		/// PANEL RECHERCHE \\\
@@ -112,7 +116,7 @@ public class VueListeEquipe extends JFrame {
 		panelSearch.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panelSearch.setBackground(Palette.COOL);
 		panelSearch.setLayout(new BorderLayout(5, 0));
-		panelMain.add(panelSearch, BorderLayout.NORTH);
+		panelCenter.add(panelSearch, BorderLayout.NORTH);
 		
 		// Bouton valider
 		JPanel panelValider = new JPanel();
@@ -151,7 +155,7 @@ public class VueListeEquipe extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeEquipes);
-		panelMain.add(scrollPane, BorderLayout.CENTER);
+		panelCenter.add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	public String getSearch() {
