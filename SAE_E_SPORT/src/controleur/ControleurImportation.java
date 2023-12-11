@@ -22,6 +22,7 @@ import dao.ParticiperJDBC;
 import ihm.VueImportation;
 import modele.Equipe;
 import modele.Joueur;
+import modele.Participer;
 import modele.Pays;
 
 public class ControleurImportation implements ActionListener{
