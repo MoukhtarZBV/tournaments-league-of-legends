@@ -111,6 +111,7 @@ public class VueAccueilAdmin extends JFrame {
 		JButton btnEquipe = new JButton("Liste équipes");
 		btnEquipe.setBackground(Color.WHITE);
 		panelCadreEquipe.add(btnEquipe);
+		btnEquipe.setFocusable(false);
 		
 		JPanel panelTournoi = new JPanel();
 		panelTournoi.setBackground(new Color(255, 255, 255));
@@ -133,6 +134,7 @@ public class VueAccueilAdmin extends JFrame {
 		JButton btnTournoi = new JButton("Liste Tournois");
 		btnTournoi.setBackground(Color.WHITE);
 		panelCadreTournoi.add(btnTournoi);
+		btnTournoi.setFocusable(false);
 		
 		
 		
@@ -158,6 +160,7 @@ public class VueAccueilAdmin extends JFrame {
 		JButton btnHistorique = new JButton("Historique");
 		btnHistorique.setBackground(Color.WHITE);
 		panelCadreHistorique.add(btnHistorique);
+		btnHistorique.setFocusable(false);
 	}
 
 }

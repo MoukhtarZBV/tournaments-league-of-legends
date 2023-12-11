@@ -14,13 +14,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import Fonctions.LireCSV;
 import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import dao.JoueurJDBC;
+import dao.ParticiperJDBC;
 import ihm.VueImportation;
 import modele.Equipe;
 import modele.Joueur;
-import modele.LireCSV;
+import modele.Participer;
 import modele.Pays;
 
 public class ControleurImportation implements ActionListener{
@@ -79,7 +81,7 @@ public class ControleurImportation implements ActionListener{
 		                    if (row == 0) {
 		                        cell.setBackground(new Color (56,111,215));
 		                        cell.setForeground(new Color (255,255,255));
-		                    }else {
+		                    } else {
 		                    	cell.setBackground(Color.WHITE);
 		                    	cell.setForeground(new Color (0,0,0));
 		                    }
@@ -111,8 +113,8 @@ public class ControleurImportation implements ActionListener{
 	            e1.printStackTrace();
 	        }
 	    }
-	    if(bouton.getText().equals("Valider") && this.data != null) {
-	    	boolean roll = false;
+	    if (bouton.getText().equals("Valider") && this.data != null) {
+	    	boolean rollback = false;
 	    	try {
 				ConnectionJDBC.getConnection().setAutoCommit(false);
 			} catch (SQLException e2) {
@@ -120,45 +122,49 @@ public class ControleurImportation implements ActionListener{
 			}
 	    	EquipeJDBC equipeDB = new EquipeJDBC();
 	    	JoueurJDBC joueurDB = new JoueurJDBC();
-	    	for(int i = 1; i<this.data.size();i=i+5) {
+	    	ParticiperJDBC participerDB = new ParticiperJDBC();
+	    	
+	    	
+	    	for (int ligne = 1; ligne<this.data.size(); ligne += 5) {
 	    		try {
-	    			Equipe equipe = new Equipe(equipeDB.getNextValueSequence(), this.data.get(i)[4], Integer.parseInt(this.data.get(i)[5]), Pays.getPays(data.get(i)[6]));
-	    			for (int j = i; j<i+5; j++) {
-	    				Joueur joueur = new Joueur(joueurDB.getNextValueSequence(), this.data.get(j)[7], equipe);
-	    				equipe.ajouterJoueur(joueur);
-	    				// Si un joueur est déjà dans une autre équipe
-	    				if (!joueur.verifierJoueur(equipe)) {
-	    					roll = true;
-	    					this.vue.setMsgErreur("Un ou plusieurs joueurs appartiennent à plus d'une équipe");
-	    				}
+	    			String messageErreur = "";
+	    			System.out.println(ligne);
+	    			Equipe equipe = equipeDB.getByNom(this.data.get(ligne)[4]).orElse(null);
+	    			if (equipe == null) {
+	    				System.out.println("Equipe pas presente");
+	    				// Creer l'equipe et lui attribuer les joueurs
+		    			equipe = new Equipe(EquipeJDBC.getNextValueSequence(), this.data.get(ligne)[4], Integer.parseInt(this.data.get(ligne)[5]), Pays.getPays(data.get(ligne)[6]));
+		    			for (int j = ligne; j<ligne+5; j++) {
+		    				Joueur joueur = new Joueur(JoueurJDBC.getNextValueSequence(), this.data.get(j)[7], equipe);
+		    				if (!joueur.presentDansAutreEquipe()) {
+		    					equipe.ajouterJoueur(joueur);
+		    				} else {
+		    					rollback = true;
+		    				}
+		    			}
+		    			if (!rollback) {
+		    				equipeDB.add(equipe);
+		    			}
+		    			System.out.println("--- Equipe ajoutee ---\n" + equipe);
 	    			}
-	    			// si la composition a changé
-	    			if(equipeDB.getByNom(equipe.getNom()).orElse(null) != null) {
-	    				if (!(equipe.getJoueurs().equals(equipeDB.getByNom(equipe.getNom()).get().getJoueurs()))) {
-	    					roll = true;
-	    					this.vue.setMsgErreur("La composition d'une ou plusieurs équipes ne correspond pas");
-	    				}
+	    			System.out.println("Equipe presente");
+	    			if (rollback) {
+	    				ConnectionJDBC.getConnection().rollback();
+	    				this.vue.setColorMessage(new Color(255, 204, 204));
+	    				this.vue.setMsgErreur("Un ou plusieurs joueurs appartiennent à plus d'une équipe");
+	    			} else {
+	    				ConnectionJDBC.getConnection().commit();
+	    				this.vue.setColorMessage(new Color(204, 255, 204));
+	    				this.vue.setMsgErreur("Les équipes ont bien été importées");
+	    				Participer participer = new Participer(equipe, vue.getTournoi());
+						participerDB.add(participer);
 	    			}
-	    			// On ajoute l'équipe à la base si elle n'est pas déjà présente
-	    			if (equipe.verifierEquipe() && !roll) {
-	    				equipeDB.add(equipe);
-	    			}
-					// si composition ne correspond pas rollaback
-					if (roll == true) {
-						ConnectionJDBC.getConnection().rollback();
-						this.vue.setColorMessage(new Color(255, 204, 204));
-					// sinon succès de l'importation
-					}else {
-						ConnectionJDBC.getConnection().commit();
-						this.vue.setColorMessage(new Color(204, 255, 204));
-						this.vue.setMsgErreur("Les équipes ont bien été importées");
-					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 	    	}
 	    }
-	    if(bouton.getText().equals("Retour")) {
+	    if (bouton.getText().equals("Retour")) {
 	    	this.vue.dispose();
 	    }
 	}

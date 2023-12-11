@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+import java.awt.Color;
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -161,10 +163,15 @@ public class VueEquipe extends JFrame {
 		JButton btnSave = new JButton("Sauvegarder");
 		btnSave.addActionListener(controleur);
 		panelButton.add(btnSave);
+		btnSave.setBackground(Color.WHITE);
+		btnSave.setFocusable(false);
 		
 		JButton btnBack = new JButton("Retour");
 		btnBack.addActionListener(controleur);
 		panelButton.add(btnBack);
+		panelButton.setBorder(new EmptyBorder(20, 20, 0, 20));
+		btnBack.setBackground(Color.WHITE);
+		btnBack.setFocusable(false);
 		
 		
 		/// RIGHT SIDE \\\

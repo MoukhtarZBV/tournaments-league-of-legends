@@ -1,4 +1,4 @@
-package modele;
+package Fonctions;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

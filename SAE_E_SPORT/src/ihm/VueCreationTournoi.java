@@ -34,8 +34,8 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 
 import components.JTextFieldArrondi;
-import controleur.ControleurTournoi;
 import javax.swing.border.MatteBorder;
+import controleur.ControleurCreationTournoi;
 
 public class VueCreationTournoi extends JFrame {
 	
@@ -54,7 +54,7 @@ public class VueCreationTournoi extends JFrame {
 	// Création la fenêtre
 	public VueCreationTournoi() {
 		
-		ControleurTournoi controleur = new ControleurTournoi(this);
+		ControleurCreationTournoi controleur = new ControleurCreationTournoi(this);
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

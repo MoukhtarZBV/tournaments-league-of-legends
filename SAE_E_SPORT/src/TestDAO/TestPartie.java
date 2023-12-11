@@ -1,11 +1,7 @@
 package TestDAO;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Optional;
 
 import dao.ConnectionJDBC;
@@ -15,7 +11,6 @@ import dao.JoueurJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
 import modele.Equipe;
-import modele.Jouer;
 import modele.Joueur;
 import modele.Niveau;
 import modele.Partie;
@@ -45,14 +40,14 @@ public class TestPartie {
 			System.out.println(t);
 		}
 
-		JoueurJDBC jdb = new JoueurJDBC();
+		JoueurJDBC JoueurJDBC = new JoueurJDBC();
 		
 		Equipe e1 = new Equipe(EquipeJDBC.getNextValueSequence(), "T1", 1000, Pays.FR);
-		Joueur j1 = new Joueur(jdb.getNextValueSequence(), "Zeus", e1);
-		Joueur j2 = new Joueur(jdb.getNextValueSequence(), "Oner", e1);
-		Joueur j3 = new Joueur(jdb.getNextValueSequence(), "Faker", e1);
-		Joueur j4 = new Joueur(jdb.getNextValueSequence(), "Gumayusi", e1);
-		Joueur j5 = new Joueur(jdb.getNextValueSequence(), "Keria", e1);
+		Joueur j1 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Zeus", e1);
+		Joueur j2 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Oner", e1);
+		Joueur j3 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Faker", e1);
+		Joueur j4 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Gumayusi", e1);
+		Joueur j5 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Keria", e1);
 		
 		e1.ajouterJoueur(j1, j2, j3, j4, j5);
 		
@@ -60,11 +55,11 @@ public class TestPartie {
 		eJDBC.add(e1);
 		
 		Equipe e2 = new Equipe(2, "GenG", 1000, Pays.FR);
-		Joueur j11 = new Joueur(jdb.getNextValueSequence(), "Doran", e2);
-		Joueur j21 = new Joueur(jdb.getNextValueSequence(), "Peanut", e2);
-		Joueur j31 = new Joueur(jdb.getNextValueSequence(), "Chovy", e2);
-		Joueur j41 = new Joueur(jdb.getNextValueSequence(), "Adc", e2);
-		Joueur j51 = new Joueur(jdb.getNextValueSequence(), "Sp", e2);
+		Joueur j11 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Doran", e2);
+		Joueur j21 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Peanut", e2);
+		Joueur j31 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Chovy", e2);
+		Joueur j41 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Adc", e2);
+		Joueur j51 = new Joueur(dao.JoueurJDBC.getNextValueSequence(), "Sp", e2);
 		e2.ajouterJoueur(j11,j21,j31,j41,j51);
 		
 		eJDBC.add(e2);
@@ -73,7 +68,7 @@ public class TestPartie {
 			System.out.println(e);
 		}
 		
-		for (Joueur joueur : jdb.getAll()) {
+		for (Joueur joueur : JoueurJDBC.getAll()) {
 			System.out.println(joueur);
 		}
 		
@@ -101,6 +96,12 @@ public class TestPartie {
 		}
 		System.out.println("\ndelete Partie OK\n");
 		
+		p1.setEquipeGagnant(2);
+		pjdbc.update(p1);
+		for(Partie partie : pjdbc.getAll()) {
+			System.out.println(partie);
+		}
+		System.out.println("\nUpdate Partie OK\n");
 		ConnectionJDBC.closeConnection();
 	}
 

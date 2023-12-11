@@ -59,31 +59,27 @@ public class ParticiperJDBC implements ParticiperDAO{
 	}
 
 	@Override
-	public boolean update(Participer value) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean update(Participer p) throws Exception {
+		boolean res = false;
+		try {
+			CallableStatement cs = ConnectionJDBC.getConnection().
+					prepareCall("update Participer set nbPointsGagnes = ?, nbMatchsJoues = ?, nbMatchsGagnes = ? where idTournoi = ? and idEquipe = ?");
+			cs.setInt(1, p.getNbPointsGagnes());
+			cs.setInt(2, p.getNbMatchsJoues());
+			cs.setInt(3, p.getNbMatchsGagnes());
+			cs.setInt(4, p.getTournoi().getIdTournoi());
+			cs.setInt(5, p.getEquipe().getIdEquipe());
+			cs.executeUpdate();
+			res = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	@Override
-	public boolean delete(Participer value) throws Exception {
+	public boolean delete(Participer p) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	public List<Equipe> listeEquipes(Tournoi tournoi){
-		List<Equipe> listeEquipes = new ArrayList<>();
-		try {
-            PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select equipe.* from Equipe, Tournoi, Participer where participer.idTournoi = ? and equipe.idEquipe = participer.idEquipe");
-            st.setInt(1, tournoi.getIdTournoi());
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                Equipe equipe = new Equipe(rs.getInt("idEquipe"), rs.getString("nom"), rs.getInt("rang"), Pays.getPays(rs.getString("nationalite")));
-                listeEquipes.add(equipe);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return listeEquipes;
-	}
-	
+	}	
 }
