@@ -1,6 +1,8 @@
 package modele;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,11 +20,11 @@ import Images.Images;
 public class ModelePoule {
 
 	private List<Partie> parties;
-	private Map<String, Participer> participers;
+	private Map<String, Participer> participations;
 	
 	public ModelePoule(Tournoi t) throws Exception {
 		this.parties = this.partiesParTournoi(t);
-		this.participers = this.participerParTournoi(t);
+		this.participations = this.participerParTournoi(t);
 	}
 	
 	private List<Partie> partiesParTournoi(Tournoi t) throws Exception{
@@ -53,15 +55,15 @@ public class ModelePoule {
 				else eq = p.getEquipe2().getNom();
 				
 				// Recalculer les points et les matches gagnés 
-				this.participers.get(eq).setNbPointsGagnes(this.participers.get(eq).getNbPointsGagnes()-10);
-				this.participers.get(eq).setNbMatchsGagnes(this.participers.get(eq).getNbMatchsGagnes()-1);
+				this.participations.get(eq).setNbPointsGagnes(this.participations.get(eq).getNbPointsGagnes()-10);
+				this.participations.get(eq).setNbMatchsGagnes(this.participations.get(eq).getNbMatchsGagnes()-1);
 				if(eGagne == gagnant) {
 					p.setEquipeGagnant(-1);
 				}
 			}
 			if (eGagne != gagnant || eGagne == -1) {
 				p.setEquipeGagnant(gagnant);
-				Participer participer = this.participers.get(gagnant == 1 ? p.getEquipe1().getNom() : p.getEquipe2().getNom());
+				Participer participer = this.participations.get(gagnant == 1 ? p.getEquipe1().getNom() : p.getEquipe2().getNom());
 				participer.setNbPointsGagnes(participer.getNbPointsGagnes()+10);
 				participer.setNbMatchsGagnes(participer.getNbMatchsGagnes()+1);
 			} 
@@ -86,7 +88,7 @@ public class ModelePoule {
 	}
 	
 	public Object[][] classement () {
-		List<Map.Entry<String, Participer>> sortedEntries = new ArrayList<>(this.participers.entrySet());
+		List<Map.Entry<String, Participer>> sortedEntries = new ArrayList<>(this.participations.entrySet());
 
         // Trie les participations par getNbPointsGagnes()
         Collections.sort(sortedEntries, Comparator.comparing(entry -> entry.getValue().getNbPointsGagnes(), Comparator.reverseOrder()));
@@ -110,10 +112,26 @@ public class ModelePoule {
 		for (Partie p : this.parties) {
 			res = pdb.update(p);
 		}
-		for (Participer p : this.participers.values()) {
+		for (Participer p : this.participations.values()) {
 			res &= partdb.update(p);
 		}
 		return res;
+	}
+	
+	public void generationPoule(Tournoi t){
+		List<Equipe> equipes = new ArrayList<>(); 
+		// Récupération de la liste des équipes qui participent au tournoi
+		for(Entry<String, Participer> part : this.participations.entrySet()) {
+			equipes.add(part.getValue().getEquipe());
+		}
+		// Création des matchs
+		for(int i = 0; i < equipes.size(); i++) {
+			for (int j = i+1; j < equipes.size(); j++) {
+				Partie partie = new Partie(Date.valueOf(LocalDate.of(2023, 12, 28)), "12:00", "Poule", equipes.get(i), t);
+				partie.setEquipeGagnant(-1);
+				partie.setEquipe2(equipes.get(j));
+			}
+		}
 	}
 	
 }

@@ -107,6 +107,7 @@ public class TestVueGestionPoule {
 		
 		eJDBC.add(e4);
 		
+		// Création des matchs
 		Partie p1 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 28)), "12:00", "Final", e1, t);
 		p1.setEquipeGagnant(-1);
 		p1.setEquipe2(e2);
@@ -129,6 +130,7 @@ public class TestVueGestionPoule {
 		
 		System.out.println("Add partie OK\n");
 		
+		// Nb matchs joués et points gagnés par chacune des équipes
 		Participer part1 = new Participer(e1, t);
 		Participer part2 = new Participer(e2, t);
 		Participer part3 = new Participer(e3, t);

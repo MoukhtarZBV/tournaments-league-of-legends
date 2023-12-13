@@ -1,12 +1,13 @@
 package modele;
 
 import java.sql.Date;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import dao.TournoiJDBC;
@@ -164,5 +165,12 @@ public class Tournoi {
 	
 	public void ajouterTournoi(Tournoi tournoi) throws Exception {
 		jdbc.add(tournoi);
+	}
+	
+	public int getDureeTournoi() {
+		int duree = 0;
+		long differenceInMilliseconds = Math.abs(this.dateFin.getTime() - this.dateDebut.getTime());
+	    duree =  (int) TimeUnit.DAYS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
+	    return duree;
 	}
 }

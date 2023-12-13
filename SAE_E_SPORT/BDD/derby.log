@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Dec 11 14:56:33 CET 2023:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-018c-592a-4a82-ffffccd3fcad 
+Wed Dec 13 09:29:37 CET 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-018c-624b-b2b6-ffffccd3fcad 
 on database directory C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT\BDD\BDD  with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@22d8cfe0 
 Loaded from file:/C:/Users/David%20Marquet/Documents/GitHub/SAE-e-sport/SAE_E_SPORT/derby.jar
 java.vendor=Eclipse Adoptium
@@ -8,3 +8,28 @@ java.runtime.version=17.0.6+10
 user.dir=C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT
 derby.system.home=C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT/BDD
 Database Class Loader started - derby.database.classpath=''
+Wed Dec 13 09:29:41 CET 2023 Thread[main,5,main] (XID = 401415), (SESSIONID = 3), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
+Wed Dec 13 09:29:41 CET 2023 Thread[main,5,main] (XID = 401415), (SESSIONID = 3), (DATABASE = BDD), (DRDAID = null), Failed Statement is: select * from Participer where tournoi = ?
+ERROR 42X04: Column 'TOURNOI' is either not in any table in the FROM list or appears within a join specification and is outside the scope of the join specification or appears in a HAVING clause and is not in the GROUP BY list. If this is a CREATE or ALTER TABLE  statement then 'TOURNOI' is not a column in the target table.
+	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:286)
+	at org.apache.derby.impl.sql.compile.ColumnReference.bindExpression(ColumnReference.java:405)
+	at org.apache.derby.impl.sql.compile.BinaryOperatorNode.bindExpression(BinaryOperatorNode.java:287)
+	at org.apache.derby.impl.sql.compile.BinaryComparisonOperatorNode.bindExpression(BinaryComparisonOperatorNode.java:131)
+	at org.apache.derby.impl.sql.compile.SelectNode.bindExpressions(SelectNode.java:582)
+	at org.apache.derby.impl.sql.compile.DMLStatementNode.bindExpressions(DMLStatementNode.java:227)
+	at org.apache.derby.impl.sql.compile.DMLStatementNode.bind(DMLStatementNode.java:140)
+	at org.apache.derby.impl.sql.compile.CursorNode.bindStatement(CursorNode.java:253)
+	at org.apache.derby.impl.sql.GenericStatement.prepMinion(GenericStatement.java:327)
+	at org.apache.derby.impl.sql.GenericStatement.prepare(GenericStatement.java:93)
+	at org.apache.derby.impl.sql.conn.GenericLanguageConnectionContext.prepareInternalStatement(GenericLanguageConnectionContext.java:1103)
+	at org.apache.derby.impl.jdbc.EmbedPreparedStatement.<init>(EmbedPreparedStatement.java:131)
+	at org.apache.derby.impl.jdbc.EmbedCallableStatement.<init>(EmbedCallableStatement.java:69)
+	at org.apache.derby.impl.jdbc.EmbedCallableStatement20.<init>(EmbedCallableStatement20.java:85)
+	at org.apache.derby.impl.jdbc.EmbedCallableStatement30.<init>(EmbedCallableStatement30.java:61)
+	at org.apache.derby.impl.jdbc.EmbedCallableStatement40.<init>(EmbedCallableStatement40.java:48)
+	at org.apache.derby.jdbc.Driver40.newEmbedCallableStatement(Driver40.java:126)
+	at org.apache.derby.impl.jdbc.EmbedConnection.prepareCall(EmbedConnection.java:1707)
+	at org.apache.derby.impl.jdbc.EmbedConnection.prepareCall(EmbedConnection.java:1656)
+	at dao.ParticiperJDBC.getEquipesByTournoi(ParticiperJDBC.java:45)
+	at TestDAO.TestParticiper.main(TestParticiper.java:66)
+Cleanup action completed
