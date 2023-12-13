@@ -34,7 +34,7 @@ public class CompteJDBC implements CompteDAO{
 	}
 
 	@Override
-	public Optional<Compte> getById(Integer id) throws Exception {
+	public Optional<Compte> getById(Integer id) {
 		Optional<Compte> compte = Optional.empty();
 		try {
 			String req = "SELECT * FROM Compte WHERE idCompte = ?";

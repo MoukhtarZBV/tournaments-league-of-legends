@@ -44,6 +44,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import javax.swing.border.MatteBorder;
 
 public class VueTournoi extends JFrame {
 
@@ -59,9 +60,10 @@ public class VueTournoi extends JFrame {
 	public VueTournoi(Tournoi tournoi) {
 		this.tournoi = tournoi;
 		ControleurDetailsTournoi controleur = new ControleurDetailsTournoi(this);
+		Ecran.setup();
 		
-		System.out.println(tournoi.getNomTournoi());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setBounds(510, 240, 900, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -76,126 +78,104 @@ public class VueTournoi extends JFrame {
 		panelSide.setPreferredSize(new Dimension(100, 600));
 		contentPane.add(panelSide, BorderLayout.WEST);
 
-
 		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
 		panelMain.setLayout(new BorderLayout(0, 0));
 		panelMain.setBackground(Palette.GRAY);
 		contentPane.add(panelMain, BorderLayout.CENTER);
-		
-		/***********************************************/
-		
+
+		///// TOP DU MAIN \\\\\
 		JPanel panelTop = new JPanel();
 		panelTop.setBorder(new EmptyBorder(10, 50, 10, 50));
 		panelTop.setBackground(Palette.GRAY);
 		panelMain.add(panelTop, BorderLayout.NORTH);
 		panelTop.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		///// BULLE INFO PAYS \\\\\
-		PanelRound panelPaysBorder = new PanelRound();
-		FlowLayout flowLayout = (FlowLayout) panelPaysBorder.getLayout();
-		flowLayout.setVgap(1);
-		flowLayout.setHgap(1);
-		panelPaysBorder.setBorder(new EmptyBorder(1, 1, 1, 1));
-		panelPaysBorder.setRoundTopLeft(20);
-		panelPaysBorder.setRoundTopRight(20);
-		panelPaysBorder.setRoundBottomRight(20);
-		panelPaysBorder.setBackground(Palette.WHITE);
-		
-		PanelRound panelPays = new PanelRound();
-		panelPays.setBorder(new EmptyBorder(10, 20, 10, 20));
-		panelPays.setRoundTopLeft(20);
-		panelPays.setRoundTopRight(20);
-		panelPays.setRoundBottomRight(20);
-		panelPays.setBackground(Palette.DARK_GRAY);
-		panelPays.setLayout(new BorderLayout(0, 0));
-		
-		panelPaysBorder.add(panelPays);
-		
-		JLabel lblIconePays = new JLabel(" Pays");
-		lblIconePays.setForeground(new Color(255, 255, 255));
-		lblIconePays.setFont(new Font("Arial", Font.BOLD, 16));
-		lblIconePays.setIcon(Images.EARTH);
-		panelPays.add(lblIconePays, BorderLayout.NORTH);
-		
-		JLabel lblPays = new JLabel("France");
-		lblPays.setForeground(new Color(255, 255, 255));
-		lblPays.setFont(new Font("Arial", Font.BOLD, 12));
-		panelPays.add(lblPays, BorderLayout.SOUTH);
-		panelTop.add(panelPaysBorder);
-
-		///// BULLE INFO NIVEAU \\\\\
-		PanelRound panelNiveauBorder = new PanelRound();
-		flowLayout = (FlowLayout) panelNiveauBorder.getLayout();
-		flowLayout.setVgap(1);
-		flowLayout.setHgap(1);
-		panelNiveauBorder.setBorder(new EmptyBorder(1, 1, 1, 1));
-		panelNiveauBorder.setRoundTopLeft(20);
-		panelNiveauBorder.setRoundTopRight(20);
-		panelNiveauBorder.setRoundBottomRight(20);
-		panelNiveauBorder.setBackground(Palette.WHITE);
-
-		PanelRound panelNiveau = new PanelRound();
-		panelNiveau.setBorder(new EmptyBorder(10, 20, 10, 20));
-		panelNiveau.setRoundTopLeft(20);
-		panelNiveau.setRoundTopRight(20);
-		panelNiveau.setRoundBottomRight(20);
-		panelNiveau.setBackground(Palette.DARK_GRAY);
-		panelNiveau.setLayout(new BorderLayout(0, 0));
-
-		panelNiveauBorder.add(panelNiveau);
-
-		JLabel lblIconeNiveau = new JLabel(" Niveau");
-		lblIconeNiveau.setForeground(new Color(255, 255, 255));
-		lblIconeNiveau.setFont(new Font("Arial", Font.BOLD, 16));
-		lblIconeNiveau.setIcon(Images.LEVEL);
-		panelNiveau.add(lblIconeNiveau, BorderLayout.NORTH);
-
-		JLabel lblNiveau = new JLabel("National");
-		lblNiveau.setForeground(new Color(255, 255, 255));
-		lblNiveau.setFont(new Font("Arial", Font.BOLD, 12));
-		panelNiveau.add(lblNiveau, BorderLayout.SOUTH);
-		panelTop.add(panelNiveauBorder);
-		
-		/***********************************************/
-		
-		///// BULLE INFO NIVEAU \\\\\
 		JPanel panelCenter = new JPanel();
 		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
 		panelCenter.setBackground(Palette.DARK_GRAY);
 		panelMain.add(panelCenter, BorderLayout.CENTER);
+		panelCenter.setLayout(new BorderLayout(0, 0));
 		
-		GridBagLayout gb_panelCenter = new GridBagLayout();
-		gb_panelCenter.columnWidths  = new int[]   {774, 0};
-		gb_panelCenter.rowHeights    = new int[] {0, 50};
-		gb_panelCenter.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gb_panelCenter.rowWeights    = new double[]{1.0, 0.0};
-		panelCenter.setLayout(gb_panelCenter);
+		///// PANEL INFOS DU TOURNOI \\\\\
+		JPanel panelInfos = new JPanel();
+		panelInfos.setBackground(Palette.DARK_GRAY);
+		panelCenter.add(panelInfos, BorderLayout.NORTH);
+		panelInfos.setLayout(new BorderLayout(0, 0));
+
+		///// PANEL LIBELLE INFOS \\\\\
+		JPanel panelLibelleInfos = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelLibelleInfos.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panelLibelleInfos.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(255, 255, 255)));
+		panelLibelleInfos.setBackground(Palette.GRAY);
+		panelInfos.add(panelLibelleInfos, BorderLayout.NORTH);
+
+		JLabel lblInfosTournoi = new JLabel("A propos du tournoi");
+		lblInfosTournoi.setForeground(new Color(255, 255, 255));
+		lblInfosTournoi.setFont(Police.LABEL);
+		panelLibelleInfos.add(lblInfosTournoi);
+
+		///// PANEL BULLES INFOS \\\\\
+		JPanel panelBullesInfos = new JPanel();
+		panelBullesInfos.setBorder(new EmptyBorder(10, 0, 0, 0));
+		panelBullesInfos.setBackground(Palette.GRAY);
+		panelInfos.add(panelBullesInfos, BorderLayout.CENTER);
+
+		/********************************/
+		/************ BULLES ************/
+		/********************************/
 		
+		///// BULLE INFO PAYS \\\\\
+		PanelRound panelPaysBorder = creerBordureBulleInfo();
+		PanelRound panelPays = creerBulleInfo();
+		ajouterLibelleBulle(panelPays, "Pays", Images.EARTH);
+		ajouterInfoBulle(panelPays, tournoi.getPays().denomination());
+		panelPaysBorder.add(panelPays);
+		panelBullesInfos.add(panelPaysBorder);
+
+		///// BULLE INFO NIVEAU \\\\\
+		PanelRound panelNiveauBorder = creerBordureBulleInfo();
+		PanelRound panelNiveau = creerBulleInfo();
+		ajouterLibelleBulle(panelNiveau, "Niveau", Images.LEVEL);
+		ajouterInfoBulle(panelNiveau, tournoi.getNiveau().denomination());
+		panelNiveauBorder.add(panelNiveau);
+		panelBullesInfos.add(panelNiveauBorder);
+		
+		///// BULLE INFO NOMBRE ÉQUIPES \\\\\
+		PanelRound panelEquipesBorder = creerBordureBulleInfo();
+		PanelRound panelEquipes = creerBulleInfo();
+		ajouterLibelleBulle(panelEquipes, "Équipes", Images.TEAM);
+		ajouterInfoBulle(panelEquipes, "" + new ParticiperJDBC().getAll().stream().peek(p -> p.getTournoi().getNomTournoi()).filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).count());
+		panelEquipesBorder.add(panelEquipes);
+		panelBullesInfos.add(panelEquipesBorder);
+		
+		/********************************/
+		/********** FIN BULLES **********/
+		/********************************/
+		
+		///// PANEL TABLE EQUIPES \\\\\
 		JPanel panelTableEquipes = new JPanel();
 		panelTableEquipes.setBorder(new EmptyBorder(50, 20, 50, 20));
 		panelTableEquipes.setBackground(Palette.GRAY);
-		GridBagConstraints gbc_panelTableEquipes = new GridBagConstraints();
-		gbc_panelTableEquipes.fill = GridBagConstraints.BOTH;
-		gbc_panelTableEquipes.insets = new Insets(0, 0, 5, 0);
-		gbc_panelTableEquipes.gridx = 0;
-		gbc_panelTableEquipes.gridy = 0;
-		panelCenter.add(panelTableEquipes, gbc_panelTableEquipes);
+		panelCenter.add(panelTableEquipes, BorderLayout.CENTER);
 		panelTableEquipes.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPaneTableEquipes = new JScrollPane();
+		scrollPaneTableEquipes.getViewport().setBackground(Palette.GRAY);
 		panelTableEquipes.add(scrollPaneTableEquipes, BorderLayout.CENTER);
 		
+		// Table des équipes
 		tableEquipes = new JTable();
 		tableEquipes.setFont(new Font("Arial", Font.PLAIN, 14));
-		tableEquipes.setBackground(new Color(255, 0, 0));
 		tableEquipes.getTableHeader().setBackground(Palette.DARK_GRAY);
 		tableEquipes.getTableHeader().setForeground(Palette.WHITE);
+		tableEquipes.getTableHeader().setFont(Police.LABEL);
 		tableEquipes.setBackground(Palette.GRAY);
 		tableEquipes.setForeground(Palette.WHITE);
 		scrollPaneTableEquipes.setViewportView(tableEquipes);
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
-	            new String[] { "Nom", "Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4", "Joueur 5" }) {
+	            new String[] { "Équipe", "Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4", "Joueur 5" }) {
 	                
 				@Override
 			    public boolean isCellEditable(int row, int column) {
@@ -223,13 +203,7 @@ public class VueTournoi extends JFrame {
 		panelBoutons.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelBoutons.setBackground(Palette.DARK_GRAY);
 		panelBoutons.setLayout(fl_panelBoutons);
-		
-		GridBagConstraints gbc_panelBoutons_1 = new GridBagConstraints();
-		gbc_panelBoutons_1.anchor = GridBagConstraints.NORTH;
-		gbc_panelBoutons_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panelBoutons_1.gridx = 0;
-		gbc_panelBoutons_1.gridy = 1;
-		panelCenter.add(panelBoutons, gbc_panelBoutons_1);
+		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 		
 		// Bouton annuler
 		JButton btnAnnuler = new JButton("<html><body style='padding: 5px 20px;'>Retour</body></html>");
@@ -267,6 +241,45 @@ public class VueTournoi extends JFrame {
 		Component horizontalStrut_7 = Box.createHorizontalStrut(20);
 		panelBoutons.add(horizontalStrut_7);
 		btnRetour.setFocusable(false);
+	}
+	
+	private PanelRound creerBordureBulleInfo() {
+		PanelRound bordureBulle = new PanelRound();
+		FlowLayout flowLayout = (FlowLayout) bordureBulle.getLayout();
+		flowLayout.setVgap(1);
+		flowLayout.setHgap(1);
+		bordureBulle.setBorder(new EmptyBorder(1, 1, 1, 1));
+		bordureBulle.setRoundTopLeft(20);
+		bordureBulle.setRoundTopRight(20);
+		bordureBulle.setRoundBottomRight(20);
+		bordureBulle.setBackground(Palette.WHITE);
+		return bordureBulle;
+	}
+	
+	private PanelRound creerBulleInfo() {
+		PanelRound bulle = new PanelRound();
+		bulle.setBorder(new EmptyBorder(10, 20, 10, 20));
+		bulle.setRoundTopLeft(20);
+		bulle.setRoundTopRight(20);
+		bulle.setRoundBottomRight(20);
+		bulle.setBackground(Palette.DARK_GRAY);
+		bulle.setLayout(new BorderLayout(0, 0));
+		return bulle;
+	}
+	
+	private void ajouterLibelleBulle(PanelRound panelPays, String libelle, ImageIcon icone) {
+		JLabel lblIconePays = new JLabel(" " + libelle);
+		lblIconePays.setForeground(Palette.LIGHT_PURPLE);
+		lblIconePays.setFont(new Font("Arial", Font.BOLD, 16));
+		lblIconePays.setIcon(icone);
+		panelPays.add(lblIconePays, BorderLayout.NORTH);
+	}
+	
+	private void ajouterInfoBulle(PanelRound bulle, String info) {
+		JLabel lblPays = new JLabel(info);
+		lblPays.setForeground(new Color(255, 255, 255));
+		lblPays.setFont(new Font("Arial", Font.BOLD, 12));
+		bulle.add(lblPays, BorderLayout.SOUTH);
 	}
 
 	private void mettreIconeDansHeader(String colonne, ImageIcon image) {

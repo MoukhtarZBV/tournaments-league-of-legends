@@ -8,6 +8,7 @@ public class Images {
 
 	public static final ImageIcon EARTH = Images.getIcon(25, 25, "earth");
 	public static final ImageIcon LEVEL = Images.getIcon(25, 25, "level");
+	public static final ImageIcon TEAM = Images.getIcon(25, 25, "team");
 	public static final ImageIcon TOP = Images.getIcon(25, 25, "topRole");
 	public static final ImageIcon JUNGLE = Images.getIcon(25, 25, "junglerRole");
 	public static final ImageIcon MID = Images.getIcon(25, 25, "midRole");

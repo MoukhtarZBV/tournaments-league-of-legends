@@ -37,7 +37,7 @@ public class TournoiJDBC implements TournoiDAO {
 	}
 
 	@Override
-	public Optional<Tournoi> getById(Integer id) throws Exception {
+	public Optional<Tournoi> getById(Integer id) {
 		Optional<Tournoi> tournoi = Optional.empty();
 		try {
 			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where idTournoi = ?");

@@ -15,6 +15,8 @@ public class Palette {
     public static final Color DARK_GRAY = new Color( 24,  20,  36);
     public static final Color GRAY      = new Color( 32,  28,  44);
     
+    public static final Color LIGHT_PURPLE = new Color(156, 137, 214);
+    
     public static final Color MARRON    = new Color( 91,  67,  25);
     public static final Color CREME     = new Color(201, 171, 111);
     

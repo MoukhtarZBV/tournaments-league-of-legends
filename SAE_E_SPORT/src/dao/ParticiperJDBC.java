@@ -18,17 +18,22 @@ import modele.Tournoi;
 public class ParticiperJDBC implements ParticiperDAO{
 
 	@Override
-	public List<Participer> getAll() throws Exception {
+	public List<Participer> getAll() {
 		List<Participer> participations = new ArrayList<>();
-		ResultSet rs = ConnectionJDBC.getConnection().createStatement().executeQuery("select * from participer");
-		while (rs.next()) {
-			Equipe e = (new EquipeJDBC()).getById(rs.getInt("idEquipe")).orElse(null);
-			Tournoi t = (new TournoiJDBC()).getById(rs.getInt("idTournoi")).orElse(null);
-			Participer participation = new Participer(e, t);
-			participation.setNbMatchsGagnes(rs.getInt("nbMatchsGagnes"));
-			participation.setNbMatchsJoues(rs.getInt("nbMatchsJoues"));
-			participation.setNbPointsGagnes(rs.getInt("nbPointsGagnes"));
-			participations.add(participation);
+		ResultSet rs;
+		try {
+			rs = ConnectionJDBC.getConnection().createStatement().executeQuery("select * from participer");
+			while (rs.next()) {
+				Equipe e = (new EquipeJDBC()).getById(rs.getInt("idEquipe")).orElse(null);
+				Tournoi t = (new TournoiJDBC()).getById(rs.getInt("idTournoi")).orElse(null);
+				Participer participation = new Participer(e, t);
+				participation.setNbMatchsGagnes(rs.getInt("nbMatchsGagnes"));
+				participation.setNbMatchsJoues(rs.getInt("nbMatchsJoues"));
+				participation.setNbPointsGagnes(rs.getInt("nbPointsGagnes"));
+				participations.add(participation);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return participations;
 	}

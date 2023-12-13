@@ -82,7 +82,7 @@ public class JoueurJDBC implements JoueurDAO{
 	}
 	
 	@Override
-	public List<Joueur> getByEquipe (Equipe equipe) throws Exception {
+	public List<Joueur> getByEquipe (Equipe equipe) {
 		List<Joueur> joueurs = new ArrayList<>();
 		try {			
 			String req = "select * from Joueur where idEquipe = ?";
@@ -111,7 +111,7 @@ public class JoueurJDBC implements JoueurDAO{
     }
 
 	@Override
-	public boolean add(Joueur j) throws Exception {
+	public boolean add(Joueur j) {
 		boolean res = false;
 		try {
 			String addJoueur = "INSERT INTO Joueur VALUES (?, ?, ?)";
