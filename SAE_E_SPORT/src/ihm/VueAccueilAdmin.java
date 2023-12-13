@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -14,21 +16,26 @@ import java.io.IOException;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+
 import controleur.ControleurAccueil;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.FlowLayout;
 
 public class VueAccueilAdmin extends JFrame {
 
-	private JPanel contentPane;
-
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		Ecran.setup();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -50,122 +57,147 @@ public class VueAccueilAdmin extends JFrame {
 		ControleurAccueil controleur = new ControleurAccueil(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 791, 502);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
+		
+		
+		///// PANEL PRINCIPAL \\\\\
+		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
-		JPanel panelNorth = new JPanel();
-		panelNorth.setBackground(new Color(255, 255, 255));
-		contentPane.add(panelNorth, BorderLayout.NORTH);
-		panelNorth.setLayout(new GridLayout(2, 0, 0, 0));
 		
-		JPanel panelTitre = new JPanel();
-		panelTitre.setBackground(new Color(255, 255, 255));
-		panelNorth.add(panelTitre);
+		///// PANEL TITRE \\\\\
+		JPanel panelTop = new JPanel();
+		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setBackground(Palette.DARK_GRAY);
+		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setLayout(new GridLayout());
+		contentPane.add(panelTop, BorderLayout.NORTH);
 		
-		JLabel labelTitre = new JLabel("Accueil");
-		labelTitre.setFont(new Font("Tahoma", Font.PLAIN, 31));
-		panelTitre.add(labelTitre);
+		// Label titre
+		JLabel lblTitre = new JLabel("Accueil");
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
+		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setForeground(Palette.WHITE);
+		lblTitre.setFont(Police.GROS_TITRE);
+		panelTop.add(lblTitre);
 		
+		
+		///// MAIN PANEL \\\\\
+		JPanel panelMain = new JPanel();
+		panelMain.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panelMain, BorderLayout.CENTER);
+		
+		
+		///// PANEL BONJOUUUUR \\\\\
 		JPanel panelBjr = new JPanel();
-		panelBjr.setBackground(new Color(255, 255, 255));
-		panelNorth.add(panelBjr);
+		panelBjr.setBorder(new EmptyBorder(10, 0, 10, 0));
+		panelBjr.setBackground(Palette.DARK_GRAY);
+		panelMain.add(panelBjr, BorderLayout.NORTH);
+
+		// Label bonjour
+		JLabel lblBjr = new JLabel("Bonjour admin");
+		lblBjr.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBjr.setFont(Police.SOUS_TITRE);
+		lblBjr.setForeground(Palette.WHITE);
+		panelBjr.add(lblBjr);
 		
-		JLabel labelBjr = new JLabel("Bonjour admin");
-		labelBjr.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		panelBjr.add(labelBjr);
 		
+		///// PANEL CENTER \\\\\
 		JPanel panelCenter = new JPanel();
-		panelCenter.setBackground(new Color(255, 255, 255));
-		panelCenter.setBorder(new EmptyBorder(5, 50, 50, 50));
-		contentPane.add(panelCenter, BorderLayout.CENTER);
+		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelCenter.setBorder(new EmptyBorder(5, 100, 50, 100));
 		panelCenter.setLayout(new BorderLayout(0, 0));
+		panelMain.add(panelCenter, BorderLayout.CENTER);
 		
+		
+		///// PANEL CADRE PRINCIPAL \\\\\
 		JPanel panelCadre = new JPanel();
-		panelCadre.setBackground(new Color(255, 255, 255));
-		panelCadre.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panelCenter.add(panelCadre);
+		panelCadre.setBackground(Palette.DARK_GRAY);
+		panelCadre.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Palette.GRAY));
 		panelCadre.setLayout(new GridLayout(0, 3, 0, 0));
+		panelCenter.add(panelCadre);
 		
+		
+		///// PANEL EQUIPE \\\\\
 		JPanel panelEquipe = new JPanel();
-		panelEquipe.setBackground(new Color(255, 255, 255));
-		panelCadre.add(panelEquipe);
+		panelEquipe.setName("Equipes");
+		panelEquipe.setBorder(new EmptyBorder(50, 50, 50, 50));
+		panelEquipe.addMouseListener(controleur);
+		panelEquipe.setBackground(Palette.DARK_GRAY);
 		panelEquipe.setLayout(new BorderLayout(0, 0));
+		panelCadre.add(panelEquipe);
 		
-		JPanel panelCadreEquipe = new JPanel();
-		panelCadreEquipe.setBackground(new Color(255, 255, 255));
-		FlowLayout flowLayout = (FlowLayout) panelCadreEquipe.getLayout();
-		flowLayout.setHgap(0);
-		panelCadreEquipe.setBorder(new EmptyBorder(50, 50, 50, 50));
-		panelEquipe.add(panelCadreEquipe, BorderLayout.CENTER);
+		// Logo Equipe
+		BufferedImage bufferedImageE = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgEquipe.png"));
+		Image imageE = bufferedImageE.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 		
-		JLabel iconEquipe = new JLabel("");
-		iconEquipe.setFont(new Font("Tahoma", Font.PLAIN, 6));
-		BufferedImage bufferedImage = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgEquipe.png"));
-		Image image = bufferedImage.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-		iconEquipe.setIcon(new ImageIcon(image));
+		JLabel iconEquipe = new JLabel();
+		iconEquipe.setHorizontalAlignment(SwingConstants.CENTER);
+		iconEquipe.setIcon(new ImageIcon(imageE));
 		iconEquipe.setSize(20, 80);
-		panelCadreEquipe.add(iconEquipe);
+		panelEquipe.add(iconEquipe, BorderLayout.CENTER);
 		
-		JButton btnEquipe = new JButton("Liste équipes");
-		btnEquipe.setBackground(Color.WHITE);
-		panelCadreEquipe.add(btnEquipe);
-		btnEquipe.setFocusable(false);
-		btnEquipe.addActionListener(controleur);
-		
-		JPanel panelTournoi = new JPanel();
-		panelTournoi.setBackground(new Color(255, 255, 255));
-		panelCadre.add(panelTournoi);
-		panelTournoi.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panelCadreTournoi = new JPanel();
-		panelCadreTournoi.setBackground(new Color(255, 255, 255));
-		panelCadreTournoi.setBorder(new EmptyBorder(50, 50, 50, 50));
-		panelTournoi.add(panelCadreTournoi);
-		
-		JLabel iconTournoi = new JLabel("");
-		iconTournoi.setFont(new Font("Tahoma", Font.PLAIN, 6));
-		BufferedImage bufferedImage2 = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgTournoi.png"));
-		Image image2 = bufferedImage2.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-		iconTournoi.setIcon(new ImageIcon(image2));
-		iconTournoi.setSize(20, 80);
-		panelCadreTournoi.add(iconTournoi);
-		
-		JButton btnTournoi = new JButton("Liste Tournois");
-		btnTournoi.setBackground(Color.WHITE);
-		panelCadreTournoi.add(btnTournoi);
-		btnTournoi.setFocusable(false);
-		btnTournoi.addActionListener(controleur);
+		// Bouton équipe
+		JLabel lblEquipe = new JLabel("Liste équipes");
+		lblEquipe.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEquipe.setFont(Police.SOUS_TITRE);
+		lblEquipe.setForeground(Palette.WHITE);
+		panelEquipe.add(lblEquipe, BorderLayout.SOUTH);
 		
 		
+		///// PANEL TOURNOIS \\\\\
+		JPanel panelTournois = new JPanel();
+		panelTournois.setName("Tournois");
+		panelTournois.setBorder(new EmptyBorder(50, 50, 50, 50));
+		panelTournois.addMouseListener(controleur);
+		panelTournois.setBackground(Palette.DARK_GRAY);
+		panelTournois.setLayout(new BorderLayout(0, 0));
+		panelCadre.add(panelTournois);
 		
+		// Logo Tournois
+		BufferedImage bufferedImageT = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgTournoi.png"));
+		Image imageT = bufferedImageT.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
+		
+		JLabel iconTournois = new JLabel();
+		iconTournois.setHorizontalAlignment(SwingConstants.CENTER);
+		iconTournois.setIcon(new ImageIcon(imageT));
+		iconTournois.setSize(20, 80);
+		panelTournois.add(iconTournois, BorderLayout.CENTER);
+		
+		// Bouton tournois
+		JLabel lblTournois = new JLabel("Liste tournois");
+		lblTournois.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTournois.setFont(Police.SOUS_TITRE);
+		lblTournois.setForeground(Palette.WHITE);
+		panelTournois.add(lblTournois, BorderLayout.SOUTH);
+		
+		
+		///// PANEL HISTORIQUE \\\\\
 		JPanel panelHistorique = new JPanel();
-		panelHistorique.setBackground(new Color(255, 255, 255));
-		panelCadre.add(panelHistorique);
+		panelHistorique.setName("Historique");
+		panelHistorique.setBorder(new EmptyBorder(50, 50, 50, 50));
+		panelHistorique.addMouseListener(controleur);
+		panelHistorique.setBackground(Palette.DARK_GRAY);
 		panelHistorique.setLayout(new BorderLayout(0, 0));
+		panelCadre.add(panelHistorique);
 		
-		JPanel panelCadreHistorique = new JPanel();
-		panelCadreHistorique.setBackground(new Color(255, 255, 255));
-		panelCadreHistorique.setBorder(new EmptyBorder(50, 50, 50, 50));
-		panelHistorique.add(panelCadreHistorique, BorderLayout.NORTH);
+		// Logo Tournois
+		BufferedImage bufferedImageH = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgHistorique.png"));
+		Image imageH = bufferedImageH.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
 		
-		JLabel iconHistorique = new JLabel("");
-		iconHistorique.setFont(new Font("Tahoma", Font.PLAIN, 6));
-		iconHistorique.setFont(new Font("Tahoma", Font.PLAIN, 6));
-		BufferedImage bufferedImage3 = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgHistorique.png"));
-		Image image3 = bufferedImage3.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-		iconHistorique.setIcon(new ImageIcon(image3));
-		iconHistorique.setSize(128, 128);
-		panelCadreHistorique.add(iconHistorique);
+		JLabel iconHistorique = new JLabel();
+		iconHistorique.setHorizontalAlignment(SwingConstants.CENTER);
+		iconHistorique.setIcon(new ImageIcon(imageH));
+		iconHistorique.setSize(20, 80);
+		panelHistorique.add(iconHistorique, BorderLayout.CENTER);
 		
-		JButton btnHistorique = new JButton("Historique");
-		btnHistorique.setBackground(Color.WHITE);
-		panelCadreHistorique.add(btnHistorique);
-		btnHistorique.setFocusable(false);
+		// Bouton tournois
+		JLabel lblHistorique = new JLabel("Historique");
+		lblHistorique.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHistorique.setForeground(Palette.WHITE);
+		lblHistorique.setFont(Police.SOUS_TITRE);
+		panelHistorique.add(lblHistorique, BorderLayout.SOUTH);
 	}
 
 }
