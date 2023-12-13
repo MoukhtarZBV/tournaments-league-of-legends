@@ -1,4 +1,4 @@
-package Fonctions;
+package components;
 
 import java.awt.Component;
 

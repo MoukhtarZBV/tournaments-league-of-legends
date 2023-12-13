@@ -1,14 +1,17 @@
 package ihm;
 
 import java.awt.EventQueue;
-
-
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import components.JTextFieldArrondi;
 import controleur.ControleurListeEquipe;
 import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
@@ -40,6 +43,10 @@ public class VueListeEquipe extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
+		// A RETIRER PLUS TARD
+		Ecran.setup();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -63,65 +70,70 @@ public class VueListeEquipe extends JFrame {
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(510, 240, 900, 600);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Équipes");
 		setResizable(false);
 		
 
-		///// PANEL PRINCIPAL  \\\\\
+		///// PANEL PRINCIPAL \\\\\	
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		
+		
 		///// MENU BAR \\\\\
 		JPanel panelSide = new JPanel();
 		panelSide.setBackground(Palette.DARK_GRAY);
-		panelSide.setPreferredSize(new Dimension(100, 600));
+		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Palette.GRAY));
+		panelSide.setPreferredSize(new Dimension(125, 600));
 		contentPane.add(panelSide, BorderLayout.WEST);
 		
 		
-
-		///// PANEL MAIN \\\\\
+		
+		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
+		panelMain.setBorder(new EmptyBorder(25, 0, 25, 0));
 		panelMain.setLayout(new BorderLayout(0, 0));
+		panelMain.setBackground(Palette.DARK_GRAY);
 		contentPane.add(panelMain, BorderLayout.CENTER);
-		
-		
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
 		panelTop.setPreferredSize(new Dimension(800, 120));
 		panelTop.setBackground(Palette.DARK_GRAY);
-		panelTop.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
+		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setLayout(new GridLayout());
 		panelMain.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
 		JLabel lblTitre = new JLabel("Équipes");
-		lblTitre.setForeground(Palette.WARDEN);
-		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setForeground(Palette.WHITE);
 		lblTitre.setFont(Police.GROS_TITRE);
-		panelTop.add(lblTitre, BorderLayout.CENTER);
+		panelTop.add(lblTitre);
 		
 		
 		
-		///// PANEL CENTER \\\\\
+		///// MAN PANEL MILIEU \\\\\
 		JPanel panelCenter = new JPanel();
+		panelCenter.setLayout(new BorderLayout(0, 25));
 		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
 		panelMain.add(panelCenter, BorderLayout.CENTER);
-		
+	
 		
 		/// PANEL RECHERCHE \\\
 		JPanel panelSearch = new JPanel();
-		panelSearch.setBorder(new EmptyBorder(5, 5, 5, 5));
-		panelSearch.setBackground(Palette.COOL);
+		panelSearch.setBorder(new EmptyBorder(14, 15, 15, 15));
+		panelSearch.setBackground(Palette.GRAY);
 		panelSearch.setLayout(new BorderLayout(5, 0));
 		panelCenter.add(panelSearch, BorderLayout.NORTH);
 		
 		// Bouton valider
 		JPanel panelValider = new JPanel();
-		panelValider.setBackground(Palette.COOL);
+		panelValider.setOpaque(false);
 		panelValider.setLayout(new BoxLayout(panelValider, BoxLayout.X_AXIS));
 		panelSearch.add(panelValider, BorderLayout.EAST);
 		
@@ -138,10 +150,26 @@ public class VueListeEquipe extends JFrame {
 		panelValider.add(validateBtn);
 
 		// Barre recherche
-		searchBar = new JTextField();
+		searchBar = new JTextFieldArrondi();
+		searchBar.setBackground(Palette.DARK_GRAY);
+		searchBar.setForeground(Palette.WHITE);
+		searchBar.setFont(Police.INPUT);
 		searchBar.setPreferredSize(new Dimension(searchBar.getPreferredSize().width, 25));
 		searchBar.setColumns(30);
 		panelSearch.add(searchBar);
+		
+		
+		// Panel liste
+		JPanel panelListe = new JPanel();
+		panelListe.setLayout(new BorderLayout(5, 0));
+		panelListe.setBackground(Palette.GRAY);
+		panelCenter.add(panelListe, BorderLayout.CENTER);
+
+		JLabel lblHeader = new JLabel(String.format("%-5s %-50s", "Rank", "Nom de l'équipe"));
+		lblHeader.setFont(Police.TABLEAU);
+		lblHeader.setBorder(new EmptyBorder(5, 10, 5, 10));
+		lblHeader.setForeground(Palette.WHITE);
+		panelListe.add(lblHeader, BorderLayout.NORTH);
 		
 		// Liste des équipes
 		List<String> nomEquipes = equipes.stream()
@@ -150,22 +178,37 @@ public class VueListeEquipe extends JFrame {
 		
 		JList<Object> listeEquipes = new JList<Object>(nomEquipes.toArray());
 		listeEquipes.setFont(Police.TABLEAU);
-		listeEquipes.setBackground(Palette.COOL);
+		listeEquipes.setBackground(Palette.GRAY);
+		listeEquipes.setForeground(Palette.WHITE);
+		listeEquipes.setBorder(new EmptyBorder(10, 10, 10, 10));
 		listeEquipes.addMouseListener(controleur);
 		this.listeEquipes = listeEquipes;
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeEquipes);
-		panelMain.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setBorder(null);
+		panelListe.add(scrollPane, BorderLayout.CENTER);
 		
-		JPanel panelBottom = new JPanel();
-		panelBottom.setBackground(new Color(255, 255, 255));
-		contentPane.add(panelBottom, BorderLayout.SOUTH);
 		
-		JButton btnRetour = new JButton("Retour");
-		panelBottom.add(btnRetour);
+		// PANEL DU BOUTON
+		FlowLayout fl_panelBoutons = new FlowLayout(FlowLayout.RIGHT, 5, 5);
+		
+		JPanel panelBoutons = new JPanel();
+		panelBoutons.setBorder(new EmptyBorder(0, 0, 0, 0));
+		panelBoutons.setBackground(Palette.DARK_GRAY);
+		panelBoutons.setLayout(fl_panelBoutons);
+		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
+		
+		// Bouton retour
+		JButton btnRetour = new JButton("<html><body style='padding: 5px 25px;'>Retour</body></html>");
+		btnRetour.setName("Retour");
+		btnRetour.setBackground(Palette.GRAY);
+		btnRetour.setForeground(Palette.WHITE);
+		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
-		panelCenter.add(scrollPane, BorderLayout.CENTER);
+		btnRetour.setFocusable(false);
+		panelBoutons.add(btnRetour);
 	}
 	
 	public String getSearch() {

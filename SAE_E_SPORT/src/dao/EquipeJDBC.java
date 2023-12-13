@@ -38,7 +38,7 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public Optional<Equipe> getById(Integer id) throws Exception {
+	public Optional<Equipe> getById(Integer id) {
 		Optional<Equipe> equipes = Optional.empty();
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -122,7 +122,7 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public Optional<Equipe> getByNom(String nom) throws Exception {
+	public Optional<Equipe> getByNom(String nom) {
 		Optional<Equipe> equipe = Optional.empty();
 		try {
 			CallableStatement st = ConnectionJDBC.getConnection().prepareCall("select * from Equipe where nomEquipe = ?");
