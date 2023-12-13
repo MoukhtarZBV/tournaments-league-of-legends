@@ -173,4 +173,6 @@ public class Tournoi {
 	    duree =  (int) TimeUnit.DAYS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
 	    return duree;
 	}
+	
+	
 }

@@ -73,8 +73,8 @@ public class ModelePoule {
 	public Object[][] matches() throws Exception {
 		Object[][] datas = new Object[this.parties.size()][6];
 		int i=0;
-		String trophyWin = Images.TROPHY_WIN.getNom();
-		String trophy = Images.TROPHY.getNom();
+		String trophyWin = Images.TROPHY_WIN.getDescription();
+		String trophy = Images.TROPHY.getDescription();
 		for (Partie p : this.parties) {
 			datas[i][0] = i+1;
 			datas[i][1] = p.getEquipe1().getNom();
