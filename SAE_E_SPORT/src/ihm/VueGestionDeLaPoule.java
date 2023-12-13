@@ -43,7 +43,7 @@ public class VueGestionDeLaPoule extends JFrame {
 	 * Create the frame.
 	 * @throws Exception 
 	 */
-	public VueGestionDeLaPoule(Tournoi tournoi) throws Exception {
+	public VueGestionDeLaPoule(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
 		

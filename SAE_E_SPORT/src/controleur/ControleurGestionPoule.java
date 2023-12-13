@@ -16,9 +16,13 @@ public class ControleurGestionPoule implements MouseListener {
 	private VueGestionDeLaPoule vue;
 	private ModelePoule modele;
 	
-	public ControleurGestionPoule (VueGestionDeLaPoule vue) throws Exception {
+	public ControleurGestionPoule (VueGestionDeLaPoule vue) {
 		this.vue = vue;
-		this.modele = new ModelePoule(this.vue.getTournoi());
+		try {
+			this.modele = new ModelePoule(this.vue.getTournoi());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
