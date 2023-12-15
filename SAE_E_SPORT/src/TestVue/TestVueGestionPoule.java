@@ -1,14 +1,9 @@
 package TestVue;
 
 import java.awt.EventQueue;
+
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JFrame;
 
 import dao.CreateDB;
 import dao.EquipeJDBC;
@@ -16,7 +11,6 @@ import dao.JoueurJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
-import dao.JoueurJDBC;
 import ihm.VueGestionDeLaPoule;
 import modele.Equipe;
 import modele.Joueur;

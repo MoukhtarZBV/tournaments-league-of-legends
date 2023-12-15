@@ -31,6 +31,8 @@ public class VueEquipe extends JFrame {
 	private JTextField fieldWR;
 	private JComboBox<String> comboPays;
 	private Optional<Equipe> equipe;
+	private JLabel msgErreur;
+	private JPanel panelErreur;
 
 	/**
 	 * Launch the application.
@@ -77,6 +79,9 @@ public class VueEquipe extends JFrame {
 		ligneColoree.setFont(Police.LIGNE);
 		panelTop.add(ligneColoree, BorderLayout.SOUTH);
 		
+		JPanel panelCenter = new JPanel();
+		contentPane.add(panelCenter, BorderLayout.CENTER);
+		panelCenter.setLayout(new BorderLayout(0, 0));
 		
 		
 		/// PANEL MAIN \\\
@@ -84,7 +89,7 @@ public class VueEquipe extends JFrame {
 		panelMain.setBackground(Palette.WHITE);
 		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelMain.setLayout(new GridLayout(0, 2, 0, 0));
-		contentPane.add(panelMain, BorderLayout.CENTER);
+		panelCenter.add(panelMain);
 		
 		
 		/// LEFT SIDE \\\
@@ -215,6 +220,15 @@ public class VueEquipe extends JFrame {
 		columnModel.getColumn(1).setPreferredWidth(130);
 		
 		rightPanel.add(table, BorderLayout.CENTER);
+		
+		this.panelErreur = new JPanel();
+		panelErreur.setBackground(new Color(255, 255, 255));
+		panelCenter.add(panelErreur, BorderLayout.NORTH);
+		
+		this.msgErreur = new JLabel("");
+		panelErreur.add(msgErreur);
+		
+		
 	}
 	
 	
@@ -232,5 +246,13 @@ public class VueEquipe extends JFrame {
 	
 	public Pays getPaysEquipe() {
 		return Pays.getPays((String)comboPays.getSelectedItem());
+	}
+	
+	public void setMsgErreur(String erreur){
+		msgErreur.setText(erreur);
+	}
+	
+	public void setColorMessage(Color color) {
+		panelErreur.setBackground(color);
 	}
 }
