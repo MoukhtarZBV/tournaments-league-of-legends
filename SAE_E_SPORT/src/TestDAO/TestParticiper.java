@@ -20,8 +20,7 @@ public class TestParticiper {
 
 	public static void main(String[] args) throws Exception {
 		CreateDB.main(args);
-		int idT = TournoiJDBC.getNextSequenceValue();
-		Tournoi t1 = new Tournoi(idT, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 12, 22)), 
+		Tournoi t1 = new Tournoi(0, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 12, 22)), 
 				Date.valueOf(LocalDate.of(2023, 12, 31)), Pays.FR);
 		System.out.println(t1);
 		TournoiJDBC tbd = new TournoiJDBC();
