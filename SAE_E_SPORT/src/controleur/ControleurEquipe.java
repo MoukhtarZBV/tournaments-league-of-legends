@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -28,10 +29,16 @@ public class ControleurEquipe implements ActionListener{
 		EquipeJDBC ejdbc = new EquipeJDBC();
 		if (bouton.getText().equals("Sauvegarder")) {
 			try {
-				ejdbc.update(new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe()));
-				this.vue.dispose();
-				VueListeEquipe vue = new VueListeEquipe(ejdbc.getAll());
-				vue.setVisible(true);
+				String name = this.vue.getNomEquipe().replace(" ", "");
+				if (!name.equals("")) {
+					ejdbc.update(new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe()));
+					this.vue.dispose();
+					VueListeEquipe vue = new VueListeEquipe(ejdbc.getAll());
+					vue.setVisible(true);
+				}else {
+					this.vue.setColorMessage(new Color(255, 204, 204));
+					this.vue.setMsgErreur("Le nom d'équipe ne peut pas être vide");
+				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

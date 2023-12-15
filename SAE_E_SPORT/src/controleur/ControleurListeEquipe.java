@@ -28,6 +28,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		
 		if(e.getSource() instanceof JList) {
 			JList list = (JList) e.getSource();
 			if (e.getClickCount() == 2) {
@@ -52,46 +53,35 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	    JButton bouton = (JButton) e.getSource();
 	    List<Equipe> equipes;
 	    if(bouton.getName().equals("Retour")) {
-	    	this.vue.dispose();
 	    	try {
+	    		System.out.println("ok");
+	    		this.vue.dispose();
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 	    }
-	    else {
-		try {
-			EquipeJDBC ejdbc = new EquipeJDBC();
-			equipes = ejdbc.getAll();
-			List<String> nomEquipes = equipes.stream()
-		            .map(eq -> String.format("%-5d %s", eq.getRang(), eq.getNom()))
-		            .collect(Collectors.toList());
-
-		    List<String> nomEquipesTri = nomEquipes.stream()
-		            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
-		            .collect(Collectors.toList());
-
-		    // Mise à jour du modèle de la JList dans la vue
-		    this.vue.updateListeEquipes(nomEquipesTri);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	    if(bouton.getName().equals("rechercher")) {
+			try {
+				EquipeJDBC ejdbc = new EquipeJDBC();
+				equipes = ejdbc.getAll();
+				List<String> nomEquipes = equipes.stream()
+						.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+			            .collect(Collectors.toList());
+	
+			    List<String> nomEquipesTri = nomEquipes.stream()
+			            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+			            .collect(Collectors.toList());
+	
+			    // Mise à jour du modèle de la JList dans la vue
+			    this.vue.updateListeEquipes(nomEquipesTri);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 	    }
 	}
 
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
@@ -106,6 +96,17 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			JButton b = (JButton)e.getSource();
 			b.setBackground(Palette.WHITE);
 		}	
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

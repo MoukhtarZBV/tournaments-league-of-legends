@@ -66,6 +66,8 @@ public class VueListeEquipe extends JFrame {
 	 */
 	public VueListeEquipe(List<Equipe> equipes) {
 		
+		this.equipes = equipes;
+		
 		ControleurListeEquipe controleur = new ControleurListeEquipe(this);
 		
 		///// FENÊTRE \\\\\
@@ -147,6 +149,7 @@ public class VueListeEquipe extends JFrame {
 		validateBtn.setBackground(Palette.WHITE);
 		validateBtn.addActionListener(controleur);
 		validateBtn.addMouseListener(controleur);
+		validateBtn.setName("rechercher");
 		panelValider.add(validateBtn);
 
 		// Barre recherche
@@ -219,5 +222,9 @@ public class VueListeEquipe extends JFrame {
 	    this.listeEquipes.setListData(elementsFiltres.toArray(new String[0]));
 	    this.listeEquipes.repaint();
 	}
+	
+	public JList<Object> getListeEquipes() {
+        return this.listeEquipes;
+    }
 
 }
