@@ -96,7 +96,7 @@ public class TournoiJDBC implements TournoiDAO {
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe) values (?, ?, ?, ?, ?, ?, NULL, NULL)");
-			cs.setInt(1, t.getIdTournoi());
+			cs.setInt(1, getNextSequenceValue());
 			cs.setString(2, t.getNomTournoi());
 			cs.setString(3, t.getNiveau().denomination());
 			cs.setDate(4, t.getDateDebut());

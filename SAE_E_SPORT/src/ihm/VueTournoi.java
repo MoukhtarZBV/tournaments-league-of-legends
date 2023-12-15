@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -18,6 +19,7 @@ import components.JTextFieldArrondi;
 import components.PanelRound;
 import controleur.ControleurDetailsTournoi;
 import dao.ParticiperJDBC;
+import dao.TournoiJDBC;
 import Images.Images;
 import modele.Equipe;
 import modele.Joueur;
@@ -63,8 +65,7 @@ public class VueTournoi extends JFrame {
 		Ecran.setup();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setBounds(510, 240, 900, 600);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -105,20 +106,22 @@ public class VueTournoi extends JFrame {
 
 		///// PANEL LIBELLE INFOS \\\\\
 		JPanel panelLibelleInfos = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panelLibelleInfos.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		panelLibelleInfos.setBorder(new MatteBorder(0, 0, 2, 0, (Color) new Color(255, 255, 255)));
+		panelLibelleInfos.setBorder(new EmptyBorder(10, 20, 10, 20));
 		panelLibelleInfos.setBackground(Palette.GRAY);
 		panelInfos.add(panelLibelleInfos, BorderLayout.NORTH);
+		panelLibelleInfos.setLayout(new GridLayout(0, 1, 0, 0));
 
 		JLabel lblInfosTournoi = new JLabel("A propos du tournoi");
+		lblInfosTournoi.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
 		lblInfosTournoi.setForeground(new Color(255, 255, 255));
 		lblInfosTournoi.setFont(Police.LABEL);
 		panelLibelleInfos.add(lblInfosTournoi);
 
 		///// PANEL BULLES INFOS \\\\\
 		JPanel panelBullesInfos = new JPanel();
-		panelBullesInfos.setBorder(new EmptyBorder(10, 0, 0, 0));
+		FlowLayout flowLayout = (FlowLayout) panelBullesInfos.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		panelBullesInfos.setBorder(new EmptyBorder(10, 20, 0, 20));
 		panelBullesInfos.setBackground(Palette.GRAY);
 		panelInfos.add(panelBullesInfos, BorderLayout.CENTER);
 
@@ -149,6 +152,14 @@ public class VueTournoi extends JFrame {
 		ajouterInfoBulle(panelEquipes, "" + new ParticiperJDBC().getAll().stream().peek(p -> p.getTournoi().getNomTournoi()).filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).count());
 		panelEquipesBorder.add(panelEquipes);
 		panelBullesInfos.add(panelEquipesBorder);
+		
+		///// BULLE INFO DATES \\\\\
+		PanelRound panelDatesBorder = creerBordureBulleInfo();
+		PanelRound panelDates = creerBulleInfo();
+		ajouterLibelleBulle(panelDates, "Dates", Images.TEAM);
+		ajouterInfoBulle(panelDates, tournoi.getDateDebut() + " au " + tournoi.getDateFin());
+		panelDatesBorder.add(panelDates);
+		panelBullesInfos.add(panelDatesBorder);
 		
 		/********************************/
 		/********** FIN BULLES **********/
