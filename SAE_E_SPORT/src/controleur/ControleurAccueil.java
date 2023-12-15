@@ -1,42 +1,87 @@
 package controleur;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-import javax.swing.JButton;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
+import ihm.Palette;
 import ihm.VueAccueilAdmin;
-import ihm.VueCreationTournoi;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
 import modele.Equipe;
 import modele.Tournoi;
 
-public class ControleurAccueil implements ActionListener{
+public class ControleurAccueil implements MouseListener {
 	
 	private VueAccueilAdmin vue;
-	private Equipe modele;
 	
 	public ControleurAccueil(VueAccueilAdmin vue) {
-		this.modele = new Equipe();
 		this.vue = vue;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		JButton bouton = (JButton) e.getSource();
-		if(bouton.getText() == "Liste équipes") {
-			Equipe eq = new Equipe();
-			VueListeEquipe vue = new VueListeEquipe(eq.toutesLesEquipes());
-			vue.setVisible(true);
-			this.vue.dispose();	
+	public void mouseClicked(MouseEvent e) {
+		JPanel panel = (JPanel)e.getSource();
+		switch(panel.getName()) {
+			case "Equipes":
+				Equipe eq = new Equipe();
+				VueListeEquipe vueE = new VueListeEquipe(eq.toutesLesEquipes());
+				vueE.setVisible(true);
+				this.vue.dispose();	
+				break;
+				
+			case "Tournois":
+				Tournoi t = new Tournoi();
+				VueListeTournois vueT = new VueListeTournois(t.tousLesTournois());
+				vueT.setVisible(true);
+				this.vue.dispose();	
+				break;
 		}
-		if(bouton.getText() == "Liste Tournois") {
-			Tournoi t = new Tournoi();
-			VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
-			vue.setVisible(true);
-			this.vue.dispose();	
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		JPanel panel = (JPanel)e.getSource();
+		panel.setBackground(Palette.GRAY);
+		
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		BufferedImage bufferedImage;
+		try { 
+			bufferedImage = ImageIO.read(ControleurAccueil.class.getResource("/Images/kind_cursor.png"));
+			Image image = bufferedImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+			Cursor c = toolkit.createCustomCursor(image , new Point(0,0), "img");
+			panel.setCursor(c);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		JPanel panel = (JPanel)e.getSource();
+		panel.setBackground(Palette.DARK_GRAY);
+		panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 }
