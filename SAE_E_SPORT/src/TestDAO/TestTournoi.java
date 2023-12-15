@@ -26,9 +26,9 @@ public class TestTournoi {
 
 		TournoiJDBC tjdbc = new TournoiJDBC();
 		
-		Tournoi t1 = new Tournoi(1, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 11, 23)), 
+		Tournoi t1 = new Tournoi("Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 11, 23)), 
 				Date.valueOf(LocalDate.of(2023, 12, 31)), Pays.FR);
-		Tournoi t2 = new Tournoi(2, "Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 5, 10)), 
+		Tournoi t2 = new Tournoi("Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 5, 10)), 
 				Date.valueOf(LocalDate.of(2023, 10, 31)), Pays.FR);
 		
 		// ajouter bon 
@@ -42,7 +42,7 @@ public class TestTournoi {
 		System.out.println("\n###getAll Tournoi OK###\n");
 		System.out.println("###add Tournoi OK###\n");
 		
-		Optional<Tournoi> opt = tjdbc.getById(1);
+		Optional<Tournoi> opt = tjdbc.getById("Happy League");
 		System.out.println(opt.orElse(null));
 		System.out.println("\n###getById Tournoi OK###\n");
 		
@@ -51,7 +51,7 @@ public class TestTournoi {
 			System.out.println(tournoi);
 		}
 		
-		t2 = new Tournoi(2, "Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 5, 10)), 
+		t2 = new Tournoi("Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 5, 10)), 
 				Date.valueOf(LocalDate.of(2023, 10, 31)), Pays.US);
 		
 		Equipe e1 = new Equipe(1, "T1", 1000, Pays.FR);

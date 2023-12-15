@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -14,22 +15,21 @@ import dao.TournoiJDBC;
 
 public class Tournoi {
 
-	private int idTournoi;
 	private String nomTournoi;
 	private Niveau niveau;
 	private Date dateDebut;
 	private Date dateFin;
 	private Pays pays;
+	private Status status;
 	private Compte compte;
 	private Equipe vainqueur;
 	
 	private TournoiJDBC jdbc;
 	
-	public Tournoi(int id, String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) throws IllegalArgumentException {
+	public Tournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) throws IllegalArgumentException {
 		if (dateDebut.compareTo(dateFin) > 0) {
 			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
 		} 
-		this.idTournoi = id;
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
 		this.dateDebut = dateDebut;
@@ -37,6 +37,7 @@ public class Tournoi {
 		this.pays = pays;
 		this.compte = null;
 		this.vainqueur = null;
+		this.status = Status.A_VENIR;
 		this.jdbc = new TournoiJDBC();
 	}
 	
@@ -56,16 +57,16 @@ public class Tournoi {
 		return this.pays;
 	}
 	
+	public Status getStatus() {
+		return this.status;
+	}
+	
 	public Equipe getVainqueur() {
 		return vainqueur;
 	}
 
 	public void setVainqueur(Equipe vainqueur) {
 		this.vainqueur = vainqueur;
-	}
-
-	public int getIdTournoi() {
-		return idTournoi;
 	}
 
 	public String getNomTournoi() {
@@ -86,7 +87,7 @@ public class Tournoi {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idTournoi);
+		return Objects.hash(nomTournoi);
 	}
 
 	@Override
@@ -97,18 +98,27 @@ public class Tournoi {
 			return false;
 		if (obj instanceof Tournoi) {
 			Tournoi other = (Tournoi) obj;
-			return idTournoi == other.idTournoi && this.compte.equals(other.compte) && this.dateDebut == other.dateDebut
-					&& this.dateFin == other.dateFin && this.niveau.equals(other.niveau) && this.nomTournoi.equals(other.nomTournoi)
-					&& this.pays.equals(pays) && this.vainqueur.equals(other.vainqueur);
+			return this.compte.equals(other.compte) 
+					&& this.dateDebut == other.dateDebut
+					&& this.dateFin == other.dateFin 
+					&& this.niveau.equals(other.niveau) 
+					&& this.nomTournoi.equals(other.nomTournoi)
+					&& this.pays.equals(pays) 
+					&& this.vainqueur.equals(other.vainqueur)
+					&& this.status == other.status;
 		} 
 		return false;
 	}
 	
 	@Override
 	public String toString() {
-		return "Tournoi [id="+ this.idTournoi + ", name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
-				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +"]";
+		return "Tournoi [name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
+				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +", status=" + this.status.denomination() + "]";
 	}
+	
+	// ======================= //
+	// ==== Partie modele ==== //
+	// ======================= //
 	
 	public boolean moinsDeDeuxSemainesEntreDates(Date dateDebut, Date dateFin) {
 		return Math.abs(dateFin.getTime() - dateDebut.getTime()) < 1.21e+9; 
@@ -138,21 +148,19 @@ public class Tournoi {
 		return Status.A_VENIR;
 	}
 	
-	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
-		if (niveau == null && status == null && nom == "") {
-			return jdbc.getAll();
-		} else if (niveau == null && status == null) {
-			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).collect(Collectors.toList());
-		} else if (niveau != null && status == null) {
-			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getNiveau() == niveau).collect(Collectors.toList());
-		} else if (niveau == null && status != null) {
-			return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status).collect(Collectors.toList());
-		}
-		return jdbc.getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
+	public int getDureeTournoi() {
+		int duree = 0;
+		long differenceInMilliseconds = Math.abs(this.dateFin.getTime() - this.dateDebut.getTime());
+	    duree =  (int) TimeUnit.DAYS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
+	    return duree;
 	}
-
-	public Tournoi getByDateDebut(Date dateDebut) throws Exception{
-		return jdbc.getByDateDebut(dateDebut).get();
+	
+	// ===================== //
+	// ==== Partie JDBC ==== //
+	// ===================== //
+	
+	public Tournoi getTournoiDeNom(String nomTournoi) {
+		return jdbc.getById(nomTournoi).orElse(null);
 	}
 	
 	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
@@ -167,12 +175,7 @@ public class Tournoi {
 		jdbc.add(tournoi);
 	}
 	
-	public int getDureeTournoi() {
-		int duree = 0;
-		long differenceInMilliseconds = Math.abs(this.dateFin.getTime() - this.dateDebut.getTime());
-	    duree =  (int) TimeUnit.DAYS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
-	    return duree;
+	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
+		return jdbc.getTournoisNiveauStatusNom(nom, niveau, status);
 	}
-	
-	
 }

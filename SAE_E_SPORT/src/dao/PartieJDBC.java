@@ -27,7 +27,7 @@ public class PartieJDBC implements PartieDAO{
 			while(rs.next()) {
 				TournoiJDBC tournoiBDD = new TournoiJDBC();
 				Tournoi tournoi = null;
-				Optional<Tournoi> opt = tournoiBDD.getById(rs.getInt("idTournoi"));
+				Optional<Tournoi> opt = tournoiBDD.getById(rs.getString("nomTournoi"));
 				tournoi = opt.orElse(null);
 				
 				EquipeJDBC equipeBDD = new EquipeJDBC();
@@ -72,7 +72,7 @@ public class PartieJDBC implements PartieDAO{
             
             if (rs.next()) {
                 TournoiJDBC tjdbc = new TournoiJDBC();
-                Optional<Tournoi> ot = tjdbc.getById(rs.getInt("idTournoi"));
+                Optional<Tournoi> ot = tjdbc.getById(rs.getString("nomTournoi"));
                 Tournoi t = ot.orElse(null);
 
                 EquipeJDBC equipeBDD = new EquipeJDBC();
@@ -99,11 +99,11 @@ public class PartieJDBC implements PartieDAO{
 		boolean res = false;
 		try {
 			CallableStatement cs;
-			cs = ConnectionJDBC.getConnection().prepareCall("insert into Partie (datePartie, heureDebut, deroulement, idTournoi, idEquipe, gagnant) values (?,?,?,?,?,?)");
+			cs = ConnectionJDBC.getConnection().prepareCall("insert into Partie (datePartie, heureDebut, deroulement, nomTournoi, idEquipe, gagnant) values (?,?,?,?,?,?)");
 			cs.setDate(1, p.getDate());
 			cs.setString(2, p.getHeure());
 			cs.setString(3, p.getDeroulement());
-			cs.setInt(4, p.getTournoi().getIdTournoi());
+			cs.setString(4, p.getTournoi().getNomTournoi());
 			cs.setInt(5, p.getEquipe1().getIdEquipe());
 			cs.setInt(6, p.getEquipeGagnant());
 			cs.executeUpdate();
@@ -131,13 +131,13 @@ public class PartieJDBC implements PartieDAO{
 	        Connection connection = ConnectionJDBC.getConnection();
 	        String query;
   
-	        query = "UPDATE Partie SET deroulement = ?, idEquipe = ?, gagnant = ?, idTournoi = ? WHERE datePartie = ? and heureDebut = ?";
+	        query = "UPDATE Partie SET deroulement = ?, idEquipe = ?, gagnant = ?, nomTournoi = ? WHERE datePartie = ? and heureDebut = ?";
 
         	CallableStatement cs = connection.prepareCall(query);
             cs.setString(1, p.getDeroulement());
             cs.setInt(2, p.getEquipe1().getIdEquipe());
             cs.setInt(3, p.getEquipeGagnant());
-            cs.setInt(4, p.getTournoi().getIdTournoi());
+            cs.setString(4, p.getTournoi().getNomTournoi());
             cs.setDate(5, p.getDate());
             cs.setString(6, p.getHeure());
 

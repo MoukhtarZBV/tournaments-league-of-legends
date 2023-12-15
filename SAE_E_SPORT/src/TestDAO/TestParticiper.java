@@ -20,8 +20,9 @@ public class TestParticiper {
 
 	public static void main(String[] args) throws Exception {
 		CreateDB.main(args);
-		Tournoi t1 = new Tournoi(0, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 12, 22)), 
+		Tournoi t1 = new Tournoi("Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 12, 22)), 
 				Date.valueOf(LocalDate.of(2023, 12, 31)), Pays.FR);
+		
 		System.out.println(t1);
 		TournoiJDBC tbd = new TournoiJDBC();
 		tbd.add(t1);
@@ -39,7 +40,7 @@ public class TestParticiper {
 		EquipeJDBC eJDBC = new EquipeJDBC();
 		eJDBC.add(e1);
 				
-		Participer part = new Participer(eJDBC.getByNom("T1").orElse(null), tbd.getTournoiByName("Happy League").orElse(null));
+		Participer part = new Participer(eJDBC.getByNom("T1").orElse(null), tbd.getById("Happy League").orElse(null));
 		part.setNbMatchsJoues(3);
 		part.setNbMatchsGagnes(2);
 		part.setNbPointsGagnes(10);

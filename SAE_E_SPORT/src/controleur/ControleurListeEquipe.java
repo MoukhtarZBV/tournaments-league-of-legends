@@ -51,7 +51,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    JButton bouton = (JButton) e.getSource();
 	    List<Equipe> equipes;
-	    if(bouton.getName().equals("Retour")) {
+	    if(bouton.getText().equals("Retour")) {
 	    	this.vue.dispose();
 	    	try {
 				VueAccueilAdmin vue = new VueAccueilAdmin();

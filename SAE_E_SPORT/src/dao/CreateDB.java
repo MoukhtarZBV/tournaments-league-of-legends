@@ -80,12 +80,6 @@ public class CreateDB {
 		}
 		
 		try {
-			stmt.executeUpdate("DROP TABLE NiveauTournoi");
-		} catch (SQLException e) {
-			System.out.println("Drop NiveauTournoi échoué");
-		}
-		
-		try {
 			stmt.executeUpdate("DROP TABLE Joueur");
 		} catch (SQLException e) {
 			System.out.println("Drop Joueur échoué");
@@ -101,12 +95,6 @@ public class CreateDB {
 			stmt.executeUpdate("DROP TABLE Compte");
 		} catch (SQLException e) {
 			System.out.println("Drop Compte échoué");
-		}
-		
-		try {
-			stmt.executeUpdate("DROP TABLE TypeCompte");
-		} catch (SQLException e) {
-			System.out.println("Drop TypeCompte échoué");
 		}
 		
 		try {
@@ -140,12 +128,6 @@ public class CreateDB {
 			stmt.executeUpdate("DROP SEQUENCE SEQ_Arbitre RESTRICT");
 		} catch (SQLException e) {
 			System.out.println("Drop SEQ_Arbitre échoué");
-		}
-		
-		try {
-			stmt.executeUpdate("DROP SEQUENCE SEQ_Tournoi RESTRICT");
-		} catch (SQLException e) {
-			System.out.println("Drop SEQ_Tournoi échoué");
 		}
 		
 		try {
@@ -186,13 +168,6 @@ public class CreateDB {
 		}
 
 		try {
-			stmt.executeUpdate("CREATE SEQUENCE SEQ_Tournoi START WITH 1 INCREMENT BY 1");
-			System.out.println("-- Séquence SEQ_Tournoi créée");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		try {
 			stmt.executeUpdate("CREATE SEQUENCE SEQ_Administrateur START WITH 1 INCREMENT BY 1");
 			System.out.println("-- Séquence SEQ_Administrateur créée");
 		} catch (SQLException e) {
@@ -213,26 +188,14 @@ public class CreateDB {
 			System.exit(-1);
 		}
 		
-		// Table TypeCompte
-		try {
-			stmt.executeUpdate("CREATE TABLE TypeCompte ("
-					+ "type VARCHAR(20),"
-					+ "CONSTRAINT PK_TypeCompte_type PRIMARY KEY (type))");
-			System.out.println("-- Table TypeCompte créée");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		
 		// Table Compte
 		try { 
 			stmt.executeUpdate("CREATE TABLE Compte ("
 					+ "idCompte INTEGER,"
 					+ "login VARCHAR(30),"
 					+ "motDePasse VARCHAR(30),"
-					+ "type VARCHAR(20),"
-					+ "CONSTRAINT PK_Compte_idCompte PRIMARY KEY (idCompte),"
-					+ "CONSTRAINT FK_Compte_type FOREIGN KEY (type) REFERENCES TypeCompte(type))");
+					+ "type VARCHAR(30),"
+					+ "CONSTRAINT PK_Compte_idCompte PRIMARY KEY (idCompte))");
 			System.out.println("-- Table Compte créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -268,21 +231,9 @@ public class CreateDB {
 			System.exit(-1);
 		}
 		
-		// Table NiveauTournoi
-		try {
-			stmt.executeUpdate("CREATE TABLE NiveauTournoi ("
-					+ "niveau VARCHAR(30),"
-					+ "CONSTRAINT PK_NiveauTournoi_niveau PRIMARY KEY (niveau))");
-			System.out.println("-- Table NiveauTournoi créée");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		
 		// Table Tournoi
 		try {
 			stmt.executeUpdate("CREATE TABLE Tournoi ("
-					+ "idTournoi INTEGER,"
 					+ "nomTournoi VARCHAR(100),"
 					+ "niveau VARCHAR(30),"
 					+ "dateDebut DATE,"
@@ -290,11 +241,11 @@ public class CreateDB {
 					+ "idCompte INTEGER,"
 					+ "nomPays VARCHAR(50),"
 					+ "idEquipe INTEGER,"
-					+ "CONSTRAINT PK_Tournoi_idTournoi PRIMARY KEY (idTournoi)," 
+					+ "status VARCHAR(30),"
+					+ "CONSTRAINT PK_Tournoi_nomTournoi PRIMARY KEY (nomTournoi)," 
 					+ "CONSTRAINT FK_Tournoi_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
 					+ "CONSTRAINT FK_Tournoi_idCompte FOREIGN KEY (idCompte) REFERENCES Compte(idCompte),"
-					+ "CONSTRAINT FK_Tournoi_nomPays FOREIGN KEY (nomPays) REFERENCES Pays(nomPays),"
-					+ "CONSTRAINT FK_Tournoi_niveau FOREIGN KEY (niveau) REFERENCES NiveauTournoi(niveau))");
+					+ "CONSTRAINT FK_Tournoi_nomPays FOREIGN KEY (nomPays) REFERENCES Pays(nomPays))");
 			System.out.println("-- Table Tournoi créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -308,11 +259,11 @@ public class CreateDB {
 					+ "heureDebut CHAR(5),"
 					+ "deroulement VARCHAR(15),"
 					+ "idEquipe INTEGER,"
-					+ "idTournoi INTEGER,"
+					+ "nomTournoi VARCHAR(100),"
 					+ "gagnant INTEGER,"
 					+ "CONSTRAINT PK_Partie_date_heureDebut PRIMARY KEY (datePartie, heureDebut),"
 					+ "CONSTRAINT FK_Partie_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
-					+ "CONSTRAINT FK_Partie_idTournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi),"
+					+ "CONSTRAINT FK_Partie_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi),"
 					+ "CONSTRAINT CHK_Partie_Gagnant check(gagnant in (-1,1,2)))");
 			System.out.println("-- Table Partie créée");
 		} catch (SQLException e) {
@@ -352,13 +303,13 @@ public class CreateDB {
 		try {
 			stmt.executeUpdate("CREATE TABLE Participer ("
 					+ "idEquipe INTEGER,"
-					+ "idTournoi INTEGER,"
+					+ "nomTournoi VARCHAR(100),"
 					+ "nbPointsGagnes INTEGER,"
 					+ "nbMatchsJoues INTEGER,"
 					+ "nbMatchsGagnes INTEGER,"
-					+ "CONSTRAINT PK_Participer_idEquipeTournoi PRIMARY KEY (idEquipe, idTournoi),"
+					+ "CONSTRAINT PK_Participer_idEquipeTournoi PRIMARY KEY (idEquipe, nomTournoi),"
 					+ "CONSTRAINT FK_Participer_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
-					+ "CONSTRAINT FK_Participer_idTournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi))");
+					+ "CONSTRAINT FK_Participer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi))");
 			System.out.println("-- Table Participer créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -399,49 +350,15 @@ public class CreateDB {
 		try {
 			stmt.executeUpdate("CREATE TABLE Associer ("
 					+ "idArbitre INTEGER,"
-					+ "idTournoi INTEGER,"
-					+ "CONSTRAINT PK_Associer_idArbitreTournoi PRIMARY KEY (idArbitre, idTournoi),"
+					+ "nomTournoi VARCHAR(100),"
+					+ "CONSTRAINT PK_Associer_idArbitreTournoi PRIMARY KEY (idArbitre, nomTournoi),"
 					+ "CONSTRAINT FK_Associer_idArbitre FOREIGN KEY (idArbitre) REFERENCES Arbitre(idArbitre),"
-					+ "CONSTRAINT FK_Associer_idTournoi FOREIGN KEY (idTournoi) REFERENCES Tournoi(idTournoi))");
+					+ "CONSTRAINT FK_Associer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi))");
 			System.out.println("-- Table Associer créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		
-		// ==========================================
-		// ========== Creation fonctions ============
-		// ==========================================
-		/*
-		try {
-			stmt.execute("CREATE OR REPLACE FUNCTION EstTournoiDisjoint "
-			        + "(T1_DATEDEBUT Date, "
-			        + "T1_DATEFIN Date, "
-			        + "T2_DATEDEBUT Date, "
-			        + "T2_DATEFIN Date) RETURN VARCHAR2 AS "
-			        + "BEGIN "
-			        + "    IF T1_DATEDEBUT IS NULL OR T1_DATEFIN IS NULL OR T2_DATEDEBUT IS NULL OR T2_DATEFIN IS NULL THEN "
-			        + "        RETURN NULL "
-			        + "    END IF "
-			        + "    IF T1_DATEDEBUT > T1_DATEFIN THEN "
-			        + "        RAISE_APPLICATION_ERROR(-20100, 'La date de début du premier tournoi doit être inférieure à sa date de fin') "
-			        + "    END IF "
-			        + "    IF T2_DATEDEBUT > T2_DATEFIN THEN "
-			        + "        RAISE_APPLICATION_ERROR(-20101, 'La date de début du second tournoi doit être inférieure à sa date de fin') "
-			        + "    END IF "
-			        + "    IF (T1_DATEDEBUT >= T2_DATEDEBUT AND T1_DATEDEBUT < T2_DATEFIN) "
-			        + "    OR (T1_DATEFIN > T2_DATEDEBUT AND T1_DATEFIN <= T2_DATEFIN) "
-			        + "    OR (T2_DATEDEBUT >= T1_DATEDEBUT AND T2_DATEDEBUT < T1_DATEFIN) THEN "
-			        + "        RETURN 'FALSE' "
-			        + "    END IF "
-			        + "    RETURN 'TRUE' "
-			        + "END;"
-			);
-		    System.out.println("Function EstTournoiDisjoint created");
-		} catch (SQLException e) {
-		    e.printStackTrace();
-		}*/
-
 		
 		// ==========================================
 		// ========== Initialiser Tables ============
@@ -451,22 +368,6 @@ public class CreateDB {
 		for (Pays pays : Pays.values()) {
 			try {
 				paysJDBC.add(pays);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		// Table Niveau
-		NiveauJDBC niveauJDBC = new NiveauJDBC();
-		for (Niveau niveau : Niveau.values()) {
-				niveauJDBC.add(niveau);
-		}
-		
-		// Table TypeCompte
-		TypeCompteJDBC typeCompteJDBC = new TypeCompteJDBC();
-		for (TypeCompte typeCompte : TypeCompte.values()) {
-			try {
-			    typeCompteJDBC.add(typeCompte);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

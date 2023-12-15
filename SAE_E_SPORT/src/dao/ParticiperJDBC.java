@@ -25,7 +25,7 @@ public class ParticiperJDBC implements ParticiperDAO{
 			rs = ConnectionJDBC.getConnection().createStatement().executeQuery("select * from participer");
 			while (rs.next()) {
 				Equipe e = (new EquipeJDBC()).getById(rs.getInt("idEquipe")).orElse(null);
-				Tournoi t = (new TournoiJDBC()).getById(rs.getInt("idTournoi")).orElse(null);
+				Tournoi t = (new TournoiJDBC()).getById(rs.getString("nomTournoi")).orElse(null);
 				Participer participation = new Participer(e, t);
 				participation.setNbMatchsGagnes(rs.getInt("nbMatchsGagnes"));
 				participation.setNbMatchsJoues(rs.getInt("nbMatchsJoues"));
@@ -48,9 +48,9 @@ public class ParticiperJDBC implements ParticiperDAO{
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().
-					prepareCall("insert into Participer(idTournoi, idEquipe, nbPointsGagnes, nbMatchsJoues, nbMatchsGagnes)"
+					prepareCall("insert into Participer(nomTournoi, idEquipe, nbPointsGagnes, nbMatchsJoues, nbMatchsGagnes)"
 							  + "values (?, ?, ?, ?, ?)");
-			cs.setInt(1, p.getTournoi().getIdTournoi());
+			cs.setString(1, p.getTournoi().getNomTournoi());
 			cs.setInt(2, p.getEquipe().getIdEquipe());
 			cs.setInt(3, p.getNbPointsGagnes());
 			cs.setInt(4, p.getNbMatchsJoues());
@@ -68,11 +68,11 @@ public class ParticiperJDBC implements ParticiperDAO{
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().
-					prepareCall("update Participer set nbPointsGagnes = ?, nbMatchsJoues = ?, nbMatchsGagnes = ? where idTournoi = ? and idEquipe = ?");
+					prepareCall("update Participer set nbPointsGagnes = ?, nbMatchsJoues = ?, nbMatchsGagnes = ? where nomTournoi = ? and idEquipe = ?");
 			cs.setInt(1, p.getNbPointsGagnes());
 			cs.setInt(2, p.getNbMatchsJoues());
 			cs.setInt(3, p.getNbMatchsGagnes());
-			cs.setInt(4, p.getTournoi().getIdTournoi());
+			cs.setString(4, p.getTournoi().getNomTournoi());
 			cs.setInt(5, p.getEquipe().getIdEquipe());
 			cs.executeUpdate();
 			res = true;
