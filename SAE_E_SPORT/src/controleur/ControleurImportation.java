@@ -33,30 +33,30 @@ public class ControleurImportation implements ActionListener{
 	            if (fc.showOpenDialog(this.vue) == JFileChooser.APPROVE_OPTION) {
 	            	// Récupération du chemin absolu vers le fichier
 	            	String chemin = fc.getSelectedFile().getAbsolutePath();
-	            	 
-	            	this.modele.importerEquipesJoueurs(chemin);
-	            	Object[][] datas = this.modele.getEquipesJoueurs();
-	            	
-		            // Récupération modèle de la JTable
-		            DefaultTableModel model = this.vue.getModel();
-		            
-		            // Efface les lignes et colonnes
-		            model.setRowCount(0);
-		            model.setColumnCount(0);
-		            
-		            for (Object data : datas[0]) {
-		            	model.addColumn(data);
-		            }
-		            
-		            // Ajout des colonnes au modèle
-		            for (Object[] data : datas) {
-		            	model.addRow(data);
-		            }
-		            
-		            this.vue.changerBtnValider(true);
-		            vue.setVisible(true);
+	            	if (this.modele.estBonFichierCSV(chemin, vue.getTournoi())) {
+	            		this.modele.importerEquipesJoueurs(chemin);
+		            	Object[][] datas = this.modele.getEquipesJoueurs();
+		            	
+			            // Récupération modèle de la JTable
+			            DefaultTableModel model = this.vue.getModel();
+			            
+			            // Efface les lignes et colonnes
+			            model.setRowCount(0);
+			            model.setColumnCount(0);
+			            for (Object data : datas[0]) {
+			            	model.addColumn(data);
+			            }
+			            
+			            // Ajout des colonnes au modèle
+			            for (Object[] data : datas) {
+			            	model.addRow(data);
+			            }
+			            this.vue.changerBtnValider(true);
+			            vue.setVisible(true);
+	            	} else {
+	            		this.vue.setMsgErreur("Le fichier importé ne concerne pas ce tournoi");
+	            	}
 	             }
-	        	
 	        } catch (Exception e1) {
 	            e1.printStackTrace();
 	        }

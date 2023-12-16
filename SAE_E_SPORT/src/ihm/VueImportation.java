@@ -126,10 +126,6 @@ public class VueImportation extends JFrame {
 		btnValider.setFocusable(false);
 	}
 	
-	public void setModeleTable () {
-		
-	}
-	
 	public void couleurModeleTable () {
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             /**
