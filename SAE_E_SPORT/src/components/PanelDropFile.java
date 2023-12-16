@@ -19,6 +19,7 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TooManyListenersException;
 
@@ -34,24 +35,17 @@ public class PanelDropFile extends JPanel {
     private Point dragPoint;
 
     private boolean dragOver = false;
-    private BufferedImage target;
 
     private JLabel message;
 
     public PanelDropFile() {
-        try {
-            target = ImageIO.read(new File("target.png"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
         setLayout(new GridBagLayout());
-        message = new JLabel();
-        message.setFont(message.getFont().deriveFont(Font.BOLD, 24));
-        add(message);
-
     }
 
+    public void setMessageComponent(JLabel message) {
+    	this.message = message;
+    }
+    
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(400, 400);
@@ -94,20 +88,19 @@ public class PanelDropFile extends JPanel {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setColor(new Color(0, 255, 0, 64));
             g2d.fill(new Rectangle(getWidth(), getHeight()));
-            if (dragPoint != null && target != null) {
-                int x = dragPoint.x - 12;
-                int y = dragPoint.y - 12;
-                g2d.drawImage(target, x, y, this);
-            }
             g2d.dispose();
         }
     }
 
-    protected void importFiles(final List files) {
+    protected void importFiles(final List<File> files) {
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                message.setText("You dropped " + files.size() + " files");
+                if (files.size() == 1) {
+                	notifyDropListener(files.get(0).getAbsolutePath());
+                } else {
+                	message.setText("Vous avez déposer " + files.size() + " fichiers, veuillez en déposer qu'un seul");
+                }
             }
         };
         SwingUtilities.invokeLater(run);
@@ -157,7 +150,7 @@ public class PanelDropFile extends JPanel {
                 dtde.acceptDrop(dtde.getDropAction());
                 try {
 
-                    List transferData = (List) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    List<File> transferData = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
                     if (transferData != null && transferData.size() > 0) {
                         importFiles(transferData);
                         dtde.dropComplete(true);
@@ -189,5 +182,16 @@ public class PanelDropFile extends JPanel {
             PanelDropFile.this.repaint();
         }
     }
+    
+    // Listener pour que la vue reçoit l'information lorsqu'un fichier est déposé
+    
+    private DropListener dropListener;
 
+    public void setDropListener(DropListener listener) {
+        dropListener = listener;
+    }
+
+    private void notifyDropListener(String filePath) {
+        dropListener.fileDropped(filePath);
+    }
 }

@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -13,6 +14,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import components.DropListener;
+import components.PanelDropFile;
 import controleur.ControleurImportation;
 import modele.Tournoi;
 
@@ -38,6 +41,9 @@ public class VueImportation extends JFrame {
 	private JLabel msgErreur;
 	private JPanel panelMessage;
 	
+	private PanelDropFile panelDrop;
+	private JPanel panelTableOuDrop;
+	
 	private Tournoi tournoi;
 
 	/**
@@ -46,6 +52,7 @@ public class VueImportation extends JFrame {
 	public VueImportation(Tournoi tournoi) {
 		this.tournoi = tournoi;
 		ControleurImportation controleur = new ControleurImportation(this);
+		this.setDropListener(controleur);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 564);
@@ -74,31 +81,7 @@ public class VueImportation extends JFrame {
 		panelCenter.setBorder(new EmptyBorder(50, 10, 0, 10));
 		panelCenter.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panelTable = new JPanel();
-		panelTable.setBackground(new Color(255, 255, 255));
-		panelCenter.add(panelTable, BorderLayout.CENTER);
-		panelTable.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panelJTable = new JPanel();
-		panelJTable.setBorder(new EmptyBorder(0, 20, 20, 20));
-		panelJTable.setBackground(new Color(255, 255, 255));
-		panelJTable.setLayout(new BorderLayout());
-		panelTable.add(panelJTable, BorderLayout.CENTER);
-		
-		table = new JTable(modele);
-		table.setRowHeight(25);
-		table.setBorder(new LineBorder(new Color(0, 0, 0)));
-		this.couleurModeleTable();
-		panelJTable.add(table, BorderLayout.CENTER);
-		
-		this.panelMessage = new JPanel();
-		panelMessage.setBackground(new Color(255, 255, 255));
-		panelTable.add(panelMessage, BorderLayout.NORTH);
-		
-		this.msgErreur = new JLabel(" ");
-		msgErreur.setHorizontalAlignment(SwingConstants.CENTER);
-		panelMessage.add(msgErreur);
-		
+		// PANEL BOUTONS
 		JPanel panelNorth = new JPanel();
 		panelNorth.setBackground(new Color(255, 255, 255));
 		panelCenter.add(panelNorth, BorderLayout.NORTH);
@@ -124,13 +107,33 @@ public class VueImportation extends JFrame {
 		panelNorth.add(btnValider);
 		btnValider.addActionListener(controleur);	
 		btnValider.setFocusable(false);
+		
+		// PANEL TABLE ET DROP
+		panelTableOuDrop = new JPanel();
+		panelTableOuDrop.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panelTableOuDrop.setBackground(new Color(255, 255, 255));
+		panelCenter.add(panelTableOuDrop, BorderLayout.CENTER);
+		panelTableOuDrop.setLayout(new BorderLayout(0, 0));
+
+		// Panel message
+		this.panelMessage = new JPanel();
+		panelMessage.setBackground(new Color(255, 255, 255));
+		panelTableOuDrop.add(panelMessage, BorderLayout.NORTH);
+
+		this.msgErreur = new JLabel(" ");
+		msgErreur.setHorizontalAlignment(SwingConstants.CENTER);
+		panelMessage.add(msgErreur);
+		
+		// ZONE DE DROP
+		panelDrop = new PanelDropFile();
+		panelDrop.setDropListener(new DropListenerImpl());
+		panelDrop.setMessageComponent(msgErreur);
+		panelTableOuDrop.add(panelDrop, BorderLayout.CENTER);
+
 	}
 	
 	public void couleurModeleTable () {
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            /**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -146,6 +149,21 @@ public class VueImportation extends JFrame {
                 return cell;
             }
         });
+	}
+	
+	public void ajouterEquipesTable(Object[][] fichierCSV) {
+		// Récupération modèle de la JTable
+        DefaultTableModel model = getModel();
+        // Efface les lignes et colonnes
+        model.setRowCount(0);
+        model.setColumnCount(0);
+        for (Object colonne : fichierCSV[0]) {
+        	model.addColumn(colonne);
+        }
+        // Ajout des colonnes au modèle
+        for (Object[] ligne : fichierCSV) {
+        	model.addRow(ligne);
+        }
 	}
 	
 	public void changerBtnValider(boolean etat) {
@@ -175,4 +193,31 @@ public class VueImportation extends JFrame {
 	public Tournoi getTournoi() {
 		return this.tournoi;
 	}
+	
+	public void afficherTableEquipes() {
+		panelDrop.setVisible(false);
+		table = new JTable(modele);
+		table.setRowHeight(25);
+		table.setBorder(new EmptyBorder(10, 10, 10, 0));
+		this.couleurModeleTable();
+		panelTableOuDrop.add(table, BorderLayout.CENTER);
+	}
+	
+	private class DropListenerImpl implements DropListener {
+        @Override
+        public void fileDropped(String filePath) {
+        	notifyDropListener(filePath);
+        }
+    }
+	
+	// Listener pour que le controleur reçoit l'information lorsqu'un fichier est déposé
+	private DropListener dropListener;
+
+    public void setDropListener(DropListener listener) {
+        dropListener = listener;
+    }
+
+    private void notifyDropListener(String filePath) {
+        dropListener.fileDropped(filePath);
+    }
 }
