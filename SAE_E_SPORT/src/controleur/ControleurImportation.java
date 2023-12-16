@@ -34,23 +34,21 @@ public class ControleurImportation implements ActionListener, DropListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	    JButton bouton = (JButton) e.getSource();
-	    if (bouton.getText().equals("Importer")) {
+	    if (bouton.getText().equals("Importez depuis l'explorateur")) {
 	        try {
 	            JFileChooser fc = new JFileChooser();
 	            if (fc.showOpenDialog(this.vue) == JFileChooser.APPROVE_OPTION) {
-	            	// Récupération du chemin absolu vers le fichier
 	            	String chemin = fc.getSelectedFile().getAbsolutePath();
 	            	afficherTableEquipes(chemin);
 	             }
 	        } catch (Exception e1) {
 	            e1.printStackTrace();
 	        }
-	    }
+	    } 
 	    if (bouton.getText().equals("Valider")) {
 	    	try {
 	    		EtatEquipe etat = this.modele.verifierEquipe();
 				if(etat==EtatEquipe.MAL_COMPOSITION || etat==EtatEquipe.JOUEUR_EXISTE) {
-					this.vue.setColorMessage(new Color(255, 204, 204));
 					this.vue.setMsgErreur("Un ou plusieurs joueurs d'équipe appartiennent à plus d'une équipe");
 				} else {
 					if (etat == EtatEquipe.OK) {
@@ -60,8 +58,7 @@ public class ControleurImportation implements ActionListener, DropListener {
 							e1.printStackTrace();
 						}
 					}
-					this.vue.setColorMessage(new Color(204, 255, 204));
-					this.vue.setMsgErreur("Les équipes ont bien été importées");
+					this.vue.setMsgSucces("Les équipes ont bien été importées");
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
@@ -89,6 +86,7 @@ public class ControleurImportation implements ActionListener, DropListener {
 			this.vue.ajouterEquipesTable(this.modele.getEquipesJoueurs());
 		    this.vue.changerBtnValider(true);
 		    this.vue.setVisible(true);
+		    this.vue.setMsgNormal("Voici les équipes qui seront importées");
 		} else {
 			this.vue.setMsgErreur("Le fichier importé ne concerne pas ce tournoi");
 		}

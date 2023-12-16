@@ -28,6 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import ihm.Palette;
+
 public class PanelDropFile extends JPanel {
 
     private DropTarget dropTarget;
@@ -36,13 +38,15 @@ public class PanelDropFile extends JPanel {
 
     private boolean dragOver = false;
 
+    private JPanel messageContainer;
     private JLabel message;
 
     public PanelDropFile() {
         setLayout(new GridBagLayout());
     }
 
-    public void setMessageComponent(JLabel message) {
+    public void setMessageComponent(JPanel container, JLabel message) {
+    	this.messageContainer = container;
     	this.message = message;
     }
     
@@ -100,6 +104,8 @@ public class PanelDropFile extends JPanel {
                 	notifyDropListener(files.get(0).getAbsolutePath());
                 } else {
                 	message.setText("Vous avez déposer " + files.size() + " fichiers, veuillez en déposer qu'un seul");
+                	message.setForeground(Palette.ROUGE);
+            		messageContainer.setBackground(Palette.FOND_ROUGE);
                 }
             }
         };
