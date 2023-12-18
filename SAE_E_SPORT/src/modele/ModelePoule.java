@@ -121,20 +121,4 @@ public class ModelePoule {
 		return res;
 	}
 	
-	public void generationPoule(Tournoi t){
-		List<Equipe> equipes = new ArrayList<>(); 
-		// Récupération de la liste des équipes qui participent au tournoi
-		for(Entry<String, Participer> part : this.participations.entrySet()) {
-			equipes.add(part.getValue().getEquipe());
-		}
-		// Création des matchs
-		for(int i = 0; i < equipes.size(); i++) {
-			for (int j = i+1; j < equipes.size(); j++) {
-				Partie partie = new Partie(Date.valueOf(LocalDate.of(2023, 12, 28)), "12:00", "Poule", equipes.get(i), t);
-				partie.setEquipeGagnant(-1);
-				partie.setEquipe2(equipes.get(j));
-			}
-		}
-	}
-	
 }
