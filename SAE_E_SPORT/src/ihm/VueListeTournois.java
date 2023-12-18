@@ -31,7 +31,9 @@ import java.awt.Image;
 import javax.swing.table.DefaultTableModel;
 
 import controleur.ControleurListeTournois;
+import dao.ConnectionJDBC;
 import dao.TournoiJDBC;
+import dao.UpdateDB;
 import modele.Niveau;
 import modele.Status;
 import modele.Tournoi;
@@ -59,7 +61,6 @@ public class VueListeTournois extends JFrame {
 					List<Tournoi> tournois = new TournoiJDBC().getAll();
 					VueListeTournois frame = new VueListeTournois(tournois);
 					frame.setVisible(true);
-					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -69,7 +70,6 @@ public class VueListeTournois extends JFrame {
 	
 	
 	public VueListeTournois(List<Tournoi> tournois) {
-		
 		ControleurListeTournois controleur = new ControleurListeTournois(this);
 		
 		
@@ -185,7 +185,6 @@ public class VueListeTournois extends JFrame {
 		panelTris.add(triStatus);
 		
 		
-		
 		///// PANEL LISTE TOURNOIS \\\\\
 		JPanel panelListe = new JPanel();
 		panelListe.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -227,7 +226,6 @@ public class VueListeTournois extends JFrame {
 		panelListe.add(tableScroll);
 		
 		
-		
 		///// PANEL BOUTONS \\\\\
 		JPanel panelBoutons = new JPanel();
 		panelBoutons.setBorder(new EmptyBorder(10, 100, 10, 100));
@@ -260,7 +258,7 @@ public class VueListeTournois extends JFrame {
 		DefaultTableModel modele = ((DefaultTableModel) table.getModel());
 		modele.setRowCount(0);
 		for (Tournoi tournoi : tournois) {
-			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), Tournoi.etatTournoi(tournoi).denomination()});
+			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), tournoi.getStatus().denomination()});
 		}
 	}
 	

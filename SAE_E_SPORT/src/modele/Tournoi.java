@@ -3,6 +3,7 @@ package modele;
 import java.sql.Date;
 
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
@@ -27,9 +28,30 @@ public class Tournoi {
 	private TournoiJDBC jdbc;
 	
 	public Tournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) throws IllegalArgumentException {
-		if (dateDebut.compareTo(dateFin) > 0) {
+		this.jdbc = new TournoiJDBC();
+		if (nomTournoi.trim().length() == 0) {
+			throw new IllegalArgumentException("Le nom du tournoi ne doit pas être vide");
+		} if (niveau == null) {
+			throw new IllegalArgumentException("Le niveau ne doit pas être vide");
+		} if (pays == null) {
+			throw new IllegalArgumentException("Le pays ne doit pas être vide");
+		} if (nomTournoi.length() >= 100) {
+			throw new IllegalArgumentException("Le nom du tournoi ne peut dépasser les 100 caractères");
+		} if (getTournoiDeNom(nomTournoi) != null) {
+			throw new IllegalArgumentException("Un tournoi portant ce nom existe déjà");
+		} if (dateDebut.compareTo(new Date(System.currentTimeMillis())) <= 0) {
+			throw new IllegalArgumentException("La date de debut doit être supérieure à la date du jour");
+		} if (dateDebut.after(dateFin)) {
 			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
-		} 
+		} if (!anneePourSaisonEnCours(dateDebut)) {
+			throw new IllegalArgumentException("L'année de la date doit être la même que celle en cours");
+		} if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
+			throw new IllegalArgumentException("Le tournoi ne peut durer plus de deux semaines");
+		} if (!minimum4JoursEntreDates(dateDebut, dateFin)) {
+			throw new IllegalArgumentException("Le tournoi doit durer minimum quatre jours");
+		} if (existeTournoiEntreDates(dateDebut, dateFin)) {
+			throw new IllegalArgumentException("Il existe déjà un tournoi sur ce créneau");
+		}
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
 		this.dateDebut = dateDebut;
@@ -38,7 +60,19 @@ public class Tournoi {
 		this.compte = null;
 		this.vainqueur = null;
 		this.status = Status.A_VENIR;
-		this.jdbc = new TournoiJDBC();
+	}
+	
+	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) {
+		Tournoi tournoi = new Tournoi();
+		tournoi.nomTournoi = nomTournoi;
+        tournoi.niveau = niveau;
+        tournoi.dateDebut = dateDebut;
+        tournoi.dateFin = dateFin;
+        tournoi.pays = pays;
+        tournoi.compte = null;
+        tournoi.vainqueur = null;
+        tournoi.status = Status.A_VENIR;
+        return tournoi;
 	}
 	
 	public Tournoi() {
@@ -130,6 +164,10 @@ public class Tournoi {
 		return calendar.get(Calendar.YEAR) == LocalDate.now().getYear();
 	}
 	
+	public boolean minimum4JoursEntreDates(Date dateDebut, Date dateFin) {
+		return TimeUnit.DAYS.convert(dateFin.getTime() - dateDebut.getTime(), TimeUnit.MILLISECONDS) + 1 >= 4;
+	}
+	
 	public static boolean estTournoiDisjoint(Date dateDebutT1, Date dateFinT1, Date dateDebutT2, Date dateFinT2) {
 		if ((dateDebutT1.compareTo(dateDebutT2) >= 0 && dateDebutT1.compareTo(dateFinT2) < 0) ||
 			(dateFinT1.compareTo(dateDebutT2) > 0 && dateFinT1.compareTo(dateFinT2) <= 0) ||
@@ -137,15 +175,6 @@ public class Tournoi {
 			return false;
 		}
 		return true;
-	}
-	
-	public static Status etatTournoi(Tournoi tournoi) {
-		if (tournoi.getDateFin().compareTo(new Date(System.currentTimeMillis())) < 0) {
-			return Status.TERMINE;
-		} else if (tournoi.getDateDebut().compareTo(new Date(System.currentTimeMillis())) < 0) {
-			return Status.EN_COURS;
-		}
-		return Status.A_VENIR;
 	}
 	
 	public int getDureeTournoi() {
@@ -163,7 +192,7 @@ public class Tournoi {
 		return jdbc.getById(nomTournoi).orElse(null);
 	}
 	
-	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) throws SQLException {
+	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) {
 		return jdbc.existeTournoiEntreDates(dateDebut, dateFin);
 	}
 	
@@ -171,7 +200,7 @@ public class Tournoi {
 		return jdbc.getAll();
 	}
 	
-	public void ajouterTournoi(Tournoi tournoi) throws Exception {
+	public void ajouterTournoi(Tournoi tournoi) {
 		jdbc.add(tournoi);
 	}
 	

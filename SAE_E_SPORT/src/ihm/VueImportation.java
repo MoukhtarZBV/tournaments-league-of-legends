@@ -206,25 +206,6 @@ public class VueImportation extends JFrame {
 
 	}
 	
-	public void couleurModeleTable () {
-		tableEquipes.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (row == 0) {
-                    cell.setBackground(new Color (56,111,215));
-                    cell.setForeground(new Color (255,255,255));
-                } else {
-                	cell.setBackground(Color.WHITE);
-                	cell.setForeground(new Color (0,0,0));
-                }
-                return cell;
-            }
-        });
-	}
-	
 	private void mettreIconeDansHeader(String colonne, ImageIcon image) {
 		tableEquipes.getColumn(colonne).setHeaderRenderer(new TableCellRenderer() {
 		        @Override
@@ -274,7 +255,6 @@ public class VueImportation extends JFrame {
 	
 	public void afficherTableEquipes() {
 		panelDrop.setVisible(false);
-		//this.couleurModeleTable();
 		JScrollPane tableScroll = new JScrollPane();
 		tableScroll.getViewport().setBackground(Palette.DARK_GRAY);
 		tableScroll.setBackground(Palette.DARK_GRAY);

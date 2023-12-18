@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 import components.DropListener;
 import ihm.VueImportation;
+import ihm.VueTournoi;
 import modele.ModeleImportation;
 import modele.ModeleImportation.EtatEquipe;
 
@@ -66,6 +67,8 @@ public class ControleurImportation implements ActionListener, DropListener {
 	    }
 	    
 	    if (bouton.getText().equals("Retour")) {
+	    	VueTournoi vueTournoi = new VueTournoi(vue.getTournoi());
+			vueTournoi.setVisible(true);
 	    	this.vue.dispose();
 	    }    
 	}

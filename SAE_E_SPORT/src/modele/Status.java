@@ -2,7 +2,7 @@ package modele;
 
 public enum Status {
 
-	A_VENIR("À venir"), EN_COURS("En cours"), TERMINE("Terminé");
+	A_VENIR("À venir"), EN_COURS("En cours"), TERMINE("Terminé"), ANNULE("Annulé"), ATTENTE_RESULTATS("Attente de résultats");
 	
 	private String denomination;
 	

@@ -481,27 +481,6 @@ public class VueCreationTournoi extends JFrame {
 	public void effacerMessageSucces() {
 		this.panelSucces.setVisible(false);
 	}
-
-	public boolean champVide() {
-		boolean unChampVide = false;
-		if (this.inputNom.getText().equals("")) {
-			unChampVide = true;
-		} else if (((String) this.inputPays.getSelectedItem()).equals("-- Pays --")) {
-			unChampVide = true;
-		} else if (((String) this.inputNiveau.getSelectedItem()).equals("-- Niveau --")) {
-			unChampVide = true;
-		} else if (this.inputDateDebut.getForeground() == Color.LIGHT_GRAY ||
-				this.inputDateDebut.getForeground().equals("") ||
-				this.inputDateFin.getForeground() == Color.LIGHT_GRAY ||
-				this.inputDateFin.getForeground().equals("")) {
-			unChampVide = true;
-		}
-		return unChampVide;
-	}
-	
-	public boolean nomTropLong() {
-		return this.inputNom.getText().length() > 100;
-	}
 	
 	public String getNom() {
 		return this.inputNom.getText();
