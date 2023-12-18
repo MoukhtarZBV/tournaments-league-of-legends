@@ -1,39 +1,34 @@
 package controleur;
 
 import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JButton;
 
-import dao.ConnectionJDBC;
-import dao.EquipeJDBC;
 import ihm.VueEquipe;
 import ihm.VueListeEquipe;
 import modele.Equipe;
 
 public class ControleurEquipe implements ActionListener{
-	public enum Etat {
-		ATTENTE_CLIC_SAVE, FIN_SAVE
-	}
 	private VueEquipe vue;
-	private Etat etat;
+	private Equipe modele;
 
 	public ControleurEquipe(VueEquipe vue) {
 		this.vue = vue;
+		this.modele = new Equipe();
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
-		EquipeJDBC ejdbc = new EquipeJDBC();
 		if (bouton.getText().equals("Sauvegarder")) {
 			try {
 				String name = this.vue.getNomEquipe().replace(" ", "");
 				if (!name.equals("")) {
-					ejdbc.update(new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe()));
+					this.modele.miseAJourEquipe((new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe())));
 					this.vue.dispose();
-					VueListeEquipe vue = new VueListeEquipe(ejdbc.getAll());
+					VueListeEquipe vue = new VueListeEquipe(this.modele.toutesLesEquipes());
 					vue.setVisible(true);
 				}else {
 					this.vue.setColorMessage(new Color(255, 204, 204));
@@ -47,7 +42,7 @@ public class ControleurEquipe implements ActionListener{
 			this.vue.dispose();
 			VueListeEquipe vue;
 			try {
-				vue = new VueListeEquipe(ejdbc.getAll());
+				vue = new VueListeEquipe(this.modele.toutesLesEquipes());
 				vue.setVisible(true);
 			} catch (Exception e1) {
 				e1.printStackTrace();
