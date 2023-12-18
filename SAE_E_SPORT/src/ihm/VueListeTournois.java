@@ -12,16 +12,12 @@ import java.awt.EventQueue;
 
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -30,6 +26,7 @@ import java.awt.Image;
 
 import javax.swing.table.DefaultTableModel;
 
+import components.JTextFieldArrondi;
 import controleur.ControleurListeTournois;
 import dao.ConnectionJDBC;
 import dao.TournoiJDBC;
@@ -41,32 +38,16 @@ import modele.Tournoi;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 
-import java.awt.Insets;
-import java.awt.FlowLayout;
-import java.awt.Component;
-import javax.swing.Box;
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
 
 public class VueListeTournois extends JFrame {
 	
 	private JTextField 	champRecherche;
-	private JTable     	table;
-	private JComboBox   triNiveau;
-	private JComboBox   triStatus;
-	private JTextField textField;
-
-	public static void main (String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {											
-					List<Tournoi> tournois = new TournoiJDBC().getAll();
-					VueListeTournois frame = new VueListeTournois(tournois);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTable     	table = new JTable();
+	private JComboBox<String> triNiveau = new JComboBox<String>();
+	private JComboBox<String> triStatus = new JComboBox<String>();
 	
 	
 	public VueListeTournois(List<Tournoi> tournois) {
@@ -74,133 +55,146 @@ public class VueListeTournois extends JFrame {
 		
 		
 		///// FENÊTRE \\\\\
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(510, 240, 900, 600);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addWindowListener(controleur);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Tournois");
+		setResizable(false);
 		
-		
-		
-		///// PANEL PRINCIPAL \\\\\
+
+		///// PANEL PRINCIPAL \\\\\	
 		JPanel contentPane = new JPanel();
-		contentPane.setBackground(Color.WHITE);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		
+		///// MENU BAR \\\\\
+		JPanel panelSide = new JPanel();
+		panelSide.setBackground(Palette.DARK_GRAY);
+		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Palette.GRAY));
+		panelSide.setPreferredSize(new Dimension(125, 600));
+		contentPane.add(panelSide, BorderLayout.WEST);
+		
+		
+		///// MAIN \\\\\
+		JPanel panelMain = new JPanel();
+		panelMain.setBorder(new EmptyBorder(25, 0, 25, 0));
+		panelMain.setLayout(new BorderLayout(0, 0));
+		panelMain.setBackground(Palette.DARK_GRAY);
+		contentPane.add(panelMain, BorderLayout.CENTER);
+		
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
-		panelTop.setBackground(Palette.COOL);
-		panelTop.setBorder(new EmptyBorder(0, 0, 0, 0));
-		panelTop.setLayout(new BorderLayout(0, 0));
-		contentPane.add(panelTop, BorderLayout.NORTH);
+		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setBackground(Palette.DARK_GRAY);
+		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setLayout(new GridLayout());
+		panelMain.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
 		JLabel lblTitre = new JLabel("Tournois");
-		lblTitre.setForeground(Palette.WARDEN);
-		lblTitre.setBorder(new EmptyBorder(20, 0, 20, 0));
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitre.setFont(new Font("DejaVu Sans", Font.BOLD | Font.ITALIC, 40));
-		panelTop.add(lblTitre, BorderLayout.CENTER);
-		
-		// Ligne colorée séparatrice
-		JTextField ligneColoree = new JTextField();
-		ligneColoree.setBackground(Palette.WARDEN);
-		ligneColoree.setEnabled(false);
-		ligneColoree.setEditable(false);
-		ligneColoree.setFont(new Font("Tahoma", Font.PLAIN, 5));
-		panelTop.add(ligneColoree, BorderLayout.SOUTH);
+		lblTitre.setForeground(Palette.WHITE);
+		lblTitre.setFont(Police.GROS_TITRE);
+		panelTop.add(lblTitre);
 		
 		
-		
-		///// PANEL MAIN \\\\\
-		JPanel panelMain = new JPanel();
-		panelMain.setBackground(Color.WHITE);
-		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
-		panelMain.setLayout(new BorderLayout(10, 10));
-		contentPane.add(panelMain, BorderLayout.CENTER);
-		
+		///// MAN PANEL MILIEU \\\\\
+		JPanel panelCenter = new JPanel();
+		panelCenter.setLayout(new BorderLayout(0, 25));
+		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
+		panelMain.add(panelCenter, BorderLayout.CENTER);
 		
 		
 		///// PANEL RECHERCHE ET TRIS \\\\\
 		JPanel panelSearch = new JPanel();
-		panelSearch.setBorder(new EmptyBorder(5, 5, 5, 5));
-		panelSearch.setBackground(Palette.COOL);
+		panelSearch.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panelSearch.setBackground(Palette.GRAY);
 		panelSearch.setLayout(new GridLayout(0, 2, 10, 0));
-		panelMain.add(panelSearch, BorderLayout.NORTH);
+		panelCenter.add(panelSearch, BorderLayout.NORTH);
 		
-		JPanel panel = new JPanel();
-		panelSearch.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
+		
+		///// BARRE RECHERCHE \\\\\
+		JPanel panelBarreRecherche = new JPanel();
+		panelBarreRecherche.setLayout(new BorderLayout(0, 0));
+		panelBarreRecherche.setOpaque(false);
+		panelSearch.add(panelBarreRecherche);
 		
 		// Champ de recherche
-		champRecherche = new JTextField();
-		champRecherche.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		champRecherche = new JTextFieldArrondi();
+		champRecherche.setFont(Police.INPUT);
+		champRecherche.setBackground(Palette.DARK_GRAY);
+		champRecherche.setForeground(Palette.WHITE);
 		champRecherche.setText("");
-		panel.add(champRecherche, BorderLayout.CENTER);
 		champRecherche.setColumns(10);
+		panelBarreRecherche.add(champRecherche, BorderLayout.CENTER);
 		
 		// Bouton rechercher
-		JButton btnRecherche = new JButton();
-		btnRecherche.setFont(new Font("Gigi", Font.PLAIN, 12));
-		btnRecherche.setBackground(Palette.WHITE);
-		btnRecherche.addActionListener(controleur);
-		
 		ImageIcon icon = new ImageIcon(VueListeEquipe.class.getResource("/Images/Search_Icon.png"));
 		Image img = icon.getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 		icon = new ImageIcon(img);
+		
+		JButton btnRecherche = new JButton();
+		btnRecherche.setFont(new Font("Gigi", Font.PLAIN, 12));
+		btnRecherche.setName("Rechercher");
+		btnRecherche.setBackground(Palette.WHITE);
+		btnRecherche.addActionListener(controleur);
 		btnRecherche.setIcon(icon);
-		panel.add(btnRecherche, BorderLayout.EAST); 
+		panelBarreRecherche.add(btnRecherche, BorderLayout.EAST); 
 		
 		// Panel des tris
 		JPanel panelTris = new JPanel();
-		panelTris.setBackground(Palette.COOL);
+		panelTris.setOpaque(false);
 		panelTris.setLayout(new GridLayout(1, 0, 5, 0));
 		panelSearch.add(panelTris);
 		
 		// Combo box niveau
-		triNiveau = new JComboBox<String>();
 		triNiveau.setMaximumRowCount(10);
-		triNiveau.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		triNiveau.setBackground(Color.WHITE);
-		triNiveau.setForeground(Palette.WARDEN);
+		triNiveau.setFont(Police.COMBO);
+		triNiveau.setBackground(Palette.GRAY);
+		triNiveau.setForeground(Palette.WHITE);
+		triNiveau.setFocusable(false);
+		triNiveau.addItemListener(controleur);
 		triNiveau.addItem("-- Niveau --");
 		for (Niveau niveau : Niveau.values()) {
         	triNiveau.addItem(niveau.denomination());
         }
-		triNiveau.addItemListener(controleur);
 		panelTris.add(triNiveau);
 		
 		// Combo box etats
-		triStatus = new JComboBox<String>();
 		triStatus.setMaximumRowCount(10);
-		triStatus.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		triStatus.setBackground(Color.WHITE);
-		triStatus.setForeground(Palette.WARDEN);
+		triStatus.setFont(Police.COMBO);
+		triStatus.setBackground(Palette.GRAY);
+		triStatus.setForeground(Palette.WHITE);
+		triStatus.setFocusable(false);
+		triStatus.addItemListener(controleur);
 		triStatus.addItem("-- Status --");
 		for (Status status : Status.values()) {
         	triStatus.addItem(status.denomination());
         }
-		triStatus.addItemListener(controleur);
 		panelTris.add(triStatus);
 		
 		
 		///// PANEL LISTE TOURNOIS \\\\\
 		JPanel panelListe = new JPanel();
-		panelListe.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelListe.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelListe.setLayout(new BoxLayout(panelListe, BoxLayout.X_AXIS));
-		panelListe.setBackground(Palette.COOL);
-		panelMain.add(panelListe, BorderLayout.CENTER);
+		panelListe.setBackground(Palette.GRAY);
+		panelCenter.add(panelListe, BorderLayout.CENTER);
+		table.setBorder(null);
+		table.setOpaque(false);
 		
 		// Tableau
-		table = new JTable();
 		table.setSelectionBackground(Palette.COOL);
 		table.setRowMargin(5);
-		table.setRowHeight(20);
-		table.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		table.setRowHeight(35);
+		table.setFont(Police.LABEL);
 		table.setShowGrid(false);
-		table.setBackground(Color.WHITE);
-		table.setForeground(Palette.WARDEN);
+		table.setBackground(Palette.DARK_GRAY);
+		table.setForeground(Palette.WHITE);
 		
 		// Modele de la table
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
@@ -215,40 +209,49 @@ public class VueListeTournois extends JFrame {
 		afficherTournois(tournois);
 		
 		// Table Header
-		table.getTableHeader().setBackground(Palette.WARDEN);
-		table.getTableHeader().setForeground(Color.WHITE);
+		table.getTableHeader().setBackground(Palette.WHITE);
+		table.getTableHeader().setForeground(Palette.DARK_GRAY);
 		table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 15));
 		table.addMouseListener(controleur);
 		
 		// Scroll pane de la table
 		JScrollPane tableScroll = new JScrollPane(table);
-		tableScroll.getViewport().setBackground(Palette.COOL);
+		tableScroll.setBorder(null);
+		tableScroll.getViewport().setBackground(Palette.GRAY);
 		panelListe.add(tableScroll);
 		
 		
 		///// PANEL BOUTONS \\\\\
 		JPanel panelBoutons = new JPanel();
 		panelBoutons.setBorder(new EmptyBorder(10, 100, 10, 100));
-		panelBoutons.setBackground(Palette.COOL);
+		panelBoutons.setBackground(Palette.GRAY);
+		panelBoutons.setPreferredSize(new Dimension(panelBoutons.getWidth(), 60));
 		panelBoutons.setLayout(new GridLayout(0, 2, 15, 0));
-		panelMain.add(panelBoutons, BorderLayout.SOUTH);
+		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 		
 		// Bouton annuler
-		JButton btnRetour = new JButton("Retour");
-		btnRetour.setBackground(new Color(255, 255, 255));
-		btnRetour.setBorder(new LineBorder(Palette.WARDEN, 2, true));
-		btnRetour.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		JButton btnRetour = new JButton("<html><body style='padding: 5px 25px;'>Retour</body></html>");
+		btnRetour.setName("Retour");
+		btnRetour.setBackground(Palette.GRAY);
+		btnRetour.setForeground(Palette.WHITE);
+		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
 		// Bouton valider
-		JButton btnCreer = new JButton("Créer Tournoi");
-		btnCreer.setBackground(new Color(255, 255, 255));
-		btnCreer.setBorder(new LineBorder(Palette.WARDEN, 2, true));
-		btnCreer.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnCreer.addActionListener(controleur);
-		panelBoutons.add(btnCreer);
+		JButton btnNouveau = new JButton("<html><body style='padding: 5px 25px;'>Nouveau tournoi</body></html>");
+		btnNouveau.setName("Nouveau");
+		btnNouveau.setBackground(Palette.GRAY);
+		btnNouveau.setForeground(Palette.WHITE);
+		btnNouveau.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnNouveau.setFont(Police.LABEL);
+		btnNouveau.setFocusable(false);
+		btnNouveau.addActionListener(controleur);
+		panelBoutons.add(btnNouveau);
 	}
+	
 	
 	public String saisieChamp() {
 		return this.champRecherche.getText();
@@ -263,7 +266,7 @@ public class VueListeTournois extends JFrame {
 	}
 	
 	public boolean estOptionComboboxNiveau(String option){
-		ComboBoxModel model = triNiveau.getModel();
+		ComboBoxModel<String> model = triNiveau.getModel();
 		for (int i = 0; i < model.getSize(); i++) {
 			if (((String) model.getElementAt(i)).equals(option)){
 				return true;
@@ -273,7 +276,7 @@ public class VueListeTournois extends JFrame {
 	}
 	
 	public boolean estOptionComboboxStatus(String option){
-		ComboBoxModel model = triStatus.getModel();
+		ComboBoxModel<String> model = triStatus.getModel();
 		for (int i = 0; i < model.getSize(); i++) {
 			if (((String) model.getElementAt(i)).equals(option)){
 				return true;

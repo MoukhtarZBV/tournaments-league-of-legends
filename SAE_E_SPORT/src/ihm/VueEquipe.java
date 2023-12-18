@@ -24,6 +24,7 @@ import controleur.ControleurEquipe;
 import modele.Equipe;
 import modele.Joueur;
 import modele.Pays;
+import modele.Tournoi;
 
 public class VueEquipe extends JFrame {
 
@@ -33,13 +34,16 @@ public class VueEquipe extends JFrame {
 	private Optional<Equipe> equipe;
 	private JLabel msgErreur;
 	private JPanel panelErreur;
+	
+	private Tournoi papa;
 
 	/**
 	 * Launch the application.
 	 */
-	public VueEquipe(List<Equipe> equipes, Optional<Equipe> equipe) {
+	public VueEquipe(List<Equipe> equipes, Optional<Equipe> equipe, Tournoi papa) {
 		
 		this.equipe = equipe;
+		this.papa = papa;
 		ControleurEquipe controleur = new ControleurEquipe(this);
 		
 		///// FENÊTRE \\\\\
@@ -198,10 +202,6 @@ public class VueEquipe extends JFrame {
 		titreCompo.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTitreCompo.add(titreCompo);
 		
-		
-		// Données du tableau (A RETIRER PLUS TARD)
-        Object[] columnsName = new Object [] {"Num", "Joueur"};
-        
         DefaultTableModel model = new DefaultTableModel(new Object[][] {},
 				new String[] {"Num", "Joueur"});
         
@@ -254,5 +254,9 @@ public class VueEquipe extends JFrame {
 	
 	public void setColorMessage(Color color) {
 		panelErreur.setBackground(color);
+	}
+	
+	public Tournoi getPapa() {
+		return this.papa;
 	}
 }

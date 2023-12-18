@@ -1,17 +1,14 @@
 package modele;
 
-import java.awt.Color;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import controleur.ControleurEquipe.Etat;
+import Fonctions.LireCSV;
 import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import dao.JoueurJDBC;
@@ -50,12 +47,10 @@ public class ModeleImportation {
 		this.equipes.clear();
         String line;
         List<String[]> data = new LinkedList<>();
-    	BufferedReader br = new BufferedReader(new FileReader(chemin));
-        while ((line = br.readLine()) != null) {
-            String[] values = line.split(",");
-            data.add(values);
-        }
-            	
+    	
+        LireCSV reader = new LireCSV(chemin);
+        data = reader.getData();
+        
     	for (int ligne = 1; ligne<data.size(); ligne += 5) {		
 			// Creer l'equipe et lui attribuer les joueurs
 			Equipe equipe = new Equipe(EquipeJDBC.getNextValueSequence(), data.get(ligne)[4], Integer.parseInt(data.get(ligne)[5]), Pays.getPays(data.get(ligne)[6]));

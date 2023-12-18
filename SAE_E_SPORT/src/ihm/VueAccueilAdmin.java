@@ -13,12 +13,16 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.Connection;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 import controleur.ControleurAccueil;
+import dao.ConnectionJDBC;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -30,15 +34,14 @@ import java.awt.FlowLayout;
 
 public class VueAccueilAdmin extends JFrame {
 
-	/**
-	 * Launch the application.
-	 */
+	
 	public static void main(String[] args) {
 		Ecran.setup();
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					Connection c = ConnectionJDBC.getConnection();
 					VueAccueilAdmin frame = new VueAccueilAdmin();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -48,16 +51,14 @@ public class VueAccueilAdmin extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 * @throws IOException 
-	 */
-	public VueAccueilAdmin() throws IOException {
+	
+	public VueAccueilAdmin() {
 		
 		ControleurAccueil controleur = new ControleurAccueil(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
+		setTitle("Accueil");
 		
 		
 		///// PANEL PRINCIPAL \\\\\
@@ -129,14 +130,19 @@ public class VueAccueilAdmin extends JFrame {
 		panelCadre.add(panelEquipe);
 		
 		// Logo Equipe
-		BufferedImage bufferedImageE = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgEquipe.png"));
-		Image imageE = bufferedImageE.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-		
-		JLabel iconEquipe = new JLabel();
-		iconEquipe.setHorizontalAlignment(SwingConstants.CENTER);
-		iconEquipe.setIcon(new ImageIcon(imageE));
-		iconEquipe.setSize(20, 80);
-		panelEquipe.add(iconEquipe, BorderLayout.CENTER);
+		try {
+			BufferedImage bufferedImageE;
+			bufferedImageE = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgEquipe.png"));
+			Image imageE = bufferedImageE.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
+			
+			JLabel iconEquipe = new JLabel();
+			iconEquipe.setHorizontalAlignment(SwingConstants.CENTER);
+			iconEquipe.setIcon(new ImageIcon(imageE));
+			iconEquipe.setSize(20, 80);
+			panelEquipe.add(iconEquipe, BorderLayout.CENTER);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		// Bouton équipe
 		JLabel lblEquipe = new JLabel("Liste équipes");
@@ -156,14 +162,19 @@ public class VueAccueilAdmin extends JFrame {
 		panelCadre.add(panelTournois);
 		
 		// Logo Tournois
-		BufferedImage bufferedImageT = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgTournoi.png"));
-		Image imageT = bufferedImageT.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-		
-		JLabel iconTournois = new JLabel();
-		iconTournois.setHorizontalAlignment(SwingConstants.CENTER);
-		iconTournois.setIcon(new ImageIcon(imageT));
-		iconTournois.setSize(20, 80);
-		panelTournois.add(iconTournois, BorderLayout.CENTER);
+		try {
+			BufferedImage bufferedImageT;
+			bufferedImageT = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgTournoi.png"));
+			Image imageT = bufferedImageT.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
+			
+			JLabel iconTournois = new JLabel();
+			iconTournois.setHorizontalAlignment(SwingConstants.CENTER);
+			iconTournois.setIcon(new ImageIcon(imageT));
+			iconTournois.setSize(20, 80);
+			panelTournois.add(iconTournois, BorderLayout.CENTER);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		// Bouton tournois
 		JLabel lblTournois = new JLabel("Liste tournois");
@@ -183,14 +194,19 @@ public class VueAccueilAdmin extends JFrame {
 		panelCadre.add(panelHistorique);
 		
 		// Logo Tournois
-		BufferedImage bufferedImageH = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgHistorique.png"));
-		Image imageH = bufferedImageH.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
-		
-		JLabel iconHistorique = new JLabel();
-		iconHistorique.setHorizontalAlignment(SwingConstants.CENTER);
-		iconHistorique.setIcon(new ImageIcon(imageH));
-		iconHistorique.setSize(20, 80);
-		panelHistorique.add(iconHistorique, BorderLayout.CENTER);
+		try {
+			BufferedImage bufferedImageH;
+			bufferedImageH = ImageIO.read(VueAccueilAdmin.class.getResource("/Images/imgHistorique.png"));
+			Image imageH = bufferedImageH.getScaledInstance(128, 128, Image.SCALE_DEFAULT);
+			
+			JLabel iconHistorique = new JLabel();
+			iconHistorique.setHorizontalAlignment(SwingConstants.CENTER);
+			iconHistorique.setIcon(new ImageIcon(imageH));
+			iconHistorique.setSize(20, 80);
+			panelHistorique.add(iconHistorique, BorderLayout.CENTER);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		// Bouton tournois
 		JLabel lblHistorique = new JLabel("Historique");

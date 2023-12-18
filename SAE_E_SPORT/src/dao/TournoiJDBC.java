@@ -46,7 +46,6 @@ public class TournoiJDBC implements TournoiDAO {
 		try {
 			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where nomTournoi = ?");
 			st.setString(1, nomTournoi);
-			System.out.println(nomTournoi);
 			ResultSet rs = st.executeQuery();
 			if(rs.next()) {
 				Tournoi t = Tournoi.createTournoi(rs.getString("nomTournoi"), 
@@ -54,7 +53,6 @@ public class TournoiJDBC implements TournoiDAO {
 										rs.getDate("dateDebut"), 
 										rs.getDate("dateFin"), 
 										Pays.getPays(rs.getString("nomPays")));
-				System.out.println(t);
 				EquipeJDBC ejdbc = new EquipeJDBC();
 				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
 				t.setVainqueur(e.orElse(null));

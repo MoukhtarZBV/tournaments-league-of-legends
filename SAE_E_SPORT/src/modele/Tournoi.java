@@ -5,13 +5,17 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import dao.ParticiperJDBC;
+import dao.PartieJDBC;
 import dao.TournoiJDBC;
 
 public class Tournoi {
@@ -207,4 +211,30 @@ public class Tournoi {
 	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
 		return jdbc.getTournoisNiveauStatusNom(nom, niveau, status);
 	}
+	
+	public void generationPoule(){
+		List<Equipe> equipes = new ArrayList<>(); 
+		// Récupération de la liste des équipes qui participent au tournoi
+		ParticiperJDBC pdb = new ParticiperJDBC();
+		equipes = pdb.getAll().stream()
+					.filter(e->e.getTournoi().getNomTournoi().equals(this.getNomTournoi()))
+					.map(p-> p.getEquipe())
+					.collect(Collectors.toList());
+		
+		// Création des matchs
+		PartieJDBC ppdb = new PartieJDBC();
+		for(int i = 0; i < equipes.size(); i++) {
+			for (int j = i+1; j < equipes.size(); j++) {
+				Partie partie = new Partie(Date.valueOf(LocalDate.of(2023, 12, 23)), "12:00", "Poule", equipes.get(i), this);
+				partie.setEquipeGagnant(-1);
+				partie.setEquipe2(equipes.get(j));
+				try {
+					ppdb.add(partie);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }

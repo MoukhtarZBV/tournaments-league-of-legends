@@ -58,6 +58,7 @@ public class VueCreationTournoi extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
+		addWindowListener(controleur);
 		setTitle("Nouveau tournoi");
 		setResizable(false);
 		
@@ -272,7 +273,6 @@ public class VueCreationTournoi extends JFrame {
 		inputNiveau.setFont(Police.COMBO);
 		inputNiveau.setBackground(Palette.GRAY);
 		inputNiveau.setForeground(Palette.WHITE);
-		inputNiveau.setFocusable(false);
 		inputNiveau.addItem("-- Niveau --");
 		for (Niveau niveau : Niveau.values()) {
 			inputNiveau.addItem(niveau.denomination());
@@ -305,7 +305,6 @@ public class VueCreationTournoi extends JFrame {
 		inputPays.setFont(Police.COMBO);
 		inputPays.setBackground(Palette.GRAY);
 		inputPays.setForeground(Palette.WHITE);
-		inputPays.setFocusable(false);
 		inputPays.addItem("-- Pays --");
 		for (Pays pays : Pays.values()) {
 			inputPays.addItem(pays.denomination());
