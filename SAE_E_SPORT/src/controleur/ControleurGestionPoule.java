@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 
 import ihm.VueGestionDeLaPoule;
+import ihm.VueTournoi;
 import modele.ModelePoule;
 
 public class ControleurGestionPoule implements MouseListener {
@@ -35,6 +36,11 @@ public class ControleurGestionPoule implements MouseListener {
 				int rowClicked = source.getSelectedRow();
 				if (columnClicked == 1 || columnClicked == 2) {
 					this.modele.updateGagnant(rowClicked, columnClicked);
+					if(this.modele.tousLesMatchsJouees()) {
+						this.vue.setBtnCloturer(true);
+					}else {
+						this.vue.setBtnCloturer(false);
+					}
 					try {
 						this.vue.setJTableMatches(this.modele.matches());
 						Thread.sleep(100);
@@ -49,7 +55,15 @@ public class ControleurGestionPoule implements MouseListener {
 			switch (button.getText()) {
 				case ("Imprimer") :
 					break;
-				case ("Cloturer") : 
+				case ("Cloturer Poule") :
+					// (A FAIRE) créer la finale !!!!!!!!!!!!!!!!!!!!!!!!!!!
+					
+					// Retour au détail du tournoi
+					this.vue.dispose();
+					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
+					vue.setVisible(true);
+					// Changement de statut
+					
 					break;
 				case ("Retour") :
 					try {

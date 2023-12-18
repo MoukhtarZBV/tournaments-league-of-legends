@@ -279,6 +279,7 @@ public class Tournoi {
 			int numArbitre = random.nextInt(arbitres.size());
 			arbitresTirees.add(arbitres.get(numArbitre));
 			arbitres.remove(numArbitre);
+			// Ajout dans la base de données la liason arbitre / tournoi
 			try {
 				Associer ass = new Associer(arbitres.get(numArbitre), tournoi);
 				assjdbc.add(new Associer(arbitres.get(numArbitre), tournoi));

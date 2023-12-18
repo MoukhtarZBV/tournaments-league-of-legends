@@ -38,6 +38,7 @@ public class VueGestionDeLaPoule extends JFrame {
 	private JTable tableClassement = new JTable();;
 	private JTable tableMatches = new JTable();
 	private Tournoi tournoi;
+	private JButton btnCloturer;
 	
 	/**
 	 * Create the frame.
@@ -165,11 +166,12 @@ public class VueGestionDeLaPoule extends JFrame {
 		btnImprimer.setBorder(new RoundedBorder(5));
 		panelButtons.add(btnImprimer);
 		
-		JButton btnCloturer = new JButton("Cloturer Poule");
+		this.btnCloturer = new JButton("Cloturer Poule");
 		btnCloturer.setBackground(new Color(255, 255, 255));
 		btnCloturer.addMouseListener(controleur);
 		btnCloturer.setFocusable(false);
 		btnCloturer.setBorder(new RoundedBorder(5));
+		btnCloturer.setEnabled(false);
 		panelButtons.add(btnCloturer);
 		
 		JButton btnRetour = new JButton("Retour");
@@ -236,5 +238,9 @@ public class VueGestionDeLaPoule extends JFrame {
 		for (Object[] data : datas) {
 			model.addRow(data);
 		}
+	}
+	
+	public void setBtnCloturer(boolean statut) {
+		this.btnCloturer.setEnabled(statut);
 	}
 }
