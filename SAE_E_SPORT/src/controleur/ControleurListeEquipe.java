@@ -6,15 +6,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JList;
 
-import dao.EquipeJDBC;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueEquipe;
@@ -24,9 +21,11 @@ import modele.Equipe;
 public class ControleurListeEquipe implements MouseListener, ActionListener, WindowListener {
 	
 	private VueListeEquipe vue;
+	private Equipe modele;
 
 	public ControleurListeEquipe(VueListeEquipe vue) {
 		this.vue = vue;
+		this.modele = new Equipe();
 	}
 	
 	@Override
@@ -36,10 +35,10 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 			JList list = (JList) e.getSource();
 			if (e.getClickCount() == 2) {
 				try {
-					List<Equipe> equipes = (new EquipeJDBC().getAll());
+					List<Equipe> equipes = (this.modele.toutesLesEquipes());
 					String nomEq = ((String) list.getSelectedValue()).substring(6, 55);
 					
-					VueEquipe vue = new VueEquipe(equipes, new EquipeJDBC().getByNom((nomEq)), null);
+					VueEquipe vue = new VueEquipe(equipes, this.modele.equipeParNom(nomEq), null);
 					vue.setVisible(true);
 					this.vue.dispose();
 					
@@ -61,8 +60,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 			vue.setVisible(true);
 	    } else {
 			try {
-				EquipeJDBC ejdbc = new EquipeJDBC();
-				equipes = ejdbc.getAll();
+				equipes = this.modele.toutesLesEquipes();
 				List<String> nomEquipes = equipes.stream()
 			            .map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
 			            .collect(Collectors.toList());

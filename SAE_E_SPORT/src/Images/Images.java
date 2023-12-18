@@ -14,8 +14,8 @@ public class Images {
 	public static final ImageIcon MID = Images.getIcon(25, 25, "midRole");
 	public static final ImageIcon SUPPORT = Images.getIcon(25, 25, "supportRole");
 	public static final ImageIcon BOTTOM = Images.getIcon(25, 25, "bottomRole");
-	public static final ImageIcon TROPHY = Images.getIcon(25, 25, "trophy");
-	public static final ImageIcon TROPHY_WIN = Images.getIcon(25, 25, "trophyWin");
+	public static final String TROPHY = "/Images/trophy.png";
+	public static final String TROPHY_WIN = "/Images/trophyWin.png";
 	public static final ImageIcon UPLOAD = Images.getIcon(100, 100, "upload");
 	
 

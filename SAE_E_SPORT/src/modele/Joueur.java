@@ -3,6 +3,7 @@ package modele;
 import java.util.Objects;
 
 import dao.EquipeJDBC;
+import dao.JoueurJDBC;
 
 public class Joueur {
 	
@@ -40,15 +41,9 @@ public class Joueur {
 	}
 	
 	public boolean presentDansAutreEquipe() throws Exception {
-		EquipeJDBC edb = new EquipeJDBC();
-		for (Equipe e : edb.getAll()) {
-			for (Joueur j : e.getJoueurs()) {
-				if (j.equals(this) && !(j.getEquipe().equals(this.equipe))) {
-					return true;
-				}
-			}
-		}
-		return false;
+		JoueurJDBC jdb = new JoueurJDBC();
+		Joueur j = jdb.getByPseudo(this.pseudo).orElse(null);
+		return !j.getEquipe().equals(this.getEquipe());
 	}
 	
 	// Overrides

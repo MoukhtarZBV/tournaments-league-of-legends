@@ -202,10 +202,6 @@ public class VueEquipe extends JFrame {
 		titreCompo.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTitreCompo.add(titreCompo);
 		
-		
-		// Données du tableau (A RETIRER PLUS TARD)
-        Object[] columnsName = new Object [] {"Num", "Joueur"};
-        
         DefaultTableModel model = new DefaultTableModel(new Object[][] {},
 				new String[] {"Num", "Joueur"});
         
