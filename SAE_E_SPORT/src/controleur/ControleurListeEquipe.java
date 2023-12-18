@@ -54,7 +54,6 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	    List<Equipe> equipes;
 	    if(bouton.getName().equals("Retour")) {
 	    	try {
-	    		System.out.println("ok");
 	    		this.vue.dispose();
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
@@ -62,6 +61,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 				e1.printStackTrace();
 			}
 	    }
+	    
 	    if(bouton.getName().equals("rechercher")) {
 			try {
 				EquipeJDBC ejdbc = new EquipeJDBC();

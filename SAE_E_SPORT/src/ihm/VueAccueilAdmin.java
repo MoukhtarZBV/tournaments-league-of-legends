@@ -13,12 +13,16 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.Connection;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 import controleur.ControleurAccueil;
+import dao.ConnectionJDBC;
+
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -39,6 +43,7 @@ public class VueAccueilAdmin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					Connection c = ConnectionJDBC.getConnection();
 					VueAccueilAdmin frame = new VueAccueilAdmin();
 					frame.setVisible(true);
 				} catch (Exception e) {
