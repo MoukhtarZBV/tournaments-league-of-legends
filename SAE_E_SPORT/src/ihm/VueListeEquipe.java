@@ -1,8 +1,6 @@
 package ihm;
 
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,8 +11,6 @@ import javax.swing.border.EmptyBorder;
 
 import components.JTextFieldArrondi;
 import controleur.ControleurListeEquipe;
-import dao.ConnectionJDBC;
-import dao.EquipeJDBC;
 import modele.Equipe;
 
 import java.awt.BorderLayout;
@@ -22,7 +18,6 @@ import java.awt.Dimension;
 
 import javax.swing.JList;
 import javax.swing.JLabel;
-import java.sql.Connection;
 import javax.swing.JScrollPane;
 import java.awt.Image;
 import javax.swing.JTextField;
@@ -31,39 +26,14 @@ import javax.swing.JButton;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import java.awt.Color;
 
 public class VueListeEquipe extends JFrame {
 
-	private List<Equipe> equipes;
 	private JTextField searchBar;
 	private JList<Object> listeEquipes;
+	private List<Equipe> equipes;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		
-		// A RETIRER PLUS TARD
-		Ecran.setup();
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Connection c = ConnectionJDBC.getConnection();
-					List<Equipe> equipes = (new EquipeJDBC().getAll());
-					VueListeEquipe frame = new VueListeEquipe(equipes);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
+	
 	public VueListeEquipe(List<Equipe> equipes) {
 		
 		this.equipes = equipes;
@@ -71,7 +41,8 @@ public class VueListeEquipe extends JFrame {
 		ControleurListeEquipe controleur = new ControleurListeEquipe(this);
 		
 		///// FENÊTRE \\\\\
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		addWindowListener(controleur);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Équipes");
 		setResizable(false);
@@ -145,6 +116,7 @@ public class VueListeEquipe extends JFrame {
 		
 		JButton validateBtn = new JButton("");
 		validateBtn.setIcon(icon);
+		validateBtn.setName("Rechercher");
 		validateBtn.setBorder(new EmptyBorder(5, 5, 5, 5));
 		validateBtn.setBackground(Palette.WHITE);
 		validateBtn.addActionListener(controleur);
@@ -175,12 +147,12 @@ public class VueListeEquipe extends JFrame {
 		panelListe.add(lblHeader, BorderLayout.NORTH);
 		
 		// Liste des équipes
-		List<String> nomEquipes = equipes.stream()
+		List<String> nomEquipes = this.equipes.stream()
 				.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
 				.collect(Collectors.toList());
 		
 		JList<Object> listeEquipes = new JList<Object>(nomEquipes.toArray());
-		listeEquipes.setFont(Police.TABLEAU);
+		listeEquipes.setFont(Police.TABLEAU_MONO);
 		listeEquipes.setBackground(Palette.GRAY);
 		listeEquipes.setForeground(Palette.WHITE);
 		listeEquipes.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -213,6 +185,7 @@ public class VueListeEquipe extends JFrame {
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 	}
+	
 	
 	public String getSearch() {
 		return searchBar.getText();

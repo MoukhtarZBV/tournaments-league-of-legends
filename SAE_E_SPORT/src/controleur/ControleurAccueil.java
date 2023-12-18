@@ -49,32 +49,10 @@ public class ControleurAccueil implements MouseListener {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void mouseEntered(MouseEvent e) {
 		JPanel panel = (JPanel)e.getSource();
 		panel.setBackground(Palette.GRAY);
-		
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		BufferedImage bufferedImage;
-		try { 
-			bufferedImage = ImageIO.read(ControleurAccueil.class.getResource("/Images/kind_cursor.png"));
-			Image image = bufferedImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-			Cursor c = toolkit.createCustomCursor(image , new Point(0,0), "img");
-			panel.setCursor(c);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+		panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
 
 	@Override
@@ -83,5 +61,12 @@ public class ControleurAccueil implements MouseListener {
 		panel.setBackground(Palette.DARK_GRAY);
 		panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
+	
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 
 }
