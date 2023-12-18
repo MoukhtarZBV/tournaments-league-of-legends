@@ -45,24 +45,18 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
 			vue.setVisible(true);
 		} else if (bouton.getName().equals("Gérer la poule")) {
+			VueGestionDeLaPoule frame = new VueGestionDeLaPoule(vue.getTournoi());
+            frame.setVisible(true);
+		} else if (bouton.getName().equals("Ouvrir le tournoi")) {
 			vue.getTournoi().generationPoule();
 			ModelePoule modelePoule;
 			try {
 				modelePoule = new ModelePoule(vue.getTournoi());
-				Object[][] classement = modelePoule.classement();
-	            Object[][] parties = modelePoule.matches();
-	            
 	            VueGestionDeLaPoule frame = new VueGestionDeLaPoule(vue.getTournoi());
-	            
-	            frame.setJTableMatches(parties);
-	            frame.setJTableClassement(classement);
-	            
 	            frame.setVisible(true);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
-            
+			} 
 		}
 	}
 	

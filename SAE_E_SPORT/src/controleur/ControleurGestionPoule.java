@@ -20,6 +20,8 @@ public class ControleurGestionPoule implements MouseListener {
 		this.vue = vue;
 		try {
 			this.modele = new ModelePoule(this.vue.getTournoi());
+			this.vue.setJTableClassement(modele.classement());
+			this.vue.setJTableMatches(modele.matches());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
