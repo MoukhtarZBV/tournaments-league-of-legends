@@ -10,12 +10,14 @@ import javax.swing.table.TableCellRenderer;
 
 import components.PanelRound;
 import controleur.ControleurDetailsTournoi;
+import dao.AssocierJDBC;
 import dao.ParticiperJDBC;
 import dao.TournoiJDBC;
 import Images.Images;
 import modele.Arbitre;
 import modele.Equipe;
 import modele.Joueur;
+import modele.Statut;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
@@ -259,18 +261,20 @@ public class VueTournoi extends JFrame {
 		}
 		
 		// Bouton ouvrir le tournoi
-		JButton btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
-		btnOuvrir.setName("Ouvrir le tournoi");
-		btnOuvrir.setBackground(Palette.GRAY);
-		btnOuvrir.setForeground(Palette.WHITE);
-		btnOuvrir.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-		btnOuvrir.setFont(Police.LABEL);
-		btnOuvrir.setFocusable(false);
-		btnOuvrir.addActionListener(controleur);
-		panelBoutons.add(btnOuvrir);
+		if (tournoi.getStatus() == Statut.A_VENIR) {
+			JButton btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
+			btnOuvrir.setName("Ouvrir le tournoi");
+			btnOuvrir.setBackground(Palette.GRAY);
+			btnOuvrir.setForeground(Palette.WHITE);
+			btnOuvrir.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+			btnOuvrir.setFont(Police.LABEL);
+			btnOuvrir.setFocusable(false);
+			btnOuvrir.addActionListener(controleur);
+			panelBoutons.add(btnOuvrir);
+		}
 		
 		JPanel panelArbitres = new JPanel();
-		panelArbitres.setBorder(new EmptyBorder(10, 0, 0, 0));
+		panelArbitres.setBorder(new EmptyBorder(25, 0, 0, 0));
 		panelArbitres.setBackground(Palette.GRAY);
 		panelTableEquipes.add(panelArbitres, BorderLayout.SOUTH);
 		panelArbitres.setLayout(new BorderLayout(0, 0));
@@ -282,17 +286,22 @@ public class VueTournoi extends JFrame {
 		lblNewLabel.setFont(Police.SOUS_TITRE);
 		panelArbitres.add(lblNewLabel, BorderLayout.NORTH);
 		
+		JPanel panelNomsArbitres = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelNomsArbitres.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panelNomsArbitres.setBackground(Palette.GRAY);
+		panelArbitres.add(panelNomsArbitres);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Palette.GRAY);
-		panelArbitres.add(panel);
-		
-		/*List<Arbitre> arbitresTournoi = new AssocierJDBC.getAll();
+		List<Arbitre> arbitresTournoi = new AssocierJDBC().getAll().stream().filter(associer -> associer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(associer -> associer.getArbitre()).collect(Collectors.toList());
 		for (Arbitre arbitre : arbitresTournoi) {
-			JLabel labelArbitre = new JLabel(arbitre.getNom() + " " + arbitre.getPrenom());
-			panel.add(labelArbitre);
-		}*/
-		
+			JLabel labelArbitre = new JLabel("<html><body style='padding: 5px 20px;'>" + arbitre.getNom() + " " + arbitre.getPrenom() + "</body></html>");
+			labelArbitre.setForeground(Palette.WHITE);
+			labelArbitre.setFont(Police.LABEL);
+			labelArbitre.setBackground(Palette.DARK_GRAY);
+			labelArbitre.setOpaque(true);
+			labelArbitre.setBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE));
+			panelNomsArbitres.add(labelArbitre);
+		}
 	}
 	
 	private PanelRound creerBordureBulleInfo() {

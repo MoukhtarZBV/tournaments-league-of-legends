@@ -28,7 +28,7 @@ public class Tournoi {
 	private Date dateDebut;
 	private Date dateFin;
 	private Pays pays;
-	private Status status;
+	private Statut statut;
 	private Compte compte;
 	private Equipe vainqueur;
 	
@@ -66,10 +66,10 @@ public class Tournoi {
 		this.pays = pays;
 		this.compte = null;
 		this.vainqueur = null;
-		this.status = Status.A_VENIR;
+		this.statut = Statut.A_VENIR;
 	}
 	
-	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) {
+	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut) {
 		Tournoi tournoi = new Tournoi();
 		tournoi.nomTournoi = nomTournoi;
         tournoi.niveau = niveau;
@@ -78,7 +78,7 @@ public class Tournoi {
         tournoi.pays = pays;
         tournoi.compte = null;
         tournoi.vainqueur = null;
-        tournoi.status = Status.A_VENIR;
+        tournoi.statut = statut;
         return tournoi;
 	}
 	
@@ -98,8 +98,8 @@ public class Tournoi {
 		return this.pays;
 	}
 	
-	public Status getStatus() {
-		return this.status;
+	public Statut getStatus() {
+		return this.statut;
 	}
 	
 	public Equipe getVainqueur() {
@@ -146,7 +146,7 @@ public class Tournoi {
 					&& this.nomTournoi.equals(other.nomTournoi)
 					&& this.pays.equals(pays) 
 					&& this.vainqueur.equals(other.vainqueur)
-					&& this.status == other.status;
+					&& this.statut == other.statut;
 		} 
 		return false;
 	}
@@ -154,7 +154,7 @@ public class Tournoi {
 	@Override
 	public String toString() {
 		return "Tournoi [name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
-				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +", status=" + this.status.denomination() + "]";
+				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +", status=" + this.statut.denomination() + "]";
 	}
 	
 	// ======================= //
@@ -211,7 +211,7 @@ public class Tournoi {
 		jdbc.add(tournoi);
 	}
 	
-	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
+	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Statut status){
 		return jdbc.getTournoisNiveauStatusNom(nom, niveau, status);
 	}
 	
@@ -239,11 +239,11 @@ public class Tournoi {
 			}
 		}
 	}
-	public void selectionArbitre() {
+	
+	public void selectionArbitre(Tournoi tournoi) {
 		// nombre d'équipes dans le tournoi
 		int nbEquipes = (int) new ParticiperJDBC().getAll().stream()
-				.filter(participer -> participer.getTournoi().getNomTournoi().equals(this.getNomTournoi()))
-				.map(participer -> participer.getEquipe())
+				.filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi()))
 				.count();
 		
 		// selection du nombre d'arbitres en fonction du nombre d'équipes
@@ -273,18 +273,22 @@ public class Tournoi {
 		
 		// Selection d'arbitres au hasard
 		AssocierJDBC assjdbc = new AssocierJDBC();
-		List<Arbitre> arbitresTirées = new ArrayList<>();
+		List<Arbitre> arbitresTirees = new ArrayList<>();
 		Random random = new Random();
 		for (int i = 0; i<nbArbitres; i++) {
 			int numArbitre = random.nextInt(arbitres.size());
-			arbitresTirées.add(arbitres.get(numArbitre));
+			arbitresTirees.add(arbitres.get(numArbitre));
 			arbitres.remove(numArbitre);
 			try {
-				assjdbc.add(new Associer(arbitres.get(numArbitre),this));
+				Associer ass = new Associer(arbitres.get(numArbitre), tournoi);
+				assjdbc.add(new Associer(arbitres.get(numArbitre), tournoi));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
+	public void changerStatusTournoi(Tournoi tournoi, Statut status) {
+		this.jdbc.changerStatusTournoi(tournoi, status);
+	}
 }

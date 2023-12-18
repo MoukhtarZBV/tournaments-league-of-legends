@@ -16,7 +16,7 @@ import modele.Compte;
 import modele.Equipe;
 import modele.Niveau;
 import modele.Pays;
-import modele.Status;
+import modele.Statut;
 import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO {
@@ -32,7 +32,8 @@ public class TournoiJDBC implements TournoiDAO {
 										Niveau.getNiveau(rs.getString("niveau")), 
 										rs.getDate("dateDebut"), 
 										rs.getDate("dateFin"), 
-										Pays.getPays(rs.getString("nomPays"))));
+										Pays.getPays(rs.getString("nomPays")),
+										Statut.getStatus(rs.getString("status"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -52,7 +53,8 @@ public class TournoiJDBC implements TournoiDAO {
 										Niveau.getNiveau(rs.getString("niveau")), 
 										rs.getDate("dateDebut"), 
 										rs.getDate("dateFin"), 
-										Pays.getPays(rs.getString("nomPays")));
+										Pays.getPays(rs.getString("nomPays")),
+										Statut.getStatus(rs.getString("status")));
 				EquipeJDBC ejdbc = new EquipeJDBC();
 				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
 				t.setVainqueur(e.orElse(null));
@@ -73,12 +75,13 @@ public class TournoiJDBC implements TournoiDAO {
 	public boolean add(Tournoi t) {
 		boolean res = false;
 		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe) values (?, ?, ?, ?, ?, NULL, NULL)");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe, status) values (?, ?, ?, ?, ?, NULL, NULL, ?)");
 			cs.setString(1, t.getNomTournoi());
 			cs.setString(2, t.getNiveau().denomination());
 			cs.setDate(3, t.getDateDebut());
 			cs.setDate(4, t.getDateFin());
 			cs.setString(5, t.getPays().denomination());
+			cs.setString(6, t.getStatus().denomination());
 			cs.executeUpdate();
 			res = true;
 		} catch (SQLException e) {
@@ -172,7 +175,7 @@ public class TournoiJDBC implements TournoiDAO {
 		return nombreEquipes;
 	}
 	
-	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
+	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Statut status){
 		if (niveau == null && status == null && nom == "") {
 			return getAll();
 		} else if (niveau == null && status == null) {
@@ -183,5 +186,15 @@ public class TournoiJDBC implements TournoiDAO {
 			return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getStatus() == status).collect(Collectors.toList());
 		}
 		return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getStatus() == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
+	}
+	
+	public void changerStatusTournoi(Tournoi tournoi, Statut status) {
+		try {
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("update tournoi set status = ? where nomTournoi = ?");
+			st.setString(1, status.denomination());
+			st.setString(2, tournoi.getNomTournoi());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

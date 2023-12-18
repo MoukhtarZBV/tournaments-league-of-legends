@@ -16,7 +16,7 @@ import modele.Tournoi;
 public class AssocierJDBC implements AssocierDAO{
 
 	@Override
-	public List<Associer> getAll() throws Exception {
+	public List<Associer> getAll() {
 		List<Associer> associations = new ArrayList<>();
 		ResultSet rs;
 		try {
