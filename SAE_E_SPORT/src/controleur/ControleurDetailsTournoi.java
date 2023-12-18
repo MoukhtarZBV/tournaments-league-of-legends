@@ -3,7 +3,6 @@ package controleur;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -11,12 +10,15 @@ import java.awt.event.WindowListener;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JList;
 import javax.swing.JTable;
 
+import dao.EquipeJDBC;
+import ihm.VueEquipe;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueImportation;
+import ihm.VueListeTournois;
 import ihm.VueTournoi;
+import modele.Equipe;
 import modele.ModelePoule;
 import modele.Tournoi;
 
