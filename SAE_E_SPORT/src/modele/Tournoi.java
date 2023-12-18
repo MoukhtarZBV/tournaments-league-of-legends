@@ -51,7 +51,7 @@ public class Tournoi {
 			throw new IllegalArgumentException("L'année de la date doit être la même que celle en cours");
 		} if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi ne peut durer plus de deux semaines");
-		} if (!minimum4JoursEntreDates(dateDebut, dateFin)) {
+		} if (!minimum5JoursEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi doit durer minimum quatre jours");
 		} if (existeTournoiEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Il existe déjà un tournoi sur ce créneau");
@@ -168,8 +168,8 @@ public class Tournoi {
 		return calendar.get(Calendar.YEAR) == LocalDate.now().getYear();
 	}
 	
-	public boolean minimum4JoursEntreDates(Date dateDebut, Date dateFin) {
-		return TimeUnit.DAYS.convert(dateFin.getTime() - dateDebut.getTime(), TimeUnit.MILLISECONDS) + 1 >= 4;
+	public boolean minimum5JoursEntreDates(Date dateDebut, Date dateFin) {
+		return TimeUnit.DAYS.convert(dateFin.getTime() - dateDebut.getTime(), TimeUnit.MILLISECONDS) + 1 >= 5;
 	}
 	
 	public static boolean estTournoiDisjoint(Date dateDebutT1, Date dateFinT1, Date dateDebutT2, Date dateFinT2) {

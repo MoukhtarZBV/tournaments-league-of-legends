@@ -35,8 +35,8 @@ public class VueGestionDeLaPoule extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable tableClassement;
-	private JTable tableMatches;
+	private JTable tableClassement = new JTable();;
+	private JTable tableMatches = new JTable();
 	private Tournoi tournoi;
 	
 	/**
@@ -97,8 +97,7 @@ public class VueGestionDeLaPoule extends JFrame {
         };
         
         ControleurGestionPoule controleur = new ControleurGestionPoule(this);
-        
-		this.tableMatches = new JTable(modeleMatches);
+        this.tableMatches.setModel(modeleMatches);
 		this.tableMatches.getColumnModel().getColumn(1).setCellRenderer(new PanelRenderer());
 		this.tableMatches.getColumnModel().getColumn(2).setCellRenderer(new PanelRenderer());
 		this.tableMatches.setRowHeight(35);
@@ -137,9 +136,9 @@ public class VueGestionDeLaPoule extends JFrame {
 				return false;
 			}
 		};
-		this.tableClassement = new JTable(modeleClassement);
 		DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setOpaque(false);
+		this.tableClassement.setModel(modeleClassement);
         this.tableClassement.getTableHeader().setReorderingAllowed(false);
         this.tableClassement.getTableHeader().setResizingAllowed(false);
         this.tableClassement.setDefaultRenderer(Object.class, cellRenderer);
@@ -197,6 +196,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		JLabel lblTitreTournoi = new JLabel(sb.toString());
 		lblTitreTournoi.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTitle.add(lblTitreTournoi, BorderLayout.SOUTH);
+		
 	}
 	
 	public Tournoi getTournoi() {
