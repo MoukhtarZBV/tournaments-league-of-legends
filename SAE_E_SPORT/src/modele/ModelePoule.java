@@ -25,12 +25,14 @@ public class ModelePoule {
 	public ModelePoule(Tournoi t) throws Exception {
 		this.parties = this.partiesParTournoi(t);
 		this.participations = this.participerParTournoi(t);
+		System.out.println(this.parties);
+		System.out.println(this.participations);
 	}
 	
 	private List<Partie> partiesParTournoi(Tournoi t) throws Exception{
 		PartieJDBC pdb = new PartieJDBC();
 		List<Partie> parties = pdb.getAll().stream()
-								.filter(e -> e.getTournoi().getNomTournoi() == t.getNomTournoi())
+								.filter(e -> e.getTournoi().getNomTournoi().equals(t.getNomTournoi()))
 								.sorted((p1,p2) -> p1.getDate().compareTo(p2.getDate()))
 								.collect(Collectors.toList());
 		return parties;
@@ -39,7 +41,7 @@ public class ModelePoule {
 	private Map<String,Participer> participerParTournoi(Tournoi t) throws Exception {
 		ParticiperJDBC pdb = new ParticiperJDBC(); 
 		Map<String, Participer> map =  pdb.getAll().stream()
-										.filter(e->e.getTournoi().getNomTournoi() == t.getNomTournoi())
+										.filter(e->e.getTournoi().getNomTournoi().equals(t.getNomTournoi()))
 										.collect(Collectors.toMap(e->e.getEquipe().getNom(), e->e));
 		return map;
 	}
@@ -55,6 +57,7 @@ public class ModelePoule {
 				else eq = p.getEquipe2().getNom();
 				
 				// Recalculer les points et les matches gagnés 
+				// pas sur +- combien
 				this.participations.get(eq).setNbPointsGagnes(this.participations.get(eq).getNbPointsGagnes()-10);
 				this.participations.get(eq).setNbMatchsGagnes(this.participations.get(eq).getNbMatchsGagnes()-1);
 				if(eGagne == gagnant) {
@@ -73,15 +76,15 @@ public class ModelePoule {
 	public Object[][] matches() throws Exception {
 		Object[][] datas = new Object[this.parties.size()][6];
 		int i=0;
-		String trophyWin = Images.TROPHY_WIN.getDescription();
-		String trophy = Images.TROPHY.getDescription();
+		String trophyWin = Images.TROPHY_WIN;
+		String trophy = Images.TROPHY;
 		for (Partie p : this.parties) {
 			datas[i][0] = i+1;
 			datas[i][1] = p.getEquipe1().getNom();
 			datas[i][2] = p.getEquipe2().getNom();
 			datas[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(p.getDate());
-			datas[i][4] = p.getEquipeGagnant()==1 ? "/Images/trophyWin.png" : "/Images/trophy.png";
-			datas[i][5] = p.getEquipeGagnant()==2 ? "/Images/trophyWin.png" : "/Images/trophy.png";
+			datas[i][4] = p.getEquipeGagnant()==1 ? trophyWin : trophy;
+			datas[i][5] = p.getEquipeGagnant()==2 ? trophyWin : trophy;
 			i++;
 		}
 		return datas;
