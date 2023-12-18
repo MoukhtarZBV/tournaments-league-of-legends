@@ -66,11 +66,9 @@ public class Equipe {
 		try {
 			eq =  jdbc.getAll();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return eq;
-		
 	}
 	
 	public Optional<Equipe> equipeParNom(String nom) {
