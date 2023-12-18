@@ -1,14 +1,13 @@
 package controleur;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import ihm.VueCreationTournoi;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueImportation;
-import ihm.VueListeTournois;
 import ihm.VueTournoi;
 import modele.Tournoi;
 

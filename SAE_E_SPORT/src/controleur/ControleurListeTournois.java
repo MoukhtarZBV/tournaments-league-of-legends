@@ -9,16 +9,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
-import dao.TournoiJDBC;
 import ihm.VueAccueilAdmin;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;

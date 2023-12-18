@@ -3,6 +3,7 @@ package modele;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import dao.EquipeJDBC;
 import dao.TournoiJDBC;
@@ -70,6 +71,18 @@ public class Equipe {
 		}
 		return eq;
 		
+	}
+	
+	public Optional<Equipe> equipeParNom(String nom) {
+		return jdbc.getByNom(nom);
+	}
+	
+	public void miseAJourEquipe(Equipe equipe) {
+		try {
+			jdbc.update(equipe);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

@@ -1,15 +1,14 @@
 package controleur;
 
 import java.awt.event.MouseEvent;
+
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
 
 import ihm.VueGestionDeLaPoule;
 import modele.ModelePoule;
-import modele.Tournoi;
 
 public class ControleurGestionPoule implements MouseListener {
 
