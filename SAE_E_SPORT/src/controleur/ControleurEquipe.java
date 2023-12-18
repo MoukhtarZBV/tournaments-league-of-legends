@@ -11,6 +11,7 @@ import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import ihm.VueEquipe;
 import ihm.VueListeEquipe;
+import ihm.VueTournoi;
 import modele.Equipe;
 
 public class ControleurEquipe implements ActionListener{
@@ -33,8 +34,13 @@ public class ControleurEquipe implements ActionListener{
 				if (!name.equals("")) {
 					ejdbc.update(new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe()));
 					this.vue.dispose();
-					VueListeEquipe vue = new VueListeEquipe(ejdbc.getAll());
-					vue.setVisible(true);
+					if(this.vue.getPapa() == null) {
+						VueListeEquipe vue = new VueListeEquipe(ejdbc.getAll());
+						vue.setVisible(true);
+					} else {
+						VueTournoi vue = new VueTournoi(this.vue.getPapa());
+						vue.setVisible(true);
+					}
 				}else {
 					this.vue.setColorMessage(new Color(255, 204, 204));
 					this.vue.setMsgErreur("Le nom d'équipe ne peut pas être vide");
@@ -45,10 +51,14 @@ public class ControleurEquipe implements ActionListener{
 		}
 		if(bouton.getText().equals("Retour")) {
 			this.vue.dispose();
-			VueListeEquipe vue;
 			try {
-				vue = new VueListeEquipe(ejdbc.getAll());
-				vue.setVisible(true);
+				if(this.vue.getPapa() == null) {
+					VueListeEquipe vue = new VueListeEquipe(ejdbc.getAll());
+					vue.setVisible(true);
+				} else {
+					VueTournoi vue = new VueTournoi(this.vue.getPapa());
+					vue.setVisible(true);
+				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

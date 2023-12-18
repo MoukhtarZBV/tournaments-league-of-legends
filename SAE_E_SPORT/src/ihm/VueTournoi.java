@@ -1,21 +1,13 @@
 package ihm;
 
-import java.awt.EventQueue;
-
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import components.JTextFieldArrondi;
 import components.PanelRound;
 import controleur.ControleurDetailsTournoi;
 import dao.ParticiperJDBC;
@@ -23,7 +15,6 @@ import dao.TournoiJDBC;
 import Images.Images;
 import modele.Equipe;
 import modele.Joueur;
-import modele.Participer;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
@@ -33,27 +24,21 @@ import java.awt.GridLayout;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JSeparator;
 import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.JButton;
-import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import javax.swing.border.MatteBorder;
+import javax.swing.border.LineBorder;
 
 public class VueTournoi extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private JTable tableEquipes;
-	
 	private Tournoi tournoi;
 
 	/**
@@ -62,66 +47,85 @@ public class VueTournoi extends JFrame {
 	public VueTournoi(Tournoi tournoi) {
 		this.tournoi = tournoi;
 		ControleurDetailsTournoi controleur = new ControleurDetailsTournoi(this);
-		Ecran.setup();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		//setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
+		setBounds(100, 100, 1280, 720);
+		setTitle(tournoi.getNomTournoi());
+		addWindowListener(controleur);
+		
+		
+		///// PANEL PRINCIPAL \\\\\	
+		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
-
+		setContentPane(contentPane);
+		
+		
 		///// MENU BAR \\\\\
 		JPanel panelSide = new JPanel();
 		panelSide.setBackground(Palette.DARK_GRAY);
-		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Palette.COOL));
-		panelSide.setPreferredSize(new Dimension(100, 600));
+		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Palette.GRAY));
+		panelSide.setPreferredSize(new Dimension(125, 600));
 		contentPane.add(panelSide, BorderLayout.WEST);
-
+		
+		
 		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
+		panelMain.setBorder(new EmptyBorder(25, 0, 25, 0));
 		panelMain.setLayout(new BorderLayout(0, 0));
-		panelMain.setBackground(Palette.GRAY);
+		panelMain.setBackground(Palette.DARK_GRAY);
 		contentPane.add(panelMain, BorderLayout.CENTER);
-
-		///// TOP DU MAIN \\\\\
-		JPanel panelTop = new JPanel();
-		panelTop.setBorder(new EmptyBorder(10, 50, 10, 50));
-		panelTop.setBackground(Palette.GRAY);
-		panelMain.add(panelTop, BorderLayout.NORTH);
-		panelTop.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
+		
+		///// PANEL TITRE \\\\\
+		JPanel panelTop = new JPanel();
+		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setBackground(Palette.DARK_GRAY);
+		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setLayout(new GridLayout());
+		panelMain.add(panelTop, BorderLayout.NORTH);
+		
+		// Label titre
+		JLabel lblTitre = new JLabel(tournoi.getNomTournoi());
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
+		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setForeground(Palette.WHITE);
+		lblTitre.setFont(Police.GROS_TITRE);
+		panelTop.add(lblTitre);
+		
+		
+		///// MAN PANEL MILIEU \\\\\
 		JPanel panelCenter = new JPanel();
-		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
+		panelCenter.setLayout(new BorderLayout(0, 15));
 		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
 		panelMain.add(panelCenter, BorderLayout.CENTER);
-		panelCenter.setLayout(new BorderLayout(0, 0));
+
 		
 		///// PANEL INFOS DU TOURNOI \\\\\
 		JPanel panelInfos = new JPanel();
 		panelInfos.setBackground(Palette.DARK_GRAY);
-		panelCenter.add(panelInfos, BorderLayout.NORTH);
 		panelInfos.setLayout(new BorderLayout(0, 0));
+		panelCenter.add(panelInfos, BorderLayout.NORTH);
 
 		///// PANEL LIBELLE INFOS \\\\\
 		JPanel panelLibelleInfos = new JPanel();
 		panelLibelleInfos.setBorder(new EmptyBorder(10, 20, 10, 20));
 		panelLibelleInfos.setBackground(Palette.GRAY);
-		panelInfos.add(panelLibelleInfos, BorderLayout.NORTH);
 		panelLibelleInfos.setLayout(new GridLayout(0, 1, 0, 0));
+		panelInfos.add(panelLibelleInfos, BorderLayout.NORTH);
 
 		JLabel lblInfosTournoi = new JLabel("A propos du tournoi");
 		lblInfosTournoi.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
-		lblInfosTournoi.setForeground(new Color(255, 255, 255));
-		lblInfosTournoi.setFont(Police.LABEL);
+		lblInfosTournoi.setForeground(Palette.WHITE);
+		lblInfosTournoi.setFont(Police.SOUS_TITRE);
 		panelLibelleInfos.add(lblInfosTournoi);
 
 		///// PANEL BULLES INFOS \\\\\
 		JPanel panelBullesInfos = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panelBullesInfos.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
-		panelBullesInfos.setBorder(new EmptyBorder(10, 20, 0, 20));
+		panelBullesInfos.setBorder(new EmptyBorder(10, 20, 10, 20));
 		panelBullesInfos.setBackground(Palette.GRAY);
 		panelInfos.add(panelBullesInfos, BorderLayout.CENTER);
 
@@ -167,7 +171,7 @@ public class VueTournoi extends JFrame {
 		
 		///// PANEL TABLE EQUIPES \\\\\
 		JPanel panelTableEquipes = new JPanel();
-		panelTableEquipes.setBorder(new EmptyBorder(50, 20, 50, 20));
+		panelTableEquipes.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelTableEquipes.setBackground(Palette.GRAY);
 		panelCenter.add(panelTableEquipes, BorderLayout.CENTER);
 		panelTableEquipes.setLayout(new BorderLayout(0, 0));
@@ -178,12 +182,14 @@ public class VueTournoi extends JFrame {
 		
 		// Table des équipes
 		tableEquipes = new JTable();
-		tableEquipes.setFont(new Font("Arial", Font.PLAIN, 14));
+		tableEquipes.setFont(Police.TABLEAU);
+		tableEquipes.setRowHeight(30);
 		tableEquipes.getTableHeader().setBackground(Palette.DARK_GRAY);
 		tableEquipes.getTableHeader().setForeground(Palette.WHITE);
 		tableEquipes.getTableHeader().setFont(Police.LABEL);
-		tableEquipes.setBackground(Palette.GRAY);
+		tableEquipes.setBackground(Palette.DARK_GRAY);
 		tableEquipes.setForeground(Palette.WHITE);
+		tableEquipes.addMouseListener(controleur);
 		scrollPaneTableEquipes.setViewportView(tableEquipes);
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
 	            new String[] { "Équipe", "Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4", "Joueur 5" }) {
@@ -279,15 +285,15 @@ public class VueTournoi extends JFrame {
 	private void ajouterLibelleBulle(PanelRound panelPays, String libelle, ImageIcon icone) {
 		JLabel lblIconePays = new JLabel(" " + libelle);
 		lblIconePays.setForeground(Palette.LIGHT_PURPLE);
-		lblIconePays.setFont(new Font("Arial", Font.BOLD, 16));
+		lblIconePays.setFont(Police.LABEL);
 		lblIconePays.setIcon(icone);
 		panelPays.add(lblIconePays, BorderLayout.NORTH);
 	}
 	
 	private void ajouterInfoBulle(PanelRound bulle, String info) {
 		JLabel lblPays = new JLabel(info);
-		lblPays.setForeground(new Color(255, 255, 255));
-		lblPays.setFont(new Font("Arial", Font.BOLD, 12));
+		lblPays.setForeground(Palette.WHITE);
+		lblPays.setFont(Police.INFO);
 		bulle.add(lblPays, BorderLayout.SOUTH);
 	}
 

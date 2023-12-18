@@ -39,7 +39,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 					List<Equipe> equipes = (new EquipeJDBC().getAll());
 					String nomEq = ((String) list.getSelectedValue()).substring(6, 55);
 					
-					VueEquipe vue = new VueEquipe(equipes, new EquipeJDBC().getByNom((nomEq)));
+					VueEquipe vue = new VueEquipe(equipes, new EquipeJDBC().getByNom((nomEq)), null);
 					vue.setVisible(true);
 					this.vue.dispose();
 					
@@ -109,50 +109,27 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 	// NOT IMPLEMENTED \\
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub	
-	}
+	public void mouseClicked(MouseEvent e) {}
 	
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void mousePressed(MouseEvent e) {}
 	
 	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowOpened(WindowEvent e) {}
 
 	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowClosed(WindowEvent e) {}
 
 	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowIconified(WindowEvent e) {}
 
 	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowDeiconified(WindowEvent e) {}
 
 	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowActivated(WindowEvent e) {}
 
 	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
+	public void windowDeactivated(WindowEvent e) {}
+	
 }

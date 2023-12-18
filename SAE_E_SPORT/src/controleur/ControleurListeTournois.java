@@ -92,15 +92,14 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
             Tournoi tournoi = null;
             
             try {
-            	System.out.println("Avant");
 				tournoi = modele.getTournoiDeNom((String) table.getValueAt(row, 0));
-				System.out.println("Apres : " + tournoi);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
             
             VueTournoi vueTournoi = new VueTournoi(tournoi);
 			vueTournoi.setVisible(true);
+			this.vue.dispose();
          }
 	}
 	
