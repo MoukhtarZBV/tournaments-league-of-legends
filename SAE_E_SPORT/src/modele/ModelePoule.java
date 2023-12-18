@@ -108,6 +108,17 @@ public class ModelePoule {
 		return datas;
 	}
 	
+	public boolean tousLesMatchsJouees() {
+		boolean res = true;
+		for (Partie p : this.parties) {
+			if (p.getEquipeGagnant() == -1) {
+				res = false;
+			}
+		}
+		return res;
+	}
+	
+	
 	public boolean enregistrerResultat () throws Exception {
 		boolean res = false;
 		PartieJDBC pdb = new PartieJDBC();
