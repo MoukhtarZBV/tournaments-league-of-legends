@@ -44,13 +44,13 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener,
 				try {
 					Tournoi tournoi = new Tournoi(vue.getNom(), vue.getNiveau(), vue.getDateDebut(), vue.getDateFin(), vue.getPays());
 					modele.ajouterTournoi(tournoi);
-					vue.effacerMessageErreur();
+					vue.getPopup().setEnabled(false);
 					Tournoi t = new Tournoi();
 					VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
 					vue.setVisible(true);
 					this.vue.dispose();
 				} catch (IllegalArgumentException iae) {
-					vue.afficherMessageErreur(iae.getMessage());
+					vue.getPopup().setErreur(iae.getMessage());
 				}
 			}
 		}

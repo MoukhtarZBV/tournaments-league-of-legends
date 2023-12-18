@@ -188,7 +188,7 @@ public class VueListeTournois extends JFrame {
 		table.setOpaque(false);
 		
 		// Tableau
-		table.setSelectionBackground(Palette.COOL);
+		table.setSelectionBackground(Palette.LIGHT_PURPLE);
 		table.setRowMargin(5);
 		table.setRowHeight(35);
 		table.setFont(Police.LABEL);

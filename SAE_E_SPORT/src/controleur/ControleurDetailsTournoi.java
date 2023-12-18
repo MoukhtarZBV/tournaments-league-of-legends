@@ -59,7 +59,6 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 	            
 	            frame.setVisible(true);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
             

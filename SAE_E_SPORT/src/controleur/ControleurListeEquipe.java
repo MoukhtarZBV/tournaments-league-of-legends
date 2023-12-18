@@ -82,7 +82,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
 			JButton b = (JButton)e.getSource();
-			b.setBackground(Palette.COOL);
+			b.setBackground(Palette.LIGHT_PURPLE);
 		}
 		
 	}
