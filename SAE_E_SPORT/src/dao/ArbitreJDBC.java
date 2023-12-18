@@ -32,7 +32,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 	}
 
 	@Override
-	public Optional<Arbitre> getById(Integer id) throws Exception {
+	public Optional<Arbitre> getById(Integer id) {
 		Optional<Arbitre> opt = Optional.empty();
 		try {
 			String req = "SELECT * FROM Arbitre WHERE idArbitre = ?";

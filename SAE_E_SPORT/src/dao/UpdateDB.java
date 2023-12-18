@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Date;
 
-import modele.Status;
+import modele.Statut;
 
 public class UpdateDB {
 	
@@ -48,8 +48,8 @@ public class UpdateDB {
 			
 			try {
 				stmt.executeUpdate("UPDATE Tournoi"
-								+ " SET status = '" + Status.ANNULE.denomination() + "' "
-								+ " WHERE status = '" + Status.A_VENIR.denomination() + "' "
+								+ " SET status = '" + Statut.ANNULE.denomination() + "' "
+								+ " WHERE status = '" + Statut.A_VENIR.denomination() + "' "
 								+ " AND dateFin <= CURRENT_DATE");
 			} catch (SQLException e) {
 				e.printStackTrace();

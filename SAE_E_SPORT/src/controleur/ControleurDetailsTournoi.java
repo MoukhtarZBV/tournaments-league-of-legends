@@ -20,6 +20,7 @@ import ihm.VueListeTournois;
 import ihm.VueTournoi;
 import modele.Equipe;
 import modele.ModelePoule;
+import modele.Statut;
 import modele.Tournoi;
 
 public class ControleurDetailsTournoi implements ActionListener, MouseListener, WindowListener {
@@ -45,23 +46,11 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
 			vue.setVisible(true);
 		} else if (bouton.getName().equals("Gérer la poule")) {
-			vue.getTournoi().generationPoule();
-			ModelePoule modelePoule;
-			try {
-				modelePoule = new ModelePoule(vue.getTournoi());
-				Object[][] classement = modelePoule.classement();
-	            Object[][] parties = modelePoule.matches();
-	            
-	            VueGestionDeLaPoule frame = new VueGestionDeLaPoule(vue.getTournoi());
-	            
-	            frame.setJTableMatches(parties);
-	            frame.setJTableClassement(classement);
-	            
-	            frame.setVisible(true);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-            
+			VueGestionDeLaPoule frame = new VueGestionDeLaPoule(vue.getTournoi());
+            frame.setVisible(true);
+		} else if (bouton.getName().equals("Ouvrir le tournoi")) {
+			this.modele.selectionArbitre(vue.getTournoi());
+			this.modele.changerStatusTournoi(vue.getTournoi(), Statut.EN_COURS);
 		}
 	}
 	

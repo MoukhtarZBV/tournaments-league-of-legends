@@ -19,7 +19,7 @@ import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
 import ihm.VueTournoi;
 import modele.Niveau;
-import modele.Status;
+import modele.Statut;
 import modele.Tournoi;
 
 public class ControleurListeTournois implements ActionListener, ItemListener, MouseListener, WindowListener {
@@ -29,7 +29,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 	
 	private String nom;
 	private Niveau niveau;
-	private Status status;
+	private Statut status;
 	
 	public ControleurListeTournois(VueListeTournois vue) {
 		this.modele = new Tournoi();
@@ -72,7 +72,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			}
 			
 			if (vue.estOptionComboboxStatus(option)) {
-				this.status = Status.getStatus(option);
+				this.status = Statut.getStatus(option);
 			}
 			
 			vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));
