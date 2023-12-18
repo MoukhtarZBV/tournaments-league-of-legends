@@ -30,7 +30,6 @@ public class ControleurDetailsTournoi implements ActionListener {
 			vueImportation.setVisible(true);
 		} else if (bouton.getName().equals("Retour")) {
 			vue.dispose();
-			
 		} else if (bouton.getName().equals("Gérer la poule")) {
 			VueGestionDeLaPoule vueGestionPoule = new VueGestionDeLaPoule(vue.getTournoi());
 			vueGestionPoule.setVisible(true);

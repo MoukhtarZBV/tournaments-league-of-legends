@@ -239,19 +239,17 @@ public class VueTournoi extends JFrame {
 		panelBoutons.add(btnRetour);
 		
 		// Bouton Importer
-		JButton btnImporter = new JButton("<html><body style='padding: 5px 20px;'>Importer des équipes</body></html>");
-		btnImporter.setName("Importer des équipes");
-		btnImporter.setBackground(Palette.GRAY);
-		btnImporter.setForeground(Palette.WHITE);
-		btnImporter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-		btnImporter.setFont(Police.LABEL);
-		btnImporter.setFocusable(false);
-		btnImporter.addActionListener(controleur);
-		panelBoutons.add(btnImporter);
-		
-		Component horizontalStrut_7 = Box.createHorizontalStrut(20);
-		panelBoutons.add(horizontalStrut_7);
-		btnRetour.setFocusable(false);
+		if (new TournoiJDBC().nombreEquipesTournoi(tournoi) < 4) {
+			JButton btnImporter = new JButton("<html><body style='padding: 5px 20px;'>Importer des équipes</body></html>");
+			btnImporter.setName("Importer des équipes");
+			btnImporter.setBackground(Palette.GRAY);
+			btnImporter.setForeground(Palette.WHITE);
+			btnImporter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+			btnImporter.setFont(Police.LABEL);
+			btnImporter.setFocusable(false);
+			btnImporter.addActionListener(controleur);
+			panelBoutons.add(btnImporter);
+		}
 	}
 	
 	private PanelRound creerBordureBulleInfo() {

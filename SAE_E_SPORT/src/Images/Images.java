@@ -16,6 +16,7 @@ public class Images {
 	public static final ImageIcon BOTTOM = Images.getIcon(25, 25, "bottomRole");
 	public static final ImageIcon TROPHY = Images.getIcon(25, 25, "trophy");
 	public static final ImageIcon TROPHY_WIN = Images.getIcon(25, 25, "trophyWin");
+	public static final ImageIcon UPLOAD = Images.getIcon(100, 100, "upload");
 	
 
 	private static ImageIcon getIcon(int xScale, int yScale, String type) {

@@ -90,7 +90,9 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
             int row = table.getSelectedRow();
             Tournoi tournoi = null;
             try {
-				tournoi = modele.getByDateDebut((Date) table.getValueAt(row, 2));
+            	System.out.println("Avant");
+				tournoi = modele.getTournoiDeNom((String) table.getValueAt(row, 0));
+				System.out.println("Apres : " + tournoi);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

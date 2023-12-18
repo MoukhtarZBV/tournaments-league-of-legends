@@ -28,9 +28,9 @@ public class TestPartie {
 		CreateDB.main(args);
 		System.out.println("Table tournoi, partie, niveauTournoi vide\n");
 		
-		Tournoi t1 = new Tournoi(1, "Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 12, 28)), 
+		Tournoi t1 = new Tournoi("Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 12, 28)), 
 				Date.valueOf(LocalDate.of(2023, 12, 29)), Pays.FR);
-		Tournoi t2 = new Tournoi(2, "Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 12, 30)), 
+		Tournoi t2 = new Tournoi("Happy Legends", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 12, 30)), 
 				Date.valueOf(LocalDate.of(2023, 12, 31)), Pays.FR);
 		
 		tjdbc.add(t1);

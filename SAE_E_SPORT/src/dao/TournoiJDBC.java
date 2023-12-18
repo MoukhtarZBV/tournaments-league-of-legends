@@ -10,11 +10,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import modele.Compte;
 import modele.Equipe;
 import modele.Niveau;
 import modele.Pays;
+import modele.Status;
 import modele.Tournoi;
 
 public class TournoiJDBC implements TournoiDAO {
@@ -26,9 +28,11 @@ public class TournoiJDBC implements TournoiDAO {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi");
 			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
-						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
-						rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
+				tournois.add(new Tournoi(rs.getString("nomTournoi"), 
+										Niveau.getNiveau(rs.getString("niveau")), 
+										rs.getDate("dateDebut"), 
+										rs.getDate("dateFin"), 
+										Pays.getPays(rs.getString("nomPays"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -37,44 +41,20 @@ public class TournoiJDBC implements TournoiDAO {
 	}
 
 	@Override
-	public Optional<Tournoi> getById(Integer id) {
+	public Optional<Tournoi> getById(String nomTournoi) {
 		Optional<Tournoi> tournoi = Optional.empty();
 		try {
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where idTournoi = ?");
-			st.setInt(1, id);
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where nomTournoi = ?");
+			st.setString(1, nomTournoi);
+			System.out.println(nomTournoi);
 			ResultSet rs = st.executeQuery();
 			if(rs.next()) {
-				Tournoi t = new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
-						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
-						rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays")));
-
-				EquipeJDBC ejdbc = new EquipeJDBC();
-				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
-				t.setVainqueur(e.orElse(null));
-				
-				CompteJDBC cjdbc = new CompteJDBC();
-				Optional<Compte> opt = cjdbc.getById(rs.getInt("idCompte"));
-				t.setCompte(opt.orElse(null));
-				
-				tournoi = Optional.ofNullable(t);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tournoi;
-	}
-	
-	public Optional<Tournoi> getByDateDebut(Date dateDebut) throws Exception {
-		Optional<Tournoi> tournoi = Optional.empty();
-		try {
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where dateDebut = ?");
-			st.setDate(1, dateDebut);
-			ResultSet rs = st.executeQuery();
-			if(rs.next()) {
-				Tournoi t = new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
-						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
-						rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays")));
-
+				Tournoi t = new Tournoi(rs.getString("nomTournoi"), 
+										Niveau.getNiveau(rs.getString("niveau")), 
+										rs.getDate("dateDebut"), 
+										rs.getDate("dateFin"), 
+										Pays.getPays(rs.getString("nomPays")));
+				System.out.println(t);
 				EquipeJDBC ejdbc = new EquipeJDBC();
 				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
 				t.setVainqueur(e.orElse(null));
@@ -95,13 +75,12 @@ public class TournoiJDBC implements TournoiDAO {
 	public boolean add(Tournoi t) throws Exception {
 		boolean res = false;
 		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (idTournoi, nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe) values (?, ?, ?, ?, ?, ?, NULL, NULL)");
-			cs.setInt(1, getNextSequenceValue());
-			cs.setString(2, t.getNomTournoi());
-			cs.setString(3, t.getNiveau().denomination());
-			cs.setDate(4, t.getDateDebut());
-			cs.setDate(5, t.getDateFin());
-			cs.setString(6, t.getPays().denomination());
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe) values (?, ?, ?, ?, ?, NULL, NULL)");
+			cs.setString(1, t.getNomTournoi());
+			cs.setString(2, t.getNiveau().denomination());
+			cs.setDate(3, t.getDateDebut());
+			cs.setDate(4, t.getDateFin());
+			cs.setString(5, t.getPays().denomination());
 			cs.executeUpdate();
 			res = true;
 			
@@ -120,30 +99,22 @@ public class TournoiJDBC implements TournoiDAO {
 			if (t.getCompte()!=null) {
 				if (t.getVainqueur()!=null) {
 					cs = ConnectionJDBC.getConnection().prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, "+
-																	"dateDebut = ?, dateFin = ?, nomPays = ?, idEquipe =?, "+
-																	"idCompte =? where idTournoi = ?");
+																	"dateDebut = ?, dateFin = ?, nomPays = ?, idEquipe =?, idCompte =?");
 					cs.setInt(6, t.getVainqueur().getIdEquipe());
 					cs.setInt(7, t.getCompte().getId());
-					cs.setInt(8, t.getIdTournoi());
 				}else {
 					cs = ConnectionJDBC.getConnection().prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, "+ 
-																	"dateDebut = ?, dateFin = ?, nomPays = ?, idCompte =? "+
-																	"where idTournoi = ?");
+																	"dateDebut = ?, dateFin = ?, nomPays = ?, idCompte = ?");
 					cs.setInt(6, t.getCompte().getId());
-					cs.setInt(7, t.getIdTournoi());
 				}
 			} else {
 				if (t.getVainqueur()!=null) {
 					cs = ConnectionJDBC.getConnection().prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, "+
-																	"dateDebut = ?, dateFin = ?, nomPays = ?, idEquipe =? "+
-																	"where idTournoi = ?");
+																	"dateDebut = ?, dateFin = ?, nomPays = ?, idEquipe =? ");
 					cs.setInt(6, t.getVainqueur().getIdEquipe());
-					cs.setInt(7, t.getIdTournoi());
 				}else {
 					cs = ConnectionJDBC.getConnection().prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, "+
-																	"dateDebut = ?, dateFin = ?, nomPays = ? "+
-																	"where idTournoi = ?");
-					cs.setInt(6, t.getIdTournoi());
+																	"dateDebut = ?, dateFin = ?, nomPays = ? ");
 				}
 			}
 			cs.setString(1, t.getNomTournoi());
@@ -167,8 +138,8 @@ public class TournoiJDBC implements TournoiDAO {
 		boolean res = false;
 		try {
 
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("delete from Tournoi where idTournoi = ? ");
-			cs.setInt(1, t.getIdTournoi());
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("delete from Tournoi where nomTournoi = ? ");
+			cs.setString(1, t.getNomTournoi());
 			cs.execute();
 			
 			res = true;
@@ -197,94 +168,11 @@ public class TournoiJDBC implements TournoiDAO {
 		return false;
 	}
 	
-	public Optional<Tournoi> getTournoiByName(String nom) throws Exception{
-		Optional<Tournoi> tournois = Optional.empty();
-		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("select * from Tournoi where nomTournoi = ?");
-			cs.setString(1, nom);
-			ResultSet rs = cs.executeQuery();
-			if (rs.next()) {
-				Tournoi t = new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), 
-						Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), 
-						rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays")));
-
-				EquipeJDBC ejdbc = new EquipeJDBC();
-				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
-				t.setVainqueur(e.orElse(null));
-				
-				CompteJDBC cjdbc = new CompteJDBC();
-				Optional<Compte> opt = cjdbc.getById(rs.getInt("idCompte"));
-				t.setCompte(opt.orElse(null));
-				
-				tournois = Optional.ofNullable(t);
-			}
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tournois;
-	}
-	
-	public List<Tournoi> getTournoisDeNiveau(Niveau niveau){
-		List<Tournoi> tournois = new ArrayList<>();
-		try {
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select * from Tournoi where niveau = ?");
-			st.setString(1, niveau.denomination());
-			ResultSet rs = st.executeQuery();
-			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tournois;
-	}
-	
-	public List<Tournoi> getTournoisEtat(String etat) {
-		List<Tournoi> tournois = new ArrayList<>();
-		String req = null;
-		switch (etat) {
-		case "Terminé":
-			req = "select * from Tournoi where dateFin < ?";
-			break;
-		case "En cours":
-			req = "select * from Tournoi where ? between dateDebut and dateFin";
-			break;
-		case "À venir":
-			req = "select * from Tournoi where dateDebut > ?";
-			break;
-		}
-		try {
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
-			st.setDate(1, new Date(System.currentTimeMillis()));
-			ResultSet rs = st.executeQuery();
-			while(rs.next()) {
-				tournois.add(new Tournoi(rs.getInt("idTournoi"), rs.getString("nomTournoi"), Niveau.getNiveau(rs.getString("niveau")), rs.getDate("dateDebut"), rs.getDate("dateFin"), Pays.getPays(rs.getString("nomPays"))));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tournois;
-	}
-	
-	public static int getNextSequenceValue() {
-		int res = -1;
-		try {
-			ResultSet rs = ConnectionJDBC.getConnection().createStatement().executeQuery("VALUES NEXT VALUE FOR SEQ_Tournoi");
-			if (rs.next()) {
-				res = rs.getInt(1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
-	
 	public static int nombreEquipesTournoi(Tournoi tournoi) {
 		int nombreEquipes = 0;
 		try {
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select count(*) as nombreEquipes from Participer where idTournoi = ?");
-			st.setInt(1, tournoi.getIdTournoi());
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("select count(*) as nombreEquipes from Participer where nomTournoi = ?");
+			st.setString(1, tournoi.getNomTournoi());
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				nombreEquipes = rs.getInt("nombreEquipes");
@@ -293,5 +181,18 @@ public class TournoiJDBC implements TournoiDAO {
 			e.printStackTrace();
 		}
 		return nombreEquipes;
+	}
+	
+	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
+		if (niveau == null && status == null && nom == "") {
+			return getAll();
+		} else if (niveau == null && status == null) {
+			return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).collect(Collectors.toList());
+		} else if (niveau != null && status == null) {
+			return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getNiveau() == niveau).collect(Collectors.toList());
+		} else if (niveau == null && status != null) {
+			return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status).collect(Collectors.toList());
+		}
+		return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> Tournoi.etatTournoi(tournoi) == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
 	}
 }

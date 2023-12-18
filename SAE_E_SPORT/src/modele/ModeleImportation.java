@@ -20,7 +20,6 @@ import dao.ParticiperJDBC;
 public class ModeleImportation {
 
 	private List<Equipe> equipes;
-//	private List<Equipe> newEquipes;
 	
 	public enum EtatEquipe{
 		OK, MEME_EQUIPE, MAL_COMPOSITION, JOUEUR_EXISTE;
@@ -28,29 +27,38 @@ public class ModeleImportation {
 	
 	public ModeleImportation() {
 		this.equipes = new LinkedList<>();
-//		this.newEquipes = new LinkedList<>();
+	}
+	
+	public boolean estBonFichierCSV(String chemin, Tournoi tournoi) throws IOException {
+		String line;
+    	BufferedReader br;
+		br = new BufferedReader(new FileReader(chemin));
+		br.readLine();
+		if ((line = br.readLine()) != null) {
+		    String[] values = line.split(",");
+		    System.out.println(values[0] + " " + tournoi.getNomTournoi());
+			if (!values[0].equals(tournoi.getNomTournoi())) {
+				br.close();
+				return false;
+		    }
+		}
+		br.close();
+		return true;
 	}
 	
 	public void importerEquipesJoueurs(String chemin) throws Exception {
-				
 		this.equipes.clear();
-			
         String line;
-        
         List<String[]> data = new LinkedList<>();
-   
     	BufferedReader br = new BufferedReader(new FileReader(chemin));
-
         while ((line = br.readLine()) != null) {
             String[] values = line.split(",");
             data.add(values);
         }
             	
-    	for (int ligne = 1; ligne<data.size(); ligne += 5) {
-    				
+    	for (int ligne = 1; ligne<data.size(); ligne += 5) {		
 			// Creer l'equipe et lui attribuer les joueurs
 			Equipe equipe = new Equipe(EquipeJDBC.getNextValueSequence(), data.get(ligne)[4], Integer.parseInt(data.get(ligne)[5]), Pays.getPays(data.get(ligne)[6]));
-			
 			this.equipes.add(equipe);
 			for (int j = ligne; j<ligne+5; j++) {
 				Joueur joueur = new Joueur(JoueurJDBC.getNextValueSequence(), data.get(j)[7], equipe);
@@ -60,7 +68,6 @@ public class ModeleImportation {
 	}
 	
 	public Object[][] getEquipesJoueurs(){
-		
 		Object[][] datas = new Object[6][this.equipes.size()];
 		int i = 0;
 		for (Equipe e : this.equipes) {
@@ -80,12 +87,9 @@ public class ModeleImportation {
 		EquipeJDBC edb = new EquipeJDBC();
 		EtatEquipe etat = EtatEquipe.OK;
 		try {
-			List<Joueur> joueurs = jdb.getAll();
-						
+			List<Joueur> joueurs = jdb.getAll();	
 			List<Equipe> allEquipes = edb.getAll();
-			
 			int cmp = 0;
-			
 			for (int i=0;i<this.equipes.size();i++) {
 				Equipe e = this.equipes.get(i);
 				if (allEquipes.contains(e)) {

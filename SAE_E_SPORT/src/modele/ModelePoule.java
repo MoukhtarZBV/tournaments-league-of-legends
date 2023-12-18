@@ -30,7 +30,7 @@ public class ModelePoule {
 	private List<Partie> partiesParTournoi(Tournoi t) throws Exception{
 		PartieJDBC pdb = new PartieJDBC();
 		List<Partie> parties = pdb.getAll().stream()
-								.filter(e -> e.getTournoi().getIdTournoi() == t.getIdTournoi())
+								.filter(e -> e.getTournoi().getNomTournoi() == t.getNomTournoi())
 								.sorted((p1,p2) -> p1.getDate().compareTo(p2.getDate()))
 								.collect(Collectors.toList());
 		return parties;
@@ -39,7 +39,7 @@ public class ModelePoule {
 	private Map<String,Participer> participerParTournoi(Tournoi t) throws Exception {
 		ParticiperJDBC pdb = new ParticiperJDBC(); 
 		Map<String, Participer> map =  pdb.getAll().stream()
-										.filter(e->e.getTournoi().getIdTournoi() == t.getIdTournoi())
+										.filter(e->e.getTournoi().getNomTournoi() == t.getNomTournoi())
 										.collect(Collectors.toMap(e->e.getEquipe().getNom(), e->e));
 		return map;
 	}
@@ -80,8 +80,8 @@ public class ModelePoule {
 			datas[i][1] = p.getEquipe1().getNom();
 			datas[i][2] = p.getEquipe2().getNom();
 			datas[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(p.getDate());
-			datas[i][4] = p.getEquipeGagnant()==1 ? trophyWin : trophy;
-			datas[i][5] = p.getEquipeGagnant()==2 ? trophyWin : trophy;
+			datas[i][4] = p.getEquipeGagnant()==1 ? "/Images/trophyWin.png" : "/Images/trophy.png";
+			datas[i][5] = p.getEquipeGagnant()==2 ? "/Images/trophyWin.png" : "/Images/trophy.png";
 			i++;
 		}
 		return datas;

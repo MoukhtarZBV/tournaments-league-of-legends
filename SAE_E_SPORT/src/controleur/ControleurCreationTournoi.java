@@ -61,12 +61,11 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 							vue.afficherMessageErreur("Un tournoi existe déjà sur ce créneau");
 						} else {
 							try {
-								Tournoi tournoi = new Tournoi(0, 
-										vue.getNom(), 
-										vue.getNiveau(), 
-										vue.getDateDebut(), 
-										vue.getDateFin(), 
-										vue.getPays());
+								Tournoi tournoi = new Tournoi(vue.getNom(), 
+															vue.getNiveau(), 
+															vue.getDateDebut(), 
+															vue.getDateFin(), 
+															vue.getPays());
 								System.out.println(vue.getNiveau().denomination() + " - " + vue.getPays());
 								modele.ajouterTournoi(tournoi);
 								for (Tournoi t : modele.tousLesTournois()) {

@@ -27,7 +27,7 @@ public class TestVueGestionPoule {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Tournoi t = new Tournoi(TournoiJDBC.getNextSequenceValue(), "My Tournament", Niveau.INTERNATIONAL, 
+                    Tournoi t = new Tournoi("My Tournament", Niveau.INTERNATIONAL, 
                     		Date.valueOf(LocalDate.of(2023, 12, 20)), Date.valueOf(LocalDate.of(2023, 12, 23)),
                     		Pays.FR);
                     createValues(args, t);
