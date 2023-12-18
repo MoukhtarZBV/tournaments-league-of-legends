@@ -11,9 +11,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import dao.ArbitreJDBC;
+import dao.AssocierJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
@@ -233,6 +236,53 @@ public class Tournoi {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+			}
+		}
+	}
+	public void selectionArbitre() {
+		// nombre d'équipes dans le tournoi
+		int nbEquipes = (int) new ParticiperJDBC().getAll().stream()
+				.filter(participer -> participer.getTournoi().getNomTournoi().equals(this.getNomTournoi()))
+				.map(participer -> participer.getEquipe())
+				.count();
+		
+		// selection du nombre d'arbitres en fonction du nombre d'équipes
+		int nbArbitres = 0;
+		switch(nbEquipes) {
+			case 4:
+			case 5:
+				nbArbitres = 1;
+				break;
+			case 6:
+			case 7:
+				nbArbitres = 2;
+				break;
+			case 8:
+				nbArbitres = 3;
+				break;
+		}
+		
+		// Selection de tous les arbitres de la base
+		ArbitreJDBC ajdbc = new ArbitreJDBC();
+		List<Arbitre> arbitres = new ArrayList<>();
+		try {
+			arbitres = ajdbc.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Selection d'arbitres au hasard
+		AssocierJDBC assjdbc = new AssocierJDBC();
+		List<Arbitre> arbitresTirées = new ArrayList<>();
+		Random random = new Random();
+		for (int i = 0; i<nbArbitres; i++) {
+			int numArbitre = random.nextInt(arbitres.size());
+			arbitresTirées.add(arbitres.get(numArbitre));
+			arbitres.remove(numArbitre);
+			try {
+				assjdbc.add(new Associer(arbitres.get(numArbitre),this));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
