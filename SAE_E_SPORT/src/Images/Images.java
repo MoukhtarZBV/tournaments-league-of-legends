@@ -1,7 +1,17 @@
 package Images;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 
 public class Images {
@@ -17,11 +27,13 @@ public class Images {
 	public static final String TROPHY = "/Images/trophy.png";
 	public static final String TROPHY_WIN = "/Images/trophyWin.png";
 	public static final ImageIcon UPLOAD = Images.getIcon(100, 100, "upload");
+	public static final ImageIcon EQUIPE = Images.getIcon(128, 128, "imgEquipe");
+	public static final ImageIcon TOURNOI = Images.getIcon(128, 128, "imgTournoi");
+	public static final ImageIcon HISTORIQUE = Images.getIcon(128, 128, "imgHistorique");
 	
-
 	private static ImageIcon getIcon(int xScale, int yScale, String type) {
 		ImageIcon originalIcon = new ImageIcon(Images.class.getResource("/images/" + type + ".png"));
 		return new ImageIcon(originalIcon.getImage().getScaledInstance(xScale, yScale, Image.SCALE_DEFAULT));
 	}
-
+	
 }

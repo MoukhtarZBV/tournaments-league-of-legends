@@ -82,7 +82,7 @@ public class ModelePoule {
 			datas[i][0] = i+1;
 			datas[i][1] = p.getEquipe1().getNom();
 			datas[i][2] = p.getEquipe2().getNom();
-			datas[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(p.getDate());
+			datas[i][3] = (new SimpleDateFormat("dd/MM/yyyy").format(p.getDate()))+"  "+p.getHeure();
 			datas[i][4] = p.getEquipeGagnant()==1 ? trophyWin : trophy;
 			datas[i][5] = p.getEquipeGagnant()==2 ? trophyWin : trophy;
 			i++;

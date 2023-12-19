@@ -35,25 +35,35 @@ public class Tournoi {
 		this.jdbc = new TournoiJDBC();
 		if (nomTournoi.trim().length() == 0) {
 			throw new IllegalArgumentException("Le nom du tournoi ne doit pas être vide");
-		} if (niveau == null) {
+		} 
+		if (niveau == null) {
 			throw new IllegalArgumentException("Le niveau ne doit pas être vide");
-		} if (pays == null) {
+		} 
+		if (pays == null) {
 			throw new IllegalArgumentException("Le pays ne doit pas être vide");
-		} if (nomTournoi.length() >= 100) {
+		} 
+		if (nomTournoi.length() >= 100) {
 			throw new IllegalArgumentException("Le nom du tournoi ne peut dépasser les 100 caractères");
-		} if (getTournoiDeNom(nomTournoi) != null) {
+		} 
+		if (getTournoiDeNom(nomTournoi) != null) {
 			throw new IllegalArgumentException("Un tournoi portant ce nom existe déjà");
-		} if (dateDebut.compareTo(new Date(System.currentTimeMillis())) <= 0) {
+		} 
+		if (dateDebut.compareTo(new Date(System.currentTimeMillis())) <= 0) {
 			throw new IllegalArgumentException("La date de debut doit être supérieure à la date du jour");
-		} if (dateDebut.after(dateFin)) {
+		} 
+		if (dateDebut.after(dateFin)) {
 			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
-		} if (!anneePourSaisonEnCours(dateDebut)) {
+		} 
+		if (!anneePourSaisonEnCours(dateDebut)) {
 			throw new IllegalArgumentException("L'année de la date doit être la même que celle en cours");
-		} if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
+		} 
+		if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi ne peut durer plus de deux semaines");
-		} if (!minimum4JoursEntreDates(dateDebut, dateFin)) {
+		} 
+		if (!minimum4JoursEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi doit durer minimum quatre jours");
-		} if (existeTournoiEntreDates(dateDebut, dateFin)) {
+		} 
+		if (existeTournoiEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Il existe déjà un tournoi sur ce créneau");
 		}
 		this.nomTournoi = nomTournoi;
@@ -212,6 +222,7 @@ public class Tournoi {
 		return jdbc.getTournoisNiveauStatusNom(nom, niveau, status);
 	}
 	
+	// générer une poule lorsque un tournoi est ouvert
 	public void generationPoule(){
 		List<Equipe> equipes = new ArrayList<>(); 
 		// Récupération de la liste des équipes qui participent au tournoi
@@ -220,21 +231,93 @@ public class Tournoi {
 					.filter(e->e.getTournoi().getNomTournoi().equals(this.getNomTournoi()))
 					.map(p-> p.getEquipe())
 					.collect(Collectors.toList());
-		
+				
 		// Création des matchs
 		PartieJDBC ppdb = new PartieJDBC();
-		for(int i = 0; i < equipes.size(); i++) {
-			for (int j = i+1; j < equipes.size(); j++) {
-				Partie partie = new Partie(Date.valueOf(LocalDate.of(2023, 12, 23)), "12:00", "Poule", equipes.get(i), this);
-				partie.setEquipeGagnant(-1);
-				partie.setEquipe2(equipes.get(j));
-				try {
-					ppdb.add(partie);
-				} catch (Exception e1) {
-					e1.printStackTrace();
+		
+		int equipeSize = equipes.size();
+		
+		// nombre matchs totals
+		int nbMatchsTotals = nombreMatchs(equipeSize);
+		// duree total des matchs
+		int joursMatchs = this.dureePoule(this.getDureeTournoi());
+		// nombre de matchs restant
+		int matchsRestant = nbMatchsTotals % joursMatchs;
+		// nombre de matchs par jour
+		int nbMatchsParJour = nbMatchsTotals/joursMatchs;
+		// le trou entre des matchs
+		int trouHeures = trouHeure(nbMatchsParJour);
+		// heure commence
+		int heure = 10;
+		// date commence 
+		LocalDate date = this.dateDebut.toLocalDate();
+		// compteur pour les matchs par jour
+		int cmpMatchs = 0;
+		nbMatchsParJour = verifierExtraMatchs(matchsRestant, nbMatchsParJour);
+		for (int cmp = 0, initial = equipeSize/2 ; cmp<nbMatchsTotals ;initial++) {
+			for (int i = 0, j = initial ; i<equipeSize && cmp<nbMatchsTotals ; i++, j++, cmp++, heure+=trouHeures) {
+				cmpMatchs ++;
+				j %= equipeSize;
+				createMatch(equipes, ppdb, heure, date, i, j);
+				if (cmpMatchs==nbMatchsParJour) {
+					heure = 10-trouHeures;
+					date = date.plusDays(1);
+					matchsRestant--;
+					if (matchsRestant==0) {
+						nbMatchsParJour--;
+					}
+					cmpMatchs = 0;
 				}
 			}
+			initial %= equipeSize;
 		}
+		
+	}
+
+	// creer un match et ajouter dans la base de données 
+	private void createMatch(List<Equipe> equipes, PartieJDBC ppdb, int heure, LocalDate date, int i, int j) {
+		Partie partie = new Partie(Date.valueOf(date), String.format("%02d", heure)+":00", "Poule", equipes.get(i), this);
+		partie.setEquipeGagnant(-1);
+		partie.setEquipe2(equipes.get(j));
+		try {
+			ppdb.add(partie);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	// verifier s'il existe des extra matchs
+	private int verifierExtraMatchs(int matchsRestant, int nbMatchsParJour) {
+		if (matchsRestant>0) {
+			nbMatchsParJour++;
+		}
+		return nbMatchsParJour;
+	}
+	
+	// la durée totale pour faire des matchs
+	private int dureePoule(int dureeTournoi) {
+		int duree = 4;
+		if (dureeTournoi==7) {
+			duree = 5;
+		}else if (dureeTournoi>7) {
+			duree = 7;
+		}
+		return duree;
+	}
+	
+	// le trou entre deux matchs
+	// dépendre de matchs par jour
+	// plus de match, moins de temps et vice versa
+	private int trouHeure(int nbMatchs) {
+		int gap = 1;
+		if (nbMatchs<=2) gap = 3;
+		else if (nbMatchs<=4) gap = 2;
+		return gap;
+	}
+	
+	// nombre total des matchs pour un nombre d'équipe donné
+	private int nombreMatchs(int nbEquipes) {
+		return nbEquipes*(nbEquipes-1)/2;
 	}
 	
 }
