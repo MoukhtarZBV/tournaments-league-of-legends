@@ -229,14 +229,14 @@ public class VueImportation extends JFrame {
 
 	public void setMsgErreur(String erreur){
 		msgErreur.setText(erreur);
-		msgErreur.setForeground(Palette.ROUGE);
-		panelMessage.setBackground(Palette.FOND_ROUGE);
+		msgErreur.setForeground(Palette.ERREUR);
+		panelMessage.setBackground(Palette.FOND_ERREUR);
 	}
 	
 	public void setMsgSucces(String succes) {
 		msgErreur.setText(succes);
-		msgErreur.setForeground(Palette.VERT);
-		panelMessage.setBackground(Palette.FOND_VERT);
+		msgErreur.setForeground(Palette.SUCCES);
+		panelMessage.setBackground(Palette.FOND_SUCCES);
 	}
 	
 	public void setMsgNormal(String message) {

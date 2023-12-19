@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import components.JTextFieldArrondi;
+import components.PanelPopUp;
 import modele.Niveau;
 import modele.Pays;
 
@@ -43,10 +44,7 @@ public class VueCreationTournoi extends JFrame {
 	private JFormattedTextField inputDateDebut;
 	private JFormattedTextField inputDateFin;
 	
-	private JPanel     panelErreur;
-	private JTextField txtBorderErreur, txtErreur;
-	private JPanel     panelSucces;
-	private JTextField txtBorderSucces, txtSucces;
+	private PanelPopUp panelPopup;
 
 	
 	// Création la fenêtre
@@ -120,74 +118,14 @@ public class VueCreationTournoi extends JFrame {
 		
 		
 		///// PANEL SUCCES \\\\\
-		GridBagConstraints gbc_panelSucces = new GridBagConstraints();
-		gbc_panelSucces.insets = new Insets(0, 0, 5, 0);
-		gbc_panelSucces.fill   = GridBagConstraints.BOTH;
-		gbc_panelSucces.gridx  = 0;
-		gbc_panelSucces.gridy  = 0;
+		GridBagConstraints gbc_panelPopup = new GridBagConstraints();
+		gbc_panelPopup.insets = new Insets(0, 0, 5, 0);
+		gbc_panelPopup.fill   = GridBagConstraints.BOTH;
+		gbc_panelPopup.gridx  = 0;
+		gbc_panelPopup.gridy  = 0;
 		
-		panelSucces = new JPanel();
-		panelSucces.setLayout(new BorderLayout(0, 0));
-		panelCenter.add(panelSucces, gbc_panelSucces);
-		
-		// Petite bordure verte
-		txtBorderSucces = new JTextField();
-		txtBorderSucces.setText(" ");
-		txtBorderSucces.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtBorderSucces.setEnabled(false);
-		txtBorderSucces.setEditable(false);
-		txtBorderSucces.setMargin(new Insets(5, 5, 5, 5));
-		txtBorderSucces.setFont(Police.LIGNE);
-		txtBorderSucces.setBackground(Palette.VERT);
-		panelSucces.add(txtBorderSucces, BorderLayout.WEST);
-		
-		// Label succes
-		txtSucces = new JTextField();
-		txtSucces.setText("TOURNOI CRÉÉ AVEC SUCCÈS");
-		txtSucces.setBorder(new EmptyBorder(2, 10, 2, 2));
-		txtSucces.setEditable(false);
-		txtSucces.setHorizontalAlignment(SwingConstants.LEFT);
-		txtSucces.setForeground(Palette.VERT);
-		txtSucces.setFont(Police.POPUPS);
-		txtSucces.setColumns(10);
-		txtSucces.setBackground(Palette.FOND_VERT);
-		panelSucces.add(txtSucces);
-		
-		
-		///// PANEL ERREUR \\\\\
-		GridBagConstraints gbc_panelErreur = new GridBagConstraints();
-		gbc_panelErreur.insets = new Insets(0, 0, 5, 0);
-		gbc_panelErreur.fill   = GridBagConstraints.BOTH;
-		gbc_panelErreur.gridx  = 0;
-		gbc_panelErreur.gridy  = 0;
-		
-		panelErreur = new JPanel();
-		panelErreur.setLayout(new BorderLayout(0, 0));
-		panelCenter.add(panelErreur, gbc_panelErreur);
-		
-		// Petite bordure rouge
-		txtBorderErreur = new JTextField();
-		txtBorderErreur.setText(" ");
-		txtBorderErreur.setBorder(new EmptyBorder(0, 0, 0, 0));
-		txtBorderErreur.setEnabled(false);
-		txtBorderErreur.setEditable(false);
-		txtBorderErreur.setMargin(new Insets(5, 5, 5, 5));
-		txtBorderErreur.setFont(Police.LIGNE);
-		txtBorderErreur.setBackground(Palette.ROUGE);
-		panelErreur.add(txtBorderErreur, BorderLayout.WEST);
-		
-		// Label erreur
-		txtErreur = new JTextField();
-		txtErreur.setText("LES CHAMPS NE SONT PAS REMPLIS CORRECTEMENT");
-		txtErreur.setBorder(new EmptyBorder(2, 10, 2, 2));
-		txtErreur.setEditable(false);
-		txtErreur.setHorizontalAlignment(SwingConstants.LEFT);
-		txtErreur.setForeground(Palette.ROUGE);
-		txtErreur.setFont(Police.POPUPS);
-		txtErreur.setColumns(10);
-		txtErreur.setBackground(Palette.FOND_ROUGE);
-		panelErreur.add(txtErreur);
-		
+		panelPopup = new PanelPopUp();
+		panelCenter.add(panelPopup, gbc_panelPopup);
 		
 		
 		///// PANEL INFOS TOURNOIS \\\\\
@@ -452,34 +390,8 @@ public class VueCreationTournoi extends JFrame {
 		panelBoutons.add(horizontalStrut_7);
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
-		
-		
-		this.effacerMessageErreur();
-		this.effacerMessageSucces();
 	}
 	
-	
-	// Afficher le message d'erreur
-	public void afficherMessageErreur(String text) {
-		this.panelErreur.setVisible(true);
-		this.txtErreur.setText(text);
-	}
-	
-	// Effacer le message d'erreur
-	public void effacerMessageErreur() {
-		this.panelErreur.setVisible(false);
-	}
-	
-	// Afficher le message de succes
-	public void afficherMessageSucces(String text) {
-		this.panelSucces.setVisible(true);
-		this.txtSucces.setText(text);
-	}
-	
-	// Effacer le message de succes
-	public void effacerMessageSucces() {
-		this.panelSucces.setVisible(false);
-	}
 	
 	public String getNom() {
 		return this.inputNom.getText();
@@ -491,6 +403,10 @@ public class VueCreationTournoi extends JFrame {
 	
 	public Niveau getNiveau() {
 		return Niveau.getNiveau((String) this.inputNiveau.getSelectedItem());
+	}
+	
+	public PanelPopUp getPopup() {
+		return this.panelPopup;
 	}
 	
 	private static LocalDate getDate(String date) {

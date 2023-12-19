@@ -11,9 +11,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import dao.ArbitreJDBC;
+import dao.AssocierJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
@@ -25,7 +28,7 @@ public class Tournoi {
 	private Date dateDebut;
 	private Date dateFin;
 	private Pays pays;
-	private Status status;
+	private Statut statut;
 	private Compte compte;
 	private Equipe vainqueur;
 	
@@ -73,10 +76,10 @@ public class Tournoi {
 		this.pays = pays;
 		this.compte = null;
 		this.vainqueur = null;
-		this.status = Status.A_VENIR;
+		this.statut = Statut.A_VENIR;
 	}
 	
-	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays) {
+	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut) {
 		Tournoi tournoi = new Tournoi();
 		tournoi.nomTournoi = nomTournoi;
         tournoi.niveau = niveau;
@@ -85,7 +88,7 @@ public class Tournoi {
         tournoi.pays = pays;
         tournoi.compte = null;
         tournoi.vainqueur = null;
-        tournoi.status = Status.A_VENIR;
+        tournoi.statut = statut;
         return tournoi;
 	}
 	
@@ -105,8 +108,8 @@ public class Tournoi {
 		return this.pays;
 	}
 	
-	public Status getStatus() {
-		return this.status;
+	public Statut getStatus() {
+		return this.statut;
 	}
 	
 	public Equipe getVainqueur() {
@@ -153,7 +156,7 @@ public class Tournoi {
 					&& this.nomTournoi.equals(other.nomTournoi)
 					&& this.pays.equals(pays) 
 					&& this.vainqueur.equals(other.vainqueur)
-					&& this.status == other.status;
+					&& this.statut == other.statut;
 		} 
 		return false;
 	}
@@ -161,7 +164,7 @@ public class Tournoi {
 	@Override
 	public String toString() {
 		return "Tournoi [name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
-				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +", status=" + this.status.denomination() + "]";
+				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +", status=" + this.statut.denomination() + "]";
 	}
 	
 	// ======================= //
@@ -178,8 +181,8 @@ public class Tournoi {
 		return calendar.get(Calendar.YEAR) == LocalDate.now().getYear();
 	}
 	
-	public boolean minimum4JoursEntreDates(Date dateDebut, Date dateFin) {
-		return TimeUnit.DAYS.convert(dateFin.getTime() - dateDebut.getTime(), TimeUnit.MILLISECONDS) + 1 >= 4;
+	public boolean minimum5JoursEntreDates(Date dateDebut, Date dateFin) {
+		return TimeUnit.DAYS.convert(dateFin.getTime() - dateDebut.getTime(), TimeUnit.MILLISECONDS) + 1 >= 5;
 	}
 	
 	public static boolean estTournoiDisjoint(Date dateDebutT1, Date dateFinT1, Date dateDebutT2, Date dateFinT2) {
@@ -218,7 +221,7 @@ public class Tournoi {
 		jdbc.add(tournoi);
 	}
 	
-	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Status status){
+	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Statut status){
 		return jdbc.getTournoisNiveauStatusNom(nom, niveau, status);
 	}
 	
@@ -320,4 +323,56 @@ public class Tournoi {
 		return nbEquipes*(nbEquipes-1)/2;
 	}
 	
+	public void selectionArbitre(Tournoi tournoi) {
+		// nombre d'équipes dans le tournoi
+		int nbEquipes = (int) new ParticiperJDBC().getAll().stream()
+				.filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi()))
+				.count();
+		
+		// selection du nombre d'arbitres en fonction du nombre d'équipes
+		int nbArbitres = 0;
+		switch(nbEquipes) {
+			case 4:
+			case 5:
+				nbArbitres = 1;
+				break;
+			case 6:
+			case 7:
+				nbArbitres = 2;
+				break;
+			case 8:
+				nbArbitres = 3;
+				break;
+		}
+		
+		// Selection de tous les arbitres de la base
+		ArbitreJDBC ajdbc = new ArbitreJDBC();
+		List<Arbitre> arbitres = new ArrayList<>();
+		try {
+			arbitres = ajdbc.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Selection d'arbitres au hasard
+		AssocierJDBC assjdbc = new AssocierJDBC();
+		List<Arbitre> arbitresTirees = new ArrayList<>();
+		Random random = new Random();
+		for (int i = 0; i<nbArbitres; i++) {
+			int numArbitre = random.nextInt(arbitres.size());
+			arbitresTirees.add(arbitres.get(numArbitre));
+			arbitres.remove(numArbitre);
+			// Ajout dans la base de données la liason arbitre / tournoi
+			try {
+				Associer ass = new Associer(arbitres.get(numArbitre), tournoi);
+				assjdbc.add(new Associer(arbitres.get(numArbitre), tournoi));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void changerStatusTournoi(Tournoi tournoi, Statut status) {
+		this.jdbc.changerStatusTournoi(tournoi, status);
+	}
 }

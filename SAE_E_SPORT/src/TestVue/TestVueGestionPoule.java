@@ -27,6 +27,7 @@ public class TestVueGestionPoule {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                	CreateDB.main(args);
                     Tournoi t = new Tournoi("My Tournament", Niveau.INTERNATIONAL, 
                     		Date.valueOf(LocalDate.of(2023, 12, 20)), Date.valueOf(LocalDate.of(2023, 12, 23)),
                     		Pays.FR);
@@ -50,7 +51,7 @@ public class TestVueGestionPoule {
 	}
 	
 	public static void createValues(String[] args, Tournoi t) throws Exception {
-		CreateDB.main(args);
+		//CreateDB.main(args);
 		
 		PartieJDBC pjdbc = new PartieJDBC();
 		TournoiJDBC tjdbc = new TournoiJDBC();

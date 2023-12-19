@@ -1,18 +1,20 @@
 package controleur;
 
-import java.awt.Color;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 
+import ihm.VueAccueilAdmin;
 import ihm.VueEquipe;
 import ihm.VueListeEquipe;
 import ihm.VueTournoi;
 import modele.Equipe;
 
-public class ControleurEquipe implements ActionListener{
+public class ControleurEquipe implements ActionListener, WindowListener {
 	private VueEquipe vue;
 	private Equipe modele;
 
@@ -20,6 +22,7 @@ public class ControleurEquipe implements ActionListener{
 		this.vue = vue;
 		this.modele = new Equipe();
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
@@ -29,16 +32,15 @@ public class ControleurEquipe implements ActionListener{
 				if (!name.equals("")) {
 					this.modele.miseAJourEquipe((new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe())));
 					this.vue.dispose();
-					if(this.vue.getPapa() == null) {
+					if(this.vue.getPere() == null) {
 						VueListeEquipe vue = new VueListeEquipe(this.modele.toutesLesEquipes());
 						vue.setVisible(true);
 					} else {
-						VueTournoi vue = new VueTournoi(this.vue.getPapa());
+						VueTournoi vue = new VueTournoi(this.vue.getPere());
 						vue.setVisible(true);
 					}
 				}else {
-					this.vue.setColorMessage(new Color(255, 204, 204));
-					this.vue.setMsgErreur("Le nom d'équipe ne peut pas être vide");
+					this.vue.getPopup().setErreur("Le nom de l'équipe ne peut pas être vide");
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -47,11 +49,11 @@ public class ControleurEquipe implements ActionListener{
 		if(bouton.getText().equals("Retour")) {
 			this.vue.dispose();
 			try {
-				if(this.vue.getPapa() == null) {
+				if(this.vue.getPere() == null) {
 					VueListeEquipe vue = new VueListeEquipe(this.modele.toutesLesEquipes());
 					vue.setVisible(true);
 				} else {
-					VueTournoi vue = new VueTournoi(this.vue.getPapa());
+					VueTournoi vue = new VueTournoi(this.vue.getPere());
 					vue.setVisible(true);
 				}
 			} catch (Exception e1) {
@@ -59,6 +61,43 @@ public class ControleurEquipe implements ActionListener{
 			}
 		}
 				
-		}
-		
 	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		this.vue.dispose();
+		try {
+			if(this.vue.getPere() == null) {
+				VueListeEquipe vue = new VueListeEquipe(this.modele.toutesLesEquipes());
+				vue.setVisible(true);
+			} else {
+				VueTournoi vue = new VueTournoi(this.vue.getPere());
+				vue.setVisible(true);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+
+		
+	// NOT IMPLEMENTED \\
+	
+	@Override
+	public void windowOpened(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
+	
+}

@@ -32,7 +32,7 @@ import dao.ConnectionJDBC;
 import dao.TournoiJDBC;
 import dao.UpdateDB;
 import modele.Niveau;
-import modele.Status;
+import modele.Statut;
 import modele.Tournoi;
 
 import javax.swing.BoxLayout;
@@ -172,7 +172,7 @@ public class VueListeTournois extends JFrame {
 		triStatus.setFocusable(false);
 		triStatus.addItemListener(controleur);
 		triStatus.addItem("-- Status --");
-		for (Status status : Status.values()) {
+		for (Statut status : Statut.values()) {
         	triStatus.addItem(status.denomination());
         }
 		panelTris.add(triStatus);
@@ -188,7 +188,7 @@ public class VueListeTournois extends JFrame {
 		table.setOpaque(false);
 		
 		// Tableau
-		table.setSelectionBackground(Palette.COOL);
+		table.setSelectionBackground(Palette.LIGHT_PURPLE);
 		table.setRowMargin(5);
 		table.setRowHeight(35);
 		table.setFont(Police.LABEL);

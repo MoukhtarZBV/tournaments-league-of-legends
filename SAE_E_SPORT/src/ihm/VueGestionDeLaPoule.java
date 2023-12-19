@@ -35,9 +35,10 @@ public class VueGestionDeLaPoule extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable tableClassement;
-	private JTable tableMatches;
+	private JTable tableClassement = new JTable();;
+	private JTable tableMatches = new JTable();
 	private Tournoi tournoi;
+	private JButton btnCloturer;
 	
 	/**
 	 * Create the frame.
@@ -97,8 +98,7 @@ public class VueGestionDeLaPoule extends JFrame {
         };
         
         ControleurGestionPoule controleur = new ControleurGestionPoule(this);
-        
-		this.tableMatches = new JTable(modeleMatches);
+        this.tableMatches.setModel(modeleMatches);
 		this.tableMatches.getColumnModel().getColumn(1).setCellRenderer(new PanelRenderer());
 		this.tableMatches.getColumnModel().getColumn(2).setCellRenderer(new PanelRenderer());
 		this.tableMatches.setRowHeight(35);
@@ -137,9 +137,9 @@ public class VueGestionDeLaPoule extends JFrame {
 				return false;
 			}
 		};
-		this.tableClassement = new JTable(modeleClassement);
 		DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setOpaque(false);
+		this.tableClassement.setModel(modeleClassement);
         this.tableClassement.getTableHeader().setReorderingAllowed(false);
         this.tableClassement.getTableHeader().setResizingAllowed(false);
         this.tableClassement.setDefaultRenderer(Object.class, cellRenderer);
@@ -166,11 +166,12 @@ public class VueGestionDeLaPoule extends JFrame {
 		btnImprimer.setBorder(new RoundedBorder(5));
 		panelButtons.add(btnImprimer);
 		
-		JButton btnCloturer = new JButton("Cloturer Poule");
+		this.btnCloturer = new JButton("Cloturer Poule");
 		btnCloturer.setBackground(new Color(255, 255, 255));
 		btnCloturer.addMouseListener(controleur);
 		btnCloturer.setFocusable(false);
 		btnCloturer.setBorder(new RoundedBorder(5));
+		btnCloturer.setEnabled(false);
 		panelButtons.add(btnCloturer);
 		
 		JButton btnRetour = new JButton("Retour");
@@ -197,6 +198,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		JLabel lblTitreTournoi = new JLabel(sb.toString());
 		lblTitreTournoi.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTitle.add(lblTitreTournoi, BorderLayout.SOUTH);
+		
 	}
 	
 	public Tournoi getTournoi() {
@@ -236,5 +238,9 @@ public class VueGestionDeLaPoule extends JFrame {
 		for (Object[] data : datas) {
 			model.addRow(data);
 		}
+	}
+	
+	public void setBtnCloturer(boolean statut) {
+		this.btnCloturer.setEnabled(statut);
 	}
 }

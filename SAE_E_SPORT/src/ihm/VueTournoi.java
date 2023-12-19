@@ -10,11 +10,14 @@ import javax.swing.table.TableCellRenderer;
 
 import components.PanelRound;
 import controleur.ControleurDetailsTournoi;
+import dao.AssocierJDBC;
 import dao.ParticiperJDBC;
 import dao.TournoiJDBC;
 import Images.Images;
+import modele.Arbitre;
 import modele.Equipe;
 import modele.Joueur;
+import modele.Statut;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
@@ -49,8 +52,7 @@ public class VueTournoi extends JFrame {
 		ControleurDetailsTournoi controleur = new ControleurDetailsTournoi(this);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		//setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setBounds(100, 100, 1280, 720);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle(tournoi.getNomTournoi());
 		addWindowListener(controleur);
 		
@@ -153,7 +155,7 @@ public class VueTournoi extends JFrame {
 		PanelRound panelEquipesBorder = creerBordureBulleInfo();
 		PanelRound panelEquipes = creerBulleInfo();
 		ajouterLibelleBulle(panelEquipes, "Équipes", Images.TEAM);
-		ajouterInfoBulle(panelEquipes, "" + new ParticiperJDBC().getAll().stream().peek(p -> p.getTournoi().getNomTournoi()).filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).count());
+		ajouterInfoBulle(panelEquipes, "" + new ParticiperJDBC().getAll().stream().filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).count());
 		panelEquipesBorder.add(panelEquipes);
 		panelBullesInfos.add(panelEquipesBorder);
 		
@@ -255,6 +257,49 @@ public class VueTournoi extends JFrame {
 			btnImporter.setFocusable(false);
 			btnImporter.addActionListener(controleur);
 			panelBoutons.add(btnImporter);
+		}
+		
+		// Bouton ouvrir le tournoi
+		if (tournoi.getStatus() == Statut.A_VENIR) {
+			JButton btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
+			btnOuvrir.setName("Ouvrir le tournoi");
+			btnOuvrir.setBackground(Palette.GRAY);
+			btnOuvrir.setForeground(Palette.WHITE);
+			btnOuvrir.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+			btnOuvrir.setFont(Police.LABEL);
+			btnOuvrir.setFocusable(false);
+			btnOuvrir.addActionListener(controleur);
+			panelBoutons.add(btnOuvrir);
+		}
+		
+		JPanel panelArbitres = new JPanel();
+		panelArbitres.setBorder(new EmptyBorder(25, 0, 0, 0));
+		panelArbitres.setBackground(Palette.GRAY);
+		panelTableEquipes.add(panelArbitres, BorderLayout.SOUTH);
+		panelArbitres.setLayout(new BorderLayout(0, 0));
+		
+
+		JLabel lblNewLabel = new JLabel("Arbitres");
+		lblNewLabel.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
+		lblNewLabel.setForeground(Palette.WHITE);
+		lblNewLabel.setFont(Police.SOUS_TITRE);
+		panelArbitres.add(lblNewLabel, BorderLayout.NORTH);
+		
+		JPanel panelNomsArbitres = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelNomsArbitres.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panelNomsArbitres.setBackground(Palette.GRAY);
+		panelArbitres.add(panelNomsArbitres);
+		
+		List<Arbitre> arbitresTournoi = new AssocierJDBC().getAll().stream().filter(associer -> associer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(associer -> associer.getArbitre()).collect(Collectors.toList());
+		for (Arbitre arbitre : arbitresTournoi) {
+			JLabel labelArbitre = new JLabel("<html><body style='padding: 5px 20px;'>" + arbitre.getNom() + " " + arbitre.getPrenom() + "</body></html>");
+			labelArbitre.setForeground(Palette.WHITE);
+			labelArbitre.setFont(Police.LABEL);
+			labelArbitre.setBackground(Palette.DARK_GRAY);
+			labelArbitre.setOpaque(true);
+			labelArbitre.setBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE));
+			panelNomsArbitres.add(labelArbitre);
 		}
 	}
 	
