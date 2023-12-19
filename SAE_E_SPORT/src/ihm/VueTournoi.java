@@ -260,7 +260,7 @@ public class VueTournoi extends JFrame {
 		}
 		
 		// Bouton ouvrir le tournoi
-		if (tournoi.getStatus() == Statut.A_VENIR) {
+		if (tournoi.getStatut() == Statut.A_VENIR) {
 			JButton btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
 			btnOuvrir.setName("Ouvrir le tournoi");
 			btnOuvrir.setBackground(Palette.GRAY);

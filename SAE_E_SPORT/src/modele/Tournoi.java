@@ -98,7 +98,7 @@ public class Tournoi {
 		return this.pays;
 	}
 	
-	public Statut getStatus() {
+	public Statut getStatut() {
 		return this.statut;
 	}
 	
