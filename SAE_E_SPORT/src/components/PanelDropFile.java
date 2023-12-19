@@ -104,8 +104,8 @@ public class PanelDropFile extends JPanel {
                 	notifyDropListener(files.get(0).getAbsolutePath());
                 } else {
                 	message.setText("Vous avez déposer " + files.size() + " fichiers, veuillez en déposer qu'un seul");
-                	message.setForeground(Palette.ROUGE);
-            		messageContainer.setBackground(Palette.FOND_ROUGE);
+                	message.setForeground(Palette.ERREUR);
+            		messageContainer.setBackground(Palette.FOND_ERREUR);
                 }
             }
         };

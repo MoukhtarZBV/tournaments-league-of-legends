@@ -52,8 +52,7 @@ public class VueTournoi extends JFrame {
 		ControleurDetailsTournoi controleur = new ControleurDetailsTournoi(this);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		//setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setBounds(100, 100, 1280, 720);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle(tournoi.getNomTournoi());
 		addWindowListener(controleur);
 		
