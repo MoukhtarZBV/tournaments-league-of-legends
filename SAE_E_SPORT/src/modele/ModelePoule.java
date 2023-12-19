@@ -21,54 +21,53 @@ public class ModelePoule {
 
 	private List<Partie> parties;
 	private Map<String, Participer> participations;
+	private Tournoi tournoi;
 	
-	public ModelePoule(Tournoi t) throws Exception {
-		this.parties = this.partiesParTournoi(t);
-		this.participations = this.participerParTournoi(t);
-		System.out.println(this.parties);
-		System.out.println(this.participations);
+	public ModelePoule(Tournoi tournoi) throws Exception {
+		this.parties = this.partiesParTournoi(tournoi);
+		this.participations = this.participerParTournoi(tournoi);
+		this.tournoi = tournoi;
 	}
 	
 	private List<Partie> partiesParTournoi(Tournoi t) throws Exception{
-		PartieJDBC pdb = new PartieJDBC();
-		List<Partie> parties = pdb.getAll().stream()
+		return new PartieJDBC().getAll().stream()
 								.filter(e -> e.getTournoi().getNomTournoi().equals(t.getNomTournoi()))
 								.sorted((p1,p2) -> p1.getDate().compareTo(p2.getDate()))
 								.collect(Collectors.toList());
-		return parties;
 	}
 	
 	private Map<String,Participer> participerParTournoi(Tournoi t) throws Exception {
-		ParticiperJDBC pdb = new ParticiperJDBC(); 
-		Map<String, Participer> map =  pdb.getAll().stream()
-										.filter(e->e.getTournoi().getNomTournoi().equals(t.getNomTournoi()))
-										.collect(Collectors.toMap(e->e.getEquipe().getNom(), e->e));
-		return map;
+		return new ParticiperJDBC().getAll().stream()
+								.filter(e->e.getTournoi().getNomTournoi().equals(t.getNomTournoi()))
+								.collect(Collectors.toMap(e->e.getEquipe().getNom(), e->e));
 	}
 	
 	public void updateGagnant(int row, int gagnant) {
 		if (gagnant == 1 || gagnant == 2) {
-			Partie p = this.parties.get(row);
+			Partie partie = this.parties.get(row);
 			
-			int eGagne = p.getEquipeGagnant();
-			if (eGagne != -1) {		
-				String eq;
-				if (eGagne == 1) eq = p.getEquipe1().getNom();
-				else eq = p.getEquipe2().getNom();
+			int eGagne = partie.getEquipeGagnant();
+			if (eGagne != -1 && eGagne != gagnant) {		
+				String equipeGagnante;
+				if (eGagne == 1) {
+					equipeGagnante = partie.getEquipe1().getNom();
+				} else {
+					equipeGagnante = partie.getEquipe2().getNom();
+				}
 				
 				// Recalculer les points et les matches gagnés 
 				// pas sur +- combien
-				this.participations.get(eq).setNbPointsGagnes(this.participations.get(eq).getNbPointsGagnes()-10);
-				this.participations.get(eq).setNbMatchsGagnes(this.participations.get(eq).getNbMatchsGagnes()-1);
+				this.participations.get(equipeGagnante).setNbPointsGagnes(this.participations.get(equipeGagnante).getNbPointsGagnes() - (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+				this.participations.get(equipeGagnante).setNbMatchsGagnes(this.participations.get(equipeGagnante).getNbMatchsGagnes() - 1);
 				if(eGagne == gagnant) {
-					p.setEquipeGagnant(-1);
+					partie.setEquipeGagnant(-1);
 				}
 			}
 			if (eGagne != gagnant || eGagne == -1) {
-				p.setEquipeGagnant(gagnant);
-				Participer participer = this.participations.get(gagnant == 1 ? p.getEquipe1().getNom() : p.getEquipe2().getNom());
-				participer.setNbPointsGagnes(participer.getNbPointsGagnes()+10);
-				participer.setNbMatchsGagnes(participer.getNbMatchsGagnes()+1);
+				partie.setEquipeGagnant(gagnant);
+				Participer participer = this.participations.get(gagnant == 1 ? partie.getEquipe1().getNom() : partie.getEquipe2().getNom());
+				participer.setNbPointsGagnes(participer.getNbPointsGagnes() + (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+				participer.setNbMatchsGagnes(participer.getNbMatchsGagnes() + 1);
 			} 
 		}
 	}
@@ -82,13 +81,13 @@ public class ModelePoule {
 			datas[i][0] = i+1;
 			datas[i][1] = p.getEquipe1().getNom();
 			datas[i][2] = p.getEquipe2().getNom();
-			datas[i][3] = new SimpleDateFormat("dd/MM/yyyy").format(p.getDate());
+			datas[i][3] = (new SimpleDateFormat("dd/MM/yyyy").format(p.getDate()))+"  "+p.getHeure();
 			datas[i][4] = p.getEquipeGagnant()==1 ? trophyWin : trophy;
 			datas[i][5] = p.getEquipeGagnant()==2 ? trophyWin : trophy;
 			i++;
 		}
 		return datas;
-	}
+	} 
 	
 	public Object[][] classement () {
 		List<Map.Entry<String, Participer>> sortedEntries = new ArrayList<>(this.participations.entrySet());
@@ -118,8 +117,7 @@ public class ModelePoule {
 		return res;
 	}
 	
-	
-	public boolean enregistrerResultat () throws Exception {
+	public boolean enregistrerResultat() throws Exception {
 		boolean res = false;
 		PartieJDBC pdb = new PartieJDBC();
 		ParticiperJDBC partdb = new ParticiperJDBC();
@@ -131,5 +129,8 @@ public class ModelePoule {
 		}
 		return res;
 	}
-	
+
+	public void choisirVainqueur() {
+		
+	}
 }
