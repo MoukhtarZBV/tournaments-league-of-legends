@@ -38,16 +38,14 @@ public class PanelDropFile extends JPanel {
 
     private boolean dragOver = false;
 
-    private JPanel messageContainer;
-    private JLabel message;
+    private PanelPopUp popup;
 
     public PanelDropFile() {
         setLayout(new GridBagLayout());
     }
 
-    public void setMessageComponent(JPanel container, JLabel message) {
-    	this.messageContainer = container;
-    	this.message = message;
+    public void setMessageComponent(PanelPopUp popup) {
+    	this.popup = popup;
     }
     
     @Override
@@ -103,9 +101,7 @@ public class PanelDropFile extends JPanel {
                 if (files.size() == 1) {
                 	notifyDropListener(files.get(0).getAbsolutePath());
                 } else {
-                	message.setText("Vous avez déposer " + files.size() + " fichiers, veuillez en déposer qu'un seul");
-                	message.setForeground(Palette.ERREUR);
-            		messageContainer.setBackground(Palette.FOND_ERREUR);
+                	popup.setErreur("Vous avez déposer " + files.size() + " fichiers, veuillez en déposer qu'un seul");
                 }
             }
         };
