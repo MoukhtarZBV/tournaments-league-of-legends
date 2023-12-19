@@ -63,7 +63,7 @@ public class Tournoi {
 		if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi ne peut durer plus de deux semaines");
 		} 
-		if (!minimum4JoursEntreDates(dateDebut, dateFin)) {
+		if (!minimum5JoursEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi doit durer minimum quatre jours");
 		} 
 		if (existeTournoiEntreDates(dateDebut, dateFin)) {

@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueTournoi;
 import modele.ModelePoule;
+import modele.Statut;
 
 public class ControleurGestionPoule implements MouseListener {
 
@@ -62,8 +63,7 @@ public class ControleurGestionPoule implements MouseListener {
 					this.vue.dispose();
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
 					vue.setVisible(true);
-					// Changement de statut
-					
+					// Changement de statut ?????????
 					break;
 				case ("Retour") :
 					try {
