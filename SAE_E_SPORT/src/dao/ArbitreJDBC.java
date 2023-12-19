@@ -69,6 +69,16 @@ public class ArbitreJDBC implements ArbitreDAO{
 		}
 		return opt;
 	}
+	
+	public static int getNextValueSequence() throws Exception {
+        int res = -1;
+        Statement st = ConnectionJDBC.getConnection().createStatement();
+        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Arbitre");
+        if (rs.next()) {
+            res = rs.getInt(1);
+        }
+        return res;
+    }
 
 	@Override
 	public boolean add(Arbitre a) throws Exception {

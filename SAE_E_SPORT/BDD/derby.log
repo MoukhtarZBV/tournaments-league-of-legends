@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Tue Dec 19 14:37:31 CET 2023:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-018c-824b-c078-ffffccd3fcad 
+Tue Dec 19 16:38:25 CET 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-018c-82ba-6daa-ffffccd3fcad 
 on database directory C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT\BDD\BDD  with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@22d8cfe0 
 Loaded from file:/C:/Users/David%20Marquet/Documents/GitHub/SAE-e-sport/SAE_E_SPORT/derby.jar
 java.vendor=Eclipse Adoptium
@@ -8,59 +8,3 @@ java.runtime.version=17.0.6+10
 user.dir=C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT
 derby.system.home=C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT/BDD
 Database Class Loader started - derby.database.classpath=''
-Tue Dec 19 14:38:11 CET 2023 Thread[AWT-EventQueue-0,6,main] (XID = 415864), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Cleanup action starting
-Tue Dec 19 14:38:11 CET 2023 Thread[AWT-EventQueue-0,6,main] (XID = 415864), (SESSIONID = 1), (DATABASE = BDD), (DRDAID = null), Failed Statement is: insert into Associer(idArbitre, nomTournoi)values (?, ?) with 2 parameters begin parameter #1: 5 :end parameter begin parameter #2: PCL 2023 :end parameter 
-ERROR 23505: The statement was aborted because it would have caused a duplicate key value in a unique or primary key constraint or unique index identified by 'PK_ASSOCIER_IDARBITRETOURNOI' defined on 'ASSOCIER'.
-	at org.apache.derby.iapi.error.StandardException.newException(StandardException.java:303)
-	at org.apache.derby.impl.sql.execute.IndexChanger.insertAndCheckDups(IndexChanger.java:466)
-	at org.apache.derby.impl.sql.execute.IndexChanger.doInsert(IndexChanger.java:383)
-	at org.apache.derby.impl.sql.execute.IndexChanger.insert(IndexChanger.java:590)
-	at org.apache.derby.impl.sql.execute.IndexSetChanger.insert(IndexSetChanger.java:268)
-	at org.apache.derby.impl.sql.execute.RowChangerImpl.insertRow(RowChangerImpl.java:453)
-	at org.apache.derby.impl.sql.execute.InsertResultSet.normalInsertCore(InsertResultSet.java:1028)
-	at org.apache.derby.impl.sql.execute.InsertResultSet.open(InsertResultSet.java:505)
-	at org.apache.derby.impl.sql.GenericPreparedStatement.executeStmt(GenericPreparedStatement.java:436)
-	at org.apache.derby.impl.sql.GenericPreparedStatement.execute(GenericPreparedStatement.java:317)
-	at org.apache.derby.impl.jdbc.EmbedStatement.executeStatement(EmbedStatement.java:1242)
-	at org.apache.derby.impl.jdbc.EmbedPreparedStatement.executeStatement(EmbedPreparedStatement.java:1686)
-	at org.apache.derby.impl.jdbc.EmbedCallableStatement.executeStatement(EmbedCallableStatement.java:117)
-	at org.apache.derby.impl.jdbc.EmbedPreparedStatement.executeUpdate(EmbedPreparedStatement.java:308)
-	at dao.AssocierJDBC.add(AssocierJDBC.java:51)
-	at modele.Tournoi.selectionArbitre(Tournoi.java:368)
-	at controleur.ControleurDetailsTournoi.actionPerformed(ControleurDetailsTournoi.java:68)
-	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1972)
-	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2313)
-	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
-	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
-	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
-	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6626)
-	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3389)
-	at java.desktop/java.awt.Component.processEvent(Component.java:6391)
-	at java.desktop/java.awt.Container.processEvent(Container.java:2266)
-	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5001)
-	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2324)
-	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4833)
-	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4948)
-	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4575)
-	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4516)
-	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2310)
-	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2780)
-	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4833)
-	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:773)
-	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:722)
-	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:716)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
-	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
-	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:97)
-	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:746)
-	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:744)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
-	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
-	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:743)
-	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
-	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
-	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
-	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
-	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
-	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
-Cleanup action completed
