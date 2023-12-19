@@ -72,7 +72,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			}
 			
 			if (vue.estOptionComboboxStatus(option)) {
-				this.status = Statut.getStatus(option);
+				this.status = Statut.getStatut(option);
 			}
 			
 			vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));

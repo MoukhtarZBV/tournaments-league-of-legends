@@ -55,7 +55,7 @@ public class Tournoi {
 		} if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi ne peut durer plus de deux semaines");
 		} if (!minimum5JoursEntreDates(dateDebut, dateFin)) {
-			throw new IllegalArgumentException("Le tournoi doit durer minimum quatre jours");
+			throw new IllegalArgumentException("Le tournoi doit durer minimum cinq jours");
 		} if (existeTournoiEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Il existe déjà un tournoi sur ce créneau");
 		}
@@ -98,7 +98,7 @@ public class Tournoi {
 		return this.pays;
 	}
 	
-	public Statut getStatus() {
+	public Statut getStatut() {
 		return this.statut;
 	}
 	

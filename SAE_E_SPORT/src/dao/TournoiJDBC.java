@@ -33,7 +33,7 @@ public class TournoiJDBC implements TournoiDAO {
 										rs.getDate("dateDebut"), 
 										rs.getDate("dateFin"), 
 										Pays.getPays(rs.getString("nomPays")),
-										Statut.getStatus(rs.getString("status"))));
+										Statut.getStatut(rs.getString("status"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,7 +54,7 @@ public class TournoiJDBC implements TournoiDAO {
 										rs.getDate("dateDebut"), 
 										rs.getDate("dateFin"), 
 										Pays.getPays(rs.getString("nomPays")),
-										Statut.getStatus(rs.getString("status")));
+										Statut.getStatut(rs.getString("status")));
 				EquipeJDBC ejdbc = new EquipeJDBC();
 				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
 				t.setVainqueur(e.orElse(null));
@@ -81,7 +81,7 @@ public class TournoiJDBC implements TournoiDAO {
 			cs.setDate(3, t.getDateDebut());
 			cs.setDate(4, t.getDateFin());
 			cs.setString(5, t.getPays().denomination());
-			cs.setString(6, t.getStatus().denomination());
+			cs.setString(6, t.getStatut().denomination());
 			cs.executeUpdate();
 			res = true;
 		} catch (SQLException e) {
@@ -183,9 +183,9 @@ public class TournoiJDBC implements TournoiDAO {
 		} else if (niveau != null && status == null) {
 			return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getNiveau() == niveau).collect(Collectors.toList());
 		} else if (niveau == null && status != null) {
-			return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getStatus() == status).collect(Collectors.toList());
+			return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getStatut() == status).collect(Collectors.toList());
 		}
-		return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getStatus() == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
+		return getAll().stream().filter(tournoi -> tournoi.getNomTournoi().contains(nom)).filter(tournoi -> tournoi.getStatut() == status && tournoi.getNiveau() == niveau).collect(Collectors.toList());
 	}
 	
 	public void changerStatusTournoi(Tournoi tournoi, Statut status) {

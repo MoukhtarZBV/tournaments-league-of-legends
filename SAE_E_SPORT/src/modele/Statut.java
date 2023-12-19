@@ -14,10 +14,10 @@ public enum Statut {
 		return this.denomination;
 	}
 	
-	public static Statut getStatus(String denomination) {
-	    for (Statut status : Statut.values()) {
-	   		if (status.denomination().equals(denomination)) {
-	   			return status;
+	public static Statut getStatut(String denomination) {
+	    for (Statut statut : Statut.values()) {
+	   		if (statut.denomination().equals(denomination)) {
+	   			return statut;
 	   		}
 	   	}
     	return null;
