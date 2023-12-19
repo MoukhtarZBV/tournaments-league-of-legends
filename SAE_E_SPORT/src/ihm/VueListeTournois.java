@@ -261,7 +261,7 @@ public class VueListeTournois extends JFrame {
 		DefaultTableModel modele = ((DefaultTableModel) table.getModel());
 		modele.setRowCount(0);
 		for (Tournoi tournoi : tournois) {
-			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), tournoi.getStatus().denomination()});
+			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), tournoi.getStatut().denomination()});
 		}
 	}
 	

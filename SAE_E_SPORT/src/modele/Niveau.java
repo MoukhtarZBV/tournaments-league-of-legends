@@ -22,4 +22,21 @@ public enum Niveau {
     	}
     	return null;
     }
+	
+	public static float multiplicateurNiveau(Niveau niveau) {
+		switch (niveau) {
+		case LOCAL:
+			return 1;
+		case REGIONAL:
+			return 1.5f;
+		case NATIONAL:
+			return 2;
+		case INTERNATIONAL:
+			return 2.25f;
+		case INTERNATIONAL_CLASSE:
+			return 3;
+		default:
+			return 1;
+		}
+	}
 }
