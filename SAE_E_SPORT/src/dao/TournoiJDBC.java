@@ -33,7 +33,9 @@ public class TournoiJDBC implements TournoiDAO {
 										rs.getDate("dateDebut"), 
 										rs.getDate("dateFin"), 
 										Pays.getPays(rs.getString("nomPays")),
-										Statut.getStatut(rs.getString("status"))));
+										Statut.getStatut(rs.getString("status")),
+										new EquipeJDBC().getById(rs.getInt("idEquipe")),
+										new CompteJDBC().getById(rs.getInt("idCompte"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -54,16 +56,11 @@ public class TournoiJDBC implements TournoiDAO {
 										rs.getDate("dateDebut"), 
 										rs.getDate("dateFin"), 
 										Pays.getPays(rs.getString("nomPays")),
-										Statut.getStatut(rs.getString("status")));
-				EquipeJDBC ejdbc = new EquipeJDBC();
-				Optional<Equipe> e = ejdbc.getById(rs.getInt("idEquipe"));
-				t.setVainqueur(e.orElse(null));
-				
-				CompteJDBC cjdbc = new CompteJDBC();
-				Optional<Compte> opt = cjdbc.getById(rs.getInt("idCompte"));
-				t.setCompte(opt.orElse(null));
-				
+										Statut.getStatut(rs.getString("status")),
+										new EquipeJDBC().getById(rs.getInt("idEquipe")),
+										new CompteJDBC().getById(rs.getInt("idCompte")));
 				tournoi = Optional.ofNullable(t);
+				System.out.println(tournoi);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -193,6 +190,27 @@ public class TournoiJDBC implements TournoiDAO {
 			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("update tournoi set status = ? where nomTournoi = ?");
 			st.setString(1, status.denomination());
 			st.setString(2, tournoi.getNomTournoi());
+			st.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Equipe> getEquipesFinale(Tournoi tournoi) {
+		return new ParticiperJDBC().getAll().stream()
+				.filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi()))
+				.sorted((p1, p2) -> Integer.compare(p1.getNbPointsGagnes(), p2.getNbPointsGagnes()))
+				.map(participer -> participer.getEquipe())
+				.limit(2)
+				.collect(Collectors.toList());
+	}
+	
+	public void setVainqueurTournoi(Tournoi tournoi, Equipe equipe) {
+		try {
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement("update tournoi set idEquipe = ? where nomTournoi = ?");
+			st.setInt(1, equipe.getIdEquipe());
+			st.setString(2, tournoi.getNomTournoi());
+			st.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

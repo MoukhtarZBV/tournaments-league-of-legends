@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import Images.Images;
+import Images.ImagesIcons;
 import components.DropListener;
 import components.PanelDropFile;
 import controleur.ControleurImportation;
@@ -66,7 +66,7 @@ public class VueImportation extends JFrame {
 	public VueImportation(Tournoi tournoi) {
 		this.tournoi = tournoi;
 		ControleurImportation controleur = new ControleurImportation(this);
-		this.setDropListener(controleur);
+		this.setDropListener(controleur); 
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 850, 564);
@@ -74,7 +74,7 @@ public class VueImportation extends JFrame {
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
+		setContentPane(contentPane); 
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		///// PANEL TITRE \\\\\
@@ -146,7 +146,7 @@ public class VueImportation extends JFrame {
 		gbc_lblIconeImporter.gridx = 1;
 		gbc_lblIconeImporter.gridy = 0;
 		JLabel lblIconeImporter = new JLabel();
-		lblIconeImporter.setIcon(Images.UPLOAD);
+		lblIconeImporter.setIcon(ImagesIcons.UPLOAD);
 		panelDropInfos.add(lblIconeImporter, gbc_lblIconeImporter);
 		
 		// Libellé 'Glissez votre fichier ici'
@@ -277,11 +277,11 @@ public class VueImportation extends JFrame {
 			    }
 			};
 		tableEquipes.setModel(modele);
-		mettreIconeDansHeader("Joueur 1", Images.TOP);
-		mettreIconeDansHeader("Joueur 2", Images.JUNGLE);
-		mettreIconeDansHeader("Joueur 3", Images.MID);
-		mettreIconeDansHeader("Joueur 4", Images.SUPPORT);
-		mettreIconeDansHeader("Joueur 5", Images.BOTTOM);
+		mettreIconeDansHeader("Joueur 1", ImagesIcons.TOP);
+		mettreIconeDansHeader("Joueur 2", ImagesIcons.JUNGLE);
+		mettreIconeDansHeader("Joueur 3", ImagesIcons.MID);
+		mettreIconeDansHeader("Joueur 4", ImagesIcons.SUPPORT);
+		mettreIconeDansHeader("Joueur 5", ImagesIcons.BOTTOM);
 		tableScroll.setViewportView(tableEquipes);
 	}
 	

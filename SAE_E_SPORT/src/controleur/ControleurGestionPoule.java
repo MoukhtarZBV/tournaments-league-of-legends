@@ -63,7 +63,7 @@ public class ControleurGestionPoule implements MouseListener {
 					this.vue.dispose();
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
 					vue.setVisible(true);
-					// Changement de statut ?????????
+					this.modele.changerStatusEnFinale(this.vue.getTournoi());
 					break;
 				case ("Retour") :
 					try {

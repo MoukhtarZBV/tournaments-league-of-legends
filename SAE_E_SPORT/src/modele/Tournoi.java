@@ -77,15 +77,15 @@ public class Tournoi {
 		this.statut = Statut.A_VENIR;
 	}
 	
-	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut) {
+	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut, Optional<Equipe> vainqueur, Optional<Compte> compte) {
 		Tournoi tournoi = new Tournoi();
 		tournoi.nomTournoi = nomTournoi;
         tournoi.niveau = niveau;
         tournoi.dateDebut = dateDebut;
         tournoi.dateFin = dateFin;
         tournoi.pays = pays;
-        tournoi.compte = null;
-        tournoi.vainqueur = null;
+        tournoi.vainqueur = vainqueur.orElse(null);
+        tournoi.compte = compte.orElse(null);
         tournoi.statut = statut;
         return tournoi;
 	}
@@ -162,7 +162,8 @@ public class Tournoi {
 	@Override
 	public String toString() {
 		return "Tournoi [name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
-				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +", status=" + this.statut.denomination() + "]";
+				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() 
+				+", status=" + this.statut.denomination() + ", equipe vainqueur = " + this.vainqueur + "]";
 	}
 	
 	// ======================= //
@@ -372,5 +373,13 @@ public class Tournoi {
 	
 	public void changerStatusTournoi(Tournoi tournoi, Statut status) {
 		this.jdbc.changerStatusTournoi(tournoi, status);
+	}
+	
+	public void setVainqueurTournoi(Tournoi tournoi, Equipe equipe) {
+		this.jdbc.setVainqueurTournoi(tournoi, equipe);
+	}
+	
+	public List<Equipe> getEquipesFinale(Tournoi tournoi){
+		return this.jdbc.getEquipesFinale(tournoi);
 	}
 }

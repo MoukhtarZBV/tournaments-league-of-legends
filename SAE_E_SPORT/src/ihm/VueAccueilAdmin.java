@@ -20,7 +20,7 @@ import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-import Images.Images;
+import Images.ImagesIcons;
 import controleur.ControleurAccueil;
 import dao.ConnectionJDBC;
 
@@ -133,7 +133,7 @@ public class VueAccueilAdmin extends JFrame {
 		// Logo Equipe
 		JLabel iconEquipe = new JLabel();
 		iconEquipe.setHorizontalAlignment(SwingConstants.CENTER);
-		iconEquipe.setIcon(Images.EQUIPE);
+		iconEquipe.setIcon(ImagesIcons.EQUIPE);
 		iconEquipe.setSize(20, 80);
 		panelEquipe.add(iconEquipe, BorderLayout.CENTER);
 			
@@ -164,7 +164,7 @@ public class VueAccueilAdmin extends JFrame {
 			JLabel iconTournois = new JLabel();
 			iconTournois.setHorizontalAlignment(SwingConstants.CENTER);
 //			iconTournois.setIcon(new ImageIcon(imageT));
-			iconTournois.setIcon(Images.TOURNOI);
+			iconTournois.setIcon(ImagesIcons.TOURNOI);
 			iconTournois.setSize(20, 80);
 			panelTournois.add(iconTournois, BorderLayout.CENTER);
 //		} catch (IOException e) {
@@ -197,7 +197,7 @@ public class VueAccueilAdmin extends JFrame {
 			JLabel iconHistorique = new JLabel();
 			iconHistorique.setHorizontalAlignment(SwingConstants.CENTER);
 //			iconHistorique.setIcon(new ImageIcon(imageH));
-			iconHistorique.setIcon(Images.HISTORIQUE);
+			iconHistorique.setIcon(ImagesIcons.HISTORIQUE);
 			iconHistorique.setSize(20, 80);
 			panelHistorique.add(iconHistorique, BorderLayout.CENTER);
 //		} catch (IOException e) {

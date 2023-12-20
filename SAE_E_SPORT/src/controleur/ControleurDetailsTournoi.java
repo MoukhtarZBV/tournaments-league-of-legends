@@ -14,6 +14,7 @@ import javax.swing.JTable;
 
 import dao.EquipeJDBC;
 import ihm.VueEquipe;
+import ihm.VueFinale;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueImportation;
 import ihm.VueListeTournois;
@@ -42,8 +43,7 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			vue.dispose();
 		} else if (bouton.getName().equals("Retour")) {
 			this.vue.dispose();
-			Tournoi t = new Tournoi();
-			VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
+			VueListeTournois vue = new VueListeTournois(new Tournoi().tousLesTournois());
 			vue.setVisible(true);
 		} else if (bouton.getName().equals("Gérer la poule")) {
 			ModelePoule modelePoule;
@@ -62,12 +62,16 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-            
-            
 		} else if (bouton.getName().equals("Ouvrir le tournoi")) {
 			this.modele.selectionArbitre(vue.getTournoi());
 			this.modele.changerStatusTournoi(vue.getTournoi(), Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
+			this.vue.setVisibleBoutonOuvrir(false);
+			this.vue.afficherArbitresTournoi(vue.getTournoi());
+		} else if (bouton.getName().equals("Voir finale")) {
+			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
+			vueFinale.setVisible(true);
+			this.vue.dispose();
 		}
 	}
 	
