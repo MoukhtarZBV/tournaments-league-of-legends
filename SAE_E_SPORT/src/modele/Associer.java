@@ -1,5 +1,8 @@
 package modele;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dao.AssocierJDBC;
 
 public class Associer {
@@ -17,12 +20,17 @@ public class Associer {
 		this.jdbc = new AssocierJDBC();
 	}
 	
-	
 	public Arbitre getArbitre() {
 		return this.arbitre;
 	}
 	public Tournoi getTournoi() {
 		return this.tournoi;
+	}
+	
+	public List<Associer> toutesLesAssociations(){
+		List<Associer> associations = new ArrayList<>();
+		associations = this.jdbc.getAll();
+		return associations;
 	}
 	
 	@Override 

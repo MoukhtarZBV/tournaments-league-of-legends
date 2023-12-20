@@ -44,11 +44,20 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 						if (c.getType().denomination() == "Administrateur") {
 							VueAccueilAdmin vue = new VueAccueilAdmin();
 							vue.setVisible(true);
-							// CHANGER LE BONJOUR ADMIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+							// CHANGER LE BONJOUR ADMIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (le passer en paramètre de la vueAccueil problement)
 						}
 						// Si l'utilisateur est un arbitre
 						else {
-							//
+							Associer a = new Associer();
+							List<Associer> associations = a.toutesLesAssociations();
+							for (Associer ass : associations) {
+								if (ass.getArbitre().getIdCompte() == c.getId()) {
+									System.out.println("ok");
+									VueTournoi vue = new VueTournoi(ass.getTournoi());
+									vue.setVisible(true);
+									this.vue.dispose();
+								}
+							}
 						}
 					}
 				}

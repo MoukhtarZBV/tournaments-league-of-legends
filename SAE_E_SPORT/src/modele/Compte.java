@@ -65,6 +65,14 @@ public class Compte {
 		return c;
 	}
 	
+	public void ajouterCompte(Compte c) {
+		try {
+			this.jdbc.add(c);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+	}
+	
 	// Overrides
 	@Override
 	public boolean equals(Object o) {

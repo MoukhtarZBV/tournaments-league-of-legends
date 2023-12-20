@@ -11,6 +11,7 @@ public class Arbitre {
 	private int idArbitre;
 	private String nomArbitre;
 	private String prenomArbitre;
+	private int idCompte;
 	private ArbitreJDBC jdbc;
 	
 	// Constructeur
@@ -18,6 +19,7 @@ public class Arbitre {
 		this.idArbitre = id;
 		this.nomArbitre = nomArbitre;
 		this.prenomArbitre = prenomArbitre;
+		this.idCompte = -1;
 	}
 	
 	public Arbitre() {
@@ -37,6 +39,10 @@ public class Arbitre {
 		return this.prenomArbitre;
 	}
 	
+	public int getIdCompte() {
+		return this.idCompte;
+	}
+	
 	// Set
 	public void setNom(String nomArbitre) {
 		this.nomArbitre = nomArbitre;
@@ -45,6 +51,12 @@ public class Arbitre {
 	public void setPrenom(String prenomArbitre) {
 		this.prenomArbitre = prenomArbitre;
 	}
+	
+	public void setIdCompte(int id) {
+		this.idCompte = id;
+	}
+	
+	//JDBC
 	
 	public void ajouterArbitre(Arbitre a) {
 		try {

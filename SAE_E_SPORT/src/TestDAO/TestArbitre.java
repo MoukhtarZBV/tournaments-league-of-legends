@@ -13,7 +13,7 @@ public class TestArbitre {
 		Arbitre a1 = new Arbitre(1, "koh", "youchen");
 		Arbitre a2 = new Arbitre(2, "marquet", "david");
 		Arbitre a3 = new Arbitre(3, "chevalier", "max");
-		// à retirer plus tard c'est pour le test
+
 		Arbitre a4 = new Arbitre(4, "tito", "pablo");
 		Arbitre a5 = new Arbitre(5, "tic", "tac");
 		Arbitre a6 = new Arbitre(6, "bam", "bim");

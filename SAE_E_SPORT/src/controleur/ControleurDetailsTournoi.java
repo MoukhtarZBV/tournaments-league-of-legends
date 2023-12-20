@@ -12,16 +12,19 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
+import dao.CompteJDBC;
 import dao.EquipeJDBC;
 import ihm.VueEquipe;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueImportation;
 import ihm.VueListeTournois;
 import ihm.VueTournoi;
+import modele.Compte;
 import modele.Equipe;
 import modele.ModelePoule;
 import modele.Statut;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 public class ControleurDetailsTournoi implements ActionListener, MouseListener, WindowListener {
 	
@@ -68,6 +71,14 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			this.modele.selectionArbitre(vue.getTournoi());
 			this.modele.changerStatusTournoi(vue.getTournoi(), Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
+			Compte c = new Compte();
+			try {
+				// A CHANGER POUR GENERER MDP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				c.ajouterCompte(new Compte(CompteJDBC.getNextValueSequence(),this.vue.getTournoi().getNomTournoi().replace(" ", ""),"1234",TypeCompte.ARBITRE));
+				System.out.println(CompteJDBC.getNextValueSequence()+" dans controleur");
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 	
