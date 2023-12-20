@@ -19,6 +19,7 @@ import javax.swing.table.TableCellRenderer;
 import Images.ImagesIcons;
 import components.DropListener;
 import components.PanelDropFile;
+import components.PanelPopUp;
 import controleur.ControleurImportation;
 import modele.Tournoi;
 
@@ -42,47 +43,43 @@ import javax.swing.border.BevelBorder;
 
 public class VueImportation extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel contentPane;
 	private DefaultTableModel modele;
 	public static List<String[]> data;
 	private JTable tableEquipes;
 	private JButton btnValider;
-	private JLabel msgErreur;
-	private JPanel panelMessage;
+	
+	private PanelPopUp panelPopup;
 	
 	private PanelDropFile panelDrop;
 	private JPanel panelTableOuDrop;
 	
 	private Tournoi tournoi;
 
-	/**
-	 * Create the frame.
-	 */
+	
 	public VueImportation(Tournoi tournoi) {
-		this.tournoi = tournoi;
-		ControleurImportation controleur = new ControleurImportation(this);
-		this.setDropListener(controleur); 
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 850, 564);
-		contentPane = new JPanel();
+		
+		ControleurImportation controleur = new ControleurImportation(this);
+		this.tournoi = tournoi;
+		this.setDropListener(controleur);
+		
+		JPanel contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane); 
 		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTitre = new JPanel();
 		panelTitre.setBackground(Palette.DARK_GRAY);
-		contentPane.add(panelTitre, BorderLayout.NORTH);
 		panelTitre.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panelTitre.setBorder(new EmptyBorder(15, 0, 0, 0));
+		contentPane.add(panelTitre, BorderLayout.NORTH);
 		
 		// Titre page
 		JLabel titreImport = new JLabel("Importation des équipes");
@@ -102,29 +99,19 @@ public class VueImportation extends JFrame {
 		panelTableOuDrop = new JPanel();
 		panelTableOuDrop.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panelTableOuDrop.setBackground(Palette.DARK_GRAY);
-		panelTableOuDrop.setLayout(new BorderLayout(0, 0));
+		panelTableOuDrop.setLayout(new BorderLayout(0, 5));
 		panelCenter.add(panelTableOuDrop, BorderLayout.CENTER);
-
-		// Panel message
-		this.panelMessage = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panelMessage.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		panelMessage.setBorder(new LineBorder(new Color(255, 255, 255)));
-		panelMessage.setBackground(Palette.GRAY);
-		panelTableOuDrop.add(panelMessage, BorderLayout.NORTH);
-
-		this.msgErreur = new JLabel("Sélectionnez le fichier CSV correspondant pour importer les équipes");
-		msgErreur.setBorder(new EmptyBorder(5, 2, 5, 2));
-		msgErreur.setFont(Police.POPUPS);
-		msgErreur.setForeground(Palette.WHITE);
-		panelMessage.add(msgErreur);
+		
+		this.panelPopup = new PanelPopUp();
+		panelPopup.setBackground(new Color(255, 0, 128));
+		this.panelPopup.setNormal("Sélectionnez le fichier CSV correspondant pour importer les équipes");
+		panelTableOuDrop.add(panelPopup, BorderLayout.NORTH);
 		
 		// Zone de drop
 		panelDrop = new PanelDropFile();
 		panelDrop.setBorder(BorderFactory.createDashedBorder(Palette.WHITE, 1, 10, 5, true));
 		panelDrop.setBackground(Palette.GRAY);
 		panelDrop.setDropListener(new DropListenerImpl());
-		panelDrop.setMessageComponent(panelMessage, msgErreur);
 		panelDrop.setLayout(new GridBagLayout());
 		panelTableOuDrop.add(panelDrop, BorderLayout.CENTER);
 
@@ -203,6 +190,8 @@ public class VueImportation extends JFrame {
 		btnValider.addActionListener(controleur);	
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
+		
+		panelDrop.setMessageComponent(panelPopup);
 
 	}
 	
@@ -225,24 +214,6 @@ public class VueImportation extends JFrame {
 	
 	public void changerBtnValider(boolean etat) {
 		this.btnValider.setEnabled(etat);
-	}
-
-	public void setMsgErreur(String erreur){
-		msgErreur.setText(erreur);
-		msgErreur.setForeground(Palette.ERREUR);
-		panelMessage.setBackground(Palette.FOND_ERREUR);
-	}
-	
-	public void setMsgSucces(String succes) {
-		msgErreur.setText(succes);
-		msgErreur.setForeground(Palette.SUCCES);
-		panelMessage.setBackground(Palette.FOND_SUCCES);
-	}
-	
-	public void setMsgNormal(String message) {
-		msgErreur.setText(message);
-		msgErreur.setForeground(Palette.WHITE);
-		panelMessage.setBackground(Palette.GRAY);
 	}
 	
 	public JTable getTable() {
@@ -291,6 +262,10 @@ public class VueImportation extends JFrame {
         	notifyDropListener(filePath);
         }
     }
+	
+	public PanelPopUp getPopup() {
+		return this.panelPopup;
+	}
 	
 	// Listener pour que le controleur reçoit l'information lorsqu'un fichier est déposé
 	private DropListener dropListener;

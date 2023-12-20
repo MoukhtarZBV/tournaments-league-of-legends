@@ -57,6 +57,11 @@ public class ControleurGestionPoule implements MouseListener {
 				case ("Imprimer") :
 					break;
 				case ("Cloturer Poule") :
+					try {
+						this.modele.enregistrerResultat();
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
 					// (A FAIRE) créer la finale !!!!!!!!!!!!!!!!!!!!!!!!!!!
 					
 					// Retour au détail du tournoi

@@ -54,6 +54,20 @@ public class CompteJDBC implements CompteDAO{
 		}
 		return compte;
 	}
+	
+	public static int getNextValueSequence() throws Exception{
+		int res = -1;
+		try {
+			Statement st = ConnectionJDBC.getConnection().createStatement();
+			ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Compte");
+			if (rs.next()) {
+				res = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 	@Override
 	public boolean add(Compte c) throws Exception {
@@ -65,9 +79,9 @@ public class CompteJDBC implements CompteDAO{
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addCompte);
 			
 			st.setInt(1, c.getId());
-			st.setString(1, c.getLogin());
-			st.setString(2, c.getMotDePasse());
-			st.setString(3,c.getType().denomination());
+			st.setString(2, c.getLogin());
+			st.setString(3, c.getMotDePasse());
+			st.setString(4,c.getType().denomination());
 			
 			st.executeUpdate();
 			

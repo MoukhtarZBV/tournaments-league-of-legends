@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import dao.ArbitreJDBC;
 import dao.AssocierJDBC;
+import dao.CompteJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
@@ -360,6 +361,19 @@ public class Tournoi {
 		for (int i = 0; i<nbArbitres; i++) {
 			int numArbitre = random.nextInt(arbitres.size());
 			arbitresTirees.add(arbitres.get(numArbitre));
+			
+			// Ajout du numéro de compte associé
+			Compte c = new Compte();
+			int idCompte;
+			try {
+				// il faut rajouter l'id du compte associé à l'arbitre dans la base de donnée je pense (ATTENDRE CHANGEMENT BASE)
+				idCompte = CompteJDBC.getNextValueSequence();
+				c.ajouterCompte(new Compte(idCompte,tournoi.getNomTournoi().replace(" ", ""),"1234",TypeCompte.ARBITRE));
+				arbitres.get(numArbitre).setIdCompte(idCompte);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
 			arbitres.remove(numArbitre);
 			// Ajout dans la base de données la liason arbitre / tournoi
 			try {

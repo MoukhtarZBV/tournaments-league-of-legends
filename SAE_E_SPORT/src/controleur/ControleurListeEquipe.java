@@ -30,7 +30,6 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		
 		if(e.getSource() instanceof JList) {
 			JList list = (JList) e.getSource();
 			if (e.getClickCount() == 2) {
@@ -58,22 +57,90 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 	    	this.vue.dispose();
 	    	VueAccueilAdmin vue = new VueAccueilAdmin();
 			vue.setVisible(true);
-	    } else {
+	    } 
+	    
+	    if(bouton.getName().equals("Rechercher")) {
 			try {
-				equipes = this.modele.toutesLesEquipes();
-				List<String> nomEquipes = equipes.stream()
-			            .map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
-			            .collect(Collectors.toList());
-	
-			    List<String> nomEquipesTri = nomEquipes.stream()
-			            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
-			            .collect(Collectors.toList());
-	
-			    // Mise à jour du modèle de la JList dans la vue
-			    this.vue.updateListeEquipes(nomEquipesTri);
+				// Lister par Nom d'équipe
+		    	if(this.vue.getTriParNom()) {
+		    		equipes = this.modele.toutesLesEquipes();
+					List<String> nomEquipes = equipes.stream()
+							.sorted((x,y)-> x.getNom().compareTo(y.getNom()))
+				            .map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+				            .collect(Collectors.toList());
+					
+				    List<String> nomEquipesTri = nomEquipes.stream()
+				            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+				            .collect(Collectors.toList());
+				    
+				    this.vue.updateListeEquipes(nomEquipesTri);
+				    
+				// Lister par Rang
+		    	}else {
+		    		equipes = this.modele.toutesLesEquipes();
+					List<String> nomEquipes = equipes.stream()
+							.sorted((x,y)-> {
+								if (x.getRang()>y.getRang()){
+									return 1;
+								}else if(x.getRang()<y.getRang()) {
+									return -1;
+								}else {
+									return 0;
+								}
+							})
+				            .map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+				            .collect(Collectors.toList());
+					
+				    List<String> nomEquipesTri = nomEquipes.stream()
+				            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+				            .collect(Collectors.toList());
+				    
+				    this.vue.updateListeEquipes(nomEquipesTri);
+		    	}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
+	    }
+	    
+	    if(bouton.getName().equals("Trier")) {
+	    	// Lister par Rang
+	    	if(this.vue.getTriParNom()) {
+	    		this.vue.setTriParNom(false);
+	    		equipes = this.modele.toutesLesEquipes();
+				List<String> nomEquipes = equipes.stream()
+						.sorted((x,y)-> {
+							if (x.getRang()>y.getRang()){
+								return 1;
+							}else if(x.getRang()<y.getRang()) {
+								return -1;
+							}else {
+								return 0;
+							}
+						})
+			            .map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+			            .collect(Collectors.toList());
+				
+			    List<String> nomEquipesTri = nomEquipes.stream()
+			            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+			            .collect(Collectors.toList());
+			    
+			    this.vue.updateListeEquipes(nomEquipesTri);
+			    
+			// Lister par Nom d'équipe
+	    	}else {
+	    		this.vue.setTriParNom(true);
+	    		equipes = this.modele.toutesLesEquipes();
+				List<String> nomEquipes = equipes.stream()
+						.sorted((x,y)-> x.getNom().compareTo(y.getNom()))
+			            .map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+			            .collect(Collectors.toList());
+				
+			    List<String> nomEquipesTri = nomEquipes.stream()
+			            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+			            .collect(Collectors.toList());
+			    
+			    this.vue.updateListeEquipes(nomEquipesTri);
+	    	}
 	    }
 	}
 
