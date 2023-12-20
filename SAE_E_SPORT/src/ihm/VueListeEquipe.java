@@ -32,6 +32,7 @@ public class VueListeEquipe extends JFrame {
 	private JTextField searchBar;
 	private JList<Object> listeEquipes;
 	private List<Equipe> equipes;
+	private boolean triParNom;
 
 	
 	public VueListeEquipe(List<Equipe> equipes) {
@@ -121,7 +122,6 @@ public class VueListeEquipe extends JFrame {
 		validateBtn.setBackground(Palette.WHITE);
 		validateBtn.addActionListener(controleur);
 		validateBtn.addMouseListener(controleur);
-		validateBtn.setName("rechercher");
 		panelValider.add(validateBtn);
 
 		// Barre recherche
@@ -148,6 +148,15 @@ public class VueListeEquipe extends JFrame {
 		
 		// Liste des équipes
 		List<String> nomEquipes = this.equipes.stream()
+				.sorted((x,y)-> {
+					if (x.getRang()>y.getRang()){
+						return 1;
+					}else if(x.getRang()<y.getRang()) {
+						return -1;
+					}else {
+						return 0;
+					}
+				})
 				.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
 				.collect(Collectors.toList());
 		
@@ -184,8 +193,26 @@ public class VueListeEquipe extends JFrame {
 		btnRetour.addActionListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
+		
+		JButton btnSort = new JButton("<html><body style='padding: 5px 25px;'>Trier</body></html>");
+		btnSort.setName("Trier");
+		btnSort.setBackground(Palette.GRAY);
+		btnSort.setForeground(Palette.WHITE);
+		btnSort.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnSort.setFont(Police.LABEL);
+		btnSort.addActionListener(controleur);
+		btnSort.setFocusable(false);
+		panelBoutons.add(btnSort);
+		this.triParNom = false;
 	}
 	
+	public boolean getTriParNom() {
+		return this.triParNom;
+	}
+	
+	public void setTriParNom(boolean b) {
+		this.triParNom = b;
+	}
 	
 	public String getSearch() {
 		return searchBar.getText();

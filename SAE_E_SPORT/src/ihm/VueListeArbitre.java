@@ -171,6 +171,7 @@ public class VueListeArbitre extends JFrame {
 		// Liste des arbitres
 		List<String> nomArbitres = this.arbitres.stream()
 				.map(a -> String.format("%-11s %-30s", a.getNom(), a.getPrenom()))
+				.sorted((x,y)-> x.compareTo(y))
 				.collect(Collectors.toList());
 		
 		this.listeArbitres = new JList<Object>(nomArbitres.toArray());

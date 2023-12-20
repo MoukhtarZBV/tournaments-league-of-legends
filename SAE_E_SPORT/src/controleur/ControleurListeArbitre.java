@@ -45,10 +45,12 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Wi
 				arbitres = this.modele.tousLesArbitres();
 				List<String> nomArbitres = arbitres.stream()
 			            .map(a -> a.getNom() + " "+ a.getPrenom())
+			            .sorted((x,y)-> x.compareTo(y))
 			            .collect(Collectors.toList());
 	
 			    List<String> nomArbitresTri = nomArbitres.stream()
 			            .filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+			            .sorted((x,y)-> x.compareTo(y))
 			            .collect(Collectors.toList());
 	
 			    // Mise à jour du modèle de la JList dans la vue
