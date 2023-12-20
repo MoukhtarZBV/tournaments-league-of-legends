@@ -223,6 +223,10 @@ public class VueListeArbitre extends JFrame {
 		return searchBar.getText();
 	}
 	
+	public JList<Object> getListArbitre() {
+		return this.listeArbitres;
+	}
+	
 	public void updateListeArbitres(List<String> elementsFiltres) {
 	    this.listeArbitres.setListData(elementsFiltres.toArray(new String[0]));
 	    this.listeArbitres.repaint();

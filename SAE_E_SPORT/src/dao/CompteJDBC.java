@@ -65,9 +65,9 @@ public class CompteJDBC implements CompteDAO{
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addCompte);
 			
 			st.setInt(1, c.getId());
-			st.setString(1, c.getLogin());
-			st.setString(2, c.getMotDePasse());
-			st.setString(3,c.getType().denomination());
+			st.setString(2, c.getLogin());
+			st.setString(3, c.getMotDePasse());
+			st.setString(4,c.getType().denomination());
 			
 			st.executeUpdate();
 			

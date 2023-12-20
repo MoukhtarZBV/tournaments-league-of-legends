@@ -1,14 +1,22 @@
 package modele;
 
+import dao.AssocierJDBC;
+
 public class Associer {
 	
 	private Arbitre arbitre;
 	private Tournoi tournoi;
+	private AssocierJDBC jdbc;
 	
 	public Associer(Arbitre arbitre, Tournoi tournoi) {
 		this.arbitre = arbitre;
 		this.tournoi = tournoi;
 	}
+	
+	public Associer() {
+		this.jdbc = new AssocierJDBC();
+	}
+	
 	
 	public Arbitre getArbitre() {
 		return this.arbitre;
