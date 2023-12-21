@@ -11,7 +11,7 @@ public class Arbitre {
 	private int idArbitre;
 	private String nomArbitre;
 	private String prenomArbitre;
-	private int idCompte;
+	private Integer idCompte;
 	private ArbitreJDBC jdbc;
 	
 	// Constructeur
@@ -19,7 +19,7 @@ public class Arbitre {
 		this.idArbitre = id;
 		this.nomArbitre = nomArbitre;
 		this.prenomArbitre = prenomArbitre;
-		this.idCompte = -1;
+		this.idCompte = null;
 	}
 	
 	public Arbitre() {
@@ -39,7 +39,7 @@ public class Arbitre {
 		return this.prenomArbitre;
 	}
 	
-	public int getIdCompte() {
+	public Integer getIdCompte() {
 		return this.idCompte;
 	}
 	

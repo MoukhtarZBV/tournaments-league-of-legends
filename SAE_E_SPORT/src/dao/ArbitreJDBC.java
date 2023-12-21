@@ -20,9 +20,11 @@ public class ArbitreJDBC implements ArbitreDAO{
 	        ResultSet rs = st.executeQuery("select * from Arbitre");
 	        
 	        while (rs.next()) {
-	        	listeArbitres.add(new Arbitre(rs.getInt("idArbitre"),
-	            		                 rs.getString("nomArbitre"),
-	            		                 rs.getString("prenomArbitre")));  	        
+	        	Arbitre arbitre = new Arbitre(rs.getInt("idArbitre"),
+		                 rs.getString("nomArbitre"),
+		                 rs.getString("prenomArbitre"));
+	        	arbitre.setIdCompte(rs.getInt("idCompte"));
+	        	listeArbitres.add(arbitre);
 	        }
 	        
 		} catch (SQLException e) {
@@ -39,10 +41,11 @@ public class ArbitreJDBC implements ArbitreDAO{
 			
 			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
 			st.setInt(1, id);
-			
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
-				opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre")));
+				Arbitre arbitre = new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre"));
+				arbitre.setIdCompte(rs.getInt("idCompte"));
+				opt = Optional.ofNullable(arbitre);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -61,9 +64,11 @@ public class ArbitreJDBC implements ArbitreDAO{
 			st.setString(2, prenom);
 			
 			ResultSet rs = st.executeQuery();
-			
-			opt = Optional.ofNullable(new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre")));
-			
+			if (rs.next()) {
+				Arbitre arbitre = new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre"));
+				arbitre.setIdCompte(rs.getInt("idCompte"));
+				opt = Optional.ofNullable(arbitre);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -84,7 +89,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 	public boolean add(Arbitre a) throws Exception {
 		boolean res = false;
 		try {
-			String addArbitre = "INSERT INTO Arbitre values (?, ?, ?)";
+			String addArbitre = "INSERT INTO Arbitre(idArbitre, nomArbitre, prenomArbitre) values (?, ?, ?)";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(addArbitre);
 			
@@ -108,13 +113,18 @@ public class ArbitreJDBC implements ArbitreDAO{
 		boolean res = false;
 		try {
 			String updateArbitre = "UPDATE Arbitre "
-					   		   + "SET nomArbitre = ?, prenomArbitre = ?"
+					   		   + "SET nomArbitre = ?, prenomArbitre = ?, idCompte = ?"
 					   		   + "WHERE idArbitre = ?";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateArbitre);
 			st.setString(1, a.getNom());
 			st.setString(2, a.getPrenom());
-			st.setInt(3, a.getId());
+			if (a.getIdCompte() == null) {
+				st.setNull(3, java.sql.Types.INTEGER);
+			} else {
+				st.setInt(3, a.getIdCompte());
+			}
+			st.setInt(4, a.getId());
 
 			st.executeUpdate();
 			
