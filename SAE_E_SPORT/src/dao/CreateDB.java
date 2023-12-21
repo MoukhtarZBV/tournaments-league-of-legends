@@ -277,7 +277,9 @@ public class CreateDB {
 					+ "idArbitre INTEGER,"
 					+ "nomArbitre VARCHAR(50),"
 					+ "prenomArbitre VARCHAR(50),"
-					+ "CONSTRAINT PK_Arbitre_idArbitre PRIMARY KEY (idArbitre))");
+					+ "idCompte INTEGER,"
+					+ "CONSTRAINT PK_Arbitre_idArbitre PRIMARY KEY (idArbitre),"
+					+ "CONSTRAINT FK_Arbitre_idCompte FOREIGN KEY (idCompte) REFERENCES Compte(idCompte))");
 			System.out.println("-- Table Arbitre créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
