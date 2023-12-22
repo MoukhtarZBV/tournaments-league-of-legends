@@ -20,7 +20,7 @@ import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
 import modele.Tournoi;
 
-public class ControleurCreationTournoi implements ActionListener, FocusListener, WindowListener {
+public class ControleurCreationTournoi implements ActionListener, FocusListener {
 	
 	private VueCreationTournoi vue;
 	private Tournoi modele;
@@ -65,37 +65,11 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener,
 		}
 	}
 
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-    	this.vue.dispose();
-		Tournoi t = new Tournoi();
-		VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
-		vue.setVisible(true);
-	}
-
 	
 	
 	// NOT IMPLEMENTED \\
 	
 	@Override
 	public void focusLost(FocusEvent e) {}
-	
-	@Override
-	public void windowOpened(WindowEvent e) {}
 
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
 }

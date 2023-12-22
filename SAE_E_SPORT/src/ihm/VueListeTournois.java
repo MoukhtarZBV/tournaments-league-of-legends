@@ -54,12 +54,11 @@ public class VueListeTournois extends JFrame {
 	
 	
 	public VueListeTournois(List<Tournoi> tournois) {
+		
 		ControleurListeTournois controleur = new ControleurListeTournois(this);
 		
-		
 		///// FENÊTRE \\\\\
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		addWindowListener(controleur);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Tournois");
 		setResizable(false);
@@ -231,6 +230,7 @@ public class VueListeTournois extends JFrame {
 		panelBoutons.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panelBoutons.setBackground(Palette.GRAY);
 		panelBoutons.setPreferredSize(new Dimension(panelBoutons.getWidth(), 60));
+		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 		
 		// Bouton annuler
@@ -241,7 +241,6 @@ public class VueListeTournois extends JFrame {
 		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
-		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		

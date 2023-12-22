@@ -35,9 +35,6 @@ import javax.swing.JButton;
 
 public class VueGestionDeLaPoule extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable tableClassement = new JTable();

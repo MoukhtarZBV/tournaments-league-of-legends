@@ -64,8 +64,7 @@ public class VueListeArbitre extends JFrame {
 		ControleurListeArbitre controleur = new ControleurListeArbitre(this);
 		
 		///// FENÊTRE \\\\\
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		addWindowListener(controleur);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, 873, 528);
 		setTitle("Arbitres");
 		setResizable(false);

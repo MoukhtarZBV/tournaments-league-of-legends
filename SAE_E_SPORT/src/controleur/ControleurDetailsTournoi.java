@@ -27,7 +27,7 @@ import modele.Statut;
 import modele.Tournoi;
 import modele.TypeCompte;
 
-public class ControleurDetailsTournoi implements ActionListener, MouseListener, WindowListener {
+public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 	
 	private VueTournoi vue;
 	private Tournoi modele;
@@ -97,35 +97,9 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 	         }
 		}
 	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		this.vue.dispose();
-		Tournoi t = new Tournoi();
-		VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
-		vue.setVisible(true);
-	}
-
+	
 	
 	// NOT IMPLEMENTED \\
-	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}
