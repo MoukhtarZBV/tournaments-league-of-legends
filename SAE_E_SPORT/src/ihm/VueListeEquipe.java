@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import components.CoolScrollBar;
 import components.JTextFieldArrondi;
 import controleur.ControleurListeEquipe;
 import modele.Equipe;
@@ -35,7 +36,7 @@ public class VueListeEquipe extends JFrame {
 	private boolean triParNom;
 
 	
-	public VueListeEquipe(List<Equipe> equipes) {
+	public VueListeEquipe(List<Equipe> equipes) { 
 		
 		this.equipes = equipes;
 		
@@ -55,7 +56,6 @@ public class VueListeEquipe extends JFrame {
 		setContentPane(contentPane);
 		
 		
-		
 		///// MENU BAR \\\\\
 		JPanel panelSide = new JPanel();
 		panelSide.setBackground(Palette.DARK_GRAY);
@@ -64,13 +64,13 @@ public class VueListeEquipe extends JFrame {
 		contentPane.add(panelSide, BorderLayout.WEST);
 		
 		
-		
 		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
 		panelMain.setBorder(new EmptyBorder(25, 0, 25, 0));
 		panelMain.setLayout(new BorderLayout(0, 0));
 		panelMain.setBackground(Palette.DARK_GRAY);
 		contentPane.add(panelMain, BorderLayout.CENTER);
+		
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
@@ -171,6 +171,7 @@ public class VueListeEquipe extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeEquipes);
 		scrollPane.setBorder(null);
+		scrollPane.setVerticalScrollBar(new CoolScrollBar());
 		panelListe.add(scrollPane, BorderLayout.CENTER);
 		
 		

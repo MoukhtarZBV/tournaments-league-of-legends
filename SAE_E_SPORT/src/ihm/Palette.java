@@ -11,6 +11,7 @@ public class Palette {
     // Palette app    
     public static final Color DARK_GRAY    = new Color( 24,  20,  36);
     public static final Color GRAY         = new Color( 32,  28,  44);
+    public static final Color LIGHT_GRAY   = new Color( 52,  48,  64);
     public static final Color LIGHT_PURPLE = new Color(156, 137, 214);
     
     // Couleurs erreurs et succes

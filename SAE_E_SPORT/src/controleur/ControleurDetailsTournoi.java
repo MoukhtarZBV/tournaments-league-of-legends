@@ -55,6 +55,8 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 				Object[][] classement = modelePoule.classement();
 	            Object[][] parties = modelePoule.matches();
 	            
+	            this.vue.dispose();
+	            
 	            VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
 	            
 	            frame.setJTableMatches(parties);

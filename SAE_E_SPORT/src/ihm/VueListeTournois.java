@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,6 +27,7 @@ import java.awt.Image;
 
 import javax.swing.table.DefaultTableModel;
 
+import components.CoolScrollBar;
 import components.JTextFieldArrondi;
 import controleur.ControleurListeTournois;
 import dao.ConnectionJDBC;
@@ -41,6 +43,7 @@ import javax.swing.ComboBoxModel;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
+import java.awt.FlowLayout;
 
 public class VueListeTournois extends JFrame {
 	
@@ -184,10 +187,10 @@ public class VueListeTournois extends JFrame {
 		panelListe.setLayout(new BoxLayout(panelListe, BoxLayout.X_AXIS));
 		panelListe.setBackground(Palette.GRAY);
 		panelCenter.add(panelListe, BorderLayout.CENTER);
-		table.setBorder(null);
-		table.setOpaque(false);
 		
 		// Tableau
+		table.setBorder(null);
+		table.setOpaque(false);
 		table.setSelectionBackground(Palette.LIGHT_PURPLE);
 		table.setRowMargin(5);
 		table.setRowHeight(35);
@@ -216,17 +219,18 @@ public class VueListeTournois extends JFrame {
 		
 		// Scroll pane de la table
 		JScrollPane tableScroll = new JScrollPane(table);
-		tableScroll.setBorder(null);
+		tableScroll.setBorder(new MatteBorder(1, 1, 1, 1, Palette.WHITE));
+		tableScroll.setVerticalScrollBar(new CoolScrollBar());
 		tableScroll.getViewport().setBackground(Palette.GRAY);
+		tableScroll.setViewportBorder(null);
 		panelListe.add(tableScroll);
 		
 		
 		///// PANEL BOUTONS \\\\\
 		JPanel panelBoutons = new JPanel();
-		panelBoutons.setBorder(new EmptyBorder(10, 100, 10, 100));
+		panelBoutons.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panelBoutons.setBackground(Palette.GRAY);
 		panelBoutons.setPreferredSize(new Dimension(panelBoutons.getWidth(), 60));
-		panelBoutons.setLayout(new GridLayout(0, 2, 15, 0));
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 		
 		// Bouton annuler
@@ -237,6 +241,7 @@ public class VueListeTournois extends JFrame {
 		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
