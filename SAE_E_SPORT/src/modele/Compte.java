@@ -3,6 +3,7 @@ package modele;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import dao.CompteJDBC;
 
@@ -71,6 +72,17 @@ public class Compte {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 		}
+	}
+	
+	public static String genererPassword(int longueur) {
+		String caractères = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]};:<>./?";
+		String mdp = "";
+		Random random = new Random();
+		for (int i = 0 ; i < longueur; i++) {
+			int indice = random.nextInt(caractères.length());
+			mdp += caractères.charAt(indice);
+		}
+		return mdp;	
 	}
 	
 	// Overrides

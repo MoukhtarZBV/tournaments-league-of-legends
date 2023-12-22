@@ -163,6 +163,7 @@ public class VueEquipe extends JFrame {
 		fieldWR.setBackground(Palette.DARK_GRAY);
 		fieldWR.setForeground(Palette.WHITE);
 		fieldWR.setFont(Police.INPUT);
+		fieldWR.setEnabled(false);
 		fieldWR.setColumns(10);
 		fieldWR.setText(String.valueOf(equipe.get().getRang()));
 		panelRank.add(fieldWR);

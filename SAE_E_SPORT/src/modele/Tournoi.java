@@ -358,17 +358,23 @@ public class Tournoi {
 		AssocierJDBC assjdbc = new AssocierJDBC();
 		List<Arbitre> arbitresTirees = new ArrayList<>();
 		Random random = new Random();
+		
+		// Ajout d'un compte à la base de donnée pour le tournoi
+		Compte c = new Compte();
+		int idCompte = -1;
+		try {
+			idCompte = CompteJDBC.getNextValueSequence();
+			c.ajouterCompte(new Compte(idCompte,tournoi.getNomTournoi().replace(" ", ""),Compte.genererPassword(15),TypeCompte.ARBITRE));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		for (int i = 0; i<nbArbitres; i++) {
 			int numArbitre = random.nextInt(arbitres.size());
 			arbitresTirees.add(arbitres.get(numArbitre));
 			
-			// Ajout du numéro de compte associé
-			Compte c = new Compte();
-			int idCompte;
+			// Association du compte aux arbitres
 			try {
-				// il faut rajouter l'id du compte associé à l'arbitre dans la base de donnée je pense (ATTENDRE CHANGEMENT BASE)
-				idCompte = CompteJDBC.getNextValueSequence();
-				c.ajouterCompte(new Compte(idCompte,tournoi.getNomTournoi().replace(" ", ""),"1234",TypeCompte.ARBITRE));
 				Arbitre arb = arbitres.get(numArbitre);
 				arb.setIdCompte(idCompte);
 				ajdbc.update(arb);

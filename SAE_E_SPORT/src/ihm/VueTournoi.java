@@ -374,7 +374,6 @@ public class VueTournoi extends JFrame {
 	public void afficherEquipes(Tournoi tournoi) throws Exception {
 		DefaultTableModel modele = (DefaultTableModel) tableEquipes.getModel();
 		List<Equipe> equipes = new ParticiperJDBC().getAll().stream().filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).collect(Collectors.toList());
-		System.out.println(equipes);
 		for (Equipe equipe : equipes) {
 			List<Joueur> joueursEquipe = equipe.getJoueurs();
 			modele.addRow(new Object[] {
