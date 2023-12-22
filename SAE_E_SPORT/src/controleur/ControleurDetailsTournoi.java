@@ -64,27 +64,20 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 				            
 				frame.setVisible(true);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		} else if (bouton.getName().equals("Ouvrir le tournoi")) {
 			this.modele.selectionArbitre(vue.getTournoi());
 			this.modele.changerStatusTournoi(vue.getTournoi(), Statut.EN_COURS);
+			this.vue.getTournoi().setStatut(Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
 			this.vue.setVisibleBoutonOuvrir(false);
 			this.vue.afficherArbitresTournoi(vue.getTournoi());
-		} else if (bouton.getName().equals("Voir finale")) {
+			this.vue.afficherBoutonGererPoule();
+		} else if (bouton.getName().equals("Finale")) {
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
 			vueFinale.setVisible(true);
 			this.vue.dispose();
-			Compte c = new Compte();
-			try {
-				// A CHANGER POUR GENERER MDP !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				c.ajouterCompte(new Compte(CompteJDBC.getNextValueSequence(),this.vue.getTournoi().getNomTournoi().replace(" ", ""),"1234",TypeCompte.ARBITRE));
-				System.out.println(CompteJDBC.getNextValueSequence()+" dans controleur");
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
 		}
 	}
 	
@@ -115,7 +108,6 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 		vue.setVisible(true);
 	}
 
-	
 	
 	// NOT IMPLEMENTED \\
 	

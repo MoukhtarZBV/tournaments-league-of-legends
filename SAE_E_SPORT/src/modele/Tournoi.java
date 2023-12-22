@@ -56,7 +56,7 @@ public class Tournoi {
 			throw new IllegalArgumentException("La date de debut doit être supérieure à la date du jour");
 		} 
 		if (dateDebut.after(dateFin)) {
-			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
+			throw new IllegalArgumentException("La date de début doit être inférieure à la date de fin");
 		} 
 		if (!anneePourSaisonEnCours(dateDebut)) {
 			throw new IllegalArgumentException("L'année de la date doit être la même que celle en cours");
@@ -75,7 +75,7 @@ public class Tournoi {
 		this.pays = pays;
 		this.compte = null;
 		this.vainqueur = null;
-		this.statut = Statut.A_VENIR;
+		this.statut = Statut.ATTENTE_EQUIPES;
 	}
 	
 	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut, Optional<Equipe> vainqueur, Optional<Compte> compte) {
@@ -109,6 +109,10 @@ public class Tournoi {
 	
 	public Statut getStatut() {
 		return this.statut;
+	}
+	
+	public void setStatut(Statut statut) {
+		this.statut = statut;
 	}
 	
 	public Equipe getVainqueur() {
@@ -369,12 +373,13 @@ public class Tournoi {
 				// il faut rajouter l'id du compte associé à l'arbitre dans la base de donnée je pense (ATTENDRE CHANGEMENT BASE)
 				idCompte = CompteJDBC.getNextValueSequence();
 				c.ajouterCompte(new Compte(idCompte,tournoi.getNomTournoi().replace(" ", ""),"1234",TypeCompte.ARBITRE));
-				arbitres.get(numArbitre).setIdCompte(idCompte);
+				Arbitre arb = arbitres.get(numArbitre);
+				arb.setIdCompte(idCompte);
+				ajdbc.update(arb);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 
-			arbitres.remove(numArbitre);
 			// Ajout dans la base de données la liason arbitre / tournoi
 			try {
 				Associer ass = new Associer(arbitres.get(numArbitre), tournoi);
@@ -382,6 +387,7 @@ public class Tournoi {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			arbitres.remove(numArbitre);
 		}
 	}
 	

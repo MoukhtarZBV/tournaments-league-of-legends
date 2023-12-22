@@ -34,6 +34,7 @@ public class VueListeEquipe extends JFrame {
 	private JList<Object> listeEquipes;
 	private List<Equipe> equipes;
 	private boolean triParNom;
+	private JButton btnSort;
 
 	
 	public VueListeEquipe(List<Equipe> equipes) { 
@@ -140,7 +141,7 @@ public class VueListeEquipe extends JFrame {
 		panelListe.setBackground(Palette.GRAY);
 		panelCenter.add(panelListe, BorderLayout.CENTER);
 
-		JLabel lblHeader = new JLabel(String.format("%-5s %-50s", "Rank", "Nom de l'équipe"));
+		JLabel lblHeader = new JLabel(String.format("%-5s %-50s", "Rang", "Nom de l'équipe"));
 		lblHeader.setFont(Police.TABLEAU);
 		lblHeader.setBorder(new EmptyBorder(5, 10, 5, 10));
 		lblHeader.setForeground(Palette.WHITE);
@@ -195,7 +196,7 @@ public class VueListeEquipe extends JFrame {
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
-		JButton btnSort = new JButton("<html><body style='padding: 5px 25px;'>Trier</body></html>");
+		this.btnSort = new JButton("<html><body style='padding: 5px 25px;'>Trier par nom</body></html>");
 		btnSort.setName("Trier");
 		btnSort.setBackground(Palette.GRAY);
 		btnSort.setForeground(Palette.WHITE);
@@ -205,6 +206,10 @@ public class VueListeEquipe extends JFrame {
 		btnSort.setFocusable(false);
 		panelBoutons.add(btnSort);
 		this.triParNom = false;
+	}
+	
+	public void setBtnSort(String tri) {
+		this.btnSort.setText("<html><body style='padding: 5px 25px;'>"+tri+"</body></html>");
 	}
 	
 	public boolean getTriParNom() {

@@ -74,6 +74,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 				            .collect(Collectors.toList());
 				    
 				    this.vue.updateListeEquipes(nomEquipesTri);
+				    this.vue.setBtnSort("Trier par rang");
 				    
 				// Lister par Rang
 		    	}else {
@@ -96,6 +97,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 				            .collect(Collectors.toList());
 				    
 				    this.vue.updateListeEquipes(nomEquipesTri);
+				    this.vue.setBtnSort("Trier par nom");
 		    	}
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -125,6 +127,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 			            .collect(Collectors.toList());
 			    
 			    this.vue.updateListeEquipes(nomEquipesTri);
+			    this.vue.setBtnSort("Trier par nom");
 			    
 			// Lister par Nom d'équipe
 	    	}else {
@@ -140,6 +143,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 			            .collect(Collectors.toList());
 			    
 			    this.vue.updateListeEquipes(nomEquipesTri);
+			    this.vue.setBtnSort("Trier par rang");
 	    	}
 	    }
 	}

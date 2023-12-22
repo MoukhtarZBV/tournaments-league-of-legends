@@ -127,4 +127,7 @@ public class ModeleImportation {
 		return true;
 	}
 	
+	public void changerStatusAVenir(Tournoi tournoi) {
+		new Tournoi().changerStatusTournoi(tournoi, Statut.A_VENIR);
+	}
 }

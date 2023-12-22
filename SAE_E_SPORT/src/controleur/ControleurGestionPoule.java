@@ -68,10 +68,11 @@ public class ControleurGestionPoule implements MouseListener, WindowListener {
 					// (A FAIRE) créer la finale !!!!!!!!!!!!!!!!!!!!!!!!!!!
 					
 					// Retour au détail du tournoi
-					this.vue.dispose();
+					this.modele.changerStatusEnFinale(this.vue.getTournoi());
+					this.vue.getTournoi().setStatut(Statut.FINALE);
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
 					vue.setVisible(true);
-					this.modele.changerStatusEnFinale(this.vue.getTournoi());
+					this.vue.dispose();
 					break;
 				case ("Retour") :
 					try {
