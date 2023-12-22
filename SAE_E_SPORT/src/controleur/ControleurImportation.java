@@ -21,6 +21,7 @@ import ihm.VueImportation;
 import ihm.VueTournoi;
 import modele.ModeleImportation;
 import modele.ModeleImportation.EtatEquipe;
+import modele.Statut;
 
 public class ControleurImportation implements ActionListener, DropListener {
 	
@@ -60,6 +61,8 @@ public class ControleurImportation implements ActionListener, DropListener {
 						}
 					}
 					this.vue.getPopup().setSucces("Les équipes ont bien été importées");
+					this.vue.getTournoi().setStatut(Statut.A_VENIR);
+					this.modele.changerStatusAVenir(this.vue.getTournoi());
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
