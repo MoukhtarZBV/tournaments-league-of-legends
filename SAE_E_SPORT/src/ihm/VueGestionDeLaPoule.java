@@ -34,17 +34,20 @@ import javax.swing.JButton;
 
 public class VueGestionDeLaPoule extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
 	private JTable tableClassement = new JTable();
-	private JTable tableMatches    = new JTable();
-	private JButton btnCloturer;
-
+	private JTable tableMatches = new JTable();
 	private Tournoi tournoi;
-
+	private JButton btnCloturer;
 	
 	public VueGestionDeLaPoule(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
-        ControleurGestionPoule controleur = new ControleurGestionPoule(this);
+//        ControleurGestionPoule controleur = new ControleurGestionPoule(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Poule - " + tournoi.getNomTournoi());
@@ -151,7 +154,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tableMatches.getTableHeader().setReorderingAllowed(false);
 		this.tableMatches.getTableHeader().setResizingAllowed(false);
 		this.tableMatches.getTableHeader().setUI(null);
-		this.tableMatches.addMouseListener(controleur);
+//		this.tableMatches.addMouseListener(controleur);
 		
 		JScrollPane scrollPaneMatches = new JScrollPane();
 		scrollPaneMatches.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -188,6 +191,11 @@ public class VueGestionDeLaPoule extends JFrame {
 		// Table classement
 		String[] columnsClassement = {"Rang", "Equipe", "Points Gagnés", "Matches Joués"};
 		DefaultTableModel modeleClassement = new DefaultTableModel(columnsClassement, 0) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// Rendre toutes les cellules non éditables
@@ -232,6 +240,15 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tableClassement.getColumnModel().getColumn(3).setMaxWidth(150);
 		this.tableClassement.getColumnModel().getColumn(3).setMinWidth(150);
 		
+		ControleurGestionPoule controleur = new ControleurGestionPoule(this);
+		addWindowListener(controleur);
+		
+		// ici moi 
+		// ControleurGestionPoule controleur = new ControleurGestionPoule(this);
+		 this.tableMatches.addMouseListener(controleur);
+		
+		// JScrollPane scrollPaneClassement = new JScrollPane();
+//		 scrollPaneClassement.setPreferredSize(new Dimension(450,110));
 		
 		
 		///// PANEL DES BOUTONS \\\\\

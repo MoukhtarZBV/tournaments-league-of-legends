@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.awt.event.MouseListener;
@@ -19,9 +20,15 @@ public class ControleurGestionPoule implements MouseListener {
 
 	private VueGestionDeLaPoule vue;
 	private ModelePoule modele;
+	private EtatPoule etat;
+	
+	public enum EtatPoule {
+		OUVERT, CLOTURE;
+	}
 	
 	public ControleurGestionPoule (VueGestionDeLaPoule vue) {
 		this.vue = vue;
+		this.etat = EtatPoule.OUVERT;
 		try {
 			this.modele = new ModelePoule(this.vue.getTournoi());
 			this.vue.setJTableClassement(modele.classement());
@@ -33,33 +40,43 @@ public class ControleurGestionPoule implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() instanceof JTable) {
-			if (e.getClickCount()==2) {
-				JTable source = (JTable) e.getSource();
-				int columnClicked = source.getSelectedColumn();
-				int rowClicked = source.getSelectedRow();
-				if (columnClicked == 1 || columnClicked == 2) {
-					this.modele.updateGagnant(rowClicked, columnClicked);
-					if(this.modele.tousLesMatchsJouees()) {
-						this.vue.setBtnCloturer(true);
-					}else {
-						this.vue.setBtnCloturer(false);
-					}
-					try {
-						this.vue.setJTableMatches(this.modele.matches());
-						Thread.sleep(100);
-						this.vue.setJTableClassement(this.modele.classement());
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
+		switch (this.etat) {
+			case OUVERT : 	
+				if (e.getSource() instanceof JTable) {
+						if (e.getClickCount()==2) {
+							JTable source = (JTable) e.getSource();
+							int columnClicked = source.getSelectedColumn();
+							int rowClicked = source.getSelectedRow();
+							if (columnClicked == 1 || columnClicked == 2) {
+								this.modele.updateGagnant(rowClicked, columnClicked);
+								if(this.modele.tousLesMatchsJouees()) {
+									this.vue.setBtnCloturer(true);
+								}else {
+									this.vue.setBtnCloturer(false);
+								}
+								try {
+									this.vue.setJTableMatches(this.modele.matches());
+									Thread.sleep(100);
+									this.vue.setJTableClassement(this.modele.classement());
+								} catch (Exception e1) {
+									e1.printStackTrace();
+								}
+							}
+						}
 				}
-			}
-		} else if (e.getSource() instanceof JButton) {
+				break;
+		default:
+			break;
+		}
+		if (e.getSource() instanceof JButton) {
 			JButton button = (JButton) e.getSource();
 			switch (button.getText()) {
 				case ("Imprimer") :
+					// A FAIRE !!!
+					
 					break;
 				case ("Cloturer Poule") :
+					this.etat = EtatPoule.CLOTURE;
 					try {
 						this.modele.enregistrerResultat();
 					} catch (Exception e2) {

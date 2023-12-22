@@ -29,18 +29,11 @@ public class TestVueGestionPoule {
                 try {
                 	CreateDB.main(args);
                     Tournoi t = new Tournoi("My Tournament", Niveau.INTERNATIONAL, 
-                    		Date.valueOf(LocalDate.of(2023, 12, 20)), Date.valueOf(LocalDate.of(2023, 12, 23)),
+                    		Date.valueOf(LocalDate.of(2023, 12, 20)), Date.valueOf(LocalDate.of(2023, 12, 30)),
                     		Pays.FR);
                     createValues(args, t);
-                    
-                    ModelePoule modelePoule = new ModelePoule(t);
-                    Object[][] classement = modelePoule.classement();
-                    Object[][] parties = modelePoule.matches();
-                    
+
                     VueGestionDeLaPoule frame = new VueGestionDeLaPoule(t);
-                    
-                    frame.setJTableMatches(parties);
-                    frame.setJTableClassement(classement);
                     
                     frame.setVisible(true);
                 } catch (Exception e) {
