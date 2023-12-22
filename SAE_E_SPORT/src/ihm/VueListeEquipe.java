@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import components.CoolScrollBar;
-import components.JTextFieldArrondi;
+import components.CoolTextField;
 import controleur.ControleurListeEquipe;
 import modele.Equipe;
 
@@ -142,7 +142,7 @@ public class VueListeEquipe extends JFrame {
 		panelValider.add(validateBtn);
 
 		// Barre recherche
-		searchBar = new JTextFieldArrondi();
+		searchBar = new CoolTextField();
 		searchBar.setBackground(Palette.DARK_GRAY);
 		searchBar.setForeground(Palette.WHITE);
 		searchBar.setFont(Police.INPUT);

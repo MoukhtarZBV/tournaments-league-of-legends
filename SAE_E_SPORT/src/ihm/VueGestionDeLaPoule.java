@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,12 +11,10 @@ import Images.ImagesIcons;
 import components.BufferedImageResize;
 import components.CoolScrollBar;
 import components.PanelRenderer;
-import components.RoundedBorder;
 import controleur.ControleurGestionPoule;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
@@ -27,8 +24,6 @@ import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,7 +31,7 @@ import javax.swing.JButton;
 public class VueGestionDeLaPoule extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	
 	private JTable tableClassement = new JTable();
 	private JTable tableMatches = new JTable();
 	private Tournoi tournoi;
@@ -237,12 +232,10 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tableClassement.getColumnModel().getColumn(3).setMaxWidth(150);
 		this.tableClassement.getColumnModel().getColumn(3).setMinWidth(150);
 		
-		// ici moi 
-		// ControleurGestionPoule controleur = new ControleurGestionPoule(this);
-		 this.tableMatches.addMouseListener(controleur);
+		ControleurGestionPoule controleur = new ControleurGestionPoule(this);
 		
-		// JScrollPane scrollPaneClassement = new JScrollPane();
-		//scrollPaneClassement.setPreferredSize(new Dimension(450,110));
+		// ici moi 
+		this.tableMatches.addMouseListener(controleur);
 		
 		
 		///// PANEL DES BOUTONS \\\\\

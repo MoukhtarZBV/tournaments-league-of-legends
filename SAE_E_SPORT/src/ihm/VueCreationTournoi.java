@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import components.JTextFieldArrondi;
+import components.CoolTextField;
 import components.PanelPopUp;
 import modele.Niveau;
 import modele.Pays;
@@ -55,7 +55,7 @@ public class VueCreationTournoi extends JFrame {
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY); 
 		setTitle("Nouveau tournoi");
 		setResizable(false);
 		
@@ -173,7 +173,7 @@ public class VueCreationTournoi extends JFrame {
 		panelNomTournoi.add(horizontalStrut);
 		
 		// Text field Nom
-		inputNom = new JTextFieldArrondi();
+		inputNom = new CoolTextField();
 		inputNom.setFont(Police.INPUT);
 		inputNom.setColumns(35);
 		inputNom.setBackground(Palette.GRAY);

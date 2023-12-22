@@ -28,7 +28,7 @@ import java.awt.Image;
 import javax.swing.table.DefaultTableModel;
 
 import components.CoolScrollBar;
-import components.JTextFieldArrondi;
+import components.CoolTextField;
 import controleur.ControleurListeTournois;
 import dao.ConnectionJDBC;
 import dao.TournoiJDBC;
@@ -126,7 +126,7 @@ public class VueListeTournois extends JFrame {
 		panelSearch.add(panelBarreRecherche);
 		
 		// Champ de recherche
-		champRecherche = new JTextFieldArrondi();
+		champRecherche = new CoolTextField();
 		champRecherche.setFont(Police.INPUT);
 		champRecherche.setBackground(Palette.DARK_GRAY);
 		champRecherche.setForeground(Palette.WHITE);

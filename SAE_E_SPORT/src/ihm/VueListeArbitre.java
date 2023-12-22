@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import components.JTextFieldArrondi;
+import components.CoolTextField;
 import controleur.ControleurListeArbitre;
 import modele.Arbitre;
 
@@ -146,7 +146,7 @@ public class VueListeArbitre extends JFrame {
 		panelValider.add(validateBtn);
 
 		// Barre recherche
-		searchBar = new JTextFieldArrondi();
+		searchBar = new CoolTextField();
 		searchBar.setBackground(Palette.DARK_GRAY);
 		searchBar.setForeground(Palette.WHITE);
 		searchBar.setFont(Police.INPUT);

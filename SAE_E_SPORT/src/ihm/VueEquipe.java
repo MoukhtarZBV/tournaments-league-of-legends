@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import components.JTextFieldArrondi;
+import components.CoolTextField;
 import components.PanelPopUp;
 
 import java.awt.GridLayout;
@@ -137,7 +137,7 @@ public class VueEquipe extends JFrame {
 		libName.setForeground(Palette.WHITE);
 		panelName.add(libName);
 		
-		fieldName = new JTextFieldArrondi();
+		fieldName = new CoolTextField();
 		fieldName.setBackground(Palette.DARK_GRAY);
 		fieldName.setForeground(Palette.WHITE);
 		fieldName.setFont(Police.INPUT);
@@ -158,7 +158,7 @@ public class VueEquipe extends JFrame {
 		libWR.setForeground(Palette.WHITE);
 		panelRank.add(libWR);
 		
-		fieldWR = new JTextFieldArrondi();
+		fieldWR = new CoolTextField();
 		fieldWR.setBackground(Palette.DARK_GRAY);
 		fieldWR.setForeground(Palette.WHITE);
 		fieldWR.setFont(Police.INPUT);
