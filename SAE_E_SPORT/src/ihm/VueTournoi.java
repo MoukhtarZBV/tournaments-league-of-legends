@@ -231,15 +231,15 @@ public class VueTournoi extends JFrame {
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 		
 		// Bouton annuler
-		JButton btnAnnuler = new JButton("<html><body style='padding: 5px 20px;'>Retour</body></html>");
-		btnAnnuler.setName("Retour");
-		btnAnnuler.setBackground(Palette.GRAY);
-		btnAnnuler.setForeground(Palette.WHITE);
-		btnAnnuler.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-		btnAnnuler.setFont(Police.LABEL);
-		btnAnnuler.addActionListener(controleur);
-		btnAnnuler.setFocusable(false);
-		panelBoutons.add(btnAnnuler);
+		JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>Retour</body></html>");
+		btnRetour.setName("Retour");
+		btnRetour.setBackground(Palette.GRAY);
+		btnRetour.setForeground(Palette.WHITE);
+		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnRetour.setFont(Police.LABEL);
+		btnRetour.addActionListener(controleur);
+		btnRetour.setFocusable(false);
+		panelBoutons.add(btnRetour);
 			
 		switch (tournoi.getStatut()) {
 		case ATTENTE_EQUIPES:
@@ -249,13 +249,15 @@ public class VueTournoi extends JFrame {
 			afficherBoutonOuvrir();
 			break;
 		case EN_COURS:
-			afficherBoutonGererPoule();
+			afficherBoutonGererPoule("Gérer la poule");
 			break;
 		case FINALE:
+			afficherBoutonGererPoule("Consulter la poule");
 			afficherBoutonFinale("Gérer la finale");
 			break;
 		case TERMINE:
-			afficherBoutonFinale("Voir la finale");
+			afficherBoutonGererPoule("Consulter la poule");
+			afficherBoutonFinale("Consulter la finale");
 			break;
 		}
 		
@@ -304,9 +306,9 @@ public class VueTournoi extends JFrame {
 		panelBoutons.add(btnOuvrir);
 	}
 
-	public void afficherBoutonGererPoule() {
-		JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>Gérer la poule</body></html>");
-		btnRetour.setName("Gérer la poule");
+	public void afficherBoutonGererPoule(String nomBouton) {
+		JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>" + nomBouton + "</body></html>");
+		btnRetour.setName("Poule");
 		btnRetour.setBackground(Palette.GRAY);
 		btnRetour.setForeground(Palette.WHITE);
 		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));

@@ -1,5 +1,7 @@
 package controleur;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -8,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 
 import ihm.VueAccueilAdmin;
@@ -16,58 +19,29 @@ import ihm.VueTournoi;
 import modele.ModelePoule;
 import modele.Statut;
 
-public class ControleurGestionPoule implements MouseListener, WindowListener {
+public class ControleurGestionPoule implements MouseListener, ActionListener {
 
 	private VueGestionDeLaPoule vue;
 	private ModelePoule modele;
-	private EtatPoule etat;
-	
-	public enum EtatPoule {
-		OUVERT, CLOTURE;
-	}
 	
 	public ControleurGestionPoule (VueGestionDeLaPoule vue) {
 		this.vue = vue;
-		this.etat = EtatPoule.OUVERT;
 		try {
 			this.modele = new ModelePoule(this.vue.getTournoi());
 			this.vue.setJTableClassement(modele.classement());
 			this.vue.setJTableMatches(modele.matches()); 
+			if (!modele.tousLesMatchsJouees()) {
+				this.vue.setActifBoutonCloturer(false);
+			} else if (this.vue.getTournoi().getStatut() != Statut.EN_COURS) {
+				this.vue.setVisibleBoutonCloturer(false);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		switch (this.etat) {
-			case OUVERT : 	
-				if (e.getSource() instanceof JTable) {
-						if (e.getClickCount()==2) {
-							JTable source = (JTable) e.getSource();
-							int columnClicked = source.getSelectedColumn();
-							int rowClicked = source.getSelectedRow();
-							if (columnClicked == 1 || columnClicked == 2) {
-								this.modele.updateGagnant(rowClicked, columnClicked);
-								if(this.modele.tousLesMatchsJouees()) {
-									this.vue.setBtnCloturer(true);
-								}else {
-									this.vue.setBtnCloturer(false);
-								}
-								try {
-									this.vue.setJTableMatches(this.modele.matches());
-									Thread.sleep(100);
-									this.vue.setJTableClassement(this.modele.classement());
-								} catch (Exception e1) {
-									e1.printStackTrace();
-								}
-							}
-						}
-				}
-				break;
-		default:
-			break;
-		}
+	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JButton) {
 			JButton button = (JButton) e.getSource();
 			switch (button.getText()) {
@@ -76,7 +50,6 @@ public class ControleurGestionPoule implements MouseListener, WindowListener {
 					
 					break;
 				case ("Cloturer Poule") :
-					this.etat = EtatPoule.CLOTURE;
 					try {
 						this.modele.enregistrerResultat();
 					} catch (Exception e2) {
@@ -104,17 +77,32 @@ public class ControleurGestionPoule implements MouseListener, WindowListener {
 			}
 		}
 	}
-
-
+	
 	@Override
-	public void windowClosing(WindowEvent e) {
-		this.vue.dispose();
-		VueTournoi vue = new VueTournoi(this.vue.getTournoi());
-		vue.setVisible(true);
+	public void mouseClicked(MouseEvent e) {
+		if (this.vue.getTournoi().getStatut() == Statut.EN_COURS) {
+			if (e.getSource() instanceof JTable) {
+				JTable source = (JTable) e.getSource();
+				int columnClicked = source.getSelectedColumn();
+				int rowClicked = source.getSelectedRow();
+				if (columnClicked == 1 || columnClicked == 2) {
+					this.modele.updateGagnant(rowClicked, columnClicked);
+					if (this.modele.tousLesMatchsJouees()) {
+						this.vue.setActifBoutonCloturer(true);
+					}
+					try {
+						this.vue.setJTableMatches(this.modele.matches());
+						Thread.sleep(100);
+						this.vue.setJTableClassement(this.modele.classement());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
-	
-	
+
 	// NOT IMPLEMENTED \\
 	
 	@Override
@@ -128,23 +116,5 @@ public class ControleurGestionPoule implements MouseListener, WindowListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {}
-	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
 	
 }

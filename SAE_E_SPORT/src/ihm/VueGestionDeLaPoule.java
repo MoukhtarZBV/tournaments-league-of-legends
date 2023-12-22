@@ -8,6 +8,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import Images.ImagesIcons;
 import components.BufferedImageResize;
 import components.CoolScrollBar;
 import components.PanelRenderer;
@@ -44,15 +45,15 @@ public class VueGestionDeLaPoule extends JFrame {
 	private Tournoi tournoi;
 	private JButton btnCloturer;
 	
+	private ControleurGestionPoule controleur;
+	
 	public VueGestionDeLaPoule(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
-//        ControleurGestionPoule controleur = new ControleurGestionPoule(this);
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Poule - " + tournoi.getNomTournoi());
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY); 
-//		addWindowListener(controleur);
 		
 
 		///// PANEL PRINCIPAL \\\\\	
@@ -141,7 +142,6 @@ public class VueGestionDeLaPoule extends JFrame {
         
         this.tableMatches.setModel(modeleMatches);
         this.tableMatches.setShowGrid(false);
-        this.tableMatches.setEnabled(false);
         this.tableMatches.setOpaque(false);
         this.tableMatches.setRowHeight(50);
         this.tableMatches.setForeground(Palette.WHITE);
@@ -155,7 +155,6 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tableMatches.getTableHeader().setReorderingAllowed(false);
 		this.tableMatches.getTableHeader().setResizingAllowed(false);
 		this.tableMatches.getTableHeader().setUI(null);
-//		this.tableMatches.addMouseListener(controleur);
 		
 		JScrollPane scrollPaneMatches = new JScrollPane();
 		scrollPaneMatches.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -241,15 +240,12 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tableClassement.getColumnModel().getColumn(3).setMaxWidth(150);
 		this.tableClassement.getColumnModel().getColumn(3).setMinWidth(150);
 		
-		ControleurGestionPoule controleur = new ControleurGestionPoule(this);
-		addWindowListener(controleur);
-		
 		// ici moi 
 		// ControleurGestionPoule controleur = new ControleurGestionPoule(this);
 		 this.tableMatches.addMouseListener(controleur);
 		
 		// JScrollPane scrollPaneClassement = new JScrollPane();
-//		 scrollPaneClassement.setPreferredSize(new Dimension(450,110));
+		//scrollPaneClassement.setPreferredSize(new Dimension(450,110));
 		
 		
 		///// PANEL DES BOUTONS \\\\\
@@ -263,25 +259,23 @@ public class VueGestionDeLaPoule extends JFrame {
 		panelButtons.setLayout(gl_panelButtons);
 		panelBottom.add(panelButtons, BorderLayout.EAST);
 		
-		// Bouton imprimer
-		JButton btnImprimer = new JButton("Imprimer");
-		btnImprimer.setBackground(Palette.GRAY);
-		btnImprimer.setForeground(Palette.WHITE);
-		btnImprimer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-		btnImprimer.setFont(Police.LABEL);
-		btnImprimer.addMouseListener(controleur);
-		btnImprimer.setFocusable(false);
-		panelButtons.add(btnImprimer);
-		
 		// Bouton cloturer
 		this.btnCloturer = new JButton("Cloturer Poule");
 		btnCloturer.setBackground(Palette.GRAY);
 		btnCloturer.setForeground(Palette.WHITE);
 		btnCloturer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnCloturer.setFont(Police.LABEL);
-		btnCloturer.addMouseListener(controleur);
 		btnCloturer.setFocusable(false);
 		panelButtons.add(btnCloturer);
+
+		// Bouton imprimer
+		JButton btnImprimer = new JButton("Imprimer");
+		btnImprimer.setBackground(Palette.GRAY);
+		btnImprimer.setForeground(Palette.WHITE);
+		btnImprimer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnImprimer.setFont(Police.LABEL);
+		btnImprimer.setFocusable(false);
+		panelButtons.add(btnImprimer);
 		
 		// Bouton retour
 		JButton btnRetour = new JButton("Retour");
@@ -289,9 +283,14 @@ public class VueGestionDeLaPoule extends JFrame {
 		btnRetour.setForeground(Palette.WHITE);
 		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnRetour.setFont(Police.LABEL);
-		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelButtons.add(btnRetour);
+		
+		this.controleur = new ControleurGestionPoule(this);
+		this.tableMatches.addMouseListener(controleur);
+		btnImprimer.addActionListener(controleur);
+		btnCloturer.addActionListener(controleur);
+		btnRetour.addActionListener(controleur);
 	}
 	
 	public Tournoi getTournoi() {
@@ -313,8 +312,7 @@ public class VueGestionDeLaPoule extends JFrame {
 				JPanel panel = new JPanel();
 				panel.setLayout(new BorderLayout(0, 0));
 		        panel.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Palette.LIGHT_PURPLE), new EmptyBorder(0, 10, 0, 10)));
-				panel.setBackground(Palette.DARK_GRAY);
-				
+				panel.setBackground(Palette.DARK_GRAY); 
 				switch(j) {
 					case 0:
 						JLabel nbMatch = new JLabel(String.valueOf(cloned[i][j]));
@@ -323,10 +321,10 @@ public class VueGestionDeLaPoule extends JFrame {
 						nbMatch.setHorizontalAlignment(SwingConstants.LEFT);
 						panel.add(nbMatch, BorderLayout.CENTER);
 						break;
-						
 					case 1:
 						Image image1 = BufferedImageResize.resize((String) cloned[i][model.getColumnCount()-1+j], 25, 25);
 				        JLabel label1 = new JLabel(new ImageIcon(image1));
+				        label1.addMouseListener(controleur);
 						panel.add(label1, BorderLayout.WEST);
 				        
 						JLabel name1 = new JLabel(cloned[i][j].toString());
@@ -335,10 +333,10 @@ public class VueGestionDeLaPoule extends JFrame {
 						name1.setHorizontalAlignment(SwingConstants.RIGHT);
 						panel.add(name1, BorderLayout.CENTER);
 						break;
-						
 					case 2:
 						Image image2 = BufferedImageResize.resize((String) cloned[i][model.getColumnCount()-1+j], 25, 25);
 				        JLabel label2 = new JLabel(new ImageIcon(image2));
+				        label2.addMouseListener(controleur);
 						panel.add(label2, BorderLayout.EAST);
 				        
 						JLabel name2 = new JLabel(cloned[i][j].toString());
@@ -347,7 +345,6 @@ public class VueGestionDeLaPoule extends JFrame {
 						name2.setHorizontalAlignment(SwingConstants.LEFT);
 						panel.add(name2, BorderLayout.CENTER);
 						break;
-						
 					case 3:
 						JLabel date = new JLabel(String.valueOf(cloned[i][j]));
 						date.setForeground(Palette.WHITE);
@@ -356,7 +353,6 @@ public class VueGestionDeLaPoule extends JFrame {
 						panel.add(date, BorderLayout.CENTER);
 						break;
 				}
-
 				cloned[i][j] = panel;
 			}
 			
@@ -374,7 +370,11 @@ public class VueGestionDeLaPoule extends JFrame {
 		}
 	}
 	
-	public void setBtnCloturer(boolean statut) {
-		this.btnCloturer.setEnabled(statut);
+	public void setActifBoutonCloturer(boolean actif) {
+		this.btnCloturer.setEnabled(actif);
+	}
+	
+	public void setVisibleBoutonCloturer(boolean visible) {
+		this.btnCloturer.setVisible(visible);
 	}
 }

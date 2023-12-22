@@ -261,7 +261,7 @@ public class Tournoi {
 		// compteur pour les matchs par jour
 		int cmpMatchs = 0;
 		nbMatchsParJour = verifierExtraMatchs(matchsRestant, nbMatchsParJour);
-		for (int cmp = 0, initial = equipeSize/2 ; cmp<nbMatchsTotals ;initial++) {
+		for (int cmp = 0, initial = 1; cmp<nbMatchsTotals ;initial++) {
 			for (int i = 0, j = initial ; i<equipeSize && cmp<nbMatchsTotals ; i++, j++, cmp++, heure+=trouHeures) {
 				cmpMatchs ++;
 				j %= equipeSize;
