@@ -40,7 +40,7 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 				if (c.getLogin().equals(this.vue.getLogin())) {
 					if (c.getMotDePasse().equals(this.vue.getPassword())) {
 						this.vue.dispose();
-						// Si l'utilisateur est un administrateurs
+						// Si l'utilisateur est un administrateur
 						if (c.getType().denomination() == "Administrateur") {
 							VueAccueilAdmin vue = new VueAccueilAdmin();
 							vue.setVisible(true);
