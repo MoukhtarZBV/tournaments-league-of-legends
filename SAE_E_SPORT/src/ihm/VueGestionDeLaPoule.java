@@ -35,7 +35,7 @@ public class VueGestionDeLaPoule extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable tableClassement = new JTable();;
+	private JTable tableClassement = new JTable();
 	private JTable tableMatches = new JTable();
 	private Tournoi tournoi;
 	private JButton btnCloturer;
@@ -97,7 +97,6 @@ public class VueGestionDeLaPoule extends JFrame {
 			
         };
         
-        ControleurGestionPoule controleur = new ControleurGestionPoule(this);
         this.tableMatches.setModel(modeleMatches);
 		this.tableMatches.getColumnModel().getColumn(1).setCellRenderer(new PanelRenderer());
 		this.tableMatches.getColumnModel().getColumn(2).setCellRenderer(new PanelRenderer());
@@ -106,7 +105,6 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tableMatches.getColumnModel().getColumn(3).setPreferredWidth(30);
 		this.tableMatches.getTableHeader().setReorderingAllowed(false);
 		this.tableMatches.getTableHeader().setResizingAllowed(false);
-		this.tableMatches.addMouseListener(controleur);
 		
 		panelListeMatches.add(scrollPaneMatches, BorderLayout.CENTER);
 		
@@ -145,6 +143,9 @@ public class VueGestionDeLaPoule extends JFrame {
         this.tableClassement.setDefaultRenderer(Object.class, cellRenderer);
 		this.tableClassement.getColumnModel().getColumn(0).setPreferredWidth(10);
 		this.tableClassement.setRowHeight(25);
+		
+		ControleurGestionPoule controleur = new ControleurGestionPoule(this);
+		this.tableMatches.addMouseListener(controleur);
 		
 		JScrollPane scrollPaneClassement = new JScrollPane();
 		scrollPaneClassement.setPreferredSize(new Dimension(450,110));
@@ -217,7 +218,7 @@ public class VueGestionDeLaPoule extends JFrame {
 				JPanel panel = new JPanel();
 				panel.setLayout(new BorderLayout(0, 0));
 				panel.add(new JLabel(cloned[i][j].toString()), BorderLayout.CENTER);
-											        
+			
 		        Image image = BufferedImageResize.resize((String) cloned[i][model.getColumnCount()-1+j], 25, 25);
 		        
 		        JLabel label = new JLabel(new ImageIcon(image));
