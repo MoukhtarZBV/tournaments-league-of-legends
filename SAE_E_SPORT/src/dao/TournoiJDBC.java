@@ -60,7 +60,6 @@ public class TournoiJDBC implements TournoiDAO {
 										new EquipeJDBC().getById(rs.getInt("idEquipe")),
 										new CompteJDBC().getById(rs.getInt("idCompte")));
 				tournoi = Optional.ofNullable(t);
-				System.out.println(tournoi);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

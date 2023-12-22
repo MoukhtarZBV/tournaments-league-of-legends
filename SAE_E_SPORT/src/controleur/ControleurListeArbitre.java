@@ -21,7 +21,7 @@ import ihm.VueListeEquipe;
 import modele.Arbitre;
 import modele.Equipe;
 
-public class ControleurListeArbitre implements MouseListener, ActionListener, WindowListener {
+public class ControleurListeArbitre implements MouseListener, ActionListener {
 	
 	private VueListeArbitre vue;
 	private Arbitre modele;
@@ -82,14 +82,6 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Wi
 			b.setBackground(Palette.WHITE);
 		}	
 	}
-	
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-    	this.vue.dispose();
-    	VueAccueilAdmin vue = new VueAccueilAdmin();
-		vue.setVisible(true);
-	}
 
 	
 	
@@ -102,23 +94,5 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Wi
 	
 	@Override
 	public void mousePressed(MouseEvent e) {}
-	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
 	
 }

@@ -33,7 +33,6 @@ public class ModeleImportation {
 		br.readLine();
 		if ((line = br.readLine()) != null) {
 		    String[] values = line.split(",");
-		    System.out.println(values[0] + " " + tournoi.getNomTournoi());
 			if (!values[0].equals(tournoi.getNomTournoi())) {
 				br.close();
 				return false;

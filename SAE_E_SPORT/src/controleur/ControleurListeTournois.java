@@ -22,7 +22,7 @@ import modele.Niveau;
 import modele.Statut;
 import modele.Tournoi;
 
-public class ControleurListeTournois implements ActionListener, ItemListener, MouseListener, WindowListener {
+public class ControleurListeTournois implements ActionListener, ItemListener, MouseListener {
 
 	private VueListeTournois vue;
 	private Tournoi modele;
@@ -98,13 +98,6 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
          }
 	}
 	
-	@Override
-	public void windowClosing(WindowEvent e) {
-    	this.vue.dispose();
-    	VueAccueilAdmin vue = new VueAccueilAdmin();
-		vue.setVisible(true);
-	}
-	
 
 	@Override
 	public void mousePressed(MouseEvent e) {}
@@ -117,22 +110,4 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 
 	@Override
 	public void mouseExited(MouseEvent e) {}
-
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
 }

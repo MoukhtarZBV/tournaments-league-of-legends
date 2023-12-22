@@ -58,12 +58,10 @@ public class VueListeEquipe extends JFrame {
 	public VueListeEquipe(List<Equipe> equipes) { 
 		
 		this.equipes = equipes;
-		
 		ControleurListeEquipe controleur = new ControleurListeEquipe(this);
 		
 		///// FENÊTRE \\\\\
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		addWindowListener(controleur);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Équipes");
 //		setResizable(false);

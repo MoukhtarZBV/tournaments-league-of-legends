@@ -16,6 +16,7 @@ public class CoolScrollBar extends JScrollBar {
 		this.setPreferredSize(new Dimension(15, this.getPreferredSize().height));
 		this.setFocusable(false);
 		this.setBackground(Palette.DARK_GRAY);
+		this.setUnitIncrement(10);
 		
 		this.setUI(new CoolScrollBarUI());
 		
