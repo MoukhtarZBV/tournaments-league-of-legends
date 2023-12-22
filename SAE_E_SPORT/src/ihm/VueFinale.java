@@ -24,6 +24,7 @@ import controleur.ControleurFinale;
 import dao.TournoiJDBC;
 import modele.Equipe;
 import modele.Joueur;
+import modele.Statut;
 import modele.Tournoi;
 
 import java.awt.Color;
@@ -46,6 +47,7 @@ public class VueFinale extends JFrame {
 	private JLabel lblTropheeEquipeUne;
 	private JLabel lblTropheeEquipeDeux;
 	private JButton btnConfirmer;
+	private JLabel lblNewLabel;
 	
 	private Tournoi tournoi;
 	
@@ -59,7 +61,6 @@ public class VueFinale extends JFrame {
 	public VueFinale(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
-		System.out.println(tournoi);
 		setEquipes();
 		ControleurFinale controleur = new ControleurFinale(this);
 		
@@ -72,10 +73,10 @@ public class VueFinale extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelTitreFinale = new JPanel();
-		panelTitreFinale.setBackground(Color.decode("#11022B"));
+		panelTitreFinale.setBackground(Palette.DARK_GRAY);
 		contentPane.add(panelTitreFinale, BorderLayout.NORTH);
 		
-		JLabel lblFinale = new JLabel("FINALE");
+		JLabel lblFinale = new JLabel("FINALE ");
 		lblFinale.setFont(Police.GROS_TITRE);
 		lblFinale.setForeground(Palette.WHITE);
 		panelTitreFinale.add(lblFinale);
@@ -90,13 +91,13 @@ public class VueFinale extends JFrame {
 		panelScoresEquipes.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelScores = new JPanel();
-		panelScores.setBackground(Color.decode("#11022B"));
+		panelScores.setBackground(Palette.DARK_GRAY);
 		panelScores.setBorder(new EmptyBorder(10, 20, 10, 20));
 		panelScoresEquipes.add(panelScores, BorderLayout.NORTH);
 		panelScores.setLayout(new GridLayout(0, 3, 0, 0));
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(Color.decode("#261C3F"));
+		panel_2.setBackground(Palette.GRAY);
 		panel_2.setBorder(new CompoundBorder(new MatteBorder(0, 2, 0, 0, (Color) new Color(160, 0, 0)), new EmptyBorder(10, 30, 10, 20)));
 		panelScores.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
@@ -113,19 +114,18 @@ public class VueFinale extends JFrame {
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new EmptyBorder(15, 20, 15, 20));
-		panel_3.setBackground(Color.decode("#261C3F"));
+		panel_3.setBackground(Palette.GRAY);
 		panelScores.add(panel_3);
 		panel_3.setLayout(new BorderLayout(15, 0));
 		
-		
-		String status = tournoi.getVainqueur() == null ? "En cours" : "Terminée";
-		JLabel lblNewLabel = new JLabel("<html><body style='padding: 5px 5px;'>" + status + "</body></html>");
+		lblNewLabel = new JLabel();
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setOpaque(true);
-		lblNewLabel.setBackground(new Color(30, 22, 50));
+		lblNewLabel.setBackground(Palette.DARK_GRAY);
 		lblNewLabel.setBorder(new LineBorder(new Color(238, 238, 238)));
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("DejaVu Sans", Font.BOLD, 16));
+		setLabelStatus();
 		panel_3.add(lblNewLabel);
 		
 		lblTropheeEquipeUne = new JLabel();
@@ -139,7 +139,7 @@ public class VueFinale extends JFrame {
 		panel_3.add(lblTropheeEquipeDeux, BorderLayout.EAST);
 		
 		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(Color.decode("#261C3F"));
+		panel_4.setBackground(Palette.GRAY);
 		panel_4.setBorder(new CompoundBorder(new MatteBorder(0, 0, 0, 2, (Color) new Color(0, 0, 160)), new EmptyBorder(10, 20, 10, 30)));
 		panelScores.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
@@ -156,7 +156,7 @@ public class VueFinale extends JFrame {
 		
 		JPanel panelEquipes = new JPanel();
 		panelEquipes.setBorder(new EmptyBorder(10, 20, 20, 20));
-		panelEquipes.setBackground(Color.decode("#11022B"));
+		panelEquipes.setBackground(Palette.DARK_GRAY);
 		panelScoresEquipes.add(panelEquipes, BorderLayout.CENTER);
 		
 
@@ -171,12 +171,6 @@ public class VueFinale extends JFrame {
 		
 		EquipesTable tableEquipeUne = new EquipesTable(5, 3);
 		tableEquipeUne.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, new Color(160, 0, 0)), new EmptyBorder(10, 20, 20, 10)));
-		tableEquipeUne.setFont(Police.TABLEAU);
-		tableEquipeUne.getTableHeader().setBackground(Palette.DARK_GRAY);
-		tableEquipeUne.getTableHeader().setForeground(Palette.WHITE);
-		tableEquipeUne.getTableHeader().setFont(Police.LABEL);
-		tableEquipeUne.setBackground(Palette.DARK_GRAY);
-		tableEquipeUne.setForeground(Palette.WHITE);
 		tableEquipeUne.setModel(modeleTableEquipeUne);
 		afficherEquipes(tableEquipeUne, equipeUne);
 		
@@ -191,12 +185,6 @@ public class VueFinale extends JFrame {
 
 		EquipesTable tableEquipeDeux = new EquipesTable(5, 3);
 		tableEquipeDeux.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, new Color(0, 0, 160)), new EmptyBorder(10, 20, 20, 10)));
-		tableEquipeDeux.setFont(Police.TABLEAU);
-		tableEquipeDeux.getTableHeader().setBackground(Palette.DARK_GRAY);
-		tableEquipeDeux.getTableHeader().setForeground(Palette.WHITE);
-		tableEquipeDeux.getTableHeader().setFont(Police.LABEL);
-		tableEquipeDeux.setBackground(Palette.DARK_GRAY);
-		tableEquipeDeux.setForeground(Palette.WHITE);
 		tableEquipeDeux.setModel(modeleTableEquipeDeux);
 		afficherEquipes(tableEquipeDeux, equipeDeux);
 		
@@ -209,7 +197,7 @@ public class VueFinale extends JFrame {
 		panelBoutons.setBorder(new EmptyBorder(20, 20, 20, 20));
 		FlowLayout flowLayout = (FlowLayout) panelBoutons.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
-		panelBoutons.setBackground(Color.decode("#11022B"));
+		panelBoutons.setBackground(Palette.DARK_GRAY);
 		panelScoresEquipes.add(panelBoutons, BorderLayout.SOUTH);
 		
 		JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>Retour</body></html>");
@@ -234,7 +222,12 @@ public class VueFinale extends JFrame {
 		btnConfirmer.addActionListener(controleur);
 		panelBoutons.add(btnConfirmer);
 		
-		afficherBoutonsTrophees(tournoi, controleur);
+		if (tournoi.getVainqueur() == null) {
+			btnConfirmer.setVisible(true);
+			lblTropheeEquipeUne.addMouseListener(controleur);
+			lblTropheeEquipeDeux.addMouseListener(controleur);
+		}
+		afficherBoutonsTrophees();
 		
 	}
 	
@@ -248,15 +241,14 @@ public class VueFinale extends JFrame {
 		}
 	}
 
-	private void afficherBoutonsTrophees(Tournoi tournoi, ControleurFinale controleur) {
-		if (tournoi.getVainqueur() == null) {
-			btnConfirmer.setVisible(true);
-			lblTropheeEquipeUne.addMouseListener(controleur);
-			lblTropheeEquipeDeux.addMouseListener(controleur);
-		} else if (tournoi.getVainqueur().equals(equipeUne)) {
-			setIconesTrophees(new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)), null);
-		} else {
-			setIconesTrophees(null, new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)));
+	public void afficherBoutonsTrophees() {
+		System.out.println(tournoi);
+		if (tournoi.getVainqueur() != null) {
+			if (tournoi.getVainqueur().equals(equipeUne)) {
+				setIconesTrophees(new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)), null);
+			} else {
+				setIconesTrophees(null, new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)));
+			}
 		}
 	}
 	
@@ -266,6 +258,10 @@ public class VueFinale extends JFrame {
 	
 	public void setActifConfirmer(boolean actif) {
 		this.btnConfirmer.setEnabled(actif);
+	}
+	
+	public void setVisibleConfirmer(boolean visible) {
+		this.btnConfirmer.setVisible(visible);
 	}
 
 	public void setVainqueur(String equipeGagnante) {
@@ -285,6 +281,11 @@ public class VueFinale extends JFrame {
 	
 	public Equipe getVainqueur() {
 		return equipeVainqueur;
+	}
+	
+	public void setLabelStatus() {
+		String status = tournoi.getVainqueur() == null ? "En cours" : "Terminée";
+		lblNewLabel.setText("<html><body style='padding: 5px 5px;'>" + status + "</body></html>");
 	}
 	
 	public void setEquipes() {

@@ -1,18 +1,25 @@
 package controleur;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 
+import ihm.VueAccueilAdmin;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueTournoi;
 import modele.ModelePoule;
 import modele.Statut;
 
-public class ControleurGestionPoule implements MouseListener {
+public class ControleurGestionPoule implements MouseListener, ActionListener {
 
 	private VueGestionDeLaPoule vue;
 	private ModelePoule modele;
@@ -22,39 +29,25 @@ public class ControleurGestionPoule implements MouseListener {
 		try {
 			this.modele = new ModelePoule(this.vue.getTournoi());
 			this.vue.setJTableClassement(modele.classement());
-			this.vue.setJTableMatches(modele.matches());
+			this.vue.setJTableMatches(modele.matches()); 
+			if (!modele.tousLesMatchsJouees()) {
+				this.vue.setActifBoutonCloturer(false);
+			} else if (this.vue.getTournoi().getStatut() != Statut.EN_COURS) {
+				this.vue.setVisibleBoutonCloturer(false);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() instanceof JTable) {
-			if (e.getClickCount()==2) {
-				JTable source = (JTable) e.getSource();
-				int columnClicked = source.getSelectedColumn();
-				int rowClicked = source.getSelectedRow();
-				if (columnClicked == 1 || columnClicked == 2) {
-					this.modele.updateGagnant(rowClicked, columnClicked);
-					if(this.modele.tousLesMatchsJouees()) {
-						this.vue.setBtnCloturer(true);
-					}else {
-						this.vue.setBtnCloturer(false);
-					}
-					try {
-						this.vue.setJTableMatches(this.modele.matches());
-						Thread.sleep(100);
-						this.vue.setJTableClassement(this.modele.classement());
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-		} else if (e.getSource() instanceof JButton) {
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() instanceof JButton) {
 			JButton button = (JButton) e.getSource();
 			switch (button.getText()) {
 				case ("Imprimer") :
+					// A FAIRE !!!
+					
 					break;
 				case ("Cloturer Poule") :
 					try {
@@ -65,10 +58,11 @@ public class ControleurGestionPoule implements MouseListener {
 					// (A FAIRE) créer la finale !!!!!!!!!!!!!!!!!!!!!!!!!!!
 					
 					// Retour au détail du tournoi
-					this.vue.dispose();
+					this.modele.changerStatusEnFinale(this.vue.getTournoi());
+					this.vue.getTournoi().setStatut(Statut.FINALE);
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
 					vue.setVisible(true);
-					this.modele.changerStatusEnFinale(this.vue.getTournoi());
+					this.vue.dispose();
 					break;
 				case ("Retour") :
 					try {
@@ -77,35 +71,50 @@ public class ControleurGestionPoule implements MouseListener {
 						e1.printStackTrace();
 					}
 					this.vue.dispose();
+					VueTournoi vueT2 = new VueTournoi(this.vue.getTournoi());
+					vueT2.setVisible(true);
 					break;
 			}
 		}
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if (this.vue.getTournoi().getStatut() == Statut.EN_COURS) {
+			if (e.getSource() instanceof JTable) {
+				JTable source = (JTable) e.getSource();
+				int columnClicked = source.getSelectedColumn();
+				int rowClicked = source.getSelectedRow();
+				if (columnClicked == 1 || columnClicked == 2) {
+					this.modele.updateGagnant(rowClicked, columnClicked);
+					if (this.modele.tousLesMatchsJouees()) {
+						this.vue.setActifBoutonCloturer(true);
+					}
+					try {
+						this.vue.setJTableMatches(this.modele.matches());
+						Thread.sleep(100);
+						this.vue.setJTableClassement(this.modele.classement());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+
+	// NOT IMPLEMENTED \\
+	
+	@Override
+	public void mousePressed(MouseEvent e) {}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
 	
 }

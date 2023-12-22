@@ -56,7 +56,7 @@ public class Tournoi {
 			throw new IllegalArgumentException("La date de debut doit être supérieure à la date du jour");
 		} 
 		if (dateDebut.after(dateFin)) {
-			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
+			throw new IllegalArgumentException("La date de début doit être inférieure à la date de fin");
 		} 
 		if (!anneePourSaisonEnCours(dateDebut)) {
 			throw new IllegalArgumentException("L'année de la date doit être la même que celle en cours");
@@ -75,7 +75,7 @@ public class Tournoi {
 		this.pays = pays;
 		this.compte = null;
 		this.vainqueur = null;
-		this.statut = Statut.A_VENIR;
+		this.statut = Statut.ATTENTE_EQUIPES;
 	}
 	
 	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut, Optional<Equipe> vainqueur, Optional<Compte> compte) {
@@ -109,6 +109,10 @@ public class Tournoi {
 	
 	public Statut getStatut() {
 		return this.statut;
+	}
+	
+	public void setStatut(Statut statut) {
+		this.statut = statut;
 	}
 	
 	public Equipe getVainqueur() {
@@ -257,7 +261,7 @@ public class Tournoi {
 		// compteur pour les matchs par jour
 		int cmpMatchs = 0;
 		nbMatchsParJour = verifierExtraMatchs(matchsRestant, nbMatchsParJour);
-		for (int cmp = 0, initial = equipeSize/2 ; cmp<nbMatchsTotals ;initial++) {
+		for (int cmp = 0, initial = 1; cmp<nbMatchsTotals ;initial++) {
 			for (int i = 0, j = initial ; i<equipeSize && cmp<nbMatchsTotals ; i++, j++, cmp++, heure+=trouHeures) {
 				cmpMatchs ++;
 				j %= equipeSize;

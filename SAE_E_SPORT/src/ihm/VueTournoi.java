@@ -1,6 +1,5 @@
 package ihm;
 
-import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -8,20 +7,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import components.CoolScrollBar;
 import components.PanelRound;
 import controleur.ControleurDetailsTournoi;
 import dao.AssocierJDBC;
 import dao.ParticiperJDBC;
-import dao.TournoiJDBC;
 import Images.ImagesIcons;
 import modele.Arbitre;
 import modele.Equipe;
 import modele.Joueur;
-import modele.Statut;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.List;
@@ -37,28 +34,28 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
-import javax.swing.border.LineBorder;
 
 public class VueTournoi extends JFrame {
 
 	private JTable tableEquipes;
 	private JButton btnOuvrir;
 	private JPanel panelNomsArbitres;
+	private JPanel panelBoutons;
 	
 	private Tournoi tournoi;
 
+	private ControleurDetailsTournoi controleur;
 	
 	/**
 	 * Create the frame.
 	 */
 	public VueTournoi(Tournoi tournoi) {
 		this.tournoi = tournoi;
-		ControleurDetailsTournoi controleur = new ControleurDetailsTournoi(this);
+		this.controleur = new ControleurDetailsTournoi(this);
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle(tournoi.getNomTournoi());
-		addWindowListener(controleur);
 		
 		
 		///// PANEL PRINCIPAL \\\\\	
@@ -184,6 +181,7 @@ public class VueTournoi extends JFrame {
 		
 		JScrollPane scrollPaneTableEquipes = new JScrollPane();
 		scrollPaneTableEquipes.getViewport().setBackground(Palette.GRAY);
+		scrollPaneTableEquipes.setVerticalScrollBar(new CoolScrollBar());
 		panelTableEquipes.add(scrollPaneTableEquipes, BorderLayout.CENTER);
 		
 		// Table des équipes
@@ -222,67 +220,41 @@ public class VueTournoi extends JFrame {
 		///// PANEL BOUTONS \\\\\
 		FlowLayout fl_panelBoutons = new FlowLayout(FlowLayout.RIGHT, 5, 5);
 		
-		JPanel panelBoutons = new JPanel();
+		panelBoutons = new JPanel();
 		panelBoutons.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelBoutons.setBackground(Palette.DARK_GRAY);
 		panelBoutons.setLayout(fl_panelBoutons);
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 		
 		// Bouton annuler
-		JButton btnAnnuler = new JButton("<html><body style='padding: 5px 20px;'>Retour</body></html>");
-		btnAnnuler.setName("Retour");
-		btnAnnuler.setBackground(Palette.GRAY);
-		btnAnnuler.setForeground(Palette.WHITE);
-		btnAnnuler.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-		btnAnnuler.setFont(Police.LABEL);
-		btnAnnuler.addActionListener(controleur);
-		btnAnnuler.setFocusable(false);
-		panelBoutons.add(btnAnnuler);
-		
-		if (new TournoiJDBC().nombreEquipesTournoi(tournoi) < 4) {
-			// Bouton Importer
-			JButton btnImporter = new JButton("<html><body style='padding: 5px 20px;'>Importer des équipes</body></html>");
-			btnImporter.setName("Importer des équipes");
-			btnImporter.setBackground(Palette.GRAY);
-			btnImporter.setForeground(Palette.WHITE);
-			btnImporter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-			btnImporter.setFont(Police.LABEL);
-			btnImporter.setFocusable(false);
-			btnImporter.addActionListener(controleur);
-			panelBoutons.add(btnImporter);
-		} else if (tournoi.getStatut() == Statut.A_VENIR) {
-			// Bouton ouvrir le tournoi
-			btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
-			btnOuvrir.setName("Ouvrir le tournoi");
-			btnOuvrir.setBackground(Palette.GRAY);
-			btnOuvrir.setForeground(Palette.WHITE);
-			btnOuvrir.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-			btnOuvrir.setFont(Police.LABEL);
-			btnOuvrir.setFocusable(false);
-			btnOuvrir.addActionListener(controleur);
-			panelBoutons.add(btnOuvrir);
-		} else if (tournoi.getStatut() == Statut.EN_COURS) {
-			// Bouton gérer la poule
-			JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>Gérer la poule</body></html>");
-			btnRetour.setName("Gérer la poule");
-			btnRetour.setBackground(Palette.GRAY);
-			btnRetour.setForeground(Palette.WHITE);
-			btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-			btnRetour.setFont(Police.LABEL);
-			btnRetour.setFocusable(false);
-			btnRetour.addActionListener(controleur);
-			panelBoutons.add(btnRetour);
-		} else if (tournoi.getStatut() == Statut.FINALE) {
-			// Bouton voir finale
-			JButton btnFinale = new JButton("<html><body style='padding: 5px 20px;'>Voir la finale</body></html>");
-			btnFinale.setName("Voir finale");
-			btnFinale.setBackground(Palette.GRAY);
-			btnFinale.setForeground(Palette.WHITE);
-			btnFinale.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-			btnFinale.setFont(Police.LABEL);
-			btnFinale.setFocusable(false);
-			btnFinale.addActionListener(controleur);
-			panelBoutons.add(btnFinale);
+		JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>Retour</body></html>");
+		btnRetour.setName("Retour");
+		btnRetour.setBackground(Palette.GRAY);
+		btnRetour.setForeground(Palette.WHITE);
+		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnRetour.setFont(Police.LABEL);
+		btnRetour.addActionListener(controleur);
+		btnRetour.setFocusable(false);
+		panelBoutons.add(btnRetour);
+			
+		switch (tournoi.getStatut()) {
+		case ATTENTE_EQUIPES:
+			afficherBoutonImporter();
+			break;
+		case A_VENIR:
+			afficherBoutonOuvrir();
+			break;
+		case EN_COURS:
+			afficherBoutonGererPoule("Gérer la poule");
+			break;
+		case FINALE:
+			afficherBoutonGererPoule("Consulter la poule");
+			afficherBoutonFinale("Gérer la finale");
+			break;
+		case TERMINE:
+			afficherBoutonGererPoule("Consulter la poule");
+			afficherBoutonFinale("Consulter la finale");
+			break;
 		}
 		
 		JPanel panelArbitres = new JPanel();
@@ -304,6 +276,54 @@ public class VueTournoi extends JFrame {
 		panelArbitres.add(panelNomsArbitres);
 		
 		afficherArbitresTournoi(tournoi);
+	}
+
+	public void afficherBoutonImporter() {
+		JButton btnImporter = new JButton("<html><body style='padding: 5px 20px;'>Importer des équipes</body></html>");
+		btnImporter.setName("Importer des équipes");
+		btnImporter.setBackground(Palette.GRAY);
+		btnImporter.setForeground(Palette.WHITE);
+		btnImporter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnImporter.setFont(Police.LABEL);
+		btnImporter.setFocusable(false);
+		btnImporter.addActionListener(controleur);
+		panelBoutons.add(btnImporter);
+	}
+
+	public void afficherBoutonOuvrir() {
+		btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
+		btnOuvrir.setName("Ouvrir le tournoi");
+		btnOuvrir.setBackground(Palette.GRAY);
+		btnOuvrir.setForeground(Palette.WHITE);
+		btnOuvrir.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnOuvrir.setFont(Police.LABEL);
+		btnOuvrir.setFocusable(false);
+		btnOuvrir.addActionListener(controleur);
+		panelBoutons.add(btnOuvrir);
+	}
+
+	public void afficherBoutonGererPoule(String nomBouton) {
+		JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>" + nomBouton + "</body></html>");
+		btnRetour.setName("Poule");
+		btnRetour.setBackground(Palette.GRAY);
+		btnRetour.setForeground(Palette.WHITE);
+		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnRetour.setFont(Police.LABEL);
+		btnRetour.setFocusable(false);
+		btnRetour.addActionListener(controleur);
+		panelBoutons.add(btnRetour);
+	}
+
+	public void afficherBoutonFinale(String nomBouton) {
+		JButton btnFinale = new JButton("<html><body style='padding: 5px 20px;'>" + nomBouton + "</body></html>");
+		btnFinale.setName("Finale");
+		btnFinale.setBackground(Palette.GRAY);
+		btnFinale.setForeground(Palette.WHITE);
+		btnFinale.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnFinale.setFont(Police.LABEL);
+		btnFinale.setFocusable(false);
+		btnFinale.addActionListener(controleur);
+		panelBoutons.add(btnFinale);
 	}
 
 	public void afficherArbitresTournoi(Tournoi tournoi) {

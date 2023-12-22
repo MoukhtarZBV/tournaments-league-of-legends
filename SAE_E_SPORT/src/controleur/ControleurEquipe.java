@@ -14,7 +14,7 @@ import ihm.VueListeEquipe;
 import ihm.VueTournoi;
 import modele.Equipe;
 
-public class ControleurEquipe implements ActionListener, WindowListener {
+public class ControleurEquipe implements ActionListener {
 	private VueEquipe vue;
 	private Equipe modele;
 
@@ -62,42 +62,4 @@ public class ControleurEquipe implements ActionListener, WindowListener {
 		}
 				
 	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		this.vue.dispose();
-		try {
-			if(this.vue.getPere() == null) {
-				VueListeEquipe vue = new VueListeEquipe(this.modele.toutesLesEquipes());
-				vue.setVisible(true);
-			} else {
-				VueTournoi vue = new VueTournoi(this.vue.getPere());
-				vue.setVisible(true);
-			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}
-
-		
-	// NOT IMPLEMENTED \\
-	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
-	
 }
