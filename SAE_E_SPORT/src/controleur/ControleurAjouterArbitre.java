@@ -25,7 +25,7 @@ import ihm.VueListeTournois;
 import modele.Arbitre;
 import modele.Tournoi;
 
-public class ControleurAjouterArbitre implements ActionListener, FocusListener, WindowListener {
+public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 	
 	private VueAjouterArbitre vue;
 	private Arbitre modele;
@@ -75,15 +75,6 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener, 
 		}
 	}
 
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		Arbitre a = new Arbitre();
-		VueListeArbitre vue = new VueListeArbitre(a.tousLesArbitres());
-		vue.setVisible(true);
-		this.vue.dispose();
-	}
-
 	
 	
 	// NOT IMPLEMENTED \\
@@ -91,21 +82,4 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener, 
 	@Override
 	public void focusLost(FocusEvent e) {}
 	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
 }

@@ -52,9 +52,8 @@ public class VueEquipe extends JFrame {
 		ControleurEquipe controleur = new ControleurEquipe(this);
 		
 		///// FENÊTRE \\\\\
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		addWindowListener(controleur);
 		setTitle(equipe.get().getNom());
 		setResizable(false);
 		

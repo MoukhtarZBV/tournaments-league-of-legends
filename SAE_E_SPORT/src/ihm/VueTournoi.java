@@ -1,6 +1,5 @@
 package ihm;
 
-import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -8,20 +7,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import components.CoolScrollBar;
 import components.PanelRound;
 import controleur.ControleurDetailsTournoi;
 import dao.AssocierJDBC;
 import dao.ParticiperJDBC;
-import dao.TournoiJDBC;
 import Images.ImagesIcons;
 import modele.Arbitre;
 import modele.Equipe;
 import modele.Joueur;
-import modele.Statut;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.List;
@@ -37,7 +34,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
-import javax.swing.border.LineBorder;
 
 public class VueTournoi extends JFrame {
 
@@ -57,10 +53,9 @@ public class VueTournoi extends JFrame {
 		this.tournoi = tournoi;
 		this.controleur = new ControleurDetailsTournoi(this);
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle(tournoi.getNomTournoi());
-		addWindowListener(controleur);
 		
 		
 		///// PANEL PRINCIPAL \\\\\	
@@ -186,6 +181,7 @@ public class VueTournoi extends JFrame {
 		
 		JScrollPane scrollPaneTableEquipes = new JScrollPane();
 		scrollPaneTableEquipes.getViewport().setBackground(Palette.GRAY);
+		scrollPaneTableEquipes.setVerticalScrollBar(new CoolScrollBar());
 		panelTableEquipes.add(scrollPaneTableEquipes, BorderLayout.CENTER);
 		
 		// Table des équipes

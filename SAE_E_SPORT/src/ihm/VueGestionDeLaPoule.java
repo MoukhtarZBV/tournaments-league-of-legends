@@ -46,10 +46,9 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tournoi = tournoi;
         ControleurGestionPoule controleur = new ControleurGestionPoule(this);
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Poule - " + tournoi.getNomTournoi());
-		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY); 
-		addWindowListener(controleur);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		
 
 		///// PANEL PRINCIPAL \\\\\	

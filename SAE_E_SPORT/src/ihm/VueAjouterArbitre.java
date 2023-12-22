@@ -53,9 +53,8 @@ public class VueAjouterArbitre extends JFrame {
 		Ecran.setup();
 		
 		///// FENÊTRE \\\\\
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, 822, 528);
-		addWindowListener(controleur);
 		setTitle("Ajouter un arbitre");
 		setResizable(false);
 		

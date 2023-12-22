@@ -15,7 +15,7 @@ import ihm.VueTournoi;
 import modele.ModelePoule;
 import modele.Statut;
 
-public class ControleurGestionPoule implements MouseListener, WindowListener {
+public class ControleurGestionPoule implements MouseListener {
 
 	private VueGestionDeLaPoule vue;
 	private ModelePoule modele;
@@ -88,14 +88,6 @@ public class ControleurGestionPoule implements MouseListener, WindowListener {
 		}
 	}
 
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		this.vue.dispose();
-		VueTournoi vue = new VueTournoi(this.vue.getTournoi());
-		vue.setVisible(true);
-	}
-
 	
 	
 	// NOT IMPLEMENTED \\
@@ -111,23 +103,5 @@ public class ControleurGestionPoule implements MouseListener, WindowListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {}
-	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
 	
 }

@@ -61,7 +61,6 @@ public class VueFinale extends JFrame {
 	public VueFinale(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
-		System.out.println(tournoi);
 		setEquipes();
 		ControleurFinale controleur = new ControleurFinale(this);
 		
