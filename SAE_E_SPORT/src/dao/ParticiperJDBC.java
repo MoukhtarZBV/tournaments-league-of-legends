@@ -1,25 +1,21 @@
 package dao;
 
 import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import modele.Equipe;
-import modele.Joueur;
 import modele.Participer;
-import modele.Pays;
 import modele.Tournoi;
 
 public class ParticiperJDBC implements ParticiperDAO{
 
 	@Override
 	public List<Participer> getAll() {
-		List<Participer> participations = new ArrayList<>();
+		List<Participer> participations = new LinkedList<>();
 		ResultSet rs;
 		try {
 			rs = ConnectionJDBC.getConnection().createStatement().executeQuery("select * from participer");
@@ -37,12 +33,7 @@ public class ParticiperJDBC implements ParticiperDAO{
 		}
 		return participations;
 	}
-
-	@Override
-	public Optional<Participer> getById(Integer id) throws Exception {
-		return Optional.empty();
-	}
-
+	
 	@Override
 	public boolean add(Participer p) throws Exception {
 		boolean res = false;
@@ -86,5 +77,11 @@ public class ParticiperJDBC implements ParticiperDAO{
 	public boolean delete(Participer p) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Optional<Participer> getById(Tournoi id) throws Exception {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}	
 }

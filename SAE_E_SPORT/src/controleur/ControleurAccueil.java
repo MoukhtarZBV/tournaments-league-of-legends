@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
+import ihm.VueHistoriquePoints;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
 import modele.Equipe;
@@ -43,6 +44,12 @@ public class ControleurAccueil implements MouseListener {
 				VueListeTournois vueT = new VueListeTournois(t.tousLesTournois());
 				vueT.setVisible(true);
 				this.vue.dispose();	
+				break;
+				
+			case "Historique" :
+				VueHistoriquePoints vueH = new VueHistoriquePoints();
+				vueH.setVisible(true);
+				this.vue.dispose();
 				break;
 		}
 		

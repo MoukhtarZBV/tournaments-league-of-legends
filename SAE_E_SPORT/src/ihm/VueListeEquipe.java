@@ -16,6 +16,7 @@ import modele.Equipe;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 
 import javax.swing.JList;
 import javax.swing.JLabel;
@@ -36,6 +37,23 @@ public class VueListeEquipe extends JFrame {
 	private boolean triParNom;
 	private JButton btnSort;
 
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			@SuppressWarnings("deprecation")
+			public void run() {
+				try {
+					VueListeEquipe frame = new VueListeEquipe(new Equipe().toutesLesEquipes());
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	
 	public VueListeEquipe(List<Equipe> equipes) { 
 		
@@ -48,7 +66,7 @@ public class VueListeEquipe extends JFrame {
 		addWindowListener(controleur);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Équipes");
-		setResizable(false);
+//		setResizable(false);
 		
 
 		///// PANEL PRINCIPAL \\\\\	
@@ -132,6 +150,7 @@ public class VueListeEquipe extends JFrame {
 		searchBar.setFont(Police.INPUT);
 		searchBar.setPreferredSize(new Dimension(searchBar.getPreferredSize().width, 25));
 		searchBar.setColumns(30);
+		searchBar.addActionListener(controleur);
 		panelSearch.add(searchBar);
 		
 		
