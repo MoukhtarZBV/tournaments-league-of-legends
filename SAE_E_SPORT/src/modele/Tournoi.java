@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import dao.ArbitreJDBC;
 import dao.AssocierJDBC;
+import dao.CompteJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
@@ -55,7 +56,7 @@ public class Tournoi {
 			throw new IllegalArgumentException("La date de debut doit être supérieure à la date du jour");
 		} 
 		if (dateDebut.after(dateFin)) {
-			throw new IllegalArgumentException("La date de début doit être inférieure ou égale à la date de fin");
+			throw new IllegalArgumentException("La date de début doit être inférieure à la date de fin");
 		} 
 		if (!anneePourSaisonEnCours(dateDebut)) {
 			throw new IllegalArgumentException("L'année de la date doit être la même que celle en cours");
@@ -74,18 +75,18 @@ public class Tournoi {
 		this.pays = pays;
 		this.compte = null;
 		this.vainqueur = null;
-		this.statut = Statut.A_VENIR;
+		this.statut = Statut.ATTENTE_EQUIPES;
 	}
 	
-	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut) {
+	public static Tournoi createTournoi(String nomTournoi, Niveau niveau, Date dateDebut, Date dateFin, Pays pays, Statut statut, Optional<Equipe> vainqueur, Optional<Compte> compte) {
 		Tournoi tournoi = new Tournoi();
 		tournoi.nomTournoi = nomTournoi;
         tournoi.niveau = niveau;
         tournoi.dateDebut = dateDebut;
         tournoi.dateFin = dateFin;
         tournoi.pays = pays;
-        tournoi.compte = null;
-        tournoi.vainqueur = null;
+        tournoi.vainqueur = vainqueur.orElse(null);
+        tournoi.compte = compte.orElse(null);
         tournoi.statut = statut;
         return tournoi;
 	}
@@ -108,6 +109,10 @@ public class Tournoi {
 	
 	public Statut getStatut() {
 		return this.statut;
+	}
+	
+	public void setStatut(Statut statut) {
+		this.statut = statut;
 	}
 	
 	public Equipe getVainqueur() {
@@ -162,7 +167,8 @@ public class Tournoi {
 	@Override
 	public String toString() {
 		return "Tournoi [name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
-				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() +", status=" + this.statut.denomination() + "]";
+				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() 
+				+", status=" + this.statut.denomination() + ", equipe vainqueur = " + this.vainqueur + "]";
 	}
 	
 	// ======================= //
@@ -359,7 +365,21 @@ public class Tournoi {
 		for (int i = 0; i<nbArbitres; i++) {
 			int numArbitre = random.nextInt(arbitres.size());
 			arbitresTirees.add(arbitres.get(numArbitre));
-			arbitres.remove(numArbitre);
+			
+			// Ajout du numéro de compte associé
+			Compte c = new Compte();
+			int idCompte;
+			try {
+				// il faut rajouter l'id du compte associé à l'arbitre dans la base de donnée je pense (ATTENDRE CHANGEMENT BASE)
+				idCompte = CompteJDBC.getNextValueSequence();
+				c.ajouterCompte(new Compte(idCompte,tournoi.getNomTournoi().replace(" ", ""),"1234",TypeCompte.ARBITRE));
+				Arbitre arb = arbitres.get(numArbitre);
+				arb.setIdCompte(idCompte);
+				ajdbc.update(arb);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
 			// Ajout dans la base de données la liason arbitre / tournoi
 			try {
 				Associer ass = new Associer(arbitres.get(numArbitre), tournoi);
@@ -367,10 +387,19 @@ public class Tournoi {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			arbitres.remove(numArbitre);
 		}
 	}
 	
 	public void changerStatusTournoi(Tournoi tournoi, Statut status) {
 		this.jdbc.changerStatusTournoi(tournoi, status);
+	}
+	
+	public void setVainqueurTournoi(Tournoi tournoi, Equipe equipe) {
+		this.jdbc.setVainqueurTournoi(tournoi, equipe);
+	}
+	
+	public List<Equipe> getEquipesFinale(Tournoi tournoi){
+		return this.jdbc.getEquipesFinale(tournoi);
 	}
 }

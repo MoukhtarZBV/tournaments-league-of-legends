@@ -5,7 +5,7 @@ import java.awt.Font;
 public class Police {
 	
 	// Titres
-	public static final Font GROS_TITRE   = new Font("DejaVu Sans", Font.BOLD | Font.ITALIC, 40);	// Gros titre de fou
+	public static final Font GROS_TITRE   = new Font("DejaVu Sans", Font.BOLD, 40);	// Gros titre de fou
 	public static final Font SOUS_TITRE   = new Font("Bahnschrift", Font.PLAIN, 23);				// Sous titres
 	
 	// Textes basiques

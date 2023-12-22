@@ -12,16 +12,20 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
+import dao.CompteJDBC;
 import dao.EquipeJDBC;
 import ihm.VueEquipe;
+import ihm.VueFinale;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueImportation;
 import ihm.VueListeTournois;
 import ihm.VueTournoi;
+import modele.Compte;
 import modele.Equipe;
 import modele.ModelePoule;
 import modele.Statut;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 public class ControleurDetailsTournoi implements ActionListener, MouseListener, WindowListener {
 	
@@ -42,8 +46,7 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			vue.dispose();
 		} else if (bouton.getName().equals("Retour")) {
 			this.vue.dispose();
-			Tournoi t = new Tournoi();
-			VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
+			VueListeTournois vue = new VueListeTournois(new Tournoi().tousLesTournois());
 			vue.setVisible(true);
 		} else if (bouton.getName().equals("Gérer la poule")) {
 			ModelePoule modelePoule;
@@ -52,6 +55,8 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 				Object[][] classement = modelePoule.classement();
 	            Object[][] parties = modelePoule.matches();
 	            
+	            this.vue.dispose();
+	            
 	            VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
 	            
 	            frame.setJTableMatches(parties);
@@ -59,15 +64,20 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 				            
 				frame.setVisible(true);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-            
-            
 		} else if (bouton.getName().equals("Ouvrir le tournoi")) {
 			this.modele.selectionArbitre(vue.getTournoi());
 			this.modele.changerStatusTournoi(vue.getTournoi(), Statut.EN_COURS);
+			this.vue.getTournoi().setStatut(Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
+			this.vue.setVisibleBoutonOuvrir(false);
+			this.vue.afficherArbitresTournoi(vue.getTournoi());
+			this.vue.afficherBoutonGererPoule();
+		} else if (bouton.getName().equals("Finale")) {
+			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
+			vueFinale.setVisible(true);
+			this.vue.dispose();
 		}
 	}
 	
@@ -98,7 +108,6 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 		vue.setVisible(true);
 	}
 
-	
 	
 	// NOT IMPLEMENTED \\
 	

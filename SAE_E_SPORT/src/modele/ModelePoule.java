@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 
-import Images.Images;
+import Images.ImagesIcons;
 
 public class ModelePoule {
 
@@ -75,8 +75,8 @@ public class ModelePoule {
 	public Object[][] matches() throws Exception {
 		Object[][] datas = new Object[this.parties.size()][6];
 		int i=0;
-		String trophyWin = Images.TROPHY_WIN;
-		String trophy = Images.TROPHY;
+		String trophyWin = ImagesIcons.TROPHY_WIN;
+		String trophy = ImagesIcons.TROPHY;
 		for (Partie p : this.parties) {
 			datas[i][0] = i+1;
 			datas[i][1] = p.getEquipe1().getNom();
@@ -129,8 +129,8 @@ public class ModelePoule {
 		}
 		return res;
 	}
-
-	public void choisirVainqueur() {
-		
+	
+	public void changerStatusEnFinale(Tournoi tournoi) {
+		this.tournoi.changerStatusTournoi(tournoi, Statut.FINALE);
 	}
 }

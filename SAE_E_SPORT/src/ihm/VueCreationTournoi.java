@@ -125,6 +125,7 @@ public class VueCreationTournoi extends JFrame {
 		gbc_panelPopup.gridy  = 0;
 		
 		panelPopup = new PanelPopUp();
+		panelPopup.setBackground(Palette.DARK_GRAY);
 		panelCenter.add(panelPopup, gbc_panelPopup);
 		
 		
@@ -173,12 +174,11 @@ public class VueCreationTournoi extends JFrame {
 		panelNomTournoi.add(horizontalStrut);
 		
 		// Text field Nom
-		inputNom = new JTextField();
+		inputNom = new JTextFieldArrondi();
 		inputNom.setFont(Police.INPUT);
 		inputNom.setColumns(35);
 		inputNom.setBackground(Palette.GRAY);
 		inputNom.setForeground(Palette.WHITE);
-		inputNom.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Palette.WHITE));
 		panelNomTournoi.add(inputNom);
 		
 		
@@ -385,9 +385,6 @@ public class VueCreationTournoi extends JFrame {
 		btnValider.setFont(Police.LABEL);
 		btnValider.setFocusable(false);
 		btnValider.addActionListener(controleur);
-		
-		Component horizontalStrut_7 = Box.createHorizontalStrut(20);
-		panelBoutons.add(horizontalStrut_7);
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
 	}

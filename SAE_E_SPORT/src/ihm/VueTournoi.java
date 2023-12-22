@@ -13,7 +13,7 @@ import controleur.ControleurDetailsTournoi;
 import dao.AssocierJDBC;
 import dao.ParticiperJDBC;
 import dao.TournoiJDBC;
-import Images.Images;
+import Images.ImagesIcons;
 import modele.Arbitre;
 import modele.Equipe;
 import modele.Joueur;
@@ -42,14 +42,20 @@ import javax.swing.border.LineBorder;
 public class VueTournoi extends JFrame {
 
 	private JTable tableEquipes;
+	private JButton btnOuvrir;
+	private JPanel panelNomsArbitres;
+	private JPanel panelBoutons;
+	
 	private Tournoi tournoi;
 
+	private ControleurDetailsTournoi controleur;
+	
 	/**
 	 * Create the frame.
 	 */
 	public VueTournoi(Tournoi tournoi) {
 		this.tournoi = tournoi;
-		ControleurDetailsTournoi controleur = new ControleurDetailsTournoi(this);
+		this.controleur = new ControleurDetailsTournoi(this);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
@@ -138,7 +144,7 @@ public class VueTournoi extends JFrame {
 		///// BULLE INFO PAYS \\\\\
 		PanelRound panelPaysBorder = creerBordureBulleInfo();
 		PanelRound panelPays = creerBulleInfo();
-		ajouterLibelleBulle(panelPays, "Pays", Images.EARTH);
+		ajouterLibelleBulle(panelPays, "Pays", ImagesIcons.EARTH);
 		ajouterInfoBulle(panelPays, tournoi.getPays().denomination());
 		panelPaysBorder.add(panelPays);
 		panelBullesInfos.add(panelPaysBorder);
@@ -146,7 +152,7 @@ public class VueTournoi extends JFrame {
 		///// BULLE INFO NIVEAU \\\\\
 		PanelRound panelNiveauBorder = creerBordureBulleInfo();
 		PanelRound panelNiveau = creerBulleInfo();
-		ajouterLibelleBulle(panelNiveau, "Niveau", Images.LEVEL);
+		ajouterLibelleBulle(panelNiveau, "Niveau", ImagesIcons.LEVEL);
 		ajouterInfoBulle(panelNiveau, tournoi.getNiveau().denomination());
 		panelNiveauBorder.add(panelNiveau);
 		panelBullesInfos.add(panelNiveauBorder);
@@ -154,7 +160,7 @@ public class VueTournoi extends JFrame {
 		///// BULLE INFO NOMBRE ÉQUIPES \\\\\
 		PanelRound panelEquipesBorder = creerBordureBulleInfo();
 		PanelRound panelEquipes = creerBulleInfo();
-		ajouterLibelleBulle(panelEquipes, "Équipes", Images.TEAM);
+		ajouterLibelleBulle(panelEquipes, "Équipes", ImagesIcons.TEAM);
 		ajouterInfoBulle(panelEquipes, "" + new ParticiperJDBC().getAll().stream().filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).count());
 		panelEquipesBorder.add(panelEquipes);
 		panelBullesInfos.add(panelEquipesBorder);
@@ -162,7 +168,7 @@ public class VueTournoi extends JFrame {
 		///// BULLE INFO DATES \\\\\
 		PanelRound panelDatesBorder = creerBordureBulleInfo();
 		PanelRound panelDates = creerBulleInfo();
-		ajouterLibelleBulle(panelDates, "Dates", Images.TEAM);
+		ajouterLibelleBulle(panelDates, "Dates", ImagesIcons.TEAM);
 		ajouterInfoBulle(panelDates, tournoi.getDateDebut() + " au " + tournoi.getDateFin());
 		panelDatesBorder.add(panelDates);
 		panelBullesInfos.add(panelDatesBorder);
@@ -209,16 +215,16 @@ public class VueTournoi extends JFrame {
 		}
 		
 		// Assigner images au header
-		mettreIconeDansHeader("Joueur 1", Images.TOP);
-		mettreIconeDansHeader("Joueur 2", Images.JUNGLE);
-		mettreIconeDansHeader("Joueur 3", Images.MID);
-		mettreIconeDansHeader("Joueur 4", Images.SUPPORT);
-		mettreIconeDansHeader("Joueur 5", Images.BOTTOM);
+		mettreIconeDansHeader("Joueur 1", ImagesIcons.TOP);
+		mettreIconeDansHeader("Joueur 2", ImagesIcons.JUNGLE);
+		mettreIconeDansHeader("Joueur 3", ImagesIcons.MID);
+		mettreIconeDansHeader("Joueur 4", ImagesIcons.SUPPORT);
+		mettreIconeDansHeader("Joueur 5", ImagesIcons.BOTTOM);
 		
 		///// PANEL BOUTONS \\\\\
 		FlowLayout fl_panelBoutons = new FlowLayout(FlowLayout.RIGHT, 5, 5);
 		
-		JPanel panelBoutons = new JPanel();
+		panelBoutons = new JPanel();
 		panelBoutons.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelBoutons.setBackground(Palette.DARK_GRAY);
 		panelBoutons.setLayout(fl_panelBoutons);
@@ -234,8 +240,71 @@ public class VueTournoi extends JFrame {
 		btnAnnuler.addActionListener(controleur);
 		btnAnnuler.setFocusable(false);
 		panelBoutons.add(btnAnnuler);
+			
+		switch (tournoi.getStatut()) {
+		case ATTENTE_EQUIPES:
+			afficherBoutonImporter();
+			break;
+		case A_VENIR:
+			afficherBoutonOuvrir();
+			break;
+		case EN_COURS:
+			afficherBoutonGererPoule();
+			break;
+		case FINALE:
+			afficherBoutonFinale("Gérer la finale");
+			break;
+		case TERMINE:
+			afficherBoutonFinale("Voir la finale");
+			break;
+		}
 		
-		// Bouton valider
+		JPanel panelArbitres = new JPanel();
+		panelArbitres.setBorder(new EmptyBorder(25, 0, 0, 0));
+		panelArbitres.setBackground(Palette.GRAY);
+		panelTableEquipes.add(panelArbitres, BorderLayout.SOUTH);
+		panelArbitres.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblNewLabel = new JLabel("Arbitres");
+		lblNewLabel.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
+		lblNewLabel.setForeground(Palette.WHITE);
+		lblNewLabel.setFont(Police.SOUS_TITRE);
+		panelArbitres.add(lblNewLabel, BorderLayout.NORTH);
+		
+		panelNomsArbitres = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelNomsArbitres.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
+		panelNomsArbitres.setBackground(Palette.GRAY);
+		panelArbitres.add(panelNomsArbitres);
+		
+		afficherArbitresTournoi(tournoi);
+	}
+
+	public void afficherBoutonImporter() {
+		JButton btnImporter = new JButton("<html><body style='padding: 5px 20px;'>Importer des équipes</body></html>");
+		btnImporter.setName("Importer des équipes");
+		btnImporter.setBackground(Palette.GRAY);
+		btnImporter.setForeground(Palette.WHITE);
+		btnImporter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnImporter.setFont(Police.LABEL);
+		btnImporter.setFocusable(false);
+		btnImporter.addActionListener(controleur);
+		panelBoutons.add(btnImporter);
+	}
+
+	public void afficherBoutonOuvrir() {
+		btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
+		btnOuvrir.setName("Ouvrir le tournoi");
+		btnOuvrir.setBackground(Palette.GRAY);
+		btnOuvrir.setForeground(Palette.WHITE);
+		btnOuvrir.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnOuvrir.setFont(Police.LABEL);
+		btnOuvrir.setFocusable(false);
+		btnOuvrir.addActionListener(controleur);
+		panelBoutons.add(btnOuvrir);
+	}
+
+	public void afficherBoutonGererPoule() {
 		JButton btnRetour = new JButton("<html><body style='padding: 5px 20px;'>Gérer la poule</body></html>");
 		btnRetour.setName("Gérer la poule");
 		btnRetour.setBackground(Palette.GRAY);
@@ -245,52 +314,21 @@ public class VueTournoi extends JFrame {
 		btnRetour.setFocusable(false);
 		btnRetour.addActionListener(controleur);
 		panelBoutons.add(btnRetour);
-		
-		// Bouton Importer
-		if (new TournoiJDBC().nombreEquipesTournoi(tournoi) < 4) {
-			JButton btnImporter = new JButton("<html><body style='padding: 5px 20px;'>Importer des équipes</body></html>");
-			btnImporter.setName("Importer des équipes");
-			btnImporter.setBackground(Palette.GRAY);
-			btnImporter.setForeground(Palette.WHITE);
-			btnImporter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-			btnImporter.setFont(Police.LABEL);
-			btnImporter.setFocusable(false);
-			btnImporter.addActionListener(controleur);
-			panelBoutons.add(btnImporter);
-		}
-		
-		// Bouton ouvrir le tournoi
-		if (tournoi.getStatut() == Statut.A_VENIR) {
-			JButton btnOuvrir = new JButton("<html><body style='padding: 5px 20px;'>Ouvrir le tournoi</body></html>");
-			btnOuvrir.setName("Ouvrir le tournoi");
-			btnOuvrir.setBackground(Palette.GRAY);
-			btnOuvrir.setForeground(Palette.WHITE);
-			btnOuvrir.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
-			btnOuvrir.setFont(Police.LABEL);
-			btnOuvrir.setFocusable(false);
-			btnOuvrir.addActionListener(controleur);
-			panelBoutons.add(btnOuvrir);
-		}
-		
-		JPanel panelArbitres = new JPanel();
-		panelArbitres.setBorder(new EmptyBorder(25, 0, 0, 0));
-		panelArbitres.setBackground(Palette.GRAY);
-		panelTableEquipes.add(panelArbitres, BorderLayout.SOUTH);
-		panelArbitres.setLayout(new BorderLayout(0, 0));
-		
+	}
 
-		JLabel lblNewLabel = new JLabel("Arbitres");
-		lblNewLabel.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
-		lblNewLabel.setForeground(Palette.WHITE);
-		lblNewLabel.setFont(Police.SOUS_TITRE);
-		panelArbitres.add(lblNewLabel, BorderLayout.NORTH);
-		
-		JPanel panelNomsArbitres = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panelNomsArbitres.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		panelNomsArbitres.setBackground(Palette.GRAY);
-		panelArbitres.add(panelNomsArbitres);
-		
+	public void afficherBoutonFinale(String nomBouton) {
+		JButton btnFinale = new JButton("<html><body style='padding: 5px 20px;'>" + nomBouton + "</body></html>");
+		btnFinale.setName("Finale");
+		btnFinale.setBackground(Palette.GRAY);
+		btnFinale.setForeground(Palette.WHITE);
+		btnFinale.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnFinale.setFont(Police.LABEL);
+		btnFinale.setFocusable(false);
+		btnFinale.addActionListener(controleur);
+		panelBoutons.add(btnFinale);
+	}
+
+	public void afficherArbitresTournoi(Tournoi tournoi) {
 		List<Arbitre> arbitresTournoi = new AssocierJDBC().getAll().stream().filter(associer -> associer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(associer -> associer.getArbitre()).collect(Collectors.toList());
 		for (Arbitre arbitre : arbitresTournoi) {
 			JLabel labelArbitre = new JLabel("<html><body style='padding: 5px 20px;'>" + arbitre.getNom() + " " + arbitre.getPrenom() + "</body></html>");
@@ -341,6 +379,10 @@ public class VueTournoi extends JFrame {
 		lblPays.setFont(Police.INFO);
 		bulle.add(lblPays, BorderLayout.SOUTH);
 	}
+	
+	public void setVisibleBoutonOuvrir(boolean visible) {
+		this.btnOuvrir.setVisible(visible);
+	}
 
 	private void mettreIconeDansHeader(String colonne, ImageIcon image) {
 		tableEquipes.getColumn(colonne).setHeaderRenderer(new TableCellRenderer() {
@@ -353,7 +395,7 @@ public class VueTournoi extends JFrame {
 
 	public void afficherEquipes(Tournoi tournoi) throws Exception {
 		DefaultTableModel modele = (DefaultTableModel) tableEquipes.getModel();
-		List<Equipe> equipes = new ParticiperJDBC().getAll().stream().peek(p -> p.getTournoi().getNomTournoi()).filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).collect(Collectors.toList());
+		List<Equipe> equipes = new ParticiperJDBC().getAll().stream().filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi())).map(participer -> participer.getEquipe()).collect(Collectors.toList());
 		System.out.println(equipes);
 		for (Equipe equipe : equipes) {
 			List<Joueur> joueursEquipe = equipe.getJoueurs();

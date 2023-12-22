@@ -21,6 +21,7 @@ import ihm.VueImportation;
 import ihm.VueTournoi;
 import modele.ModeleImportation;
 import modele.ModeleImportation.EtatEquipe;
+import modele.Statut;
 
 public class ControleurImportation implements ActionListener, DropListener {
 	
@@ -50,7 +51,7 @@ public class ControleurImportation implements ActionListener, DropListener {
 	    	try {
 	    		EtatEquipe etat = this.modele.verifierEquipe();
 				if(etat==EtatEquipe.MAL_COMPOSITION || etat==EtatEquipe.JOUEUR_EXISTE) {
-					this.vue.setMsgErreur("Un ou plusieurs joueurs d'équipe appartiennent à plus d'une équipe");
+					this.vue.getPopup().setErreur("Un ou plusieurs joueurs d'équipe appartiennent à plus d'une équipe");
 				} else {
 					if (etat == EtatEquipe.OK) {
 						try {
@@ -59,7 +60,9 @@ public class ControleurImportation implements ActionListener, DropListener {
 							e1.printStackTrace();
 						}
 					}
-					this.vue.setMsgSucces("Les équipes ont bien été importées");
+					this.vue.getPopup().setSucces("Les équipes ont bien été importées");
+					this.vue.getTournoi().setStatut(Statut.A_VENIR);
+					this.modele.changerStatusAVenir(this.vue.getTournoi());
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
@@ -89,9 +92,9 @@ public class ControleurImportation implements ActionListener, DropListener {
 			this.vue.ajouterEquipesTable(this.modele.getEquipesJoueurs());
 		    this.vue.changerBtnValider(true);
 		    this.vue.setVisible(true);
-		    this.vue.setMsgNormal("Voici les équipes qui seront importées");
+		    this.vue.getPopup().setNormal("Voici les équipes qui seront importées");
 		} else {
-			this.vue.setMsgErreur("Le fichier importé ne concerne pas ce tournoi");
+			this.vue.getPopup().setErreur("Le fichier importé ne concerne pas ce tournoi");
 		}
 	}
 }

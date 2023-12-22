@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import components.CoolScrollBar;
 import components.JTextFieldArrondi;
 import controleur.ControleurListeEquipe;
 import modele.Equipe;
@@ -32,9 +33,11 @@ public class VueListeEquipe extends JFrame {
 	private JTextField searchBar;
 	private JList<Object> listeEquipes;
 	private List<Equipe> equipes;
+	private boolean triParNom;
+	private JButton btnSort;
 
 	
-	public VueListeEquipe(List<Equipe> equipes) {
+	public VueListeEquipe(List<Equipe> equipes) { 
 		
 		this.equipes = equipes;
 		
@@ -54,7 +57,6 @@ public class VueListeEquipe extends JFrame {
 		setContentPane(contentPane);
 		
 		
-		
 		///// MENU BAR \\\\\
 		JPanel panelSide = new JPanel();
 		panelSide.setBackground(Palette.DARK_GRAY);
@@ -63,13 +65,13 @@ public class VueListeEquipe extends JFrame {
 		contentPane.add(panelSide, BorderLayout.WEST);
 		
 		
-		
 		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
 		panelMain.setBorder(new EmptyBorder(25, 0, 25, 0));
 		panelMain.setLayout(new BorderLayout(0, 0));
 		panelMain.setBackground(Palette.DARK_GRAY);
 		contentPane.add(panelMain, BorderLayout.CENTER);
+		
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
@@ -121,7 +123,6 @@ public class VueListeEquipe extends JFrame {
 		validateBtn.setBackground(Palette.WHITE);
 		validateBtn.addActionListener(controleur);
 		validateBtn.addMouseListener(controleur);
-		validateBtn.setName("rechercher");
 		panelValider.add(validateBtn);
 
 		// Barre recherche
@@ -140,7 +141,7 @@ public class VueListeEquipe extends JFrame {
 		panelListe.setBackground(Palette.GRAY);
 		panelCenter.add(panelListe, BorderLayout.CENTER);
 
-		JLabel lblHeader = new JLabel(String.format("%-5s %-50s", "Rank", "Nom de l'équipe"));
+		JLabel lblHeader = new JLabel(String.format("%-5s %-50s", "Rang", "Nom de l'équipe"));
 		lblHeader.setFont(Police.TABLEAU);
 		lblHeader.setBorder(new EmptyBorder(5, 10, 5, 10));
 		lblHeader.setForeground(Palette.WHITE);
@@ -148,6 +149,15 @@ public class VueListeEquipe extends JFrame {
 		
 		// Liste des équipes
 		List<String> nomEquipes = this.equipes.stream()
+				.sorted((x,y)-> {
+					if (x.getRang()>y.getRang()){
+						return 1;
+					}else if(x.getRang()<y.getRang()) {
+						return -1;
+					}else {
+						return 0;
+					}
+				})
 				.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
 				.collect(Collectors.toList());
 		
@@ -162,6 +172,7 @@ public class VueListeEquipe extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeEquipes);
 		scrollPane.setBorder(null);
+		scrollPane.setVerticalScrollBar(new CoolScrollBar());
 		panelListe.add(scrollPane, BorderLayout.CENTER);
 		
 		
@@ -184,8 +195,30 @@ public class VueListeEquipe extends JFrame {
 		btnRetour.addActionListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
+		
+		this.btnSort = new JButton("<html><body style='padding: 5px 25px;'>Trier par nom</body></html>");
+		btnSort.setName("Trier");
+		btnSort.setBackground(Palette.GRAY);
+		btnSort.setForeground(Palette.WHITE);
+		btnSort.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnSort.setFont(Police.LABEL);
+		btnSort.addActionListener(controleur);
+		btnSort.setFocusable(false);
+		panelBoutons.add(btnSort);
+		this.triParNom = false;
 	}
 	
+	public void setBtnSort(String tri) {
+		this.btnSort.setText("<html><body style='padding: 5px 25px;'>"+tri+"</body></html>");
+	}
+	
+	public boolean getTriParNom() {
+		return this.triParNom;
+	}
+	
+	public void setTriParNom(boolean b) {
+		this.triParNom = b;
+	}
 	
 	public String getSearch() {
 		return searchBar.getText();

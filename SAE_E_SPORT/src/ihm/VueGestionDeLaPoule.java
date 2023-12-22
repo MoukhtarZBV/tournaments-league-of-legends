@@ -2,11 +2,14 @@ package ihm;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import components.BufferedImageResize;
+import components.CoolScrollBar;
 import components.PanelRenderer;
 import components.RoundedBorder;
 import controleur.ControleurGestionPoule;
@@ -25,6 +28,7 @@ import java.awt.Image;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -40,44 +44,81 @@ public class VueGestionDeLaPoule extends JFrame {
 	private Tournoi tournoi;
 	private JButton btnCloturer;
 	
-	/**
-	 * Create the frame.
-	 * @throws Exception 
-	 */
 	public VueGestionDeLaPoule(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
+//        ControleurGestionPoule controleur = new ControleurGestionPoule(this);
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 601, 425);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setTitle("Poule - " + tournoi.getNomTournoi());
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY); 
+//		addWindowListener(controleur);
+		
 
-		setContentPane(contentPane);
+		///// PANEL PRINCIPAL \\\\\	
+		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
-				
-		JPanel mainPanel = new JPanel();
-		contentPane.add(mainPanel);
-		mainPanel.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 		
+		
+		///// MENU BAR \\\\\
+		JPanel panelSide = new JPanel();
+		panelSide.setBackground(Palette.DARK_GRAY);
+		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Palette.GRAY));
+		panelSide.setPreferredSize(new Dimension(125, 600));
+		contentPane.add(panelSide, BorderLayout.WEST);
+		
+		
+		///// MAIN \\\\\
+		JPanel panelMain = new JPanel();
+		panelMain.setBorder(new EmptyBorder(25, 0, 25, 0));
+		panelMain.setLayout(new BorderLayout(0, 0));
+		panelMain.setBackground(Palette.DARK_GRAY);
+		contentPane.add(panelMain, BorderLayout.CENTER);
+		
+		
+		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
-		mainPanel.add(panelTop, BorderLayout.CENTER);
-		panelTop.setLayout(new BorderLayout(0, 0));
-		panelTop.setBorder(new EmptyBorder(10,20,10,20));
+		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setBackground(Palette.DARK_GRAY);
+		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setLayout(new GridLayout(0, 1));
+		panelMain.add(panelTop, BorderLayout.NORTH);
 		
-		JPanel panelListeMatches = new JPanel();
-		panelTop.add(panelListeMatches, BorderLayout.CENTER);
-		panelListeMatches.setLayout(new BorderLayout(0, 0));
+		// Label titre
+		JLabel lblTitre = new JLabel("Poule - " + tournoi.getNomTournoi());
+		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setForeground(Palette.WHITE);
+		lblTitre.setFont(Police.GROS_TITRE);
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
+		panelTop.add(lblTitre);
 		
+		
+		
+		///// MAN PANEL MILIEU \\\\\
+		JPanel panelCenter = new JPanel();
+		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
+		panelMain.add(panelCenter, BorderLayout.CENTER);
+		panelCenter.setLayout(new BorderLayout(0, 5));
+		
+		
+		///// PANEL LISTE DES MATCHS \\\\\
+		JPanel panelListe = new JPanel();
+		panelListe.setBorder(new EmptyBorder(10, 20, 20, 20));
+		panelListe.setLayout(new BorderLayout(0, 10));
+		panelListe.setBackground(Palette.GRAY);
+		panelCenter.add(panelListe, BorderLayout.CENTER);
+		
+		// Titre liste
 		JLabel lblListeMatches = new JLabel("Liste des matches");
-		panelListeMatches.add(lblListeMatches, BorderLayout.NORTH);
-		
-		JScrollPane scrollPaneMatches = new JScrollPane();
-		scrollPaneMatches.setPreferredSize(new Dimension(450,125));
-		
-		// Liste des matches
-        String[] columnNames = { "Match", "Equipe 1", "Equipe 2", "Date"};
-        // Initializing the JTable      
+		lblListeMatches.setForeground(Palette.WHITE);
+		lblListeMatches.setFont(Police.SOUS_TITRE);
+		lblListeMatches.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Palette.WHITE));
+		panelListe.add(lblListeMatches, BorderLayout.NORTH);
+				
+		// Table des matchs
+        String[] columnNames = { "Match", "Equipe 1", "Equipe 2", "Date"}; 
         DefaultTableModel modeleMatches = new DefaultTableModel(columnNames, 0) {
 			private static final long serialVersionUID = 1L;
 
@@ -96,34 +137,61 @@ public class VueGestionDeLaPoule extends JFrame {
 			}
 			
         };
+        tableMatches.setBorder(new EmptyBorder(0, 0, 0, 5));
         
         this.tableMatches.setModel(modeleMatches);
+        this.tableMatches.setShowGrid(false);
+        this.tableMatches.setEnabled(false);
+        this.tableMatches.setOpaque(false);
+        this.tableMatches.setRowHeight(50);
+        this.tableMatches.setForeground(Palette.WHITE);
+        this.tableMatches.setFont(Police.TABLEAU);
+        this.tableMatches.setBackground(Palette.DARK_GRAY);		
+        this.tableMatches.setIntercellSpacing(new Dimension(0, 8));
+		this.tableMatches.getColumnModel().getColumn(0).setCellRenderer(new PanelRenderer());
 		this.tableMatches.getColumnModel().getColumn(1).setCellRenderer(new PanelRenderer());
 		this.tableMatches.getColumnModel().getColumn(2).setCellRenderer(new PanelRenderer());
-		this.tableMatches.setRowHeight(35);
-		this.tableMatches.getColumnModel().getColumn(0).setPreferredWidth(1);
-		this.tableMatches.getColumnModel().getColumn(3).setPreferredWidth(30);
+		this.tableMatches.getColumnModel().getColumn(3).setCellRenderer(new PanelRenderer());
 		this.tableMatches.getTableHeader().setReorderingAllowed(false);
 		this.tableMatches.getTableHeader().setResizingAllowed(false);
+		this.tableMatches.getTableHeader().setUI(null);
+//		this.tableMatches.addMouseListener(controleur);
 		
-		panelListeMatches.add(scrollPaneMatches, BorderLayout.CENTER);
-		
+		JScrollPane scrollPaneMatches = new JScrollPane();
+		scrollPaneMatches.setBorder(new EmptyBorder(0, 0, 0, 0));
+		scrollPaneMatches.setPreferredSize(new Dimension(450,125));
 		scrollPaneMatches.setViewportView(tableMatches);
+		scrollPaneMatches.setBackground(Palette.GRAY);
+		scrollPaneMatches.setOpaque(false);
+		scrollPaneMatches.getViewport().setBackground(Palette.GRAY);
+		scrollPaneMatches.setVerticalScrollBar(new CoolScrollBar());
+		panelListe.add(scrollPaneMatches, BorderLayout.CENTER);
 		
+		
+		///// PANEL INFERIEUR \\\\\
 		JPanel panelBottom = new JPanel();
-		mainPanel.add(panelBottom, BorderLayout.SOUTH);
 		panelBottom.setLayout(new BorderLayout(0, 0));
+		panelBottom.setBackground(Palette.GRAY);
+		panelCenter.add(panelBottom, BorderLayout.SOUTH);
 		
+		
+		///// PANEL CLASSEMENT \\\\\
 		JPanel panelClassement = new JPanel();
+		panelClassement.setBorder(new EmptyBorder(10, 20, 20, 20));
+		panelClassement.setLayout(new BorderLayout(0, 10));
+		panelClassement.setBackground(Palette.GRAY);
 		panelBottom.add(panelClassement);
-		panelClassement.setBorder(new EmptyBorder(10,20,20,20));
-		panelClassement.setLayout(new BorderLayout(0, 0));
 		
+		// Titre classement
 		JLabel lblClassement = new JLabel("Classement");
+		lblClassement.setForeground(Palette.WHITE);
+		lblClassement.setFont(Police.SOUS_TITRE);
+		lblClassement.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Palette.WHITE));
 		panelClassement.add(lblClassement, BorderLayout.NORTH);
 		
+		// Table classement
 		String[] columnsClassement = {"Rang", "Equipe", "Points Gagnés", "Matches Joués"};
-		DefaultTableModel modeleClassement = new DefaultTableModel(columnsClassement,0) {
+		DefaultTableModel modeleClassement = new DefaultTableModel(columnsClassement, 0) {
 			/**
 			 * 
 			 */
@@ -137,69 +205,93 @@ public class VueGestionDeLaPoule extends JFrame {
 		};
 		DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
         cellRenderer.setOpaque(false);
+        
+		JScrollPane scrollPaneClassement = new JScrollPane();
+		scrollPaneClassement.setPreferredSize(new Dimension(500, 120));
+		scrollPaneClassement.setViewportView(tableClassement);
+		scrollPaneClassement.setBorder(new EmptyBorder(0, 0, 0, 0));
+		scrollPaneClassement.setBackground(Palette.GRAY);
+		scrollPaneClassement.getViewport().setBackground(Palette.GRAY);
+		scrollPaneClassement.setVerticalScrollBar(new CoolScrollBar());
+		panelClassement.add(scrollPaneClassement, BorderLayout.CENTER);
+        
+		// Table classement
 		this.tableClassement.setModel(modeleClassement);
+        this.tableClassement.setDefaultRenderer(Object.class, cellRenderer);
+		this.tableClassement.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		this.tableClassement.setRowHeight(25);
+        this.tableClassement.setShowGrid(false);
+        this.tableClassement.setEnabled(false);
+        this.tableClassement.setOpaque(false);
+        this.tableClassement.setRowHeight(30);
+        this.tableClassement.setForeground(Palette.WHITE);
+        this.tableClassement.setFont(Police.TABLEAU);
+        this.tableClassement.setBackground(Palette.DARK_GRAY);		
+        this.tableClassement.setIntercellSpacing(new Dimension(0, 8));
+		
         this.tableClassement.getTableHeader().setReorderingAllowed(false);
         this.tableClassement.getTableHeader().setResizingAllowed(false);
-        this.tableClassement.setDefaultRenderer(Object.class, cellRenderer);
-		this.tableClassement.getColumnModel().getColumn(0).setPreferredWidth(10);
-		this.tableClassement.setRowHeight(25);
+        this.tableClassement.getTableHeader().setBackground(Palette.WHITE);
+        this.tableClassement.getTableHeader().setForeground(Palette.DARK_GRAY);
+        this.tableClassement.getTableHeader().setFont(Police.TABLEAU);
+        
+		this.tableClassement.getColumnModel().getColumn(0).setMaxWidth(75);		
+		this.tableClassement.getColumnModel().getColumn(2).setMinWidth(150);
+		this.tableClassement.getColumnModel().getColumn(2).setMaxWidth(150);
+		this.tableClassement.getColumnModel().getColumn(3).setMaxWidth(150);
+		this.tableClassement.getColumnModel().getColumn(3).setMinWidth(150);
 		
 		ControleurGestionPoule controleur = new ControleurGestionPoule(this);
-		this.tableMatches.addMouseListener(controleur);
+		addWindowListener(controleur);
 		
-		JScrollPane scrollPaneClassement = new JScrollPane();
-		scrollPaneClassement.setPreferredSize(new Dimension(450,110));
+		// ici moi 
+		// ControleurGestionPoule controleur = new ControleurGestionPoule(this);
+		 this.tableMatches.addMouseListener(controleur);
 		
-		panelClassement.add(scrollPaneClassement, BorderLayout.CENTER);
-		scrollPaneClassement.setViewportView(tableClassement);
+		// JScrollPane scrollPaneClassement = new JScrollPane();
+//		 scrollPaneClassement.setPreferredSize(new Dimension(450,110));
+		
+		
+		///// PANEL DES BOUTONS \\\\\
+		GridLayout gl_panelButtons = new GridLayout(3, 0, 0, 0);
+		gl_panelButtons.setVgap(7);
 		
 		JPanel panelButtons = new JPanel();
-		panelBottom.add(panelButtons, BorderLayout.EAST);
-		panelButtons.setBorder(new EmptyBorder(20,20,20,20));
-		GridLayout gl_panelButtons = new GridLayout(3, 0, 0, 0);
-		gl_panelButtons.setVgap(20);
+		panelButtons.setPreferredSize(new Dimension(250, 10));
+		panelButtons.setBorder(new EmptyBorder(20, 20, 20, 20));
+		panelButtons.setBackground(Palette.GRAY);
 		panelButtons.setLayout(gl_panelButtons);
+		panelBottom.add(panelButtons, BorderLayout.EAST);
 		
+		// Bouton imprimer
 		JButton btnImprimer = new JButton("Imprimer");
-		btnImprimer.setBackground(new Color(255, 255, 255));
+		btnImprimer.setBackground(Palette.GRAY);
+		btnImprimer.setForeground(Palette.WHITE);
+		btnImprimer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnImprimer.setFont(Police.LABEL);
 		btnImprimer.addMouseListener(controleur);
 		btnImprimer.setFocusable(false);
-		btnImprimer.setBorder(new RoundedBorder(5));
 		panelButtons.add(btnImprimer);
 		
+		// Bouton cloturer
 		this.btnCloturer = new JButton("Cloturer Poule");
-		btnCloturer.setBackground(new Color(255, 255, 255));
+		btnCloturer.setBackground(Palette.GRAY);
+		btnCloturer.setForeground(Palette.WHITE);
+		btnCloturer.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnCloturer.setFont(Police.LABEL);
 		btnCloturer.addMouseListener(controleur);
 		btnCloturer.setFocusable(false);
-		btnCloturer.setBorder(new RoundedBorder(5));
-		btnCloturer.setEnabled(false);
 		panelButtons.add(btnCloturer);
 		
+		// Bouton retour
 		JButton btnRetour = new JButton("Retour");
-		btnRetour.setBackground(new Color(255, 255, 255));
+		btnRetour.setBackground(Palette.GRAY);
+		btnRetour.setForeground(Palette.WHITE);
+		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnRetour.setFont(Police.LABEL);
 		btnRetour.addMouseListener(controleur);
-		panelButtons.add(btnRetour);
 		btnRetour.setFocusable(false);
-		btnRetour.setBorder(new RoundedBorder(5));
-		
-		JPanel panelTitle = new JPanel();
-		contentPane.add(panelTitle, BorderLayout.NORTH);
-		panelTitle.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblGestionPoule = new JLabel("Gestion de la Poule");
-		lblGestionPoule.setBorder(new EmptyBorder(10, 0, 0, 0));
-		lblGestionPoule.setHorizontalAlignment(SwingConstants.CENTER);
-		panelTitle.add(lblGestionPoule, BorderLayout.NORTH);
-		
-		StringBuffer sb = new StringBuffer(tournoi.getNomTournoi() + " (" + 
-											new SimpleDateFormat("dd/MM/yyyy")
-											.format(tournoi.getDateDebut()) + " - " +
-											new SimpleDateFormat("dd/MM/yyyy")
-											.format(tournoi.getDateFin()) + ")");
-		JLabel lblTitreTournoi = new JLabel(sb.toString());
-		lblTitreTournoi.setHorizontalAlignment(SwingConstants.CENTER);
-		panelTitle.add(lblTitreTournoi, BorderLayout.SOUTH);
-		
+		panelButtons.add(btnRetour);
 	}
 	
 	public Tournoi getTournoi() {
@@ -209,24 +301,65 @@ public class VueGestionDeLaPoule extends JFrame {
 	public void setJTableMatches (Object[][] datas) throws IOException {
 		DefaultTableModel model = (DefaultTableModel) this.tableMatches.getModel();
 		model.setRowCount(0);
+		
 		Object[][] cloned = new Object[datas.length][4];
-		for (int i=0;i<datas.length;i++) {
+		for (int i = 0; i < datas.length; i++) {
 			cloned[i] = datas[i].clone();
 		}
-		for (int i=0;i<datas.length;i++) { 
-			for(int j=1;j<=2;j++) {
+		for (int i = 0; i < datas.length; i++) { 
+			for(int j = 0; j < datas.length; j++) {
+				
+				// Panel avec bordure
 				JPanel panel = new JPanel();
 				panel.setLayout(new BorderLayout(0, 0));
-				panel.add(new JLabel(cloned[i][j].toString()), BorderLayout.CENTER);
-			
-		        Image image = BufferedImageResize.resize((String) cloned[i][model.getColumnCount()-1+j], 25, 25);
-		        
-		        JLabel label = new JLabel(new ImageIcon(image));
-		        panel.setBorder(new EmptyBorder(0,10,0,10));
-				panel.add(label, BorderLayout.EAST);
-				panel.setOpaque(false);
+		        panel.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Palette.LIGHT_PURPLE), new EmptyBorder(0, 10, 0, 10)));
+				panel.setBackground(Palette.DARK_GRAY);
+				
+				switch(j) {
+					case 0:
+						JLabel nbMatch = new JLabel(String.valueOf(cloned[i][j]));
+						nbMatch.setForeground(Palette.WHITE);
+						nbMatch.setFont(Police.TABLEAU);
+						nbMatch.setHorizontalAlignment(SwingConstants.LEFT);
+						panel.add(nbMatch, BorderLayout.CENTER);
+						break;
+						
+					case 1:
+						Image image1 = BufferedImageResize.resize((String) cloned[i][model.getColumnCount()-1+j], 25, 25);
+				        JLabel label1 = new JLabel(new ImageIcon(image1));
+						panel.add(label1, BorderLayout.WEST);
+				        
+						JLabel name1 = new JLabel(cloned[i][j].toString());
+						name1.setForeground(Palette.WHITE);
+						name1.setFont(Police.TABLEAU);
+						name1.setHorizontalAlignment(SwingConstants.RIGHT);
+						panel.add(name1, BorderLayout.CENTER);
+						break;
+						
+					case 2:
+						Image image2 = BufferedImageResize.resize((String) cloned[i][model.getColumnCount()-1+j], 25, 25);
+				        JLabel label2 = new JLabel(new ImageIcon(image2));
+						panel.add(label2, BorderLayout.EAST);
+				        
+						JLabel name2 = new JLabel(cloned[i][j].toString());
+						name2.setForeground(Palette.WHITE);
+						name2.setFont(Police.TABLEAU);
+						name2.setHorizontalAlignment(SwingConstants.LEFT);
+						panel.add(name2, BorderLayout.CENTER);
+						break;
+						
+					case 3:
+						JLabel date = new JLabel(String.valueOf(cloned[i][j]));
+						date.setForeground(Palette.WHITE);
+						date.setFont(Police.TABLEAU);
+						date.setHorizontalAlignment(SwingConstants.RIGHT);
+						panel.add(date, BorderLayout.CENTER);
+						break;
+				}
+
 				cloned[i][j] = panel;
 			}
+			
 			this.tableMatches.setRowSelectionAllowed(false);
 			this.tableMatches.setOpaque(false);
 			model.addRow(cloned[i]);

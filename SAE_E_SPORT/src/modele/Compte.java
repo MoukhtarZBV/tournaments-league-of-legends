@@ -1,12 +1,17 @@
 package modele;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import dao.CompteJDBC;
 
 public class Compte {
 	private int idCompte;
 	private String login;
 	private String motDePasse;
 	private TypeCompte type;
+	private CompteJDBC jdbc;
 	
 	// Constructeur
 	public Compte(int id, String login, String motDePasse, TypeCompte type) {
@@ -14,6 +19,10 @@ public class Compte {
 		this.login = login;
 		this.motDePasse = motDePasse;
 		this.type = type;
+	}
+	
+	public Compte() {
+		this.jdbc = new CompteJDBC();
 	}
 	
 	// Get
@@ -44,6 +53,24 @@ public class Compte {
 	
 	public void setType(TypeCompte type) {
 		this.type = type;
+	}
+	
+	public List<Compte> tousLesComptes(){
+		List<Compte> c = new ArrayList<>();
+		try {
+			c =  this.jdbc.getAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return c;
+	}
+	
+	public void ajouterCompte(Compte c) {
+		try {
+			this.jdbc.add(c);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
 	}
 	
 	// Overrides

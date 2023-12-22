@@ -4,16 +4,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
 
+import ihm.VueAccueilAdmin;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueTournoi;
 import modele.ModelePoule;
 import modele.Statut;
 
-public class ControleurGestionPoule extends MouseAdapter {
+public class ControleurGestionPoule implements MouseListener, WindowListener {
 
 	private VueGestionDeLaPoule vue;
 	private ModelePoule modele;
@@ -29,7 +32,7 @@ public class ControleurGestionPoule extends MouseAdapter {
 		try {
 			this.modele = new ModelePoule(this.vue.getTournoi());
 			this.vue.setJTableClassement(modele.classement());
-			this.vue.setJTableMatches(modele.matches());
+			this.vue.setJTableMatches(modele.matches()); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,6 +65,8 @@ public class ControleurGestionPoule extends MouseAdapter {
 						}
 				}
 				break;
+		default:
+			break;
 		}
 		if (e.getSource() instanceof JButton) {
 			JButton button = (JButton) e.getSource();
@@ -77,11 +82,14 @@ public class ControleurGestionPoule extends MouseAdapter {
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
+					// (A FAIRE) créer la finale !!!!!!!!!!!!!!!!!!!!!!!!!!!
+					
 					// Retour au détail du tournoi
-					this.vue.dispose();
+					this.modele.changerStatusEnFinale(this.vue.getTournoi());
+					this.vue.getTournoi().setStatut(Statut.FINALE);
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
 					vue.setVisible(true);
-					// Changement de statut ?????????
+					this.vue.dispose();
 					break;
 				case ("Retour") :
 					try {
@@ -90,35 +98,53 @@ public class ControleurGestionPoule extends MouseAdapter {
 						e1.printStackTrace();
 					}
 					this.vue.dispose();
+					VueTournoi vueT2 = new VueTournoi(this.vue.getTournoi());
+					vueT2.setVisible(true);
 					break;
 			}
 		}
 	}
 
-//	@Override
-//	public void mousePressed(MouseEvent e) {
-//		// TODO Auto-generated method stub
-//		
-//	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void windowClosing(WindowEvent e) {
+		this.vue.dispose();
+		VueTournoi vue = new VueTournoi(this.vue.getTournoi());
+		vue.setVisible(true);
 	}
 
 	
+	
+	// NOT IMPLEMENTED \\
+	
+	@Override
+	public void mousePressed(MouseEvent e) {}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {}
+
+	@Override
+	public void mouseExited(MouseEvent e) {}
+	
+	@Override
+	public void windowOpened(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 	
 }
