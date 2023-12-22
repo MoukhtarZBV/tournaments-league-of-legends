@@ -369,12 +369,13 @@ public class Tournoi {
 				// il faut rajouter l'id du compte associé à l'arbitre dans la base de donnée je pense (ATTENDRE CHANGEMENT BASE)
 				idCompte = CompteJDBC.getNextValueSequence();
 				c.ajouterCompte(new Compte(idCompte,tournoi.getNomTournoi().replace(" ", ""),"1234",TypeCompte.ARBITRE));
-				arbitres.get(numArbitre).setIdCompte(idCompte);
+				Arbitre arb = arbitres.get(numArbitre);
+				arb.setIdCompte(idCompte);
+				ajdbc.update(arb);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 
-			arbitres.remove(numArbitre);
 			// Ajout dans la base de données la liason arbitre / tournoi
 			try {
 				Associer ass = new Associer(arbitres.get(numArbitre), tournoi);
@@ -382,6 +383,7 @@ public class Tournoi {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			arbitres.remove(numArbitre);
 		}
 	}
 	
