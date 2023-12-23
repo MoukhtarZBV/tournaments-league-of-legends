@@ -51,7 +51,7 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 							Associer a = new Associer();
 							List<Associer> associations = a.toutesLesAssociations();
 							for (Associer ass : associations) {
-								if (ass.getArbitre().getIdCompte() == c.getId()) {
+								if (ass.getArbitre().getIdCompte() == c.getIdCompte()) {
 									VueTournoi vue = new VueTournoi(ass.getTournoi());
 									vue.setVisible(true);
 									this.vue.dispose();

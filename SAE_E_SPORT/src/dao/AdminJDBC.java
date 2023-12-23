@@ -66,7 +66,7 @@ public class AdminJDBC implements AdminDAO {
 				st  = ConnectionJDBC.getConnection()
 						.prepareStatement("INSERT INTO Administrateur(idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
 										+ "VALUES (?, ?, ?, ?)");
-				st.setInt(4, admin.getCompte().getId());
+				st.setInt(4, admin.getCompte().getIdCompte());
 			} else {
 				st  = ConnectionJDBC.getConnection()
 						.prepareStatement("INSERT INTO Administrateur (idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
@@ -95,7 +95,7 @@ public class AdminJDBC implements AdminDAO {
 				st  = ConnectionJDBC.getConnection().prepareStatement("UPDATE Administrateur "
 														   		   + "SET nomAdmin = ?, prenomAdmin = ?, idCompte = ? "
 														   		   + "WHERE idAdministrateur = ?");
-				st.setInt(3, admin.getCompte().getId());
+				st.setInt(3, admin.getCompte().getIdCompte());
 				st.setInt(4, admin.getId());
 			} else {
 				st  = ConnectionJDBC.getConnection().prepareStatement("UPDATE Administrateur "

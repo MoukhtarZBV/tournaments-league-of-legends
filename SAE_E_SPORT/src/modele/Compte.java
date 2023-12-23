@@ -27,7 +27,7 @@ public class Compte {
 	}
 	
 	// Get
-	public int getId() {
+	public int getIdCompte() {
 		return this.idCompte;
 	}
 	
@@ -105,6 +105,6 @@ public class Compte {
 	
 	@Override
 	public String toString() {
-		return String.format("Compte ID[%d], %s, %s", this.getId(), this.getLogin(), this.getMotDePasse());
+		return String.format("Compte ID[%d], %s, %s", this.getIdCompte(), this.getLogin(), this.getMotDePasse());
 	}
 }

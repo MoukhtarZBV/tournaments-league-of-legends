@@ -44,9 +44,11 @@ public class ControleurFinale implements MouseListener, ActionListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		JLabel trophee = (JLabel) e.getSource();
-		this.vue.setVainqueur(trophee.getName());
-		this.vue.setActifConfirmer(true);
+		if (this.vue.getTournoi().getStatut() == Statut.FINALE) {
+			JLabel trophee = (JLabel) e.getSource();
+			this.vue.setVainqueur(trophee.getName());
+			this.vue.setActifConfirmer(true);
+		}
 	}
 
 	@Override

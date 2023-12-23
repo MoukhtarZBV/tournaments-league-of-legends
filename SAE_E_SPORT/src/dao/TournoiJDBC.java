@@ -71,13 +71,23 @@ public class TournoiJDBC implements TournoiDAO {
 	public boolean add(Tournoi t) {
 		boolean res = false;
 		try {
-			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe, status) values (?, ?, ?, ?, ?, NULL, NULL, ?)");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Tournoi (nomTournoi, niveau, dateDebut, dateFin, nomPays, idCompte, idEquipe, status) values (?, ?, ?, ?, ?, ?, ?, ?)");
 			cs.setString(1, t.getNomTournoi());
 			cs.setString(2, t.getNiveau().denomination());
 			cs.setDate(3, t.getDateDebut());
 			cs.setDate(4, t.getDateFin());
 			cs.setString(5, t.getPays().denomination());
-			cs.setString(6, t.getStatut().denomination());
+			if (t.getCompte() != null) {
+				cs.setInt(6, t.getCompte().getIdCompte());
+			} else {
+				cs.setNull(6, java.sql.Types.INTEGER);
+			}
+			if (t.getVainqueur() != null) {
+				cs.setInt(7, t.getVainqueur().getIdEquipe());
+			} else {
+				cs.setNull(7, java.sql.Types.INTEGER);
+			}
+			cs.setString(8, t.getStatut().denomination());
 			cs.executeUpdate();
 			res = true;
 		} catch (SQLException e) {
@@ -96,11 +106,11 @@ public class TournoiJDBC implements TournoiDAO {
 					cs = ConnectionJDBC.getConnection().prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, "+
 																	"dateDebut = ?, dateFin = ?, nomPays = ?, idEquipe =?, idCompte =?");
 					cs.setInt(6, t.getVainqueur().getIdEquipe());
-					cs.setInt(7, t.getCompte().getId());
+					cs.setInt(7, t.getCompte().getIdCompte());
 				}else {
 					cs = ConnectionJDBC.getConnection().prepareCall("update Tournoi set nomTournoi = ?, niveau = ?, "+ 
 																	"dateDebut = ?, dateFin = ?, nomPays = ?, idCompte = ?");
-					cs.setInt(6, t.getCompte().getId());
+					cs.setInt(6, t.getCompte().getIdCompte());
 				}
 			} else {
 				if (t.getVainqueur()!=null) {
