@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import dao.ArbitreJDBC;
 import dao.AssocierJDBC;
 import dao.CompteJDBC;
+import dao.JouerJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
@@ -41,10 +42,10 @@ public class Tournoi {
 			throw new IllegalArgumentException("Le nom du tournoi ne doit pas être vide");
 		} 
 		if (niveau == null) {
-			throw new IllegalArgumentException("Le niveau ne doit pas être vide");
+			throw new IllegalArgumentException("Le niveau ne doit pas être nul");
 		} 
 		if (pays == null) {
-			throw new IllegalArgumentException("Le pays ne doit pas être vide");
+			throw new IllegalArgumentException("Le pays ne doit pas être nul");
 		} 
 		if (nomTournoi.length() >= 100) {
 			throw new IllegalArgumentException("Le nom du tournoi ne peut dépasser les 100 caractères");
@@ -240,10 +241,7 @@ public class Tournoi {
 					.collect(Collectors.toList());
 				
 		// Création des matchs
-		PartieJDBC ppdb = new PartieJDBC();
-		
 		int equipeSize = equipes.size();
-		
 		// nombre matchs totals
 		int nbMatchsTotals = nombreMatchs(equipeSize);
 		// duree total des matchs
@@ -265,7 +263,7 @@ public class Tournoi {
 			for (int i = 0, j = initial ; i<equipeSize && cmp<nbMatchsTotals ; i++, j++, cmp++, heure+=trouHeures) {
 				cmpMatchs ++;
 				j %= equipeSize;
-				createMatch(equipes, ppdb, heure, date, i, j);
+				createMatch(equipes, heure, date, i, j);
 				if (cmpMatchs==nbMatchsParJour) {
 					heure = 10-trouHeures;
 					date = date.plusDays(1);
@@ -278,19 +276,14 @@ public class Tournoi {
 			}
 			initial %= equipeSize;
 		}
-		
 	}
 
 	// creer un match et ajouter dans la base de données 
-	private void createMatch(List<Equipe> equipes, PartieJDBC ppdb, int heure, LocalDate date, int i, int j) {
-		Partie partie = new Partie(Date.valueOf(date), String.format("%02d", heure)+":00", "Poule", equipes.get(i), this);
-		partie.setEquipeGagnant(-1);
-		partie.setEquipe2(equipes.get(j));
-		try {
-			ppdb.add(partie);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+	private void createMatch(List<Equipe> equipes, int heure, LocalDate date, int equipeUne, int equipeDeux) {
+		Partie partie = new Partie(Date.valueOf(date), String.format("%02d", heure)+":00", "Poule", this);
+		partie.setEquipeUne(equipes.get(equipeUne));
+		partie.setEquipeDeux(equipes.get(equipeDeux));
+		new PartieJDBC().add(partie); 
 	}
 
 	// verifier s'il existe des extra matchs

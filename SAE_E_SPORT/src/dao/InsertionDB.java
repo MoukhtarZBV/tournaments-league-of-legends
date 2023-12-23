@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import modele.Equipe;
+import modele.Jouer;
 import modele.Joueur;
 import modele.Niveau;
 import modele.Participer;
@@ -15,6 +16,7 @@ import modele.Pays;
 import modele.Statut;
 import modele.Tournoi;
 import modele.TypeCompte;
+import modele.Arbitre;
 import modele.Compte;
 
 public class InsertionDB {
@@ -28,6 +30,7 @@ public class InsertionDB {
 		TournoiJDBC tJDBC = new TournoiJDBC();
 		ParticiperJDBC pJDBC = new ParticiperJDBC();
 		PartieJDBC mJDBC = new PartieJDBC();
+		ArbitreJDBC aJDBC = new ArbitreJDBC();
 		
 		// ============================== //
 		// ==== Création des équipes ==== //
@@ -223,6 +226,9 @@ public class InsertionDB {
 	    e19.ajouterJoueur(j91, j92, j93, j94, j95);
 	    eJDBC.add(e19);
 	    
+	    aJDBC.add(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Jules", "Antoine"));
+	    aJDBC.add(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Paul", "Antoine"));
+	    aJDBC.add(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Eric", "Antoine"));
 	    
 	    // =============================== //
 	 	// ==== Création des tournois ==== //
@@ -232,15 +238,36 @@ public class InsertionDB {
 		Compte c1 = new Compte(CompteJDBC.getNextValueSequence(), "happyleague", "vHd14sR?!de@Az", TypeCompte.ARBITRE);
 		cJDBC.add(c1);
 		Tournoi t1 = Tournoi.createTournoi("Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 01, 13)), 
-							Date.valueOf(LocalDate.of(2023, 01, 20)), Pays.FR, Statut.TERMINE, Optional.empty(), Optional.of(c1));
+							Date.valueOf(LocalDate.of(2023, 01, 20)), Pays.FR, Statut.A_VENIR, Optional.empty(), Optional.of(c1));
 		tJDBC.add(t1);
-		ajouterEquipesTournoi(pJDBC, t1, e1, e4, e5, e11, e16, e17);
+		ajouterEquipesTournoi(pJDBC, t1, e1, e4, e5, e11, e16, e17);/*
 		t1.generationPoule();
 		List<Partie> parties = mJDBC.getAll().stream().filter(p -> p.getTournoi().getNomTournoi().equals(t1.getNomTournoi())).collect(Collectors.toList());
+		List<Equipe> equipesPartie;
 		for (Partie partie : parties) {
-			partie.setEquipeGagnant((Math.random() <= 0.5) ? 1 : 2);
+			equipesPartie = mJDBC.getEquipes(partie);
+			partie.setEquipeGagnante((Math.random() <= 0.5) ? equipesPartie.get(0) : equipesPartie.get(1));
 			mJDBC.update(partie);
 		}
+	    
+	    /*
+	    Compte c1 = new Compte(CompteJDBC.getNextValueSequence(), "happyleague", "vHd14sR?!de@Az", TypeCompte.ARBITRE);
+		cJDBC.add(c1);
+	    Tournoi t1 = Tournoi.createTournoi("Happy League", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 01, 13)), 
+				Date.valueOf(LocalDate.of(2023, 01, 20)), Pays.FR, Statut.TERMINE, Optional.empty(), Optional.of(c1));
+	    tJDBC.add(t1);
+		
+		Partie partie = new Partie(t1.getDateDebut(), "10:00", "Poule", t1);
+		
+		JouerJDBC jouerJDBC = new JouerJDBC();
+		PartieJDBC partieJDBC = new PartieJDBC();
+		partieJDBC.add(partie);
+		jouerJDBC.add(jouerUn);
+		jouerJDBC.add(jouerDeux);
+		
+		System.out.println(new JouerJDBC().getAll());
+		System.out.println(mJDBC.getEquipes(partie));*/
+	    
 	}
 
 	private static void ajouterEquipesTournoi(ParticiperJDBC pJDBC, Tournoi tournoi, Equipe... equipes) throws Exception {

@@ -181,7 +181,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		panelClassement.add(lblClassement, BorderLayout.NORTH);
 		
 		// Table classement
-		String[] columnsClassement = {"Rang", "Equipe", "Points Gagnés", "Matches Joués"};
+		String[] columnsClassement = {"Rang", "Équipe", "Points gagnés", "Parties gagnés"};
 		DefaultTableModel modeleClassement = new DefaultTableModel(columnsClassement, 0) {
 			/**
 			 * 
@@ -271,6 +271,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		btnRetour.setFocusable(false);
 		panelButtons.add(btnRetour);
 		
+		// Controleur
 		this.controleur = new ControleurGestionPoule(this);
 		this.tableMatches.addMouseListener(controleur);
 		btnImprimer.addActionListener(controleur);

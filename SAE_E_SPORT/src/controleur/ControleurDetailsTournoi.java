@@ -49,21 +49,9 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			VueListeTournois vue = new VueListeTournois(new Tournoi().tousLesTournois());
 			vue.setVisible(true);
 		} else if (bouton.getName().equals("Poule")) {
-			ModelePoule modelePoule;
-			try {
-				modelePoule = new ModelePoule(this.vue.getTournoi());
-				Object[][] classement = modelePoule.classement();
-	            Object[][] parties = modelePoule.matches();
-	            
-	            this.vue.dispose();
-	            
-	            VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
-	            frame.setJTableMatches(parties);
-	            frame.setJTableClassement(classement);            
-				frame.setVisible(true);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+	        VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
+	        frame.setVisible(true);
+	        this.vue.dispose();
 		} else if (bouton.getName().equals("Ouvrir le tournoi")) {
 			this.modele.selectionArbitre(vue.getTournoi());
 			this.modele.changerStatusTournoi(vue.getTournoi(), Statut.EN_COURS);
@@ -75,7 +63,7 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 		} else if (bouton.getName().equals("Finale")) {
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
 			vueFinale.setVisible(true);
-			this.vue.dispose();
+			this.vue.dispose(); 
 		}
 	}
 	

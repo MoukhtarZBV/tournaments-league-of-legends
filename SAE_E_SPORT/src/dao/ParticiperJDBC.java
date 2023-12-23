@@ -55,7 +55,7 @@ public class ParticiperJDBC implements ParticiperDAO{
 	}
 
 	@Override
-	public boolean update(Participer p) throws Exception {
+	public boolean update(Participer p) {
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().

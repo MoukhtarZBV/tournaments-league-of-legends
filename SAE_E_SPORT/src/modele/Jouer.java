@@ -5,11 +5,13 @@ import java.sql.Date;
 public class Jouer {
 
 	private Equipe equipe;
-	private Partie partie;
+	private Date dateDebut;
+	private String heureDebut;
 	
-	public Jouer(Equipe e, Partie p) {
+	public Jouer(Equipe e, Date dateDebut, String heureDebut) {
 		this.equipe = e;
-		this.partie = p;
+		this.dateDebut = dateDebut;
+		this.heureDebut = heureDebut;
 	}
 	
 	public Equipe getEquipe() {
@@ -20,13 +22,17 @@ public class Jouer {
 		this.equipe = e;
 	}
 
-	public Partie getPartie() {
-		return this.partie;
+	public Date getDate() {
+		return this.dateDebut;
+	}
+	
+	public String getHeure() {
+		return this.heureDebut;
 	}
 	
 	@Override 
 	public String toString() {
-		return "Jouer = [equipe=" + this.equipe + ", partie=" + this.partie + "]";
+		return "Jouer = [equipe=" + this.equipe + ", date = " + this.dateDebut + ", heure = " + this.heureDebut + "]";
 	}
 	
 }

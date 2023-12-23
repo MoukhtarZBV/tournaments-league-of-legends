@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import dao.EquipeJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 
@@ -42,34 +44,27 @@ public class ModelePoule {
 								.collect(Collectors.toMap(e->e.getEquipe().getNom(), e->e));
 	}
 	
-	public void updateGagnant(int row, int gagnant) {
-		if (gagnant == 1 || gagnant == 2) {
+	public void updateGagnant(int row, int idGagnant) {
 			Partie partie = this.parties.get(row);
 			
-			int eGagne = partie.getEquipeGagnant();
-			if (eGagne != -1 && eGagne != gagnant) {		
-				String equipeGagnante;
-				if (eGagne == 1) {
-					equipeGagnante = partie.getEquipe1().getNom();
-				} else {
-					equipeGagnante = partie.getEquipe2().getNom();
+			Equipe equipeGagnante = partie.getEquipeGagnante();
+			Equipe nouvelleEquipe = idGagnant == 1 ? partie.getEquipeUne() : partie.getEquipeDeux();
+			String nomNouvelleEquipe = nouvelleEquipe.getNom();
+			if (equipeGagnante != null) {
+				if (equipeGagnante != nouvelleEquipe) {
+					String nomEquipeGagnante = equipeGagnante.getNom();
+					this.participations.get(nomEquipeGagnante).setNbPointsGagnes(this.participations.get(nomEquipeGagnante).getNbPointsGagnes() - (int) ((25 - 15) * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+					this.participations.get(nomEquipeGagnante).setNbMatchsGagnes(this.participations.get(nomEquipeGagnante).getNbMatchsGagnes() - 1);
+					this.participations.get(nomNouvelleEquipe).setNbPointsGagnes(this.participations.get(nomNouvelleEquipe).getNbPointsGagnes() + (int) ((25 - 15) * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+					this.participations.get(nomNouvelleEquipe).setNbMatchsGagnes(this.participations.get(nomNouvelleEquipe).getNbMatchsGagnes() + 1);
 				}
-				
-				// Recalculer les points et les matches gagnés 
-				// pas sur +- combien
-				this.participations.get(equipeGagnante).setNbPointsGagnes(this.participations.get(equipeGagnante).getNbPointsGagnes() - (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
-				this.participations.get(equipeGagnante).setNbMatchsGagnes(this.participations.get(equipeGagnante).getNbMatchsGagnes() - 1);
-				if(eGagne == gagnant) {
-					partie.setEquipeGagnant(-1);
-				}
+			} else {
+				String nomEquipePerdante = idGagnant == 1 ? partie.getEquipeDeux().getNom() : partie.getEquipeUne().getNom();
+				this.participations.get(nomNouvelleEquipe).setNbPointsGagnes(this.participations.get(nomNouvelleEquipe).getNbPointsGagnes() + (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+				this.participations.get(nomNouvelleEquipe).setNbMatchsGagnes(this.participations.get(nomNouvelleEquipe).getNbMatchsGagnes() + 1);
+				this.participations.get(nomEquipePerdante).setNbPointsGagnes(this.participations.get(nomEquipePerdante).getNbPointsGagnes() + (int) (15 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
 			}
-			if (eGagne != gagnant || eGagne == -1) {
-				partie.setEquipeGagnant(gagnant);
-				Participer participer = this.participations.get(gagnant == 1 ? partie.getEquipe1().getNom() : partie.getEquipe2().getNom());
-				participer.setNbPointsGagnes(participer.getNbPointsGagnes() + (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
-				participer.setNbMatchsGagnes(participer.getNbMatchsGagnes() + 1);
-			} 
-		}
+			partie.setEquipeGagnante(nouvelleEquipe);
 	}
 	
 	public Object[][] matches() throws Exception {
@@ -79,11 +74,16 @@ public class ModelePoule {
 		String trophy = ImagesIcons.TROPHY;
 		for (Partie p : this.parties) {
 			datas[i][0] = i+1;
-			datas[i][1] = p.getEquipe1().getNom();
-			datas[i][2] = p.getEquipe2().getNom();
+			datas[i][1] = p.getEquipeUne().getNom();
+			datas[i][2] = p.getEquipeDeux().getNom();
 			datas[i][3] = (new SimpleDateFormat("dd/MM/yyyy").format(p.getDate()))+"  "+p.getHeure();
-			datas[i][4] = p.getEquipeGagnant()==1 ? trophyWin : trophy;
-			datas[i][5] = p.getEquipeGagnant()==2 ? trophyWin : trophy;
+			if (p.getEquipeGagnante() != null) {
+				datas[i][4] = p.getEquipeGagnante().getIdEquipe() == p.getEquipeUne().getIdEquipe() ? trophyWin : trophy;
+				datas[i][5] = p.getEquipeGagnante().getIdEquipe() == p.getEquipeDeux().getIdEquipe() ? trophyWin : trophy;
+			} else {
+				datas[i][4] = trophy;
+				datas[i][5] = trophy;
+			}
 			i++;
 		}
 		return datas;
@@ -101,7 +101,7 @@ public class ModelePoule {
 			datas[i][0] = i+1;
 			datas[i][1] = entry.getKey();
 			datas[i][2] = entry.getValue().getNbPointsGagnes();
-			datas[i][3] = entry.getValue().getNbMatchsJoues();
+			datas[i][3] = entry.getValue().getNbMatchsGagnes();
 			i++;
 		}
 		return datas;
@@ -110,14 +110,14 @@ public class ModelePoule {
 	public boolean tousLesMatchsJouees() {
 		boolean res = true;
 		for (Partie p : this.parties) {
-			if (p.getEquipeGagnant() == -1) {
+			if (p.getEquipeGagnante() == null) {
 				res = false;
 			}
 		}
 		return res;
 	}
 	
-	public boolean enregistrerResultat() throws Exception {
+	public boolean enregistrerResultat() {
 		boolean res = false;
 		PartieJDBC pdb = new PartieJDBC();
 		ParticiperJDBC partdb = new ParticiperJDBC();

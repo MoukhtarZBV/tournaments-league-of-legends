@@ -72,13 +72,11 @@ public class TestPartie {
 			System.out.println(joueur);
 		}
 		
-		Partie p1 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 28)), "12:00", "Final", e1, t1);
-		p1.setEquipeGagnant(1);
-		p1.setEquipe2(e2);
-		Partie p2 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 30)), "13:00", "Final", e1, t2);
-		p2.setEquipe2(e2);
+		Partie p1 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 28)), "12:00", "Final", t1);
+		Partie p2 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 30)), "13:00", "Final", t2);
 		pjdbc.add(p1);
 		pjdbc.add(p2);
+		
 		System.out.println("Add partie OK\n");
 		
 		for(Partie partie : pjdbc.getAll()) {
@@ -96,7 +94,7 @@ public class TestPartie {
 		}
 		System.out.println("\ndelete Partie OK\n");
 		
-		p1.setEquipeGagnant(2);
+		p1.setEquipeGagnante(2);
 		pjdbc.update(p1);
 		for(Partie partie : pjdbc.getAll()) {
 			System.out.println(partie);
