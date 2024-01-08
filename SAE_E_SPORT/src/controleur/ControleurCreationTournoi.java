@@ -37,7 +37,7 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 			if (bouton.getName().equals("Annuler")) {
 				vue.dispose();
 				Tournoi t = new Tournoi();
-				VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
+				VueListeTournois vue = new VueListeTournois(t.getTousLesTournois());
 				vue.setVisible(true);
 			}
 			if (bouton.getName().equals("Valider")) {
@@ -46,7 +46,7 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 					modele.ajouterTournoi(tournoi);
 					vue.getPopup().setEnabled(false);
 					Tournoi t = new Tournoi();
-					VueListeTournois vue = new VueListeTournois(t.tousLesTournois());
+					VueListeTournois vue = new VueListeTournois(t.getTousLesTournois());
 					vue.setVisible(true);
 					this.vue.dispose();
 				} catch (IllegalArgumentException iae) {

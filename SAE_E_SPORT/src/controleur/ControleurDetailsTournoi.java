@@ -12,8 +12,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
-import dao.CompteJDBC;
-import dao.EquipeJDBC;
 import ihm.VueEquipe;
 import ihm.VueFinale;
 import ihm.VueGestionDeLaPoule;
@@ -40,42 +38,34 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
-		if (bouton.getName().equals("Importer des équipes")) {
+		if (bouton.getName().equals("Importer")) {
 			VueImportation vueImportation = new VueImportation(vue.getTournoi());
 			vueImportation.setVisible(true);
 			vue.dispose();
 		} else if (bouton.getName().equals("Retour")) {
 			this.vue.dispose();
-			VueListeTournois vue = new VueListeTournois(new Tournoi().tousLesTournois());
+			VueListeTournois vue = new VueListeTournois(new Tournoi().getTousLesTournois());
 			vue.setVisible(true);
 		} else if (bouton.getName().equals("Poule")) {
-			ModelePoule modelePoule;
-			try {
-				modelePoule = new ModelePoule(this.vue.getTournoi());
-				Object[][] classement = modelePoule.classement();
-	            Object[][] parties = modelePoule.matches();
-	            
-	            this.vue.dispose();
-	            
-	            VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
-	            frame.setJTableMatches(parties);
-	            frame.setJTableClassement(classement);            
-				frame.setVisible(true);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+	        VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
+	        frame.setVisible(true);
+	        this.vue.dispose();
+		} else if (bouton.getName().equals("Ouvrir")) {
+			if (this.modele.selectionArbitre(vue.getTournoi())) {
+				this.modele.changerStatutTournoi(vue.getTournoi(), Statut.EN_COURS);
+				this.vue.getTournoi().setStatut(Statut.EN_COURS);
+				this.vue.getTournoi().generationPoule();
+				this.vue.setVisibleBoutonOuvrir(false);
+				this.vue.afficherMessageArbitres(false);
+				this.vue.afficherArbitresTournoi();
+				this.vue.afficherBoutonGererPoule("Gérer la poule");
+			} else {
+				this.vue.afficherMessageErreurArbitres();
 			}
-		} else if (bouton.getName().equals("Ouvrir le tournoi")) {
-			this.modele.selectionArbitre(vue.getTournoi());
-			this.modele.changerStatusTournoi(vue.getTournoi(), Statut.EN_COURS);
-			this.vue.getTournoi().setStatut(Statut.EN_COURS);
-			this.vue.getTournoi().generationPoule();
-			this.vue.setVisibleBoutonOuvrir(false);
-			this.vue.afficherArbitresTournoi(vue.getTournoi());
-			this.vue.afficherBoutonGererPoule("Gérer la poule");
 		} else if (bouton.getName().equals("Finale")) {
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
 			vueFinale.setVisible(true);
-			this.vue.dispose();
+			this.vue.dispose(); 
 		}
 	}
 	
@@ -84,11 +74,12 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 		if(e.getSource() instanceof JTable) {
 			if (e.getClickCount() == 2) {
 				try {
+					Equipe equipeBDD = new Equipe();
 		            JTable table = (JTable) e.getSource();
 		            int row = table.getSelectedRow();
-		            List<Equipe> equipes = (new EquipeJDBC().getAll());
+		            List<Equipe> equipes = (equipeBDD.getToutesLesEquipes());
 					
-					VueEquipe vue = new VueEquipe(equipes, new EquipeJDBC().getByNom(table.getValueAt(row, 0).toString()), this.vue.getTournoi());
+					VueEquipe vue = new VueEquipe(equipes, equipeBDD.getEquipeParNom(table.getValueAt(row, 0).toString()), this.vue.getTournoi());
 					vue.setVisible(true);
 					this.vue.dispose();
 				} catch (Exception e1) {

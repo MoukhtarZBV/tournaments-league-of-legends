@@ -26,7 +26,7 @@ public class ModeleImportation {
 		this.equipes = new LinkedList<>();
 	}
 	
-	public boolean estBonFichierCSV(String chemin, Tournoi tournoi) throws IOException {
+	public boolean fichierCSVconcerneTournoi(String chemin, Tournoi tournoi) throws IOException {
 		String line;
     	BufferedReader br;
 		br = new BufferedReader(new FileReader(chemin));
@@ -42,9 +42,8 @@ public class ModeleImportation {
 		return true;
 	}
 	
-	public void importerEquipesJoueurs(String chemin) throws Exception {
+	public void importerEquipesJoueurs(String chemin) {
 		this.equipes.clear();
-        String line;
         List<String[]> data = new LinkedList<>();
     	
         LireCSV reader = new LireCSV(chemin);
@@ -112,7 +111,7 @@ public class ModeleImportation {
 		return etat;
 	}
 	
-	public boolean enregistrerImportation (Tournoi t) throws Exception{
+	public boolean enregistrerImportation (Tournoi t) {
 		EquipeJDBC edb = new EquipeJDBC();
 		ParticiperJDBC pdb = new ParticiperJDBC();
 		try {
@@ -127,6 +126,7 @@ public class ModeleImportation {
 	}
 	
 	public void changerStatusAVenir(Tournoi tournoi) {
-		new Tournoi().changerStatusTournoi(tournoi, Statut.A_VENIR);
+		tournoi.setStatut(Statut.A_VENIR);
+		new Tournoi().changerStatutTournoi(tournoi, Statut.A_VENIR);
 	}
 }

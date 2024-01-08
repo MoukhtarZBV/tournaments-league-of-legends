@@ -56,33 +56,6 @@ public class Equipe {
 		return this.nationalite;
 	}
 	
-	public static boolean equipeExistante(Equipe e) throws Exception {
-		EquipeJDBC edb = new EquipeJDBC();
-		return edb.getAll().contains(e);
-	}
-	
-	public List<Equipe> toutesLesEquipes(){
-		List<Equipe> eq = null;
-		try {
-			eq =  jdbc.getAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return eq;
-	}
-	
-	public Optional<Equipe> equipeParNom(String nom) {
-		return jdbc.getByNom(nom);
-	}
-	
-	public void miseAJourEquipe(Equipe equipe) {
-		try {
-			jdbc.update(equipe);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 		if (o==this) return true;
@@ -105,5 +78,44 @@ public class Equipe {
 		return "Equipe [ID : "+ this.idEquipe + ", nom=" + this.nom + ", rang=" + this.rang + ", nationalite=" + this.nationalite +
 				", joueurs=" + this.joueurs + "\n";
 	}
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Equipe> getToutesLesEquipes(){
+		return jdbc.getAll();
+	}
+
+	public Equipe getEquipeParID(Integer id) {
+		return jdbc.getById(id).orElse(null);
+	}
+
+	public void ajouterEquipe(Equipe equipe) {
+		jdbc.add(equipe);
+	}
+
+	public void mettreAJourEquipe(Equipe equipe) {
+		jdbc.update(equipe);
+	}
+
+	public void supprimerEquipe(Equipe equipe) {
+		jdbc.delete(equipe);
+	}
 	
+	public Equipe getEquipeParNom(String nom) {
+		return jdbc.getByNom(nom).orElse(null);
+	}
+	
+	public int getIdByNom(String nom) {
+		return jdbc.getIdByNom(nom);
+	}
+	
+	public List<Joueur> listeJoueurs(Equipe equipe) {
+		return jdbc.listeJoueurs(equipe);
+	}
+	
+	public boolean equipeExistante(Equipe equipe) {
+		return getToutesLesEquipes().contains(equipe);
+	}
 }

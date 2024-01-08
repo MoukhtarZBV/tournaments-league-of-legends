@@ -37,7 +37,7 @@ public class VueEquipe extends JFrame {
 	private JTextField fieldName;
 	private JTextField fieldWR;
 	private JComboBox<String> comboPays;
-	private Optional<Equipe> equipe;
+	private Equipe equipe;
 	private PanelPopUp panelPopup;
 	
 	private Tournoi fenPere;
@@ -45,7 +45,7 @@ public class VueEquipe extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public VueEquipe(List<Equipe> equipes, Optional<Equipe> equipe, Tournoi pere) {
+	public VueEquipe(List<Equipe> equipes, Equipe equipe, Tournoi pere) {
 		
 		this.equipe = equipe;
 		this.fenPere = pere;
@@ -54,7 +54,7 @@ public class VueEquipe extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle(equipe.get().getNom());
+		setTitle(equipe.getNom());
 		setResizable(false);
 		
 		
@@ -89,7 +89,7 @@ public class VueEquipe extends JFrame {
 		panelMain.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
-		JLabel lblTitre = new JLabel(equipe.get().getNom());
+		JLabel lblTitre = new JLabel(equipe.getNom());
 		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitre.setForeground(Palette.WHITE);
@@ -143,7 +143,7 @@ public class VueEquipe extends JFrame {
 		fieldName.setFont(Police.INPUT);
 		fieldName.setHorizontalAlignment(SwingConstants.LEFT);
 		fieldName.setColumns(10);
-		fieldName.setText(equipe.get().getNom());
+		fieldName.setText(equipe.getNom());
 		panelName.add(fieldName);
 		
 		// Rank de l'équipe 
@@ -164,7 +164,7 @@ public class VueEquipe extends JFrame {
 		fieldWR.setFont(Police.INPUT);
 		fieldWR.setEnabled(false);
 		fieldWR.setColumns(10);
-		fieldWR.setText(String.valueOf(equipe.get().getRang()));
+		fieldWR.setText(String.valueOf(equipe.getRang()));
 		panelRank.add(fieldWR);
 		
 		// Pays de l'équipe
@@ -183,9 +183,9 @@ public class VueEquipe extends JFrame {
 		comboPays.setBackground(Palette.DARK_GRAY);
 		comboPays.setForeground(Palette.WHITE);
 		comboPays.setFont(Police.COMBO);
-		comboPays.addItem(equipe.get().getNationalite().denomination());
+		comboPays.addItem(equipe.getNationalite().denomination());
 		for (Pays p  : Pays.values()) {
-			if (p.denomination() != equipe.get().getNationalite().denomination()) {
+			if (p.denomination() != equipe.getNationalite().denomination()) {
 				comboPays.addItem(p.denomination());
 			}
 		}
@@ -216,7 +216,7 @@ public class VueEquipe extends JFrame {
 				new String[] {"Num", "Joueur"});
         
         int objetCourant = 0;
-        for (Joueur j : equipe.get().getJoueurs()) {
+        for (Joueur j : equipe.getJoueurs()) {
         	model.addRow(new Object[] {objetCourant+1,j.getPseudo()});
         	objetCourant ++;
         }
@@ -270,7 +270,7 @@ public class VueEquipe extends JFrame {
 	}
 	
 	public int getIdEquipe() {
-		return this.equipe.get().getIdEquipe();
+		return this.equipe.getIdEquipe();
 	}
 
 	public int getRangEquipe() {

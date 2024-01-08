@@ -9,9 +9,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import dao.EquipeJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 
@@ -31,7 +34,7 @@ public class ModelePoule {
 	
 	private List<Partie> partiesParTournoi(Tournoi t) throws Exception{
 		return new PartieJDBC().getAll().stream()
-								.filter(e -> e.getTournoi().getNomTournoi().equals(t.getNomTournoi()))
+								.filter(e -> e.getTournoi().getNomTournoi().equals(t.getNomTournoi()) && e.getDeroulement().equals("Poule"))
 								.sorted((p1,p2) -> p1.getDate().compareTo(p2.getDate()))
 								.collect(Collectors.toList());
 	}
@@ -42,34 +45,26 @@ public class ModelePoule {
 								.collect(Collectors.toMap(e->e.getEquipe().getNom(), e->e));
 	}
 	
-	public void updateGagnant(int row, int gagnant) {
-		if (gagnant == 1 || gagnant == 2) {
-			Partie partie = this.parties.get(row);
-			
-			int eGagne = partie.getEquipeGagnant();
-			if (eGagne != -1 && eGagne != gagnant) {		
-				String equipeGagnante;
-				if (eGagne == 1) {
-					equipeGagnante = partie.getEquipe1().getNom();
-				} else {
-					equipeGagnante = partie.getEquipe2().getNom();
+	public void updateGagnant(int indicePartie, int numeroEquipeGagnante) {
+			Partie partie = this.parties.get(indicePartie);
+			Equipe equipeGagnante = partie.getEquipeGagnante();
+			Equipe nouvelleEquipe = numeroEquipeGagnante == 1 ? partie.getEquipeUne() : partie.getEquipeDeux();
+			String nomNouvelleEquipe = nouvelleEquipe.getNom();
+			if (equipeGagnante != null) {
+				if (equipeGagnante != nouvelleEquipe) {
+					String nomEquipeGagnante = equipeGagnante.getNom();
+					this.participations.get(nomEquipeGagnante).setNbPointsGagnes(this.participations.get(nomEquipeGagnante).getNbPointsGagnes() - (int) ((25 - 15) * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+					this.participations.get(nomEquipeGagnante).setNbMatchsGagnes(this.participations.get(nomEquipeGagnante).getNbMatchsGagnes() - 1);
+					this.participations.get(nomNouvelleEquipe).setNbPointsGagnes(this.participations.get(nomNouvelleEquipe).getNbPointsGagnes() + (int) ((25 - 15) * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+					this.participations.get(nomNouvelleEquipe).setNbMatchsGagnes(this.participations.get(nomNouvelleEquipe).getNbMatchsGagnes() + 1);
 				}
-				
-				// Recalculer les points et les matches gagnés 
-				// pas sur +- combien
-				this.participations.get(equipeGagnante).setNbPointsGagnes(this.participations.get(equipeGagnante).getNbPointsGagnes() - (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
-				this.participations.get(equipeGagnante).setNbMatchsGagnes(this.participations.get(equipeGagnante).getNbMatchsGagnes() - 1);
-				if(eGagne == gagnant) {
-					partie.setEquipeGagnant(-1);
-				}
+			} else {
+				String nomEquipePerdante = numeroEquipeGagnante == 1 ? partie.getEquipeDeux().getNom() : partie.getEquipeUne().getNom();
+				this.participations.get(nomNouvelleEquipe).setNbPointsGagnes(this.participations.get(nomNouvelleEquipe).getNbPointsGagnes() + (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
+				this.participations.get(nomNouvelleEquipe).setNbMatchsGagnes(this.participations.get(nomNouvelleEquipe).getNbMatchsGagnes() + 1);
+				this.participations.get(nomEquipePerdante).setNbPointsGagnes(this.participations.get(nomEquipePerdante).getNbPointsGagnes() + (int) (15 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
 			}
-			if (eGagne != gagnant || eGagne == -1) {
-				partie.setEquipeGagnant(gagnant);
-				Participer participer = this.participations.get(gagnant == 1 ? partie.getEquipe1().getNom() : partie.getEquipe2().getNom());
-				participer.setNbPointsGagnes(participer.getNbPointsGagnes() + (int) (25 * Niveau.multiplicateurNiveau(tournoi.getNiveau())));
-				participer.setNbMatchsGagnes(participer.getNbMatchsGagnes() + 1);
-			} 
-		}
+			partie.setEquipeGagnante(nouvelleEquipe);
 	}
 	
 	public Object[][] matches() throws Exception {
@@ -79,11 +74,16 @@ public class ModelePoule {
 		String trophy = ImagesIcons.TROPHY;
 		for (Partie p : this.parties) {
 			datas[i][0] = i+1;
-			datas[i][1] = p.getEquipe1().getNom();
-			datas[i][2] = p.getEquipe2().getNom();
+			datas[i][1] = p.getEquipeUne().getNom();
+			datas[i][2] = p.getEquipeDeux().getNom();
 			datas[i][3] = (new SimpleDateFormat("dd/MM/yyyy").format(p.getDate()))+"  "+p.getHeure();
-			datas[i][4] = p.getEquipeGagnant()==1 ? trophyWin : trophy;
-			datas[i][5] = p.getEquipeGagnant()==2 ? trophyWin : trophy;
+			if (p.getEquipeGagnante() != null) {
+				datas[i][4] = p.getEquipeGagnante().getIdEquipe() == p.getEquipeUne().getIdEquipe() ? trophyWin : trophy;
+				datas[i][5] = p.getEquipeGagnante().getIdEquipe() == p.getEquipeDeux().getIdEquipe() ? trophyWin : trophy;
+			} else {
+				datas[i][4] = trophy;
+				datas[i][5] = trophy;
+			}
 			i++;
 		}
 		return datas;
@@ -101,7 +101,7 @@ public class ModelePoule {
 			datas[i][0] = i+1;
 			datas[i][1] = entry.getKey();
 			datas[i][2] = entry.getValue().getNbPointsGagnes();
-			datas[i][3] = entry.getValue().getNbMatchsJoues();
+			datas[i][3] = entry.getValue().getNbMatchsGagnes();
 			i++;
 		}
 		return datas;
@@ -110,14 +110,14 @@ public class ModelePoule {
 	public boolean tousLesMatchsJouees() {
 		boolean res = true;
 		for (Partie p : this.parties) {
-			if (p.getEquipeGagnant() == -1) {
+			if (p.getEquipeGagnante() == null) {
 				res = false;
 			}
 		}
 		return res;
 	}
 	
-	public boolean enregistrerResultat() throws Exception {
+	public boolean enregistrerResultat() {
 		boolean res = false;
 		PartieJDBC pdb = new PartieJDBC();
 		ParticiperJDBC partdb = new ParticiperJDBC();
@@ -131,6 +131,65 @@ public class ModelePoule {
 	}
 	
 	public void changerStatusEnFinale(Tournoi tournoi) {
-		this.tournoi.changerStatusTournoi(tournoi, Statut.FINALE);
+		this.tournoi.changerStatutTournoi(tournoi, Statut.FINALE);
+	}
+	
+	public void creerFinale(Tournoi tournoi) {
+		List<Participer> participationsOrdrePoints = participations.values().stream()
+				.sorted((p1, p2) -> Integer.compare(p1.getNbPointsGagnes(), p2.getNbPointsGagnes()))
+				.collect(Collectors.toList());
+		Collections.reverse(participationsOrdrePoints);
+		
+		List<Equipe> equipesFinale = new ArrayList<>();
+		// Choix par rapport au world ranking en cas d'égalité
+		if (participationsOrdrePoints.get(1).getNbPointsGagnes() == participationsOrdrePoints.get(2).getNbPointsGagnes()) {
+			equipesFinale = choixEquipesFinaleEgalite(participationsOrdrePoints);
+		} else {
+			equipesFinale.add(participationsOrdrePoints.get(0).getEquipe());
+			equipesFinale.add(participationsOrdrePoints.get(1).getEquipe());
+		}
+		
+		int heure = new Random().nextInt(8 + 1)  + 10;
+		Partie finale = new Partie(tournoi.getDateFin(), String.format("%02d", heure)+":00", "Finale", tournoi);
+		finale.setEquipeUne(equipesFinale.get(0));
+		finale.setEquipeDeux(equipesFinale.get(1));
+		new PartieJDBC().add(finale);
+	}
+
+	private List<Equipe> choixEquipesFinaleEgalite(List<Participer> participationsOrdrePoints) {
+		List<Equipe> equipesEnEgalite = new ArrayList<>();
+
+		int indiceEquipe = 1;
+		while (indiceEquipe + 1 < participationsOrdrePoints.size() && participationsOrdrePoints.get(indiceEquipe).getNbPointsGagnes() == participationsOrdrePoints.get(indiceEquipe + 1).getNbPointsGagnes()) {
+			equipesEnEgalite.add(participationsOrdrePoints.get(indiceEquipe).getEquipe());
+			indiceEquipe++;
+		}
+		equipesEnEgalite.add(participationsOrdrePoints.get(indiceEquipe).getEquipe());
+		
+		// Si la première équipe est également en égalité avec le reste		
+		boolean premiereEquipeEgalite = false;
+		if (participationsOrdrePoints.get(0).getNbPointsGagnes() == participationsOrdrePoints.get(1).getNbPointsGagnes()) {
+			equipesEnEgalite.add(participationsOrdrePoints.get(0).getEquipe());
+			premiereEquipeEgalite = true;
+		}
+		
+		List<Equipe> equipesEnEgaliteTriRang = equipesEnEgalite.stream()
+				.sorted((e1, e2) -> Integer.compare(e1.getRang(), e2.getRang()))
+				.collect(Collectors.collectingAndThen(
+		        Collectors.toList(),
+		        result -> {
+		            Collections.reverse(result);
+		            return result;
+		        }));
+		
+		List<Equipe> equipesFinale = new ArrayList<>();
+		if (premiereEquipeEgalite) {
+			equipesFinale.add(equipesEnEgaliteTriRang.get(0));
+			equipesFinale.add(equipesEnEgaliteTriRang.get(1));
+		} else {
+			equipesFinale.add(participationsOrdrePoints.get(0).getEquipe());
+			equipesFinale.add(equipesEnEgaliteTriRang.get(0));
+		}
+		return equipesFinale;
 	}
 }

@@ -14,7 +14,7 @@ import modele.Pays;
 public class PaysJDBC implements PaysDAO {
 	
 	@Override
-	public List<Pays> getAll() throws Exception {
+	public List<Pays> getAll() {
 		List<Pays> pays = new ArrayList<>();
         try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -30,13 +30,13 @@ public class PaysJDBC implements PaysDAO {
 	}
 
 	@Override
-	public Optional<Pays> getById(Integer id) throws Exception {
-		// Pays n'a pas d'id
+	public Optional<Pays> getById(Integer id) {
+		// Inutile dans notre cas
 		return Optional.empty();
 	}
 
 	@Override
-	public boolean add(Pays p) throws Exception {
+	public boolean add(Pays p) {
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("insert into Pays values (?)");
@@ -50,12 +50,13 @@ public class PaysJDBC implements PaysDAO {
 	}
 
 	@Override
-	public boolean update(Pays p) throws Exception {
+	public boolean update(Pays p) {
+		// Inutile dans notre cas
 		return false;
 	}
 
 	@Override
-	public boolean delete(Pays p) throws Exception {
+	public boolean delete(Pays p) {
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("delete from Pays where nomPays = ?");

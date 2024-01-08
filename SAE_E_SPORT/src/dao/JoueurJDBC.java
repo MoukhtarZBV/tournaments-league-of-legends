@@ -14,7 +14,7 @@ import modele.Joueur;
 public class JoueurJDBC implements JoueurDAO{
 	
 	@Override
-	public List<Joueur> getAll() throws Exception {
+	public List<Joueur> getAll() {
         List<Joueur> listeJoueurs = new ArrayList<Joueur>();
         try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -35,7 +35,7 @@ public class JoueurJDBC implements JoueurDAO{
 	}
 
 	@Override
-	public Optional<Joueur> getById(Integer id) throws Exception {
+	public Optional<Joueur> getById(Integer id) {
 		Optional<Joueur> opt = Optional.empty();
 		try {
 			String req = "SELECT * FROM Joueur WHERE idJoueur = ?";
@@ -59,7 +59,7 @@ public class JoueurJDBC implements JoueurDAO{
 	}
 	
 	@Override
-	public Optional<Joueur> getByPseudo(String j) throws Exception {
+	public Optional<Joueur> getByPseudo(String j) {
 		Optional<Joueur> opt = Optional.empty();
 		try {
 			String req = "SELECT * FROM Joueur WHERE pseudo = ?";
@@ -100,13 +100,17 @@ public class JoueurJDBC implements JoueurDAO{
 		return joueurs;
 	}
 	
-    public static int getNextValueSequence() throws Exception {
+    public static int getNextValueSequence() {
         int res = -1;
-        Statement st = ConnectionJDBC.getConnection().createStatement();
-        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Joueur");
-        if (rs.next()) {
-            res = rs.getInt(1);
-        }
+		try { 
+			Statement st = ConnectionJDBC.getConnection().createStatement();
+			ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Joueur");
+	        if (rs.next()) {
+	            res = rs.getInt(1);
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         return res;
     }
 
@@ -137,7 +141,7 @@ public class JoueurJDBC implements JoueurDAO{
 	}
 
 	@Override
-	public boolean update(Joueur j) throws Exception {
+	public boolean update(Joueur j) {
 		boolean res = false;
 		try {
 			String updateJoueur = "UPDATE Joueur "
@@ -159,7 +163,7 @@ public class JoueurJDBC implements JoueurDAO{
 	}
 
 	@Override
-	public boolean delete(Joueur j) throws Exception {
+	public boolean delete(Joueur j) {
 		boolean res = false;
 		try {
 			String updateJoueur = "DELETE FROM Joueur WHERE idJoueur = ?";

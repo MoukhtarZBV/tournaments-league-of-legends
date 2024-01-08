@@ -8,15 +8,14 @@ import java.util.Random;
 import dao.CompteJDBC;
 
 public class Compte {
-	private int idCompte;
 	private String login;
 	private String motDePasse;
 	private TypeCompte type;
+	
 	private CompteJDBC jdbc;
 	
 	// Constructeur
-	public Compte(int id, String login, String motDePasse, TypeCompte type) {
-		this.idCompte = id;
+	public Compte(String login, String motDePasse, TypeCompte type) {
 		this.login = login;
 		this.motDePasse = motDePasse;
 		this.type = type;
@@ -24,11 +23,6 @@ public class Compte {
 	
 	public Compte() {
 		this.jdbc = new CompteJDBC();
-	}
-	
-	// Get
-	public int getId() {
-		return this.idCompte;
 	}
 	
 	public String getLogin() {
@@ -56,24 +50,6 @@ public class Compte {
 		this.type = type;
 	}
 	
-	public List<Compte> tousLesComptes(){
-		List<Compte> c = new ArrayList<>();
-		try {
-			c =  this.jdbc.getAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return c;
-	}
-	
-	public void ajouterCompte(Compte c) {
-		try {
-			this.jdbc.add(c);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-		}
-	}
-	
 	public static String genererPassword(int longueur) {
 		String caractères = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]};:<>./?";
 		String mdp = "";
@@ -92,7 +68,7 @@ public class Compte {
 		if (o==null) return false;
 		if(o instanceof Compte) {
 			Compte c = (Compte) o;
-			return this.idCompte == c.idCompte && this.login == c.login && this.motDePasse == c.login;
+			return this.login == c.login && this.motDePasse == c.login;
 		} else {
 			return false;
 		}
@@ -100,11 +76,35 @@ public class Compte {
 	
 	@Override 
 	public int hashCode() {
-		return Objects.hash(this.idCompte);
+		return Objects.hash(this.login);
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("Compte ID[%d], %s, %s", this.getId(), this.getLogin(), this.getMotDePasse());
+		return String.format("Compte %s | Mot de passe : %s", this.getLogin(), this.getMotDePasse());
+	}
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Compte> getTousLesComptes(){
+		return jdbc.getAll();
+	}
+
+	public Compte getCompteParLogin(String login) {
+		return jdbc.getById(login).orElse(null);
+	}
+
+	public void ajouterCompte(Compte compte) {
+		jdbc.add(compte);
+	}
+
+	public void mettreAJourCompte(Compte compte) {
+		jdbc.update(compte);
+	}
+
+	public void supprimerCompte(Compte compte) {
+		jdbc.delete(compte);
 	}
 }

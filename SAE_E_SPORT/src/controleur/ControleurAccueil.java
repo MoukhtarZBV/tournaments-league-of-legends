@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -33,22 +34,23 @@ public class ControleurAccueil implements MouseListener {
 		JPanel panel = (JPanel)e.getSource();
 		switch(panel.getName()) {
 			case "Equipes":
-				Equipe eq = new Equipe();
-				VueListeEquipe vueE = new VueListeEquipe(eq.toutesLesEquipes());
-				vueE.setVisible(true);
+				Equipe equipeBDD = new Equipe();
+				VueListeEquipe vueEquipes = new VueListeEquipe(equipeBDD.getToutesLesEquipes());
+				vueEquipes.setVisible(true);
 				this.vue.dispose();	
 				break;
 				
 			case "Tournois":
-				Tournoi t = new Tournoi();
-				VueListeTournois vueT = new VueListeTournois(t.tousLesTournois());
-				vueT.setVisible(true);
+				Tournoi tournoiBDD = new Tournoi();
+				System.out.println(tournoiBDD.getTousLesTournois());
+				VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
+				vueTournois.setVisible(true);
 				this.vue.dispose();	
 				break;
 				
 			case "Historique" :
-				VueHistoriquePoints vueH = new VueHistoriquePoints();
-				vueH.setVisible(true);
+				VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
+				vueHistorique.setVisible(true);
 				this.vue.dispose();
 				break;
 		}

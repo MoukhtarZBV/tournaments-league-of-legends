@@ -97,23 +97,23 @@ public class TestVueGestionPoule {
 		
 		// Création des matchs
 		Partie p1 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 28)), "12:00", "Final", e1, t);
-		p1.setEquipeGagnant(-1);
+		p1.setEquipeGagnante(-1);
 		p1.setEquipe2(e2);
 		pjdbc.add(p1);
 		
 		Partie p2 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 30)), "13:00", "Final", e2, t);
 		p2.setEquipe2(e1);
-		p2.setEquipeGagnant(2);
+		p2.setEquipeGagnante(2);
 		pjdbc.add(p2);
 		
 		Partie p3 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 29)), "12:00", "Final", e3, t);
-		p3.setEquipeGagnant(1);
+		p3.setEquipeGagnante(1);
 		p3.setEquipe2(e4);
 		pjdbc.add(p3);
 		
 		Partie p4 = new Partie(Date.valueOf(LocalDate.of(2023, 12, 31)), "13:00", "Final", e4, t);
 		p4.setEquipe2(e3);
-		p4.setEquipeGagnant(2);
+		p4.setEquipeGagnante(2);
 		pjdbc.add(p4);
 		
 		System.out.println("Add partie OK\n");

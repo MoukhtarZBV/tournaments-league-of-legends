@@ -16,7 +16,7 @@ import modele.Pays;
 public class EquipeJDBC implements EquipeDAO{
 
 	@Override
-	public List<Equipe> getAll() throws Exception {
+	public List<Equipe> getAll() {
 		List<Equipe> equipes = new ArrayList<>();
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -58,9 +58,8 @@ public class EquipeJDBC implements EquipeDAO{
 		return equipes;
 	}
 
-	//Test ok
 	@Override
-	public boolean add(Equipe e) throws Exception {
+	public boolean add(Equipe e) {
 		if (e.getJoueurs().size()!=5) {
 			throw new IllegalArgumentException("Nombre de joueurs d'une equipe doit etre 5 !");
 		}
@@ -87,7 +86,7 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public boolean update(Equipe e) throws Exception {
+	public boolean update(Equipe e) {
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("update Equipe set nomEquipe = ?, rang = ?, nationalite = ? where idEquipe = ?");
@@ -104,7 +103,7 @@ public class EquipeJDBC implements EquipeDAO{
 	}
 
 	@Override
-	public boolean delete(Equipe e) throws Exception {
+	public boolean delete(Equipe e) {
 		boolean res = false;
 		try {
 			JoueurJDBC jjdbc = new JoueurJDBC();
@@ -142,7 +141,8 @@ public class EquipeJDBC implements EquipeDAO{
 		return equipe;
 	}
 	
-	public int getIdByNom(String nom) throws Exception{
+	@Override
+	public int getIdByNom(String nom) {
 		int id = -1;
 		try {
 			CallableStatement st = ConnectionJDBC.getConnection().prepareCall("select idEquipe from Equipe where nomEquipe = ?");
@@ -157,7 +157,7 @@ public class EquipeJDBC implements EquipeDAO{
 		return id;
 	}
 
-	public static int getNextValueSequence() throws Exception{
+	public static int getNextValueSequence() {
 		int res = -1;
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -171,6 +171,7 @@ public class EquipeJDBC implements EquipeDAO{
 		return res;
 	}
 	
+	@Override
 	public List<Joueur> listeJoueurs(Equipe equipe){
 		List<Joueur> listeJoueurs = new ArrayList<>();
         try {

@@ -42,10 +42,9 @@ public class VueListeEquipe extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			@SuppressWarnings("deprecation")
 			public void run() {
 				try {
-					VueListeEquipe frame = new VueListeEquipe(new Equipe().toutesLesEquipes());
+					VueListeEquipe frame = new VueListeEquipe(new Equipe().getToutesLesEquipes());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -1,5 +1,6 @@
 package modele;
 
+import java.util.List;
 import java.util.Objects;
 
 import dao.EquipeJDBC;
@@ -11,11 +12,17 @@ public class Joueur {
 	private String pseudo;
 	private Equipe equipe;
 	
+	private JoueurJDBC jdbc;
+	
 	// Constructeur
 	public Joueur(int id, String pseudo, Equipe e) {
 		this.idJoueur = id;
 		this.pseudo = pseudo;
 		this.equipe = e;
+	}
+	
+	public Joueur() {
+		this.jdbc = new JoueurJDBC();
 	}
 	
 	// Get
@@ -40,12 +47,6 @@ public class Joueur {
 		this.equipe = e;
 	}
 	
-	public boolean presentDansAutreEquipe() throws Exception {
-		JoueurJDBC jdb = new JoueurJDBC();
-		Joueur j = jdb.getByPseudo(this.pseudo).orElse(null);
-		return !j.getEquipe().equals(this.getEquipe());
-	}
-	
 	// Overrides
 	@Override
 	public boolean equals(Object o) {
@@ -59,7 +60,6 @@ public class Joueur {
 		}
 	}
 	
-	
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.idJoueur);
@@ -68,5 +68,42 @@ public class Joueur {
 	@Override
 	public String toString() {
 		return String.format("Joueur ID[%d] : %s", this.getId(), this.getPseudo());
+	}
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Joueur> getTousLesJoueurs(){
+		return jdbc.getAll();
+	}
+
+	public Joueur getJoueurParID(Integer id) {
+		return jdbc.getById(id).orElse(null);
+	}
+
+	public void ajouterJoueur(Joueur joueur) {
+		jdbc.add(joueur);
+	}
+
+	public void mettreAJourJoueur(Joueur joueur) {
+		jdbc.update(joueur);
+	}
+
+	public void supprimerJoueur(Joueur joueur) {
+		jdbc.delete(joueur);
+	}
+	
+	public Joueur getJoueurParPseudo(String pseudo) {
+		return jdbc.getByPseudo(pseudo).orElse(null);
+	}
+	
+	public List<Joueur> getJoueursEquipe(Equipe equipe){
+		return jdbc.getByEquipe(equipe);
+	}
+	
+	public boolean presentDansAutreEquipe() {
+		Joueur j = jdbc.getByPseudo(this.pseudo).orElse(null);
+		return !j.getEquipe().equals(this.getEquipe());
 	}
 }

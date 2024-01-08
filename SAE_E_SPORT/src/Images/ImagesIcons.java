@@ -16,9 +16,11 @@ import javax.swing.ImageIcon;
 
 public class ImagesIcons {
 
-	public static final ImageIcon EARTH = ImagesIcons.getIcon(25, 25, "earth");
-	public static final ImageIcon LEVEL = ImagesIcons.getIcon(25, 25, "level");
-	public static final ImageIcon TEAM = ImagesIcons.getIcon(25, 25, "team");
+	public static final ImageIcon BULLE_PAYS = ImagesIcons.getIcon(25, 25, "infoEarth");
+	public static final ImageIcon BULLE_NIVEAU = ImagesIcons.getIcon(25, 25, "infoLevel");
+	public static final ImageIcon BULLE_EQUIPES = ImagesIcons.getIcon(25, 25, "infoTeam");
+	public static final ImageIcon BULLE_DATES = ImagesIcons.getIcon(25, 25, "infoCalendar");
+	public static final ImageIcon BULLE_VAINQUEUR = ImagesIcons.getIcon(25, 25, "infoTrophy");
 	public static final ImageIcon TOP = ImagesIcons.getIcon(25, 25, "topRole");
 	public static final ImageIcon JUNGLE = ImagesIcons.getIcon(25, 25, "junglerRole");
 	public static final ImageIcon MID = ImagesIcons.getIcon(25, 25, "midRole");

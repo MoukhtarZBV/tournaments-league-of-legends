@@ -42,8 +42,8 @@ public class VueListeArbitre extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Arbitre a = new Arbitre();
-					VueListeArbitre frame = new VueListeArbitre(a.tousLesArbitres());
+					Arbitre arbitreBDD = new Arbitre();
+					VueListeArbitre frame = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

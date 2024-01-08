@@ -40,9 +40,9 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			if (bouton.getName().equals("Annuler")) {
-				Arbitre a = new Arbitre();
-				VueListeArbitre vue = new VueListeArbitre(a.tousLesArbitres());
-				vue.setVisible(true);
+				Arbitre arbitreBDD = new Arbitre();
+				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
+				vueArbitres.setVisible(true);
 				this.vue.dispose();
 			}
 			if (bouton.getName().equals("Valider")) {
@@ -52,8 +52,8 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 						arbitre = new Arbitre(ArbitreJDBC.getNextValueSequence(),this.vue.getNom(),this.vue.getPrenom());
 						modele.ajouterArbitre(arbitre);
 						vue.getPopup().setEnabled(false);
-						Arbitre a = new Arbitre();
-						VueListeArbitre vue = new VueListeArbitre(a.tousLesArbitres());
+						Arbitre arbitreBDD = new Arbitre();
+						VueListeArbitre vue = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
 						vue.setVisible(true);
 					} catch (Exception e1) {
 						e1.printStackTrace();

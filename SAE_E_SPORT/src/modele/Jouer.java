@@ -1,15 +1,26 @@
 package modele;
 
 import java.sql.Date;
+import java.util.List;
+
+import dao.JouerJDBC;
 
 public class Jouer {
 
 	private Equipe equipe;
-	private Partie partie;
+	private Date dateDebut;
+	private String heureDebut;
 	
-	public Jouer(Equipe e, Partie p) {
+	private JouerJDBC jdbc;
+	
+	public Jouer(Equipe e, Date dateDebut, String heureDebut) {
 		this.equipe = e;
-		this.partie = p;
+		this.dateDebut = dateDebut;
+		this.heureDebut = heureDebut;
+	}
+	
+	public Jouer() {
+		this.jdbc = new JouerJDBC();
 	}
 	
 	public Equipe getEquipe() {
@@ -20,13 +31,33 @@ public class Jouer {
 		this.equipe = e;
 	}
 
-	public Partie getPartie() {
-		return this.partie;
+	public Date getDate() {
+		return this.dateDebut;
+	}
+	
+	public String getHeure() {
+		return this.heureDebut;
 	}
 	
 	@Override 
 	public String toString() {
-		return "Jouer = [equipe=" + this.equipe + ", partie=" + this.partie + "]";
+		return "Jouer = [equipe=" + this.equipe + ", date = " + this.dateDebut + ", heure = " + this.heureDebut + "]";
+	}
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Jouer> getTousLesJouers(){
+		return jdbc.getAll();
+	}
+	
+	public void ajouterJouer(Jouer jouer) {
+		jdbc.add(jouer);
+	}
+
+	public void supprimerJouer(Jouer jouer) {
+		jdbc.delete(jouer);
 	}
 	
 }

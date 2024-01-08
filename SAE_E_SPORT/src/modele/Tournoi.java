@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import dao.ArbitreJDBC;
 import dao.AssocierJDBC;
 import dao.CompteJDBC;
+import dao.JouerJDBC;
 import dao.ParticiperJDBC;
 import dao.PartieJDBC;
 import dao.TournoiJDBC;
@@ -41,19 +42,19 @@ public class Tournoi {
 			throw new IllegalArgumentException("Le nom du tournoi ne doit pas être vide");
 		} 
 		if (niveau == null) {
-			throw new IllegalArgumentException("Le niveau ne doit pas être vide");
+			throw new IllegalArgumentException("Le niveau ne doit pas être nul");
 		} 
 		if (pays == null) {
-			throw new IllegalArgumentException("Le pays ne doit pas être vide");
+			throw new IllegalArgumentException("Le pays ne doit pas être nul");
 		} 
 		if (nomTournoi.length() >= 100) {
 			throw new IllegalArgumentException("Le nom du tournoi ne peut dépasser les 100 caractères");
 		} 
-		if (getTournoiDeNom(nomTournoi) != null) {
+		if (getTournoiParNom(nomTournoi) != null) {
 			throw new IllegalArgumentException("Un tournoi portant ce nom existe déjà");
 		} 
-		if (dateDebut.compareTo(new Date(System.currentTimeMillis())) <= 0) {
-			throw new IllegalArgumentException("La date de debut doit être supérieure à la date du jour");
+		if (dateDebut.before(new Date(System.currentTimeMillis()))) {
+			throw new IllegalArgumentException("La date de début doit être supérieure à la date du jour");
 		} 
 		if (dateDebut.after(dateFin)) {
 			throw new IllegalArgumentException("La date de début doit être inférieure à la date de fin");
@@ -63,11 +64,14 @@ public class Tournoi {
 		} 
 		if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi ne peut durer plus de deux semaines");
-		} if (!minimum5JoursEntreDates(dateDebut, dateFin)) {
+		} 
+		if (!minimum5JoursEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi doit durer minimum cinq jours");
-		} if (existeTournoiEntreDates(dateDebut, dateFin)) {
+		} 
+		if (existeTournoiEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Il existe déjà un tournoi sur ce créneau");
 		}
+		this.jdbc = null;
 		this.nomTournoi = nomTournoi;
 		this.niveau = niveau;
 		this.dateDebut = dateDebut;
@@ -197,53 +201,26 @@ public class Tournoi {
 		}
 		return true;
 	}
-	
+
 	public int getDureeTournoi() {
 		int duree = 0;
 		long differenceInMilliseconds = Math.abs(this.dateFin.getTime() - this.dateDebut.getTime());
-	    duree =  (int) TimeUnit.DAYS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
-	    return duree;
+		duree =  (int) TimeUnit.DAYS.convert(differenceInMilliseconds, TimeUnit.MILLISECONDS);
+		return duree;
 	}
-	
-	// ===================== //
-	// ==== Partie JDBC ==== //
-	// ===================== //
-	
-	public Tournoi getTournoiDeNom(String nomTournoi) {
-		return jdbc.getById(nomTournoi).orElse(null);
-	}
-	
-	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) {
-		return jdbc.existeTournoiEntreDates(dateDebut, dateFin);
-	}
-	
-	public List<Tournoi> tousLesTournois(){
-		return jdbc.getAll();
-	}
-	
-	public void ajouterTournoi(Tournoi tournoi) {
-		jdbc.add(tournoi);
-	}
-	
-	public List<Tournoi> getTournoisNiveauStatusNom(String nom, Niveau niveau, Statut status){
-		return jdbc.getTournoisNiveauStatusNom(nom, niveau, status);
-	}
-	
+
 	// générer une poule lorsque un tournoi est ouvert
-	public void generationPoule(){
+	public int generationPoule(){
 		List<Equipe> equipes = new ArrayList<>(); 
 		// Récupération de la liste des équipes qui participent au tournoi
 		ParticiperJDBC pdb = new ParticiperJDBC();
 		equipes = pdb.getAll().stream()
-					.filter(e->e.getTournoi().getNomTournoi().equals(this.getNomTournoi()))
-					.map(p-> p.getEquipe())
-					.collect(Collectors.toList());
-				
+				.filter(e->e.getTournoi().getNomTournoi().equals(this.getNomTournoi()))
+				.map(p-> p.getEquipe())
+				.collect(Collectors.toList());
+
 		// Création des matchs
-		PartieJDBC ppdb = new PartieJDBC();
-		
 		int equipeSize = equipes.size();
-		
 		// nombre matchs totals
 		int nbMatchsTotals = nombreMatchs(equipeSize);
 		// duree total des matchs
@@ -265,7 +242,7 @@ public class Tournoi {
 			for (int i = 0, j = initial ; i<equipeSize && cmp<nbMatchsTotals ; i++, j++, cmp++, heure+=trouHeures) {
 				cmpMatchs ++;
 				j %= equipeSize;
-				createMatch(equipes, ppdb, heure, date, i, j);
+				createMatch(equipes, heure, date, i, j);
 				if (cmpMatchs==nbMatchsParJour) {
 					heure = 10-trouHeures;
 					date = date.plusDays(1);
@@ -278,19 +255,15 @@ public class Tournoi {
 			}
 			initial %= equipeSize;
 		}
-		
+		return nbMatchsTotals;
 	}
 
 	// creer un match et ajouter dans la base de données 
-	private void createMatch(List<Equipe> equipes, PartieJDBC ppdb, int heure, LocalDate date, int i, int j) {
-		Partie partie = new Partie(Date.valueOf(date), String.format("%02d", heure)+":00", "Poule", equipes.get(i), this);
-		partie.setEquipeGagnant(-1);
-		partie.setEquipe2(equipes.get(j));
-		try {
-			ppdb.add(partie);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+	private void createMatch(List<Equipe> equipes, int heure, LocalDate date, int equipeUne, int equipeDeux) {
+		Partie partie = new Partie(Date.valueOf(date), String.format("%02d", heure)+":00", "Poule", this);
+		partie.setEquipeUne(equipes.get(equipeUne));
+		partie.setEquipeDeux(equipes.get(equipeDeux));
+		new PartieJDBC().add(partie); 
 	}
 
 	// verifier s'il existe des extra matchs
@@ -300,7 +273,7 @@ public class Tournoi {
 		}
 		return nbMatchsParJour;
 	}
-	
+
 	// la durée totale pour faire des matchs
 	private int dureePoule(int dureeTournoi) {
 		int duree = 4;
@@ -311,7 +284,7 @@ public class Tournoi {
 		}
 		return duree;
 	}
-	
+
 	// le trou entre deux matchs
 	// dépendre de matchs par jour
 	// plus de match, moins de temps et vice versa
@@ -321,91 +294,114 @@ public class Tournoi {
 		else if (nbMatchs<=4) gap = 2;
 		return gap;
 	}
-	
+
 	// nombre total des matchs pour un nombre d'équipe donné
 	private int nombreMatchs(int nbEquipes) {
 		return nbEquipes*(nbEquipes-1)/2;
 	}
-	
-	public void selectionArbitre(Tournoi tournoi) {
+
+	public boolean selectionArbitre(Tournoi tournoi) {
 		// nombre d'équipes dans le tournoi
 		int nbEquipes = (int) new ParticiperJDBC().getAll().stream()
 				.filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi()))
 				.count();
-		
+
 		// selection du nombre d'arbitres en fonction du nombre d'équipes
 		int nbArbitres = 0;
 		switch(nbEquipes) {
-			case 4:
-			case 5:
-				nbArbitres = 1;
-				break;
-			case 6:
-			case 7:
-				nbArbitres = 2;
-				break;
-			case 8:
-				nbArbitres = 3;
-				break;
+		case 4:
+		case 5:
+			nbArbitres = 1;
+			break;
+		case 6:
+		case 7:
+			nbArbitres = 2;
+			break;
+		case 8:
+			nbArbitres = 3;
+			break;
 		}
-		
+
 		// Selection de tous les arbitres de la base
-		ArbitreJDBC ajdbc = new ArbitreJDBC();
-		List<Arbitre> arbitres = new ArrayList<>();
-		try {
-			arbitres = ajdbc.getAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Arbitre arbitreBDD = new Arbitre();
+		List<Arbitre> arbitres = arbitreBDD.getTousLesArbitres();
 		
+		// S'il n'y a pas assez d'arbitres, on retourne faux
+		if (arbitres.size() < nbArbitres) {
+			return false;
+		}
+
 		// Selection d'arbitres au hasard
-		AssocierJDBC assjdbc = new AssocierJDBC();
+		Associer associerBDD = new Associer();
 		List<Arbitre> arbitresTirees = new ArrayList<>();
 		Random random = new Random();
-		
+
 		// Ajout d'un compte à la base de donnée pour le tournoi
-		Compte c = new Compte();
-		int idCompte = -1;
-		try {
-			idCompte = CompteJDBC.getNextValueSequence();
-			c.ajouterCompte(new Compte(idCompte,tournoi.getNomTournoi().replace(" ", ""),Compte.genererPassword(15),TypeCompte.ARBITRE));
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		
-		for (int i = 0; i<nbArbitres; i++) {
+		Compte compteTournoi = new Compte(tournoi.getDateDebut().toString().replace("-", ""), Compte.genererPassword(15), TypeCompte.ARBITRE);
+		new Compte().ajouterCompte(compteTournoi);
+
+		for (int i = 0; i < nbArbitres; i++) {
 			int numArbitre = random.nextInt(arbitres.size());
 			arbitresTirees.add(arbitres.get(numArbitre));
-			
-			// Association du compte aux arbitres
-			try {
-				Arbitre arb = arbitres.get(numArbitre);
-				arb.setIdCompte(idCompte);
-				ajdbc.update(arb);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 
-			// Ajout dans la base de données la liason arbitre / tournoi
-			try {
-				Associer ass = new Associer(arbitres.get(numArbitre), tournoi);
-				assjdbc.add(new Associer(arbitres.get(numArbitre), tournoi));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			// Association du compte aux arbitres
+			Arbitre arb = arbitres.get(numArbitre);
+			arb.setCompte(compteTournoi);
+			arbitreBDD.mettreAJourArbitre(arb);
+
+			// Ajout dans la base de données la liaison arbitre / tournoi
+			associerBDD.ajouterAssociation(new Associer(arbitres.get(numArbitre), tournoi));
 			arbitres.remove(numArbitre);
 		}
+		
+		return true;
 	}
 	
-	public void changerStatusTournoi(Tournoi tournoi, Statut status) {
-		this.jdbc.changerStatusTournoi(tournoi, status);
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+	
+	public List<Tournoi> getTousLesTournois(){
+		return jdbc.getAll();
 	}
 	
-	public void setVainqueurTournoi(Tournoi tournoi, Equipe equipe) {
-		this.jdbc.setVainqueurTournoi(tournoi, equipe);
+	public Tournoi getTournoiParNom(String nomTournoi) {
+		return jdbc.getById(nomTournoi).orElse(null);
 	}
 	
-	public List<Equipe> getEquipesFinale(Tournoi tournoi){
-		return this.jdbc.getEquipesFinale(tournoi);
+	public void ajouterTournoi(Tournoi tournoi) {
+		jdbc.add(tournoi);
+	}
+	
+	public void mettreAJourTournoi(Tournoi tournoi) {
+		jdbc.update(tournoi);
+	}
+	
+	public void supprimerTournoi(Tournoi tournoi) {
+		jdbc.delete(tournoi);
+	}
+	
+	public boolean existeTournoiEntreDates(Date dateDebut, Date dateFin) {
+		return jdbc.existeTournoiEntreDates(dateDebut, dateFin);
+	}
+	
+	public List<Equipe> getEquipesTournoi(Tournoi tournoi) {
+		return jdbc.getEquipesTournoi(tournoi);
+	}
+	
+	public List<Arbitre> getArbitresTournoi(Tournoi tournoi){
+		return jdbc.getArbitresTournoi(tournoi);
+	}
+	
+	public List<Tournoi> getTournoisNiveauStatutNom(String nom, Niveau niveau, Statut status){
+		return jdbc.getTournoisNiveauStatutNom(nom, niveau, status);
+	}
+	
+	public void changerStatutTournoi(Tournoi tournoi, Statut status) {
+		this.jdbc.changerStatutTournoi(tournoi, status);
+	}
+	
+	public void changerVainqueurTournoi(Tournoi tournoi, Equipe equipe) {
+		this.jdbc.changerVainqueurTournoi(tournoi, equipe);
 	}
 }

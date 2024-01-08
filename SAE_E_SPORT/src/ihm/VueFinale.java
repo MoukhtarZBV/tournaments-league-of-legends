@@ -21,9 +21,9 @@ import javax.swing.table.DefaultTableModel;
 import Images.ImagesIcons;
 import components.EquipesTable;
 import controleur.ControleurFinale;
-import dao.TournoiJDBC;
 import modele.Equipe;
 import modele.Joueur;
+import modele.Partie;
 import modele.Statut;
 import modele.Tournoi;
 
@@ -55,9 +55,7 @@ public class VueFinale extends JFrame {
 	private Equipe equipeDeux;
 	private Equipe equipeVainqueur;
 
-	/**
-	 * Create the frame.
-	 */
+
 	public VueFinale(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
@@ -223,12 +221,13 @@ public class VueFinale extends JFrame {
 		panelBoutons.add(btnConfirmer);
 		
 		if (tournoi.getVainqueur() == null) {
+			System.out.println("Null");
 			btnConfirmer.setVisible(true);
 			lblTropheeEquipeUne.addMouseListener(controleur);
 			lblTropheeEquipeDeux.addMouseListener(controleur);
+		} else {
+			afficherTropheeVainqueur();
 		}
-		afficherBoutonsTrophees();
-		
 	}
 	
 	private void afficherEquipes(JTable table, Equipe equipe) {
@@ -241,14 +240,11 @@ public class VueFinale extends JFrame {
 		}
 	}
 
-	public void afficherBoutonsTrophees() {
-		System.out.println(tournoi);
-		if (tournoi.getVainqueur() != null) {
-			if (tournoi.getVainqueur().equals(equipeUne)) {
-				setIconesTrophees(new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)), null);
-			} else {
-				setIconesTrophees(null, new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)));
-			}
+	public void afficherTropheeVainqueur() {
+		if (tournoi.getVainqueur().equals(equipeUne)) {
+			setIconesTrophees(new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)), null);
+		} else {
+			setIconesTrophees(null, new ImageIcon(ImagesIcons.class.getResource(ImagesIcons.TROPHY_WIN)));
 		}
 	}
 	
@@ -289,7 +285,8 @@ public class VueFinale extends JFrame {
 	}
 	
 	public void setEquipes() {
-		List<Equipe> equipes = new Tournoi().getEquipesFinale(tournoi);
+		Partie partieBDD = new Partie();
+		List<Equipe> equipes = partieBDD.getEquipesPartie(partieBDD.getFinaleTournoi(tournoi));
 		equipeUne = equipes.get(0);
 		equipeDeux = equipes.get(1);
 	}

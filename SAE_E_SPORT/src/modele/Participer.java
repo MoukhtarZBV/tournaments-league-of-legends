@@ -1,5 +1,9 @@
 package modele;
 
+import java.util.List;
+
+import dao.ParticiperJDBC;
+
 public class Participer implements Comparable<Participer>{
 
 	private Equipe equipe;
@@ -8,12 +12,18 @@ public class Participer implements Comparable<Participer>{
 	private int nbMatchsJoues;
 	private int nbMatchsGagnes;
 	
+	private ParticiperJDBC jdbc;
+	
 	public Participer(Equipe equipe, Tournoi tournoi) throws IllegalArgumentException {
 		this.equipe = equipe;
 		this.tournoi = tournoi;
 		this.nbMatchsGagnes = 0;
 		this.nbMatchsJoues = 0;
 		this.nbPointsGagnes = 0;
+	}
+	
+	public Participer() {
+		this.jdbc = new ParticiperJDBC();
 	}
 
 	public int getNbPointsGagnes() throws IllegalArgumentException {
@@ -60,6 +70,22 @@ public class Participer implements Comparable<Participer>{
 		if (res<0) return -1;
 		else if (res==0) return 0;
 		else return 1;
+	}
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Participer> getToutesLesParticipations(){
+		return jdbc.getAll();
+	}
+	
+	public void ajouterParticipation(Participer participation) {
+		jdbc.add(participation);
+	}
+
+	public void mettreAJourParticipation(Participer participation) {
+		jdbc.update(participation);
 	}
 	
 }

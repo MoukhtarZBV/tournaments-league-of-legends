@@ -32,21 +32,23 @@ public class ControleurFinale implements MouseListener, ActionListener {
 			vueTournoi.setVisible(true);
 			this.vue.dispose();
 		} else if (bouton.getName().equals("Confirmer")) {
-			this.modele.setVainqueurTournoi(this.vue.getTournoi(), this.vue.getVainqueur());
+			this.modele.changerVainqueurTournoi(this.vue.getTournoi(), this.vue.getVainqueur());
 			this.vue.setVisibleConfirmer(false);
-			this.modele.changerStatusTournoi(this.vue.getTournoi(), Statut.TERMINE);
+			this.modele.changerStatutTournoi(this.vue.getTournoi(), Statut.TERMINE);
 			this.vue.getTournoi().setStatut(Statut.TERMINE);
 			this.vue.getTournoi().setVainqueur(this.vue.getVainqueur());
-			this.vue.afficherBoutonsTrophees();
+			this.vue.afficherTropheeVainqueur();
 			this.vue.setLabelStatus();
 		}
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		JLabel trophee = (JLabel) e.getSource();
-		this.vue.setVainqueur(trophee.getName());
-		this.vue.setActifConfirmer(true);
+		if (this.vue.getTournoi().getStatut() == Statut.FINALE) {
+			JLabel trophee = (JLabel) e.getSource();
+			this.vue.setVainqueur(trophee.getName());
+			this.vue.setActifConfirmer(true);
+		}
 	}
 
 	@Override

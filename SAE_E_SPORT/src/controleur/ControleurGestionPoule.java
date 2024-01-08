@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,13 +24,15 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 
 	private VueGestionDeLaPoule vue;
 	private ModelePoule modele;
+	private boolean modifie;
 	
 	public ControleurGestionPoule (VueGestionDeLaPoule vue) {
 		this.vue = vue;
+		this.modifie = false;
 		try {
 			this.modele = new ModelePoule(this.vue.getTournoi());
 			this.vue.setJTableClassement(modele.classement());
-			this.vue.setJTableMatches(modele.matches()); 
+			this.vue.setJTableMatches(modele.matches());
 			if (!modele.tousLesMatchsJouees()) {
 				this.vue.setActifBoutonCloturer(false);
 			} else if (this.vue.getTournoi().getStatut() != Statut.EN_COURS) {
@@ -55,9 +58,7 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
-					// (A FAIRE) créer la finale !!!!!!!!!!!!!!!!!!!!!!!!!!!
-					
-					// Retour au détail du tournoi
+					this.modele.creerFinale(this.vue.getTournoi());
 					this.modele.changerStatusEnFinale(this.vue.getTournoi());
 					this.vue.getTournoi().setStatut(Statut.FINALE);
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
@@ -65,10 +66,8 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 					this.vue.dispose();
 					break;
 				case ("Retour") :
-					try {
+					if (this.modifie) {
 						this.modele.enregistrerResultat();
-					} catch (Exception e1) {
-						e1.printStackTrace();
 					}
 					this.vue.dispose();
 					VueTournoi vueT2 = new VueTournoi(this.vue.getTournoi());
@@ -98,6 +97,7 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 						e1.printStackTrace();
 					}
 				}
+				this.modifie = true;
 			}
 		}
 	}

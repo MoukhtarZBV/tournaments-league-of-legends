@@ -36,6 +36,7 @@ public class TestEquipeJoueur {
 		e2.ajouterJoueur(j11,j21,j31,j41,j51);
 		
 		eJDBC.add(e1);
+		System.out.println(jJDBC.getAll());
 		eJDBC.add(e2);
 		
 		System.out.println("\n###add Equipe OK###\n");

@@ -34,13 +34,13 @@ public class AssocierJDBC implements AssocierDAO{
 	}
 
 	@Override
-	public Optional<Associer> getById(Integer id) throws Exception {
-		// TODO Auto-generated method stub
+	public Optional<Associer> getById(Integer id) {
+		// Inutile dans notre cas
 		return Optional.empty();
 	}
 
 	@Override
-	public boolean add(Associer value) throws Exception {
+	public boolean add(Associer value) {
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().
@@ -57,14 +57,14 @@ public class AssocierJDBC implements AssocierDAO{
 	}
 
 	@Override
-	public boolean update(Associer value) throws Exception {
-		// TODO Auto-generated method stub
+	public boolean update(Associer value){
+		// Inutile dans notre cas
 		return false;
 	}
 
 	@Override
-	public boolean delete(Associer value) throws Exception {
-		// TODO Auto-generated method stub
+	public boolean delete(Associer value) {
+		// Inutile dans notre cas
 		return false;
 	}
 

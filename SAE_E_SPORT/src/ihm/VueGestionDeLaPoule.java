@@ -181,7 +181,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		panelClassement.add(lblClassement, BorderLayout.NORTH);
 		
 		// Table classement
-		String[] columnsClassement = {"Rang", "Equipe", "Points Gagnés", "Matches Joués"};
+		String[] columnsClassement = {"Rang", "Équipe", "Points gagnés", "Parties gagnés"};
 		DefaultTableModel modeleClassement = new DefaultTableModel(columnsClassement, 0) {
 			/**
 			 * 
@@ -232,11 +232,6 @@ public class VueGestionDeLaPoule extends JFrame {
 		this.tableClassement.getColumnModel().getColumn(3).setMaxWidth(150);
 		this.tableClassement.getColumnModel().getColumn(3).setMinWidth(150);
 		
-		ControleurGestionPoule controleur = new ControleurGestionPoule(this);
-		
-		// ici moi 
-		this.tableMatches.addMouseListener(controleur);
-		
 		
 		///// PANEL DES BOUTONS \\\\\
 		GridLayout gl_panelButtons = new GridLayout(3, 0, 0, 0);
@@ -276,6 +271,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		btnRetour.setFocusable(false);
 		panelButtons.add(btnRetour);
 		
+		// Controleur
 		this.controleur = new ControleurGestionPoule(this);
 		this.tableMatches.addMouseListener(controleur);
 		btnImprimer.addActionListener(controleur);
@@ -296,7 +292,7 @@ public class VueGestionDeLaPoule extends JFrame {
 			cloned[i] = datas[i].clone();
 		}
 		for (int i = 0; i < datas.length; i++) { 
-			for(int j = 0; j < datas.length; j++) {
+			for(int j = 0; j < datas[i].length; j++) {
 				
 				// Panel avec bordure
 				JPanel panel = new JPanel();

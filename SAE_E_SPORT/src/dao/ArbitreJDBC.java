@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 import modele.Arbitre;
+import modele.Tournoi;
 
 public class ArbitreJDBC implements ArbitreDAO{
 	
 	@Override
-	public List<Arbitre> getAll() throws Exception {
+	public List<Arbitre> getAll() {
         List<Arbitre> listeArbitres = new ArrayList<>();
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -23,7 +24,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 	        	Arbitre arbitre = new Arbitre(rs.getInt("idArbitre"),
 		                 rs.getString("nomArbitre"),
 		                 rs.getString("prenomArbitre"));
-	        	arbitre.setIdCompte(rs.getInt("idCompte"));
+	        	arbitre.setCompte(new CompteJDBC().getById(rs.getString("login")).orElse(null));
 	        	listeArbitres.add(arbitre);
 	        }
 	        
@@ -44,7 +45,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				Arbitre arbitre = new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre"));
-				arbitre.setIdCompte(rs.getInt("idCompte"));
+				arbitre.setCompte(new CompteJDBC().getById(rs.getString("login")).orElse(null));
 				opt = Optional.ofNullable(arbitre);
 			}
 		} catch (SQLException e) {
@@ -52,41 +53,9 @@ public class ArbitreJDBC implements ArbitreDAO{
 		}
 		return opt;
 	}
-	
-	@Override
-	public Optional<Arbitre> getByNomPrenom(String nom, String prenom) throws Exception {
-		Optional<Arbitre> opt = Optional.empty();
-		try {
-			String req = "SELECT * FROM Arbitre WHERE nomArbitre = ? AND prenomArbitre = ?";
-			
-			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
-			st.setString(1, nom);
-			st.setString(2, prenom);
-			
-			ResultSet rs = st.executeQuery();
-			if (rs.next()) {
-				Arbitre arbitre = new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre"));
-				arbitre.setIdCompte(rs.getInt("idCompte"));
-				opt = Optional.ofNullable(arbitre);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return opt;
-	}
-	
-	public static int getNextValueSequence() throws Exception {
-        int res = -1;
-        Statement st = ConnectionJDBC.getConnection().createStatement();
-        ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Arbitre");
-        if (rs.next()) {
-            res = rs.getInt(1);
-        }
-        return res;
-    }
 
 	@Override
-	public boolean add(Arbitre a) throws Exception {
+	public boolean add(Arbitre a) {
 		boolean res = false;
 		try {
 			String addArbitre = "INSERT INTO Arbitre(idArbitre, nomArbitre, prenomArbitre) values (?, ?, ?)";
@@ -109,20 +78,20 @@ public class ArbitreJDBC implements ArbitreDAO{
 	}
 
 	@Override
-	public boolean update(Arbitre a) throws Exception {
+	public boolean update(Arbitre a) {
 		boolean res = false;
 		try {
 			String updateArbitre = "UPDATE Arbitre "
-					   		   + "SET nomArbitre = ?, prenomArbitre = ?, idCompte = ?"
+					   		   + "SET nomArbitre = ?, prenomArbitre = ?, login = ?"
 					   		   + "WHERE idArbitre = ?";
 			
 			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement(updateArbitre);
 			st.setString(1, a.getNom());
 			st.setString(2, a.getPrenom());
-			if (a.getIdCompte() == null) {
+			if (a.getCompte() == null) {
 				st.setNull(3, java.sql.Types.INTEGER);
 			} else {
-				st.setInt(3, a.getIdCompte());
+				st.setString(3, a.getCompte().getLogin());
 			}
 			st.setInt(4, a.getId());
 
@@ -138,7 +107,7 @@ public class ArbitreJDBC implements ArbitreDAO{
 	}
 
 	@Override
-	public boolean delete(Arbitre a) throws Exception {
+	public boolean delete(Arbitre a) {
 		boolean res = false;
 		try {
 			String updateArbitre = "DELETE FROM Arbitre WHERE idArbitre = ?";
@@ -156,5 +125,41 @@ public class ArbitreJDBC implements ArbitreDAO{
 		}
 		return res;
 	}
+	
+	@Override
+	public Optional<Arbitre> getByNomPrenom(String nom, String prenom) {
+		Optional<Arbitre> opt = Optional.empty();
+		try {
+			String req = "SELECT * FROM Arbitre WHERE nomArbitre = ? AND prenomArbitre = ?";
+			
+			PreparedStatement st = ConnectionJDBC.getConnection().prepareStatement(req);
+			st.setString(1, nom);
+			st.setString(2, prenom);
+			
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				Arbitre arbitre = new Arbitre(rs.getInt("idArbitre"), rs.getString("nomArbitre"),rs.getString("prenomArbitre"));
+				arbitre.setCompte(new CompteJDBC().getById(rs.getString("login")).orElse(null));
+				opt = Optional.ofNullable(arbitre);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return opt;
+	}
+	
+	public static int getNextValueSequence() {
+        int res = -1;
+        try {
+        	Statement st = ConnectionJDBC.getConnection().createStatement();
+            ResultSet rs = st.executeQuery("VALUES NEXT VALUE FOR SEQ_Arbitre");
+            if (rs.next()) {
+                res = rs.getInt(1);
+            }
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        return res;
+    }
 
 }

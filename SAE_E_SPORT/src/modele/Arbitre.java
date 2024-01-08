@@ -2,6 +2,7 @@ package modele;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import dao.ArbitreJDBC;
 import dao.EquipeJDBC;
@@ -11,7 +12,8 @@ public class Arbitre {
 	private int idArbitre;
 	private String nomArbitre;
 	private String prenomArbitre;
-	private Integer idCompte;
+	private Compte compte;
+	
 	private ArbitreJDBC jdbc;
 	
 	// Constructeur
@@ -19,7 +21,7 @@ public class Arbitre {
 		this.idArbitre = id;
 		this.nomArbitre = nomArbitre;
 		this.prenomArbitre = prenomArbitre;
-		this.idCompte = null;
+		this.compte = null;
 	}
 	
 	public Arbitre() {
@@ -39,8 +41,8 @@ public class Arbitre {
 		return this.prenomArbitre;
 	}
 	
-	public Integer getIdCompte() {
-		return this.idCompte;
+	public Compte getCompte() {
+		return this.compte;
 	}
 	
 	// Set
@@ -52,28 +54,8 @@ public class Arbitre {
 		this.prenomArbitre = prenomArbitre;
 	}
 	
-	public void setIdCompte(int id) {
-		this.idCompte = id;
-	}
-	
-	//JDBC
-	
-	public void ajouterArbitre(Arbitre a) {
-		try {
-			this.jdbc.add(a);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public List<Arbitre> tousLesArbitres(){
-		List<Arbitre> arbitres = null;
-		try {
-			arbitres =  jdbc.getAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return arbitres;
+	public void setCompte(Compte compte) {
+		this.compte = compte;
 	}
 	
 	// Overrides
@@ -98,4 +80,32 @@ public class Arbitre {
 	public String toString() {
 		return String.format("Arbitre ID[%d], %s %s", this.getId(), this.getPrenom(), this.getNom().toUpperCase());
 	}	
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Arbitre> getTousLesArbitres(){
+		return jdbc.getAll();
+	}
+
+	public Arbitre getArbitreParID(Integer id) {
+		return jdbc.getById(id).orElse(null);
+	}
+
+	public void ajouterArbitre(Arbitre arbitre) {
+		jdbc.add(arbitre);
+	}
+
+	public void mettreAJourArbitre(Arbitre arbitre) {
+		jdbc.update(arbitre);
+	}
+
+	public void supprimerArbitre(Arbitre arbitre) {
+		jdbc.delete(arbitre);
+	}
+	
+	public Arbitre getByNomPrenom(String nom, String prenom){
+		return jdbc.getByNomPrenom(nom, prenom).orElse(null);
+	}
 }

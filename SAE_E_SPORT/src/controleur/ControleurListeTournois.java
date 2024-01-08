@@ -29,14 +29,14 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 	
 	private String nom;
 	private Niveau niveau;
-	private Statut status;
+	private Statut statut;
 	
 	public ControleurListeTournois(VueListeTournois vue) {
 		this.modele = new Tournoi();
 		this.vue = vue;
 		this.nom = "";
 		this.niveau = null;
-		this.status = null;
+		this.statut = null;
 	}
 
 	@Override
@@ -47,16 +47,14 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			if (bouton.getName().equals("Nouveau")) {
 				VueCreationTournoi vue = new VueCreationTournoi();
 				vue.setVisible(true);
-				
-				this.vue.dispose(); // pour actualiser la page en fond
+				this.vue.dispose(); 
 			} else if (bouton.getName().equals("Retour")) {
-				vue.dispose();
-				
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
+				this.vue.dispose(); 
 			} else if (bouton.getFont().getFamily().equals("Gigi")) {
 				this.nom = vue.saisieChamp();
-				vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));
+				vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
 			}
 		}
 	}
@@ -72,10 +70,10 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			}
 			
 			if (vue.estOptionComboboxStatus(option)) {
-				this.status = Statut.getStatut(option);
+				this.statut = Statut.getStatut(option);
 			}
 			
-			vue.afficherTournois(modele.getTournoisNiveauStatusNom(nom, niveau, status));
+			vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
 		}
 	}
 
@@ -87,7 +85,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
             Tournoi tournoi = null;
             
             try {
-				tournoi = modele.getTournoiDeNom((String) table.getValueAt(row, 0));
+				tournoi = modele.getTournoiParNom((String) table.getValueAt(row, 0));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

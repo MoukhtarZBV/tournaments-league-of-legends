@@ -1,6 +1,7 @@
 package ihm;
 
 import javax.swing.JFrame;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -12,13 +13,12 @@ import modele.Pays;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import java.awt.Color;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.util.Date;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -299,7 +299,7 @@ public class VueCreationTournoi extends JFrame {
 		// Input date début
 		inputDateDebut = new JFormattedTextField(dateFormat);
 		inputDateDebut.setForeground(Palette.WHITE);
-		inputDateDebut.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+		inputDateDebut.setText(new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()));
 		inputDateDebut.setFont(Police.INPUT);
 		inputDateDebut.setColumns(10);
 		inputDateDebut.addActionListener(controleur);
@@ -331,7 +331,7 @@ public class VueCreationTournoi extends JFrame {
 		
 		// Input date fin
 		inputDateFin = new JFormattedTextField(dateFormat);
-		inputDateFin.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+		inputDateFin.setText(new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()));
 		inputDateFin.setForeground(Palette.WHITE);
 		inputDateFin.setFont(Police.INPUT);
 		inputDateFin.setColumns(10);
@@ -405,28 +405,13 @@ public class VueCreationTournoi extends JFrame {
 		return this.panelPopup;
 	}
 	
-	private static LocalDate getDate(String date) {
-		int indexSeparateur = date.indexOf('/');
-		int jour = Integer.valueOf(date.substring(0, indexSeparateur));
-		
-		date = date.substring(indexSeparateur + 1);
-		indexSeparateur = date.indexOf('/');
-		int mois = Integer.valueOf(date.substring(0, indexSeparateur));
-		
-		date = date.substring(indexSeparateur);
-		int annee = Integer.valueOf(date.substring(1));
-		
-		LocalDate localDate = LocalDate.of(annee, mois, jour);
-		return localDate;
-	}
-	
-	public java.sql.Date getDateDebut() {
-		java.sql.Date date = java.sql.Date.valueOf(getDate(this.inputDateDebut.getText()));
+	public Date getDateDebut() {
+		Date date = Date.valueOf(Utilitaires.convertirTexteEnDate(this.inputDateDebut.getText()));
         return date;
 	}
 	
-	public java.sql.Date getDateFin() {
-		java.sql.Date date = java.sql.Date.valueOf(getDate(this.inputDateFin.getText()));
+	public Date getDateFin() {
+		Date date = Date.valueOf(Utilitaires.convertirTexteEnDate(this.inputDateFin.getText()));
         return date;
 	}
 }
