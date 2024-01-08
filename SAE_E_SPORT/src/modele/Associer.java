@@ -9,6 +9,7 @@ public class Associer {
 	
 	private Arbitre arbitre;
 	private Tournoi tournoi;
+	
 	private AssocierJDBC jdbc;
 	
 	public Associer(Arbitre arbitre, Tournoi tournoi) {
@@ -23,18 +24,25 @@ public class Associer {
 	public Arbitre getArbitre() {
 		return this.arbitre;
 	}
+	
 	public Tournoi getTournoi() {
 		return this.tournoi;
-	}
-	
-	public List<Associer> toutesLesAssociations(){
-		List<Associer> associations = new ArrayList<>();
-		associations = this.jdbc.getAll();
-		return associations;
 	}
 	
 	@Override 
 	public String toString() {
 		return "Associer = [arbitre=" + this.arbitre.getId() + ", tournoi=" + this.tournoi.getNomTournoi() +"]\n";
+	}
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Associer> getToutesLesAssociations(){
+		return jdbc.getAll();
+	}
+	
+	public void ajouterAssociation(Associer associer) {
+		jdbc.add(associer);
 	}
 }

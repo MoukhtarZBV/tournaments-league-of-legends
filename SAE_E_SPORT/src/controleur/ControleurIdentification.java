@@ -23,12 +23,10 @@ import modele.Tournoi;
 public class ControleurIdentification implements ActionListener, WindowListener {
 	private VueIdentification vue;
 	private Compte modele;
-	private List<Compte> comptes;
 
 	public ControleurIdentification(VueIdentification vue) {
 		this.vue = vue;
 		this.modele = new Compte();
-		this.comptes = this.modele.tousLesComptes();
 	}
 	
 	@Override
@@ -36,22 +34,22 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 		JButton bouton = (JButton) e.getSource();
 		if (bouton.getText().equals("Se connecter")) {
 			// Verifie que le correspondance compte
-			for (Compte c : comptes) {
-				if (c.getLogin().equals(this.vue.getLogin())) {
-					if (c.getMotDePasse().equals(this.vue.getPassword())) {
+			for (Compte compte : this.modele.getTousLesComptes()) {
+				if (compte.getLogin().equals(this.vue.getLogin())) {
+					if (compte.getMotDePasse().equals(this.vue.getPassword())) {
 						this.vue.dispose();
 						// Si l'utilisateur est un administrateur
-						if (c.getType().denomination() == "Administrateur") {
+						if (compte.getType().denomination() == "Administrateur") {
 							VueAccueilAdmin vue = new VueAccueilAdmin();
 							vue.setVisible(true);
 							// CHANGER LE BONJOUR ADMIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (le passer en paramètre de la vueAccueil problement)
 						}
 						// Si l'utilisateur est un arbitre
 						else {
-							Associer a = new Associer();
-							List<Associer> associations = a.toutesLesAssociations();
+							Associer associerBDD = new Associer();
+							List<Associer> associations = associerBDD.getToutesLesAssociations();
 							for (Associer ass : associations) {
-								if (ass.getArbitre().getIdCompte() == c.getIdCompte()) {
+								if (ass.getArbitre().getCompte().getLogin().equals(compte.getLogin())) {
 									VueTournoi vue = new VueTournoi(ass.getTournoi());
 									vue.setVisible(true);
 									this.vue.dispose();

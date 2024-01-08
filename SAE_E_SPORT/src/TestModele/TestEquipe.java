@@ -36,6 +36,7 @@ public class TestEquipe {
 		this.e1 = null;
 		this.e2 = null;
 		this.e3 = null;
+		this.e5 = null;
 	}
 
 	@Test

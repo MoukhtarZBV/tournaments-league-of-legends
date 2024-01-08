@@ -15,7 +15,7 @@ import modele.Compte;
 public class AdminJDBC implements AdminDAO {
 	
 	@Override
-	public List<Administrateur> getAll() throws Exception {
+	public List<Administrateur> getAll() {
 		List<Administrateur> list = new ArrayList<>();
 		try {			
 			Statement st = ConnectionJDBC.getConnection().createStatement();
@@ -25,7 +25,7 @@ public class AdminJDBC implements AdminDAO {
 			
 			while(rs.next()) {
 				CompteJDBC cbdd = new CompteJDBC();
-				Compte c = cbdd.getById(rs.getInt("idCompte")).orElse(null);
+				Compte c = cbdd.getById(rs.getString("login")).orElse(null);
 				list.add(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin"), c));
 			}
 			
@@ -36,7 +36,7 @@ public class AdminJDBC implements AdminDAO {
 	}
 
 	@Override
-	public Optional<Administrateur> getById(Integer id) throws Exception {
+	public Optional<Administrateur> getById(Integer id) {
 		Optional<Administrateur> opt = Optional.empty();
 		try {
 
@@ -48,7 +48,7 @@ public class AdminJDBC implements AdminDAO {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				CompteJDBC cbdd = new CompteJDBC();
-				Compte c = cbdd.getById(rs.getInt("idCompte")).orElse(null);
+				Compte c = cbdd.getById(rs.getString("login")).orElse(null);
 				opt = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin"), c));
 			}
 		} catch (SQLException e) {
@@ -58,23 +58,21 @@ public class AdminJDBC implements AdminDAO {
 	}
 
 	@Override
-	public boolean add(Administrateur admin) throws Exception {
+	public boolean add(Administrateur admin) {
 		boolean res = false;
 		try {
-			PreparedStatement st = null;
-			if (admin.getCompte()!= null) {
-				st  = ConnectionJDBC.getConnection()
-						.prepareStatement("INSERT INTO Administrateur(idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
-										+ "VALUES (?, ?, ?, ?)");
-				st.setInt(4, admin.getCompte().getIdCompte());
-			} else {
-				st  = ConnectionJDBC.getConnection()
-						.prepareStatement("INSERT INTO Administrateur (idAdministrateur, nomAdmin, prenomAdmin, idCompte) "
-										+ "VALUES (NEXT VALUE FOR SEQ_Administrateur, ?, ?, null)");
-			}
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement("INSERT INTO "
+						+ "Administrateur(idAdministrateur, nomAdmin, prenomAdmin, login) "
+						+ "VALUES (?, ?, ?, ?)");
+			
 			st.setInt(1, admin.getId());
 			st.setString(2, admin.getNom());
 			st.setString(3, admin.getPrenom());
+			if (admin.getCompte()!= null) {
+				st.setString(4, admin.getCompte().getLogin());
+			} else {
+				st.setNull(4, java.sql.Types.VARCHAR);
+			}
 			st.executeUpdate();
 			
 			System.out.println("L'administrateur "+ admin.getNom().toUpperCase() +" a été ajouté.");
@@ -87,20 +85,19 @@ public class AdminJDBC implements AdminDAO {
 	}
 
 	@Override
-	public boolean update(Administrateur admin) throws Exception {
+	public boolean update(Administrateur admin) {
 		boolean res = false;
 		try {
 			PreparedStatement st = null;
 			if (admin.getCompte()!=null) {
 				st  = ConnectionJDBC.getConnection().prepareStatement("UPDATE Administrateur "
-														   		   + "SET nomAdmin = ?, prenomAdmin = ?, idCompte = ? "
-														   		   + "WHERE idAdministrateur = ?");
-				st.setInt(3, admin.getCompte().getIdCompte());
+									   		   + "WHERE idAdministrateur = ?");
+				st.setString(3, admin.getCompte().getLogin());
 				st.setInt(4, admin.getId());
 			} else {
 				st  = ConnectionJDBC.getConnection().prepareStatement("UPDATE Administrateur "
-													   		   + "SET nomAdmin = ?, prenomAdmin = ?, idCompte = null "
-													   		   + "WHERE idAdministrateur = ?");
+												+ "SET nomAdmin = ?, prenomAdmin = ?, idCompte = null "
+												+ "WHERE idAdministrateur = ?");
 				st.setInt(3, admin.getId());
 			}
 			st.setString(1, admin.getNom());
@@ -117,7 +114,7 @@ public class AdminJDBC implements AdminDAO {
 	}
 
 	@Override
-	public boolean delete(Administrateur admin) throws Exception {
+	public boolean delete(Administrateur admin) {
 		boolean res = false;
 		try {
 			String updateAdmin = "DELETE FROM Administrateur WHERE idAdministrateur = ?";
@@ -135,20 +132,26 @@ public class AdminJDBC implements AdminDAO {
 		return res;
 	}
 
-	@Override
-	public List<Administrateur> getByNom(String nom) throws Exception {
-		List<Administrateur> admins = this.getAll().stream()
-											.filter(e->e.getNom()==nom)
-											.collect(Collectors.toList());
-		return admins;	
-	}
-
-	@Override
-	public List<Administrateur> getByNomPrenom(String nom, String prenom) throws Exception {
-		List<Administrateur> admins = this.getAll().stream()
-										.filter(e->e.getNom()==nom && e.getPrenom()==prenom)
-										.collect(Collectors.toList());
-		return admins;
+	@Override 
+	public Optional<Administrateur> getByNomPrenom(String nom, String prenom) {
+		Optional<Administrateur> admin = Optional.empty();
+		try {			
+			PreparedStatement st  = ConnectionJDBC.getConnection().prepareStatement("SELECT * FROM Administrateur"
+					+ "WHERE nomAdmin = ? AND prenomAdmin = ?");
+			st.setString(1, nom);
+			st.setString(2, nom);
+			ResultSet rs = st.executeQuery();
+			
+			if (rs.next()) {
+				CompteJDBC cbdd = new CompteJDBC();
+				Compte c = cbdd.getById(rs.getString("login")).orElse(null);
+				admin = Optional.ofNullable(new Administrateur(rs.getInt("idAdministrateur"), rs.getString("nomAdmin"), rs.getString("prenomAdmin"), c));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return admin;
 	}
 
 }

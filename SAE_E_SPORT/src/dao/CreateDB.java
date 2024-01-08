@@ -106,11 +106,6 @@ public class CreateDB {
 		// ====================================
 		// ========== Drop Sequences ==========
 		// ====================================
-		try {
-			stmt.executeUpdate("DROP SEQUENCE SEQ_Compte RESTRICT");
-		} catch (SQLException e) {
-			System.out.println("Drop SEQ_Compte échoué");
-		}
 		
 		try {
 			stmt.executeUpdate("DROP SEQUENCE SEQ_Equipe RESTRICT");
@@ -139,12 +134,6 @@ public class CreateDB {
 		// =====================================
 		// ========== Créer Sequences ==========
 		// =====================================
-		try {
-			stmt.executeUpdate("CREATE SEQUENCE SEQ_Compte START WITH 1 INCREMENT BY 1");
-			System.out.println("-- Séquence SEQ_Compte créée");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
 		try {
 			stmt.executeUpdate("CREATE SEQUENCE SEQ_Equipe START WITH 1 INCREMENT BY 1");
@@ -191,11 +180,10 @@ public class CreateDB {
 		// Table Compte
 		try { 
 			stmt.executeUpdate("CREATE TABLE Compte ("
-					+ "idCompte INTEGER,"
 					+ "login VARCHAR(30),"
 					+ "motDePasse VARCHAR(30),"
 					+ "type VARCHAR(30),"
-					+ "CONSTRAINT PK_Compte_idCompte PRIMARY KEY (idCompte))");
+					+ "CONSTRAINT PK_Compte_login PRIMARY KEY (login))");
 			System.out.println("-- Table Compte créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -210,7 +198,10 @@ public class CreateDB {
 					+ "rang INTEGER,"
 					+ "nationalite VARCHAR(50),"
 					+ "CONSTRAINT PK_Equipe_idEquipe PRIMARY KEY(idEquipe),"
-					+ "CONSTRAINT FK_Equipe_nationalite FOREIGN KEY (nationalite) REFERENCES Pays(nomPays))");
+					+ "CONSTRAINT FK_Equipe_nationalite FOREIGN KEY (nationalite) REFERENCES Pays(nomPays),"
+					+ "CONSTRAINT UN_Equipe_nom UNIQUE (nomEquipe),"
+					+ "CONSTRAINT UN_Equipe_rang UNIQUE (rang),"
+					+ "CONSTRAINT CK_Equipe_rang CHECK (0 < rang))");
 			System.out.println("-- Table Equipe créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -224,7 +215,8 @@ public class CreateDB {
 					+ "pseudo VARCHAR(50),"
 					+ "idEquipe INTEGER,"
 					+ "CONSTRAINT PK_Joueur_idJoueur PRIMARY KEY (idJoueur),"
-					+ "CONSTRAINT FK_Joueur_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe))");
+					+ "CONSTRAINT FK_Joueur_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
+					+ "CONSTRAINT FK_Joueur_pseudo UNIQUE (pseudo))");
 			System.out.println("-- Table Joueur créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -238,13 +230,13 @@ public class CreateDB {
 					+ "niveau VARCHAR(30),"
 					+ "dateDebut DATE,"
 					+ "dateFin DATE,"
-					+ "idCompte INTEGER,"
+					+ "login VARCHAR(30),"
 					+ "nomPays VARCHAR(50),"
 					+ "idEquipe INTEGER,"
-					+ "status VARCHAR(30),"
+					+ "statut VARCHAR(50),"
 					+ "CONSTRAINT PK_Tournoi_nomTournoi PRIMARY KEY (nomTournoi)," 
 					+ "CONSTRAINT FK_Tournoi_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
-					+ "CONSTRAINT FK_Tournoi_idCompte FOREIGN KEY (idCompte) REFERENCES Compte(idCompte),"
+					+ "CONSTRAINT FK_Tournoi_login FOREIGN KEY (login) REFERENCES Compte(login),"
 					+ "CONSTRAINT FK_Tournoi_nomPays FOREIGN KEY (nomPays) REFERENCES Pays(nomPays))");
 			System.out.println("-- Table Tournoi créée");
 		} catch (SQLException e) {
@@ -275,9 +267,10 @@ public class CreateDB {
 					+ "idArbitre INTEGER,"
 					+ "nomArbitre VARCHAR(50),"
 					+ "prenomArbitre VARCHAR(50),"
-					+ "idCompte INTEGER,"
+					+ "login VARCHAR(30),"
 					+ "CONSTRAINT PK_Arbitre_idArbitre PRIMARY KEY (idArbitre),"
-					+ "CONSTRAINT FK_Arbitre_idCompte FOREIGN KEY (idCompte) REFERENCES Compte(idCompte))");
+					+ "CONSTRAINT FK_Arbitre_login FOREIGN KEY (login) REFERENCES Compte(login),"
+					+ "CONSTRAINT UN_Arbitre_nomPrenom UNIQUE (nomArbitre, prenomArbitre))");
 			System.out.println("-- Table Arbitre créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -290,9 +283,10 @@ public class CreateDB {
 					+ "idAdministrateur INTEGER,"
 					+ "nomAdmin VARCHAR(50),"
 					+ "prenomAdmin VARCHAR(50),"
-					+ "idCompte INTEGER,"
+					+ "login VARCHAR(30),"
 					+ "CONSTRAINT PK_Administrateur_idAdmin PRIMARY KEY (idAdministrateur),"
-					+ "CONSTRAINT FK_Administrateur_idCompte FOREIGN KEY (idCompte) REFERENCES Compte(idCompte))");
+					+ "CONSTRAINT FK_Administrateur_login FOREIGN KEY (login) REFERENCES Compte(login),"
+					+ "CONSTRAINT UN_Administrateur_nomPrenom UNIQUE (nomAdmin, prenomAdmin))");
 			System.out.println("-- Table Administrateur créée");
 		} catch (SQLException e) {
 			e.printStackTrace();

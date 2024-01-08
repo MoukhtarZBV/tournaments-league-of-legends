@@ -15,7 +15,7 @@ public class ModeleHistoriquePoints {
 	
 	public ModeleHistoriquePoints() {
 		this.participations = new ParticiperJDBC().getAll();
-		this.equipes = new Equipe().toutesLesEquipes().stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList());
+		this.equipes = new Equipe().getToutesLesEquipes().stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList());
 		this.filteredEquipe = this.equipes;
 	}
 	

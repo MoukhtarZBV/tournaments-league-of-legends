@@ -39,21 +39,7 @@ public class UpdateDB {
 		if (canUpdate()) {
 			Statement stmt = null;
 			
-			try {
-				stmt = connection.createStatement();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.exit(-1);
-			}
 			
-			try {
-				stmt.executeUpdate("UPDATE Tournoi"
-								+ " SET status = '" + Statut.ANNULE.denomination() + "' "
-								+ " WHERE status = '" + Statut.A_VENIR.denomination() + "' "
-								+ " AND dateFin <= CURRENT_DATE");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 			/*
 			try {
 				stmt.executeUpdate("UPDATE Tournoi"

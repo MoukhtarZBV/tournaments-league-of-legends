@@ -58,9 +58,7 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
-					// (A FAIRE) créer la finale !!!!!!!!!!!!!!!!!!!!!!!!!!!
-					
-					// Retour au détail du tournoi
+					this.modele.creerFinale(this.vue.getTournoi());
 					this.modele.changerStatusEnFinale(this.vue.getTournoi());
 					this.vue.getTournoi().setStatut(Statut.FINALE);
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());

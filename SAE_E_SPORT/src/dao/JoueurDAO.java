@@ -7,6 +7,8 @@ import modele.Equipe;
 import modele.Joueur;
 
 public interface JoueurDAO extends DAO<Joueur, Integer>{
-	Optional <Joueur> getByPseudo(String value) throws Exception;
-	List <Joueur> getByEquipe(Equipe equipe) throws Exception;
+	
+	Optional<Joueur> getByPseudo(String value);
+	
+	List<Joueur> getByEquipe(Equipe equipe);
 }

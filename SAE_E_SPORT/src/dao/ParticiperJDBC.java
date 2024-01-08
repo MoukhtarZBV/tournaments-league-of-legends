@@ -35,7 +35,7 @@ public class ParticiperJDBC implements ParticiperDAO{
 	}
 	
 	@Override
-	public boolean add(Participer p) throws Exception {
+	public boolean add(Participer p) {
 		boolean res = false;
 		try {
 			CallableStatement cs = ConnectionJDBC.getConnection().
@@ -74,14 +74,14 @@ public class ParticiperJDBC implements ParticiperDAO{
 	}
 
 	@Override
-	public boolean delete(Participer p) throws Exception {
-		// TODO Auto-generated method stub
+	public boolean delete(Participer p) {
+		// Inutile dans notre cas
 		return false;
 	}
 
 	@Override
-	public Optional<Participer> getById(Tournoi id) throws Exception {
-		// TODO Auto-generated method stub
+	public Optional<Participer> getById(Tournoi id) {
+		// Pas d'id unique
 		return Optional.empty();
 	}	
 }

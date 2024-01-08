@@ -46,30 +46,17 @@ public class ControleurImportation implements ActionListener, DropListener {
 	        } catch (Exception e1) {
 	            e1.printStackTrace();
 	        }
-	    } 
-	    if (bouton.getText().equals("Valider")) {
-	    	try {
-	    		EtatEquipe etat = this.modele.verifierEquipe();
-				if(etat==EtatEquipe.MAL_COMPOSITION || etat==EtatEquipe.JOUEUR_EXISTE) {
-					this.vue.getPopup().setErreur("Un ou plusieurs joueurs d'équipe appartiennent à plus d'une équipe");
-				} else {
-					if (etat == EtatEquipe.OK) {
-						try {
-							this.modele.enregistrerImportation(this.vue.getTournoi());
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					}
-					this.vue.getPopup().setSucces("Les équipes ont bien été importées");
-					this.vue.getTournoi().setStatut(Statut.A_VENIR);
-					this.modele.changerStatusAVenir(this.vue.getTournoi());
-				}
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-	    }
-	    
-	    if (bouton.getText().equals("Retour")) {
+	    } else if (bouton.getText().equals("Valider")) {
+	    	EtatEquipe etat = this.modele.verifierEquipe();
+	    	if(etat==EtatEquipe.MAL_COMPOSITION || etat==EtatEquipe.JOUEUR_EXISTE) {
+	    		this.vue.getPopup().setErreur("Un ou plusieurs joueurs d'équipe appartiennent à plus d'une équipe");
+	    	} else if (etat == EtatEquipe.OK) {
+	    		this.modele.enregistrerImportation(this.vue.getTournoi());
+	    		this.vue.getPopup().setSucces("Les équipes ont bien été importées");
+	    		this.vue.getTournoi().setStatut(Statut.A_VENIR);
+	    		this.modele.changerStatusAVenir(this.vue.getTournoi());
+	    	}
+	    } else if (bouton.getText().equals("Retour")) {
 	    	VueTournoi vueTournoi = new VueTournoi(vue.getTournoi());
 			vueTournoi.setVisible(true);
 	    	this.vue.dispose();
@@ -86,7 +73,7 @@ public class ControleurImportation implements ActionListener, DropListener {
 	}
 	
 	private void afficherTableEquipes(String chemin) throws IOException, Exception {
-		if (this.modele.estBonFichierCSV(chemin, vue.getTournoi())) {
+		if (this.modele.fichierCSVconcerneTournoi(chemin, vue.getTournoi())) {
 			this.modele.importerEquipesJoueurs(chemin);
 			this.vue.afficherTableEquipes();
 			this.vue.ajouterEquipesTable(this.modele.getEquipesJoueurs());

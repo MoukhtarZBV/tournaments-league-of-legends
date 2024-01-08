@@ -30,9 +30,6 @@ import javax.swing.table.DefaultTableModel;
 import components.CoolScrollBar;
 import components.CoolTextField;
 import controleur.ControleurListeTournois;
-import dao.ConnectionJDBC;
-import dao.TournoiJDBC;
-import dao.UpdateDB;
 import modele.Niveau;
 import modele.Statut;
 import modele.Tournoi;
@@ -160,7 +157,7 @@ public class VueListeTournois extends JFrame {
 		triNiveau.setForeground(Palette.WHITE);
 		triNiveau.setFocusable(false);
 		triNiveau.addItemListener(controleur);
-		triNiveau.addItem("-- Niveau --");
+		triNiveau.addItem("Tous les niveaux");
 		for (Niveau niveau : Niveau.values()) {
         	triNiveau.addItem(niveau.denomination());
         }
@@ -173,7 +170,7 @@ public class VueListeTournois extends JFrame {
 		triStatus.setForeground(Palette.WHITE);
 		triStatus.setFocusable(false);
 		triStatus.addItemListener(controleur);
-		triStatus.addItem("-- Status --");
+		triStatus.addItem("Tous les statuts");
 		for (Statut status : Statut.values()) {
         	triStatus.addItem(status.denomination());
         }
@@ -200,7 +197,7 @@ public class VueListeTournois extends JFrame {
 		
 		// Modele de la table
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
-	            new String[] { "Nom", "Niveau", "Date début", "Nombre d'équipes", "État" }) {
+	            new String[] { "Nom", "Niveau", "Date début", "Équipes", "Statut" }) {
 	                
 				@Override
 			    public boolean isCellEditable(int row, int column) {
@@ -208,6 +205,9 @@ public class VueListeTournois extends JFrame {
 			    }
 			};
 		table.setModel(modele);
+		table.getColumnModel().getColumn(3).setMaxWidth(75);
+		table.getTableHeader().setReorderingAllowed(false);
+		table.getTableHeader().setResizingAllowed(false);
 		afficherTournois(tournois);
 		
 		// Table Header
@@ -265,7 +265,7 @@ public class VueListeTournois extends JFrame {
 		DefaultTableModel modele = ((DefaultTableModel) table.getModel());
 		modele.setRowCount(0);
 		for (Tournoi tournoi : tournois) {
-			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), tournoi.getDateDebut(), TournoiJDBC.nombreEquipesTournoi(tournoi), tournoi.getStatut().denomination()});
+			modele.addRow(new Object[] {tournoi.getNomTournoi(), tournoi.getNiveau().denomination(), Utilitaires.formaterDate(tournoi.getDateDebut()), tournoi.getEquipesTournoi(tournoi).size(), tournoi.getStatut().denomination()});
 		}
 	}
 	

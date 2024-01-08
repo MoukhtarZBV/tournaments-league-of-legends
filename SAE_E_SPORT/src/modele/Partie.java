@@ -2,7 +2,11 @@ package modele;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import dao.PartieJDBC;
 
 public class Partie {
 
@@ -14,6 +18,8 @@ public class Partie {
 	private Equipe equipeGagnante;
 	private Tournoi tournoi;
 	
+	private PartieJDBC jdbc;
+	
 	public Partie(Date date, String heure, String deroulement, Tournoi tournoi) {
 		this.date = date;
 		this.heure = heure;
@@ -22,6 +28,10 @@ public class Partie {
 		this.equipeUne = null;
 		this.equipeDeux = null;
 		this.equipeGagnante = null;
+	}
+	
+	public Partie() {
+		this.jdbc = new PartieJDBC();
 	}
 
 	public Date getDate() {
@@ -86,5 +96,40 @@ public class Partie {
 		return "Partie [date=" + this.date + ", heure=" + this.heure + ", deroulement=" + 
 				this.deroulement + ", tournoi=" + this.tournoi + ", premiere equipe = " + this.equipeUne + ", deuxieme equipe = " + this.equipeDeux + ", gagnant=" + this.equipeGagnante + ']';
 	}
+
+	// ==================== //
+	// ==== Partie DAO ==== //
+	// ==================== //
+
+	public List<Partie> getToutesLesParties(){
+		return jdbc.getAll();
+	}
+
+	public Partie getPartieParDateHeure(Date date, String heure) {
+		return jdbc.getByDateHeure(date, heure).orElse(null);
+	}
+
+	public void ajouterPartie(Partie partie) throws IllegalArgumentException {
+		jdbc.add(partie);
+	}
+
+	public void mettreAJourPartie(Partie partie) {
+		jdbc.update(partie);
+	}
 	
+	public void supprimerPartie(Partie partie) {
+		jdbc.update(partie);
+	}
+	
+	public List<Partie> getPartiesTournoi(Tournoi tournoi){
+		return jdbc.getPartiesTournoi(tournoi);
+	}
+	
+	public Partie getFinaleTournoi(Tournoi tournoi) {
+		return jdbc.getFinaleTournoi(tournoi).orElse(null);
+	}
+	
+	public List<Equipe> getEquipesPartie(Partie partie){
+		return jdbc.getEquipes(partie);
+	}
 }

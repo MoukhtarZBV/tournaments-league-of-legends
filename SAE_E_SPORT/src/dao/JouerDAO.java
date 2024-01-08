@@ -8,6 +8,5 @@ import modele.Equipe;
 import modele.Jouer;
 
 public interface JouerDAO extends DAO <Jouer, Integer>{
-	Optional<List<Jouer>> getByDateHeure(Date date, String heure) throws Exception;
-	Optional<Jouer> getByEquipe(Equipe e) throws Exception;
+	
 }

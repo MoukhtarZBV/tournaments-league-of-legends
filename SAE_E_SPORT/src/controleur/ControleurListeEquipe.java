@@ -36,10 +36,10 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			JList<String> list = (JList<String>) e.getSource();
 			if (e.getClickCount() == 2) {
 				try {
-					List<Equipe> equipes = (this.modele.toutesLesEquipes());
+					List<Equipe> equipes = (this.modele.getToutesLesEquipes());
 					String nomEq = ((String) list.getSelectedValue()).substring(6, 55);
 					
-					VueEquipe vue = new VueEquipe(equipes, this.modele.equipeParNom(nomEq), null);
+					VueEquipe vue = new VueEquipe(equipes, this.modele.getEquipeParNom(nomEq), null);
 					vue.setVisible(true);
 					this.vue.dispose();
 					
@@ -69,7 +69,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 				try {
 					// Lister par Nom d'équipe
 					if(this.vue.getTriParNom()) {
-						equipes = this.modele.toutesLesEquipes();
+						equipes = this.modele.getToutesLesEquipes();
 						List<String> nomEquipes = equipes.stream()
 								.sorted((x,y)-> x.getNom().compareTo(y.getNom()))
 								.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
@@ -84,7 +84,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 
 						// Lister par Rang
 					}else {
-						equipes = this.modele.toutesLesEquipes();
+						equipes = this.modele.getToutesLesEquipes();
 						List<String> nomEquipes = equipes.stream()
 								.sorted((x,y)-> {
 									if (x.getRang()>y.getRang()){
@@ -114,7 +114,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 				// Lister par Rang
 				if(this.vue.getTriParNom()) {
 					this.vue.setTriParNom(false);
-					equipes = this.modele.toutesLesEquipes();
+					equipes = this.modele.getToutesLesEquipes();
 					List<String> nomEquipes = equipes.stream()
 							.sorted((x,y)-> {
 								if (x.getRang()>y.getRang()){
@@ -138,7 +138,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 					// Lister par Nom d'équipe
 				}else {
 					this.vue.setTriParNom(true);
-					equipes = this.modele.toutesLesEquipes();
+					equipes = this.modele.getToutesLesEquipes();
 					List<String> nomEquipes = equipes.stream()
 							.sorted((x,y)-> x.getNom().compareTo(y.getNom()))
 							.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))

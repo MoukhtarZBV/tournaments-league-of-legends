@@ -42,7 +42,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	    } 
 	    if (bouton.getName().equals("Rechercher")){
 			try {
-				arbitres = this.modele.tousLesArbitres();
+				arbitres = this.modele.getTousLesArbitres();
 				List<String> nomArbitres = arbitres.stream()
 			            .map(a -> a.getNom() + " "+ a.getPrenom())
 			            .sorted((x,y)-> x.compareTo(y))

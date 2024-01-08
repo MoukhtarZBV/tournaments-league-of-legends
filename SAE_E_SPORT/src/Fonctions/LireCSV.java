@@ -28,22 +28,4 @@ public class LireCSV {
 	public List<String[]> getData(){
 		return this.data;
 	}
-	/*
-    public static void main(String[] args) {
-    
-        // Affichage des données
-        for (String[] row : this.data) {
-            for (String value : row) {
-                System.out.print(value + " ");
-            }
-            System.out.println(); // Nouvelle ligne pour chaque ligne du CSV
-        }
-
-        // Utilisation des données
-        if (!data.isEmpty() && data.get(0).length > 1) {
-            String value = data.get(1)[4];
-            System.out.println("Valeur à la deuxième colonne de la première ligne : " + value);
-        }
-    }
-    */
 }
