@@ -40,6 +40,7 @@ public class PanelPopUp extends JPanel {
 		
 		this.setOpaque(true);
 		this.setEnabled(true);
+		this.setVisible(true);
 	}
 	
 	public void setSucces(String texte) {
@@ -53,6 +54,7 @@ public class PanelPopUp extends JPanel {
 
 		this.setOpaque(true);
 		this.setEnabled(true);
+		this.setVisible(true);
 	}
 	
 	public void setNormal(String texte) {
@@ -62,6 +64,8 @@ public class PanelPopUp extends JPanel {
 		
 		this.texte.setForeground(Palette.WHITE);
 		this.texte.setText(texte);
+		
+		this.setVisible(true);
 	}
 
 }

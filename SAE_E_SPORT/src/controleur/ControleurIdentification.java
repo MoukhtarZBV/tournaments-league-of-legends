@@ -1,26 +1,24 @@
 package controleur;
 
-import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-
+import ihm.Palette;
 import ihm.VueAccueilAdmin;
-import ihm.VueEquipe;
 import ihm.VueIdentification;
-import ihm.VueListeEquipe;
 import ihm.VueTournoi;
 import modele.Associer;
 import modele.Compte;
-import modele.Equipe;
-import modele.Tournoi;
 
-public class ControleurIdentification implements ActionListener, WindowListener {
+public class ControleurIdentification implements ActionListener, WindowListener, MouseListener {
 	private VueIdentification vue;
 	private Compte modele;
 	private List<Compte> comptes;
@@ -34,7 +32,7 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
-		if (bouton.getText().equals("Se connecter")) {
+		if (bouton.getName().equals("Connexion")) {
 			// Verifie que le correspondance compte
 			for (Compte c : comptes) {
 				if (c.getLogin().equals(this.vue.getLogin())) {
@@ -62,12 +60,12 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 				}
 			}
 			// Si pas de correspondance
-			this.vue.setMessageErreur("Le login et/ou le mot de passe sont incorrect");
-			this.vue.setColorErreur (Color.RED);
+			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
+			
 			this.vue.setLogin("");
 			this.vue.setPassword("");
 		}
-		if(bouton.getText().equals("Retour")) {
+		if(bouton.getName().equals("Quitter")) {
 			this.vue.dispose();
 		}
 				
@@ -76,6 +74,38 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 	@Override
 	public void windowClosing(WindowEvent e) {
 		this.vue.dispose();
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			if(b.getName().equals("Connexion")) {
+				b.setBackground(Palette.LIGHT_PURPLE.brighter());	
+				b.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.LIGHT_PURPLE.brighter()));
+			} else {
+				b.setBackground(b.getBackground().brighter());
+			}
+			
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			if(b.getName().equals("Connexion")) {
+				b.setBackground(Palette.WHITE);	
+				b.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+			} else {
+				b.setBackground(b.getBackground().darker());
+			}
+			
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 	}
 
 		
@@ -98,5 +128,14 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
 	
 }
