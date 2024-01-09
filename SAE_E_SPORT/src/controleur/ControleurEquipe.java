@@ -49,18 +49,14 @@ public class ControleurEquipe implements ActionListener {
 			}
 		}
 		if (bouton.getText().equals("Retour")) {
-			this.vue.dispose();
-			try {
-				if(this.vue.getPere() == null) {
-					VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
-					vue.setVisible(true);
-				} else {
-					VueTournoi vue = new VueTournoi(this.vue.getPere());
-					vue.setVisible(true);
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			if (this.vue.getPere() == null) {
+				VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
+				vue.setVisible(true);
+			} else {
+				VueTournoi vue = new VueTournoi(this.vue.getPere());
+				vue.setVisible(true);
 			}
+			this.vue.dispose();
 		}
 				
 	}

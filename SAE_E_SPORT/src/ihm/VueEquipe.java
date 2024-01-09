@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +17,7 @@ import javax.swing.table.TableColumnModel;
 
 import components.CoolTextField;
 import components.PanelPopUp;
+import components.TableEquipes;
 
 import java.awt.GridLayout;
 import java.util.List;
@@ -212,29 +215,9 @@ public class VueEquipe extends JFrame {
 		titreCompo.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTitreCompo.add(titreCompo);
 		
-        DefaultTableModel model = new DefaultTableModel(new Object[][] {},
-				new String[] {"Num", "Joueur"});
-        
-        int objetCourant = 0;
-        for (Joueur j : equipe.getJoueurs()) {
-        	model.addRow(new Object[] {objetCourant+1,j.getPseudo()});
-        	objetCourant ++;
-        }
-        
-		JTable table = new JTable(model);
-		table.setShowGrid(true);
-		table.setGridColor(Palette.GRAY);
-		table.setBorder(null);
-		table.setEnabled(false);
-		table.setOpaque(false);
-		table.setRowHeight(50);
-		table.setForeground(Palette.WHITE);
-		table.setFont(Police.TABLEAU);
-		table.setBackground(Palette.DARK_GRAY);		
-		table.setIntercellSpacing(new Dimension(0, 6));
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-		table.getColumnModel().getColumn(0).setMaxWidth(75);
-		rightPanel.add(table, BorderLayout.CENTER);
+		TableEquipes tableEquipeUne = new TableEquipes(false);
+		tableEquipeUne.ajouterJoueurs(equipe.getJoueurs());
+		rightPanel.add(tableEquipeUne, BorderLayout.CENTER);
 		
 		
 		// Boutons

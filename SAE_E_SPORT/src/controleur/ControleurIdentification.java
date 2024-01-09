@@ -19,6 +19,7 @@ import ihm.VueIdentification;
 import ihm.VueTournoi;
 import modele.Associer;
 import modele.Compte;
+import modele.Tournoi;
 
 public class ControleurIdentification implements ActionListener, WindowListener, MouseListener, KeyListener {
 	private VueIdentification vue;
@@ -71,14 +72,13 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
 			}
-			
 			// Si arbitre
 			else {
-				Associer associerBDD = new Associer();
-				List<Associer> associations = associerBDD.getToutesLesAssociations();
-				for (Associer ass : associations) {
-					if (ass.getArbitre().getCompte().getLogin().equals(this.vue.getLogin())) {
-						VueTournoi vue = new VueTournoi(ass.getTournoi());
+				Tournoi tournoiBDD = new Tournoi();
+				List<Tournoi> tournois = tournoiBDD.getTousLesTournois();
+				for (Tournoi tournoi : tournois) {
+					if (tournoi.getCompte().getLogin().equals(this.vue.getLogin())) {
+						VueTournoi vue = new VueTournoi(tournoi);
 						vue.setVisible(true);
 						this.vue.dispose();
 					}
