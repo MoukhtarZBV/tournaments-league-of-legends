@@ -33,6 +33,9 @@ public class ImagesIcons {
 	public static final ImageIcon TOURNOI = ImagesIcons.getIcon(128, 128, "imgTournoi");
 	public static final ImageIcon HISTORIQUE = ImagesIcons.getIcon(128, 128, "imgHistorique");
 	
+	public static final ImageIcon LOGIN = ImagesIcons.getIcon(25, 25, "login");
+	public static final ImageIcon PASSWORD = ImagesIcons.getIcon(25, 25, "password");
+	
 	// Drapeaux
 	public static final ImageIcon FRANCE = ImagesIcons.getIcon(40, 40, "drapeaux/france");
 	public static final ImageIcon UKRAINE = ImagesIcons.getIcon(40, 40, "drapeaux/ukraine");

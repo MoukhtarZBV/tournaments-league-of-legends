@@ -32,7 +32,7 @@ public class ModeleHistoriquePoints {
 	}
 	
 	public Map<Tournoi, Integer> pointsTournoiParEquipe (Equipe e){
-		Map<Tournoi, Integer> map = this.participations.stream().filter(eq->eq.getEquipe().equals(e)).collect(Collectors.toMap(Participer::getTournoi, p->p.getNbPointsGagnes()));
+		Map<Tournoi, Integer> map = this.participations.stream().filter(eq->eq.getEquipe().equals(e)).collect(Collectors.toMap(Participer::getTournoi, p->p.getNbPointsTournoiGagnes()));
 		return map;
 	}
 	

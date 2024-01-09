@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import ihm.VueFinale;
 import ihm.VueListeTournois;
 import ihm.VueTournoi;
+import modele.Participer;
 import modele.Statut;
 import modele.Tournoi;
 
@@ -32,9 +33,9 @@ public class ControleurFinale implements MouseListener, ActionListener {
 			vueTournoi.setVisible(true);
 			this.vue.dispose();
 		} else if (bouton.getName().equals("Confirmer")) {
+			this.modele.cloturerTournoi(this.vue.getTournoi(), this.vue.getVainqueur());
 			this.modele.changerVainqueurTournoi(this.vue.getTournoi(), this.vue.getVainqueur());
 			this.vue.setVisibleConfirmer(false);
-			this.modele.changerStatutTournoi(this.vue.getTournoi(), Statut.TERMINE);
 			this.vue.getTournoi().setStatut(Statut.TERMINE);
 			this.vue.getTournoi().setVainqueur(this.vue.getVainqueur());
 			this.vue.afficherTropheeVainqueur();

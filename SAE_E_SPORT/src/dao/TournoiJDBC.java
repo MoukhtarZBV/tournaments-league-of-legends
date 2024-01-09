@@ -229,6 +229,10 @@ public class TournoiJDBC implements TournoiDAO {
 			st.setInt(1, equipe.getIdEquipe());
 			st.setString(2, tournoi.getNomTournoi());
 			st.executeUpdate();
+			st = ConnectionJDBC.getConnection().prepareStatement("update partie set idEquipe = ? where nomTournoi = ? and deroulement = 'Finale'");
+			st.setInt(1, equipe.getIdEquipe());
+			st.setString(2, tournoi.getNomTournoi());
+			st.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

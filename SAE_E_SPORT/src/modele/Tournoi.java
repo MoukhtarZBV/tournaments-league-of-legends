@@ -2,25 +2,16 @@ package modele;
 
 import java.sql.Date;
 
-import java.sql.SQLException;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import dao.ArbitreJDBC;
-import dao.AssocierJDBC;
-import dao.CompteJDBC;
-import dao.JouerJDBC;
-import dao.ParticiperJDBC;
-import dao.PartieJDBC;
 import dao.TournoiJDBC;
 
 public class Tournoi {
@@ -176,7 +167,7 @@ public class Tournoi {
 	}
 	
 	// ======================= //
-	// ==== Partie modele ==== //
+	// ==== Partie modele ==== //	
 	// ======================= //
 	
 	public boolean moinsDeDeuxSemainesEntreDates(Date dateDebut, Date dateFin) {
@@ -213,8 +204,8 @@ public class Tournoi {
 	public int generationPoule(){
 		List<Equipe> equipes = new ArrayList<>(); 
 		// Récupération de la liste des équipes qui participent au tournoi
-		ParticiperJDBC pdb = new ParticiperJDBC();
-		equipes = pdb.getAll().stream()
+		Participer participerBDD = new Participer();
+		equipes = participerBDD.getToutesLesParticipations().stream()
 				.filter(e->e.getTournoi().getNomTournoi().equals(this.getNomTournoi()))
 				.map(p-> p.getEquipe())
 				.collect(Collectors.toList());
@@ -263,7 +254,7 @@ public class Tournoi {
 		Partie partie = new Partie(Date.valueOf(date), String.format("%02d", heure)+":00", "Poule", this);
 		partie.setEquipeUne(equipes.get(equipeUne));
 		partie.setEquipeDeux(equipes.get(equipeDeux));
-		new PartieJDBC().add(partie); 
+		new Partie().ajouterPartie(partie); 
 	}
 
 	// verifier s'il existe des extra matchs
@@ -302,7 +293,7 @@ public class Tournoi {
 
 	public boolean selectionArbitre(Tournoi tournoi) {
 		// nombre d'équipes dans le tournoi
-		int nbEquipes = (int) new ParticiperJDBC().getAll().stream()
+		int nbEquipes = (int) new Participer().getToutesLesParticipations().stream()
 				.filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi()))
 				.count();
 
@@ -355,6 +346,29 @@ public class Tournoi {
 		}
 		
 		return true;
+	}
+	
+	public void cloturerTournoi(Tournoi tournoi, Equipe equipe) {
+		changerVainqueurTournoi(tournoi, equipe);
+		tournoi.setVainqueur(equipe);
+		mettreAJourPointsFinalistes(tournoi);
+		changerStatutTournoi(tournoi, Statut.TERMINE);
+	}
+	
+	public void mettreAJourPointsFinalistes(Tournoi tournoi) {
+		Partie partieBDD = new Partie();
+		Partie finaleTournoi = partieBDD.getFinaleTournoi(tournoi);
+		Equipe equipeGagnante = finaleTournoi.getEquipeGagnante();
+		Equipe equipePerdante = equipeGagnante == finaleTournoi.getEquipeUne() ? finaleTournoi.getEquipeUne() : finaleTournoi.getEquipeDeux();
+		
+		Participer participerBDD = new Participer();
+		Participer participationEquipeGagnante = participerBDD.getParTournoiEquipe(tournoi, equipeGagnante);
+		Participer participationEquipePerdante = participerBDD.getParTournoiEquipe(tournoi, equipePerdante);
+		
+		participationEquipeGagnante.setNbPointsTournoiGagnes(participationEquipeGagnante.getNbPointsTournoiGagnes() + 200);
+		participationEquipePerdante.setNbPointsTournoiGagnes(participationEquipePerdante.getNbPointsTournoiGagnes() + 100);
+		participerBDD.mettreAJourParticipation(participationEquipeGagnante);
+		participerBDD.mettreAJourParticipation(participationEquipePerdante);
 	}
 	
 	// ==================== //
