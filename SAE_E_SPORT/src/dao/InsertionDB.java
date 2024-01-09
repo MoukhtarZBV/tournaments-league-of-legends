@@ -24,15 +24,15 @@ import modele.Arbitre;
 import modele.Compte;
 
 public class InsertionDB {
+	
+	private static Equipe equipeBDD = new Equipe();
+	private static Tournoi tournoiBDD = new Tournoi();
+	private static Participer participerBDD = new Participer();
+	private static Partie partieBDD = new Partie();
+	private static Arbitre arbitreBDD = new Arbitre();
 
 	public static void main(String args[]) throws Exception {
 		CreateDB.main(args);
-		
-		Equipe equipeBDD = new Equipe();
-		Tournoi tournoiBDD = new Tournoi();
-		Participer participerBDD = new Participer();
-		Partie partieBDD = new Partie();
-		Arbitre arbitreBDD = new Arbitre();
 		
 		// ============================== //
 		// ==== Création des équipes ==== //
@@ -253,36 +253,36 @@ public class InsertionDB {
 	    Tournoi t1 = Tournoi.createTournoi("Hitpoint Masters Winter 2023", Niveau.INTERNATIONAL, Date.valueOf(LocalDate.of(2023, 01, 13)), 
 	    		Date.valueOf(LocalDate.of(2023, 01, 20)), Pays.GB, Statut.TERMINE, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t1);
-	    ajouterEquipesTournoi(participerBDD, t1, e1, e4, e5, e11, e16, e17);
-	    simulerParties(partieBDD, tournoiBDD, t1.generationPoule(), t1);
+	    ajouterEquipesTournoi(t1, e1, e4, e5, e11, e16, e17);
+	    simulerParties(t1.generationPoule(), t1);
 
 	    // Tournoi 2
 	    Tournoi t2 = Tournoi.createTournoi("League of Legends Champions Korea", Niveau.INTERNATIONAL_CLASSE, Date.valueOf(LocalDate.of(2023, 01, 28)), 
 	    		Date.valueOf(LocalDate.of(2023, 02, 8)), Pays.KR, Statut.TERMINE, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t2);
-	    ajouterEquipesTournoi(participerBDD, t2, e4, e6, e1, e11, e14, e5, e2, e3);
-	    simulerParties(partieBDD, tournoiBDD, t2.generationPoule(), t2);
+	    ajouterEquipesTournoi(t2, e4, e6, e1, e11, e14, e5, e2, e3);
+	    simulerParties(t2.generationPoule(), t2);
 	    
 	    // Tournoi 3
 	    Tournoi t3 = Tournoi.createTournoi("Superdome 2023 - Egypt", Niveau.NATIONAL, Date.valueOf(LocalDate.of(2023, 02, 10)), 
 	    		Date.valueOf(LocalDate.of(2023, 02, 17)), Pays.EG, Statut.TERMINE, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t3);
-	    ajouterEquipesTournoi(participerBDD, t3, e5, e11, e16, e17);
-	    simulerParties(partieBDD, tournoiBDD, t3.generationPoule(), t3);
+	    ajouterEquipesTournoi(t3, e5, e11, e16, e17);
+	    simulerParties(t3.generationPoule(), t3);
 	    
 	    // Tournoi 4
 	    Tournoi t4 = Tournoi.createTournoi("Ignis Cup Split", Niveau.LOCAL, Date.valueOf(LocalDate.of(2023, 02, 21)), 
 	    		Date.valueOf(LocalDate.of(2023, 02, 27)), Pays.KP, Statut.TERMINE, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t4);
-	    ajouterEquipesTournoi(participerBDD, t4, e7, e15, e17, e3);
-	    simulerParties(partieBDD, tournoiBDD, t4.generationPoule(), t4);
+	    ajouterEquipesTournoi(t4, e7, e15, e17, e3);
+	    simulerParties(t4.generationPoule(), t4);
 	    
 	    // Tournoi 5
 	    Tournoi t5 = Tournoi.createTournoi("Asia Esports Championship 2023", Niveau.INTERNATIONAL_CLASSE, Date.valueOf(LocalDate.of(2023, 03, 19)), 
 	    		Date.valueOf(LocalDate.of(2023, 04, 02)), Pays.JP, Statut.TERMINE, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t5);
-	    ajouterEquipesTournoi(participerBDD, t5, e1, e2, e8, e9, e10, e12, e13, e14);
-	    simulerParties(partieBDD, tournoiBDD, t5.generationPoule(), t5);
+	    ajouterEquipesTournoi(t5, e1, e2, e8, e9, e10, e12, e13, e14);
+	    simulerParties(t5.generationPoule(), t5);
 
 
 	    // ====================================== //
@@ -308,7 +308,7 @@ public class InsertionDB {
 	    
 	}
 
-	private static void simulerParties(Partie partieBDD, Tournoi tournoiBDD, int nbParties, Tournoi tournoi) throws Exception {
+	private static void simulerParties(int nbParties, Tournoi tournoi) throws Exception {
 		ModelePoule poule = new ModelePoule(tournoi);
 		tournoiBDD.selectionArbitre(tournoi);
 		int gagnant;
@@ -319,14 +319,13 @@ public class InsertionDB {
 		poule.enregistrerResultat();
 		poule.creerFinale(tournoi);
 		Partie finale = partieBDD.getFinaleTournoi(tournoi);
-		tournoi.setVainqueur((Math.random() <= 0.5) ? finale.getEquipeUne() : finale.getEquipeDeux());
-		tournoiBDD.mettreAJourTournoi(tournoi);
+		tournoiBDD.cloturerTournoi(tournoi, (Math.random() <= 0.5) ? finale.getEquipeUne() : finale.getEquipeDeux());
 	}
 
-	private static void ajouterEquipesTournoi(Participer pBDD, Tournoi tournoi, Equipe... equipes) throws Exception {
+	private static void ajouterEquipesTournoi(Tournoi tournoi, Equipe... equipes) throws Exception {
 		for (Equipe equipe : equipes) {
 			Participer participer = new Participer(equipe, tournoi);
-			pBDD.ajouterParticipation(participer);
+			participerBDD.ajouterParticipation(participer);
 		}
 	}
 }

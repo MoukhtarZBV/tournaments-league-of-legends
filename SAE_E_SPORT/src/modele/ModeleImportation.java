@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import Fonctions.LireCSV;
 import dao.ConnectionJDBC;
@@ -49,14 +50,20 @@ public class ModeleImportation {
         LireCSV reader = new LireCSV(chemin);
         data = reader.getData();
         
+        Equipe equipeBDD = new Equipe();
     	for (int ligne = 1; ligne<data.size(); ligne += 5) {		
 			// Creer l'equipe et lui attribuer les joueurs
-			Equipe equipe = new Equipe(EquipeJDBC.getNextValueSequence(), data.get(ligne)[4], Integer.parseInt(data.get(ligne)[5]), Pays.getPays(data.get(ligne)[6]));
-			this.equipes.add(equipe);
-			for (int j = ligne; j<ligne+5; j++) {
-				Joueur joueur = new Joueur(JoueurJDBC.getNextValueSequence(), data.get(j)[7], equipe);
-				equipe.ajouterJoueur(joueur);
-			}
+    		Equipe equipe = equipeBDD.getEquipeParNom(data.get(ligne)[4]);
+    		if (equipe != null) {
+    			this.equipes.add(equipe);
+    		} else {
+    			equipe = new Equipe(EquipeJDBC.getNextValueSequence(), data.get(ligne)[4], Integer.parseInt(data.get(ligne)[5]), Pays.getPays(data.get(ligne)[6]));
+    			this.equipes.add(equipe);
+				for (int j = ligne; j<ligne+5; j++) {
+					Joueur joueur = new Joueur(JoueurJDBC.getNextValueSequence(), data.get(j)[7], equipe);
+					equipe.ajouterJoueur(joueur);
+				}
+    		}
     	}
 	}
 	
@@ -76,51 +83,52 @@ public class ModeleImportation {
 	}
 	
 	public EtatEquipe verifierEquipe() {
-		JoueurJDBC jdb = new JoueurJDBC();
-		EquipeJDBC edb = new EquipeJDBC();
-		EtatEquipe etat = EtatEquipe.OK;
+		Joueur joueurBDD = new Joueur();
+		Equipe equipeBDD = new Equipe();
 		try {
-			List<Joueur> joueurs = jdb.getAll();	
-			List<Equipe> allEquipes = edb.getAll();
-			int cmp = 0;
+			List<Joueur> joueurs = joueurBDD.getTousLesJoueurs();	
+			List<Equipe> allEquipes = equipeBDD.getToutesLesEquipes();
+			int compteurEquipesPresentes = 0;
 			for (int i=0;i<this.equipes.size();i++) {
 				Equipe e = this.equipes.get(i);
 				if (allEquipes.contains(e)) {
 					for (Joueur j : e.getJoueurs()) {
 						if (!joueurs.contains(j)){
-							// joueur inexistant
+							// Un  joueur de l'équipe présente dans l'application n'est pas enregistré dans la BDD
 							return EtatEquipe.MAL_COMPOSITION;
 						}
 					}
-					cmp++;
+					compteurEquipesPresentes++;
 				} else {
 					for (Joueur j : e.getJoueurs()) {
 						if (joueurs.contains(j)){
-							// pas equipe mais joueur existe
+							// Un joueur d'un équipe à importé est déjà dans une autre équipe
 							return EtatEquipe.JOUEUR_EXISTE;
 						}
 					}
 				}
 			}
-			if (cmp == this.equipes.size()) {
+			if (compteurEquipesPresentes == this.equipes.size()) {
 				return EtatEquipe.MEME_EQUIPE;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return etat;
+		return EtatEquipe.OK;
 	}
 	
 	public boolean enregistrerImportation (Tournoi t) {
-		EquipeJDBC edb = new EquipeJDBC();
-		ParticiperJDBC pdb = new ParticiperJDBC();
-		try {
-			for(Equipe e : this.equipes) {
-				edb.add(e);
-				pdb.add(new Participer(e, t));
+		Equipe equipeBDD = new Equipe();
+		Participer participerBDD = new Participer();
+		List<Equipe> allEquipes = equipeBDD.getToutesLesEquipes();
+		for (int numEquipe = 0; numEquipe < this.equipes.size(); numEquipe++) {
+			Equipe equipeCourante = this.equipes.get(numEquipe);
+			if (!allEquipes.contains(equipeCourante)) {
+				equipeBDD.ajouterEquipe(equipeCourante);
+				participerBDD.ajouterParticipation(new Participer(equipeCourante, t));
+			} else {
+				participerBDD.ajouterParticipation(new Participer(equipeCourante, t));
 			}
-		} catch (Exception exp) {
-			exp.printStackTrace();
 		}
 		return true;
 	}

@@ -54,18 +54,18 @@ public class TestsImportationEquipes {
 	@Test
 	public void testAdministrateurImporteEtConfirme() throws IOException {
 		modele.importerEquipesJoueurs(cheminCSV);
-		EtatEquipe etat = this.modele.verifierEquipe();
-		if (etat == EtatEquipe.OK) {
+		if (this.modele.verifierEquipe() == EtatEquipe.OK) {
 			this.modele.enregistrerImportation(tournoi);
 			this.modele.changerStatusAVenir(tournoi);
 		}
+		
 		Equipe equipeBDD = new Equipe();
 		Tournoi tournoiBDD = new Tournoi();
 		assertTrue(tournoi.getStatut() == Statut.A_VENIR);
 		
 		int nbEquipesTotal = equipeBDD.getToutesLesEquipes().size();
 		int nbEquipesTournoi = tournoiBDD.getEquipesTournoi(tournoi).size();
-		assertEquals(nbEquipesTotal, 4);
+		assertEquals(4, nbEquipesTotal);
 		assertEquals(nbEquipesTotal, nbEquipesTournoi);
 		
 		for (int numEquipe = 0; numEquipe < nbEquipesTournoi; numEquipe++) {
@@ -101,8 +101,7 @@ public class TestsImportationEquipes {
 	    equipeBDD.ajouterEquipe(equipeUne);
 		
 		modele.importerEquipesJoueurs(cheminCSV);
-		EtatEquipe etat = this.modele.verifierEquipe();
-		if (etat == EtatEquipe.OK) {
+		if (this.modele.verifierEquipe() == EtatEquipe.OK) {
 			this.modele.enregistrerImportation(tournoi);
 			this.modele.changerStatusAVenir(tournoi);
 		}

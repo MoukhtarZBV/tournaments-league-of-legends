@@ -43,7 +43,7 @@ public class TestParticiper {
 		Participer part = new Participer(eJDBC.getByNom("T1").orElse(null), tbd.getById("Happy League").orElse(null));
 		part.setNbMatchsJoues(3);
 		part.setNbMatchsGagnes(2);
-		part.setNbPointsGagnes(10);
+		part.setNbPointsPouleGagnes(10);
 		
 		ParticiperJDBC pbd = new ParticiperJDBC();
 		
@@ -54,7 +54,7 @@ public class TestParticiper {
 		}
 		System.out.println("Add OK");
 		
-		part.setNbPointsGagnes(100);
+		part.setNbPointsPouleGagnes(100);
 		part.setNbMatchsGagnes(part.getNbMatchsGagnes()+1);
 		pbd.update(part);
 		
