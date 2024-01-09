@@ -37,6 +37,7 @@ public class VueIdentification extends JFrame {
 	private PanelPopUp panelErreur;
 
 	public static void main(String[] args) {
+		ConnectionJDBC.getConnection();
 		Ecran.setup();
 		ConnectionJDBC.getConnection();
 		

@@ -6,6 +6,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import Images.ImagesIcons;
 import components.BufferedImageResize;
@@ -15,7 +16,12 @@ import controleur.ControleurGestionPoule;
 import modele.Tournoi;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -23,12 +29,16 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class VueGestionDeLaPoule extends JFrame {
+public class VueGestionDeLaPoule extends JFrame implements Printable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,6 +46,7 @@ public class VueGestionDeLaPoule extends JFrame {
 	private JTable tableMatches = new JTable();
 	private Tournoi tournoi;
 	private JButton btnCloturer;
+	private String[] columnsClassementT;
 	
 	private ControleurGestionPoule controleur;
 	
@@ -179,6 +190,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		
 		// Table classement
 		String[] columnsClassement = {"Rang", "Équipe", "Points gagnés", "Parties gagnés"};
+		columnsClassementT = columnsClassement.clone();
 		DefaultTableModel modeleClassement = new DefaultTableModel(columnsClassement, 0) {
 			/**
 			 * 
@@ -274,6 +286,7 @@ public class VueGestionDeLaPoule extends JFrame {
 		btnImprimer.addActionListener(controleur);
 		btnCloturer.addActionListener(controleur);
 		btnRetour.addActionListener(controleur);
+		
 	}
 	
 	public Tournoi getTournoi() {
@@ -360,4 +373,93 @@ public class VueGestionDeLaPoule extends JFrame {
 	public void setVisibleBoutonCloturer(boolean visible) {
 		this.btnCloturer.setVisible(visible);
 	}
+	
+	private JTable cloneTableClassement() {
+		DefaultTableModel modele = (DefaultTableModel) this.tableClassement.getModel();
+		DefaultTableModel clonedModele = new DefaultTableModel(this.columnsClassementT, 0);
+		JTable clonedTable = new JTable();
+		clonedTable.setModel(clonedModele);
+		
+		Object[] datas = new Object[modele.getRowCount()];
+		
+		clonedModele.addRow(this.columnsClassementT);
+		
+		for (int i=0; i<modele.getRowCount(); i++) {
+			for(int j=0; j<modele.getColumnCount(); j++) {
+				datas[j] = modele.getValueAt(i, j);
+			}
+			clonedModele.addRow(datas);
+		}
+		return clonedTable;
+	}
+	
+	// Print to pdf
+	public void printClassemenToPDF() {
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(this);
+
+        if (job.printDialog()) {
+            try {
+                job.print();
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+        if (pageIndex > 0) {
+            return Printable.NO_SUCH_PAGE;
+        }
+        
+        double xLeft = pageFormat.getImageableX();
+		double yTop = pageFormat.getImageableY();
+		double width = pageFormat.getImageableWidth();
+		double height = pageFormat.getImageableHeight();
+
+		// Convert 2.1 cm to points (1 inch = 72 points)
+		double xCoordinate = 2.1 * 72 / 2.54; // 2.1 cm in points
+		double yCoordinate = 2.1 * 72 / 2.54; // 2.1 cm in points
+
+		// Create a Graphics2D object for printing
+		Graphics2D g2d = (Graphics2D) graphics;
+
+		// Translate to the specified coordinates
+		g2d.translate(xLeft + xCoordinate, yTop + yCoordinate);
+		
+		// Draw the "Hello world" text
+		Font font = new Font("SansSerif", Font.PLAIN, 12);
+		g2d.setFont(font);
+		
+		String nomTournoi = this.tournoi.getNomTournoi();
+		String str = "Classement du Tournoi "+nomTournoi;
+		g2d.drawString(str, 0, 0);
+
+		// Move the pen below the title
+		FontMetrics fontMetrics = g2d.getFontMetrics();
+		
+        // Move the pen below the title
+        g2d.translate(0, fontMetrics.getHeight());
+        
+        JTable tableC = this.cloneTableClassement();
+        tableC.getColumnModel().getColumn(0).setWidth(50);
+        tableC.getColumnModel().getColumn(1).setWidth(200);
+        tableC.getColumnModel().getColumn(2).setWidth(100);
+        tableC.getColumnModel().getColumn(3).setWidth(100);
+        tableC.setSize((int) width + 100, (int) height - fontMetrics.getHeight());
+        tableC.print(g2d);
+        
+        addBorderToTable(g2d, tableC.getColumnModel().getTotalColumnWidth(), tableC.getRowCount() * tableC.getRowHeight());
+        
+        return Printable.PAGE_EXISTS;
+    }
+    
+    // ajouter border a la table en pdf 
+    private void addBorderToTable(Graphics2D g2d, int tableWidth, int tableHeight) {    	
+    	// Draw a border around the table
+        g2d.setColor(new Color(122, 138, 153));
+        g2d.drawRect(0, 0, tableWidth - 1, tableHeight - 1);
+    }
+
 }
