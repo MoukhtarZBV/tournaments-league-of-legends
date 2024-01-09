@@ -12,6 +12,7 @@ import components.CoolTextField;
 import components.PanelImage;
 import components.PanelPopUp;
 import controleur.ControleurIdentification;
+import dao.ConnectionJDBC;
 
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
@@ -36,6 +37,7 @@ public class VueIdentification extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		ConnectionJDBC.getConnection();
 		Ecran.setup();
 		
 		EventQueue.invokeLater(new Runnable() {
