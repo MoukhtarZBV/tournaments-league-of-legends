@@ -129,6 +129,7 @@ public class VueListeTournois extends JFrame {
 		champRecherche.setForeground(Palette.WHITE);
 		champRecherche.setText("");
 		champRecherche.setColumns(10);
+		champRecherche.addActionListener(controleur);
 		panelBarreRecherche.add(champRecherche, BorderLayout.CENTER);
 		
 		// Bouton rechercher
