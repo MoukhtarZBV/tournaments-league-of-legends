@@ -36,7 +36,7 @@ public class VueAccueilAdmin extends JFrame {
 		JPanel panelTop = new JPanel();
 		panelTop.setPreferredSize(new Dimension(800, 120));
 		panelTop.setBackground(Palette.DARK_GRAY);
-		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setBorder(new EmptyBorder(15, 100, 15, 100));
 		panelTop.setLayout(new GridLayout());
 		contentPane.add(panelTop, BorderLayout.NORTH);
 		
@@ -53,20 +53,6 @@ public class VueAccueilAdmin extends JFrame {
 		JPanel panelMain = new JPanel();
 		panelMain.setLayout(new BorderLayout(0, 0));
 		contentPane.add(panelMain, BorderLayout.CENTER);
-		
-		
-		///// PANEL BONJOUUUUR \\\\\
-		JPanel panelBjr = new JPanel();
-		panelBjr.setBorder(new EmptyBorder(10, 0, 10, 0));
-		panelBjr.setBackground(Palette.DARK_GRAY);
-		panelMain.add(panelBjr, BorderLayout.NORTH);
-
-		// Label bonjour
-		JLabel lblBjr = new JLabel("Bonjour admin");
-		lblBjr.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBjr.setFont(Police.SOUS_TITRE);
-		lblBjr.setForeground(Palette.WHITE);
-		panelBjr.add(lblBjr);
 		
 		
 		///// PANEL CENTER \\\\\

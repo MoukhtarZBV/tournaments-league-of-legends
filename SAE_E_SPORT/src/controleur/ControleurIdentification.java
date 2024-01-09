@@ -1,6 +1,5 @@
 package controleur;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -71,7 +70,6 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
-				// CHANGER LE BONJOUR ADMIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (le passer en paramètre de la vueAccueil problement)
 			}
 			
 			// Si arbitre
@@ -86,7 +84,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 					}
 				}
 			}
-		}else {
+		} else {
 			// Si pas de correspondance
 			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
 			this.vue.setLogin("");
