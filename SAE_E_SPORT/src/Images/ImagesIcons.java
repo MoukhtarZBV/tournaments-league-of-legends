@@ -29,12 +29,16 @@ public class ImagesIcons {
 	public static final String TROPHY = "/Images/trophy.png";
 	public static final String TROPHY_WIN = "/Images/trophyWin.png";
 	public static final ImageIcon UPLOAD = ImagesIcons.getIcon(100, 100, "upload");
+	
 	public static final ImageIcon EQUIPE = ImagesIcons.getIcon(128, 128, "imgEquipe");
 	public static final ImageIcon TOURNOI = ImagesIcons.getIcon(128, 128, "imgTournoi");
 	public static final ImageIcon HISTORIQUE = ImagesIcons.getIcon(128, 128, "imgHistorique");
+	public static final ImageIcon ARBITRE = ImagesIcons.getIcon(128, 128, "imgArbitres");
 	
 	public static final ImageIcon LOGIN = ImagesIcons.getIcon(25, 25, "login");
 	public static final ImageIcon PASSWORD = ImagesIcons.getIcon(25, 25, "password");
+	public static final ImageIcon VIEW_PASS = ImagesIcons.getIcon(25, 25, "viewPass");
+	public static final ImageIcon VIEW_PASS_HOVER = ImagesIcons.getIcon(25, 25, "viewPassHover");
 	
 	// Drapeaux
 	public static final ImageIcon FRANCE = ImagesIcons.getIcon(40, 40, "drapeaux/france");

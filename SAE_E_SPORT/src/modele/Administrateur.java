@@ -95,6 +95,10 @@ public class Administrateur {
 		return jdbc.getById(id).orElse(null);
 	}
 	
+	public Administrateur getAdministrateurParCompte(Compte compte) {
+		return jdbc.getByCompte(compte).orElse(null);
+	}
+	
 	public void ajouterAdministrateur(Administrateur administrateur) {
 		jdbc.add(administrateur);
 	}
@@ -107,7 +111,7 @@ public class Administrateur {
 		jdbc.delete(administrateur);
 	}
 	
-	public Administrateur getArbitreParNomPrenom(String nom, String prenom) {
+	public Administrateur getAdministrateurParNomPrenom(String nom, String prenom) {
 		return jdbc.getByNomPrenom(nom, prenom).orElse(null);
 	}
 }

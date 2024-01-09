@@ -1,16 +1,8 @@
 package controleur;
 
 import java.awt.Cursor;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.stream.Collectors;
-
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import ihm.Palette;
@@ -42,7 +34,6 @@ public class ControleurAccueil implements MouseListener {
 				
 			case "Tournois":
 				Tournoi tournoiBDD = new Tournoi();
-				System.out.println(tournoiBDD.getTousLesTournois());
 				VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
 				vueTournois.setVisible(true);
 				this.vue.dispose();	
