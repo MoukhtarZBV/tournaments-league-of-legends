@@ -19,7 +19,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 import Images.ImagesIcons;
-import components.EquipesTable;
+import components.TableEquipes;
 import controleur.ControleurFinale;
 import modele.Equipe;
 import modele.Joueur;
@@ -156,35 +156,14 @@ public class VueFinale extends JFrame {
 		panelEquipes.setBorder(new EmptyBorder(10, 20, 20, 20));
 		panelEquipes.setBackground(Palette.DARK_GRAY);
 		panelScoresEquipes.add(panelEquipes, BorderLayout.CENTER);
-		
-
-		DefaultTableModel modeleTableEquipeUne = new DefaultTableModel(new Object[][] {},
-	            new String[] { "Équipe", "Joueur 1"}) {
-	                
-				@Override
-			    public boolean isCellEditable(int row, int column) {
-			       return false;
-			    }
-		};
-		
-		EquipesTable tableEquipeUne = new EquipesTable(5, 3);
+			
+		TableEquipes tableEquipeUne = new TableEquipes(true);
 		tableEquipeUne.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, new Color(160, 0, 0)), new EmptyBorder(10, 20, 20, 10)));
-		tableEquipeUne.setModel(modeleTableEquipeUne);
-		afficherEquipes(tableEquipeUne, equipeUne);
+		tableEquipeUne.ajouterJoueurs(equipeUne.getJoueurs());
 		
-		DefaultTableModel modeleTableEquipeDeux = new DefaultTableModel(new Object[][] {},
-	            new String[] { "Équipe", "Joueur 1"}) {
-	                
-				@Override
-			    public boolean isCellEditable(int row, int column) {
-			       return false;
-			    }
-		};
-
-		EquipesTable tableEquipeDeux = new EquipesTable(5, 3);
+		TableEquipes tableEquipeDeux = new TableEquipes(false);
 		tableEquipeDeux.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, new Color(0, 0, 160)), new EmptyBorder(10, 20, 20, 10)));
-		tableEquipeDeux.setModel(modeleTableEquipeDeux);
-		afficherEquipes(tableEquipeDeux, equipeDeux);
+		tableEquipeDeux.ajouterJoueurs(equipeDeux.getJoueurs());
 		
 		
 		panelEquipes.setLayout(new GridLayout(0, 2, 20, 0));
@@ -227,16 +206,6 @@ public class VueFinale extends JFrame {
 			lblTropheeEquipeDeux.addMouseListener(controleur);
 		} else {
 			afficherTropheeVainqueur();
-		}
-	}
-	
-	private void afficherEquipes(JTable table, Equipe equipe) {
-		DefaultTableModel modele = (DefaultTableModel) table.getModel();
-		List<Joueur> joueursEquipe = equipe.getJoueurs();
-		for (int i = 0; i < joueursEquipe.size(); i++) {
-			modele.addRow(new Object[] {
-				joueursEquipe.get(i).getPseudo(), "Role"
-			});
 		}
 	}
 

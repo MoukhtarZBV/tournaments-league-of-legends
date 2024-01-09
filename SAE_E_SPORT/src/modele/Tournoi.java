@@ -344,7 +344,6 @@ public class Tournoi {
 			associerBDD.ajouterAssociation(new Associer(arbitres.get(numArbitre), tournoi));
 			arbitres.remove(numArbitre);
 		}
-		
 		return true;
 	}
 	
