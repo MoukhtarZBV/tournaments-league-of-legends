@@ -298,12 +298,15 @@ public class CreateDB {
 			stmt.executeUpdate("CREATE TABLE Participer ("
 					+ "idEquipe INTEGER,"
 					+ "nomTournoi VARCHAR(100),"
-					+ "nbPointsGagnes INTEGER,"
+					+ "nbPointsPouleGagnes INTEGER,"
+					+ "nbPointsTournoiGagnes INTEGER,"
 					+ "nbMatchsJoues INTEGER,"
 					+ "nbMatchsGagnes INTEGER,"
+					+ "classement INTEGER,"
 					+ "CONSTRAINT PK_Participer_idEquipeTournoi PRIMARY KEY (idEquipe, nomTournoi),"
 					+ "CONSTRAINT FK_Participer_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
-					+ "CONSTRAINT FK_Participer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi))");
+					+ "CONSTRAINT FK_Participer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi),"
+					+ "CONSTRAINT CK_Participer_classement CHECK (0 <= classement AND classement <= 8))");
 			System.out.println("-- Table Participer créée");
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -121,16 +121,16 @@ public class TestImportation {
 		Participer part4 = new Participer(e4, t);
 		
 		part1.setNbMatchsJoues(2);
-		part1.setNbPointsGagnes(6);
+		part1.setNbPointsPouleGagnes(6);
 		
 		part2.setNbMatchsJoues(5);
-		part2.setNbPointsGagnes(3);
+		part2.setNbPointsPouleGagnes(3);
 		
 		part3.setNbMatchsJoues(10);
-		part3.setNbPointsGagnes(100);
+		part3.setNbPointsPouleGagnes(100);
 		
 		part4.setNbMatchsJoues(5);
-		part4.setNbPointsGagnes(10);
+		part4.setNbPointsPouleGagnes(10);
 		
 		pbd.add(part1);
 		pbd.add(part2);
