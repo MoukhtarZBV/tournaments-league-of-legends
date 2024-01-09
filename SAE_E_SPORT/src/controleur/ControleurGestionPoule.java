@@ -49,7 +49,7 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 			JButton button = (JButton) e.getSource();
 			switch (button.getText()) {
 				case ("Imprimer") :
-					// A FAIRE !!!
+					this.vue.printClassemenToPDF();
 					
 					break;
 				case ("Cloturer Poule") :

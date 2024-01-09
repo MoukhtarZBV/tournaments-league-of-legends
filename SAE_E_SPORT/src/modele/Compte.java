@@ -64,12 +64,10 @@ public class Compte {
 	}
 	
 	public boolean compteValide(String login, String mdp) {
-		// Verifie que l'existance du couple login mdp
-		for (Compte compte : this.getTousLesComptes()) {
-			if (compte.getLogin().equals(login)) {
-				if (compte.getMotDePasse().equals(mdp)) {
-					return true;
-				}
+		Compte compte = this.getCompteParLogin(login);
+		if (compte != null) {
+			if(compte.getMotDePasse().equals(mdp)) {
+				return true;
 			}
 		}
 		return false;

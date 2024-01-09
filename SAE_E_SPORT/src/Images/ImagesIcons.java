@@ -34,6 +34,10 @@ public class ImagesIcons {
 	public static final ImageIcon TOURNOI = ImagesIcons.getIcon(128, 128, "imgTournoi");
 	public static final ImageIcon HISTORIQUE = ImagesIcons.getIcon(128, 128, "imgHistorique");
 	public static final ImageIcon ARBITRE = ImagesIcons.getIcon(128, 128, "imgArbitres");
+	public static final ImageIcon EQUIPE_MENU = ImagesIcons.getIcon(64, 64, "imgEquipe");
+	public static final ImageIcon TOURNOI_MENU = ImagesIcons.getIcon(64, 64, "imgTournoi");
+	public static final ImageIcon HISTORIQUE_MENU = ImagesIcons.getIcon(64, 64, "imgHistorique");
+	public static final ImageIcon ARBITRE_MENU = ImagesIcons.getIcon(64, 64, "imgArbitres");
 	
 	public static final ImageIcon LOGIN = ImagesIcons.getIcon(25, 25, "login");
 	public static final ImageIcon PASSWORD = ImagesIcons.getIcon(25, 25, "password");

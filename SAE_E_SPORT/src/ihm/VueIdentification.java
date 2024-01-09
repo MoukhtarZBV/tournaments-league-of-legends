@@ -13,6 +13,7 @@ import components.CoolTextField;
 import components.PanelImage;
 import components.PanelPopUp;
 import controleur.ControleurIdentification;
+import dao.ConnectionJDBC;
 
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
@@ -35,11 +36,10 @@ public class VueIdentification extends JFrame {
 	
 	private PanelPopUp panelErreur;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
+		ConnectionJDBC.getConnection();
 		Ecran.setup();
+		ConnectionJDBC.getConnection();
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -55,6 +55,8 @@ public class VueIdentification extends JFrame {
 
 	
 	public VueIdentification() {
+		
+		this.setUndecorated(true);
 		
 		controleur = new ControleurIdentification(this);
 		
