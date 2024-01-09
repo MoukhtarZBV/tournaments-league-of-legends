@@ -4,10 +4,12 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import components.CoolPassword;
 import components.CoolTextField;
 import components.PanelImage;
 import components.PanelPopUp;
@@ -29,6 +31,8 @@ public class VueIdentification extends JFrame {
 
 	private JTextField textFieldLogin;
 	private JTextField textFieldPassword;
+	
+	private ControleurIdentification controleur;
 	
 	private PanelPopUp panelErreur;
 
@@ -53,12 +57,12 @@ public class VueIdentification extends JFrame {
 	
 	public VueIdentification() {
 		
-		ControleurIdentification controleur = new ControleurIdentification(this);
+		controleur = new ControleurIdentification(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setResizable(false);
-		
+				
 		
 		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
@@ -127,6 +131,7 @@ public class VueIdentification extends JFrame {
 		
 		this.textFieldLogin = new CoolTextField();
 		textFieldLogin.setColumns(15);
+		textFieldLogin.addKeyListener(controleur);
 		panelLogin.add(textFieldLogin, BorderLayout.CENTER);
 		
 		
@@ -148,9 +153,10 @@ public class VueIdentification extends JFrame {
 		panelPass.add(iconPass, BorderLayout.WEST);
 		
 		// Password input
-		this.textFieldPassword = new CoolTextField();
-		textFieldPassword.setColumns(15);
-		panelPass.add(textFieldPassword);
+		CoolPassword passwordField = new CoolPassword(15, this);
+		this.textFieldPassword = passwordField.getPasswordField();
+		textFieldPassword.addKeyListener(controleur);
+		panelPass.add(passwordField);
 		
 		
 		///// PANEL BOUTONS \\\\\
@@ -188,12 +194,9 @@ public class VueIdentification extends JFrame {
 		panelBtn.setPreferredSize(new Dimension(300, panelBtn.getPreferredSize().height));
 		
 		
-		
 		///// PANEL IMAGE CONNEXION \\\\\\
 		PanelImage panelImg = new PanelImage("src/Images/connexion.png");
 		contentPane.add(panelImg, BorderLayout.CENTER);
-		
-		
 	}
 	
 	public void setLogin(String login) {
@@ -214,5 +217,9 @@ public class VueIdentification extends JFrame {
 	
 	public PanelPopUp getPopup() {
 		return this.panelErreur;
+	}
+	
+	public ControleurIdentification getControleur() {
+		return this.controleur;
 	}
 }
