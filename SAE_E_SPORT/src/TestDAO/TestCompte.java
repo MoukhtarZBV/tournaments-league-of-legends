@@ -11,8 +11,8 @@ public class TestCompte {
 		CreateDB.main(args);
 		CompteJDBC cbdd = new CompteJDBC();
 		
-		Compte c1 = new Compte(1, "KHC4298A", "iutinfo", TypeCompte.ADMINISTRATEUR);
-		Compte c2 = new Compte(2, "MOU5221A", "iutinfo", TypeCompte.ARBITRE);
+		Compte c1 = new Compte("KHC4298A", "iutinfo", TypeCompte.ADMINISTRATEUR);
+		Compte c2 = new Compte("MOU5221A", "iutinfo", TypeCompte.ARBITRE);
 		
 		cbdd.add(c1);
 		cbdd.add(c2);
@@ -24,10 +24,10 @@ public class TestCompte {
 		System.out.println("\n###add Compte OK###\n");
 		System.out.println("###getAll Compte OK###\n");
 		
-		System.out.println(cbdd.getById(2).orElse(null));
+		System.out.println(cbdd.getById("MOU5221A").orElse(null));
 		System.out.println("\n###getById Compte OK###\n");
 		
-		c2 = new Compte(2, "MOU5252A", "iutinfo", TypeCompte.ARBITRE);
+		c2 = new Compte("MOU5252A", "iutinfo", TypeCompte.ARBITRE);
 		cbdd.update(c2);
 		
 		for(Compte c : cbdd.getAll()) {

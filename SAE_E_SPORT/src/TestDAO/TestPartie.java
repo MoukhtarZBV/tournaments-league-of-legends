@@ -94,7 +94,7 @@ public class TestPartie {
 		}
 		System.out.println("\ndelete Partie OK\n");
 		
-		p1.setEquipeGagnante(2);
+		//p1.setEquipeGagnante(2);
 		pjdbc.update(p1);
 		for(Partie partie : pjdbc.getAll()) {
 			System.out.println(partie);

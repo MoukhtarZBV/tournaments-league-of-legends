@@ -7,7 +7,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BorderFactory;
 
-import java.awt.EventQueue;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -18,23 +17,6 @@ import controleur.ControleurAccueil;
 
 public class VueAccueilAdmin extends JFrame {
 
-	
-	public static void main(String[] args) {
-		Ecran.setup();
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VueAccueilAdmin frame = new VueAccueilAdmin();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace(); 
-				}
-			}
-		});
-	}
-
-	
 	public VueAccueilAdmin() {
 		
 		ControleurAccueil controleur = new ControleurAccueil(this);
@@ -54,7 +36,7 @@ public class VueAccueilAdmin extends JFrame {
 		JPanel panelTop = new JPanel();
 		panelTop.setPreferredSize(new Dimension(800, 120));
 		panelTop.setBackground(Palette.DARK_GRAY);
-		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setBorder(new EmptyBorder(15, 100, 15, 100));
 		panelTop.setLayout(new GridLayout());
 		contentPane.add(panelTop, BorderLayout.NORTH);
 		
@@ -73,20 +55,6 @@ public class VueAccueilAdmin extends JFrame {
 		contentPane.add(panelMain, BorderLayout.CENTER);
 		
 		
-		///// PANEL BONJOUUUUR \\\\\
-		JPanel panelBjr = new JPanel();
-		panelBjr.setBorder(new EmptyBorder(10, 0, 10, 0));
-		panelBjr.setBackground(Palette.DARK_GRAY);
-		panelMain.add(panelBjr, BorderLayout.NORTH);
-
-		// Label bonjour
-		JLabel lblBjr = new JLabel("Bonjour admin");
-		lblBjr.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBjr.setFont(Police.SOUS_TITRE);
-		lblBjr.setForeground(Palette.WHITE);
-		panelBjr.add(lblBjr);
-		
-		
 		///// PANEL CENTER \\\\\
 		JPanel panelCenter = new JPanel();
 		panelCenter.setBackground(Palette.DARK_GRAY);
@@ -99,14 +67,14 @@ public class VueAccueilAdmin extends JFrame {
 		JPanel panelCadre = new JPanel();
 		panelCadre.setBackground(Palette.DARK_GRAY);
 		panelCadre.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Palette.GRAY));
-		panelCadre.setLayout(new GridLayout(0, 3, 0, 0));
+		panelCadre.setLayout(new GridLayout(2, 2, 0, 0));
 		panelCenter.add(panelCadre);
 		
 		
 		///// PANEL EQUIPE \\\\\
 		JPanel panelEquipe = new JPanel();
 		panelEquipe.setName("Equipes");
-		panelEquipe.setBorder(new EmptyBorder(50, 50, 50, 50));
+		panelEquipe.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelEquipe.addMouseListener(controleur);
 		panelEquipe.setBackground(Palette.DARK_GRAY);
 		panelEquipe.setLayout(new BorderLayout(0, 0));
@@ -131,7 +99,7 @@ public class VueAccueilAdmin extends JFrame {
 		///// PANEL TOURNOIS \\\\\
 		JPanel panelTournois = new JPanel();
 		panelTournois.setName("Tournois");
-		panelTournois.setBorder(new EmptyBorder(50, 50, 50, 50));
+		panelTournois.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelTournois.addMouseListener(controleur);
 		panelTournois.setBackground(Palette.DARK_GRAY);
 		panelTournois.setLayout(new BorderLayout(0, 0));
@@ -155,7 +123,7 @@ public class VueAccueilAdmin extends JFrame {
 		///// PANEL HISTORIQUE \\\\\
 		JPanel panelHistorique = new JPanel();
 		panelHistorique.setName("Historique");
-		panelHistorique.setBorder(new EmptyBorder(50, 50, 50, 50));
+		panelHistorique.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelHistorique.addMouseListener(controleur);
 		panelHistorique.setBackground(Palette.DARK_GRAY);
 		panelHistorique.setLayout(new BorderLayout(0, 0));
@@ -174,6 +142,30 @@ public class VueAccueilAdmin extends JFrame {
 		lblHistorique.setForeground(Palette.WHITE);
 		lblHistorique.setFont(Police.SOUS_TITRE);
 		panelHistorique.add(lblHistorique, BorderLayout.SOUTH);
+		
+		
+		///// PANEL HISTORIQUE \\\\\
+		JPanel panelArbitres = new JPanel();
+		panelArbitres.setName("Historique");
+		panelArbitres.setBorder(new EmptyBorder(15, 15, 15, 15));
+		panelArbitres.addMouseListener(controleur);
+		panelArbitres.setBackground(Palette.DARK_GRAY);
+		panelArbitres.setLayout(new BorderLayout(0, 0));
+		panelCadre.add(panelArbitres);
+		
+		// Logo Tournois
+		JLabel iconArbitres = new JLabel();
+		iconArbitres.setHorizontalAlignment(SwingConstants.CENTER);
+		iconArbitres.setIcon(ImagesIcons.ARBITRE);
+		iconArbitres.setSize(20, 80);
+		panelArbitres.add(iconArbitres, BorderLayout.CENTER);
+		
+		// Bouton tournois
+		JLabel lblArbitres = new JLabel("Arbitres");
+		lblArbitres.setHorizontalAlignment(SwingConstants.CENTER);
+		lblArbitres.setForeground(Palette.WHITE);
+		lblArbitres.setFont(Police.SOUS_TITRE);
+		panelArbitres.add(lblArbitres, BorderLayout.SOUTH);
 	}
 
 }

@@ -3,6 +3,8 @@ package controleur;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -18,7 +20,7 @@ import ihm.VueTournoi;
 import modele.Associer;
 import modele.Compte;
 
-public class ControleurIdentification implements ActionListener, WindowListener, MouseListener {
+public class ControleurIdentification implements ActionListener, WindowListener, MouseListener, KeyListener {
 	private VueIdentification vue;
 	private Compte modele;
 
@@ -31,38 +33,9 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
 		if (bouton.getName().equals("Connexion")) {
-			// Verifie que le correspondance compte
-			for (Compte compte : this.modele.getTousLesComptes()) {
-				if (compte.getLogin().equals(this.vue.getLogin())) {
-					if (compte.getMotDePasse().equals(this.vue.getPassword())) {
-						this.vue.dispose();
-						// Si l'utilisateur est un administrateur
-						if (compte.getType().denomination() == "Administrateur") {
-							VueAccueilAdmin vue = new VueAccueilAdmin();
-							vue.setVisible(true);
-							// CHANGER LE BONJOUR ADMIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (le passer en paramètre de la vueAccueil problement)
-						}
-						// Si l'utilisateur est un arbitre
-						else {
-							Associer associerBDD = new Associer();
-							List<Associer> associations = associerBDD.getToutesLesAssociations();
-							for (Associer ass : associations) {
-								if (ass.getArbitre().getCompte().getLogin().equals(compte.getLogin())) {
-									VueTournoi vue = new VueTournoi(ass.getTournoi());
-									vue.setVisible(true);
-									this.vue.dispose();
-								}
-							}
-						}
-					}
-				}
-			}
-			// Si pas de correspondance
-			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
-			
-			this.vue.setLogin("");
-			this.vue.setPassword("");
+			this.connexion();
 		}
+			
 		if(bouton.getName().equals("Quitter")) {
 			this.vue.dispose();
 		}
@@ -89,6 +62,35 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		}
 	}
+	
+	public void connexion() {
+		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
+			this.vue.dispose();
+			// Si administrateur
+			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
+				VueAccueilAdmin vue = new VueAccueilAdmin();
+				vue.setVisible(true);
+			}
+			
+			// Si arbitre
+			else {
+				Associer associerBDD = new Associer();
+				List<Associer> associations = associerBDD.getToutesLesAssociations();
+				for (Associer ass : associations) {
+					if (ass.getArbitre().getCompte().getLogin().equals(this.vue.getLogin())) {
+						VueTournoi vue = new VueTournoi(ass.getTournoi());
+						vue.setVisible(true);
+						this.vue.dispose();
+					}
+				}
+			}
+		} else {
+			// Si pas de correspondance
+			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
+			this.vue.setLogin("");
+			this.vue.setPassword("");
+		}
+	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
@@ -104,6 +106,13 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 			
 			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
+	}	
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+	    if (e.getKeyCode()==KeyEvent.VK_ENTER){
+	        this.connexion();
+	    }
 	}
 
 		
@@ -135,5 +144,11 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 
 	@Override
 	public void mouseClicked(MouseEvent e) {}
+
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
 	
 }

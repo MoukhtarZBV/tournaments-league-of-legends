@@ -19,6 +19,7 @@ import modele.Pays;
 import modele.Statut;
 import modele.Tournoi;
 import modele.TypeCompte;
+import modele.Administrateur;
 import modele.Arbitre;
 import modele.Compte;
 
@@ -282,6 +283,28 @@ public class InsertionDB {
 	    tournoiBDD.ajouterTournoi(t5);
 	    ajouterEquipesTournoi(t5, e1, e2, e8, e9, e10, e12, e13, e14);
 	    simulerParties(t5.generationPoule(), t5);
+
+
+	    // ====================================== //
+	    // ==== Création des Administrateurs ==== //
+	    // ====================================== //
+	    
+		AdminJDBC abdd = new AdminJDBC();
+		CompteJDBC cbdd = new CompteJDBC();
+		
+		Compte c1 = new Compte("KHC4298A", "youinfo", TypeCompte.ADMINISTRATEUR);
+		Compte c2 = new Compte("MAR5221A", "davinfo", TypeCompte.ADMINISTRATEUR); 
+		Compte c3 = new Compte("CHE1111A", "maxinfo", TypeCompte.ADMINISTRATEUR);
+		cbdd.add(c1);
+		cbdd.add(c2);
+		cbdd.add(c3);
+		
+		Administrateur a1 = new Administrateur (1, "koh", "youchen", c1);
+		Administrateur a2 = new Administrateur(2, "marquet", "david", c2);
+		Administrateur a3 = new Administrateur(3, "chevalier", "max", c3);
+		abdd.add(a1);
+		abdd.add(a2);
+		abdd.add(a3);
 	    
 	}
 

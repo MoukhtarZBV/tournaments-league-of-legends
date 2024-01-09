@@ -153,5 +153,11 @@ public class AdminJDBC implements AdminDAO {
 		}
 		return admin;
 	}
+	
+	// A FAIRE SVP A LAIDE IBRAHIM
+	@Override 
+	public Optional<Administrateur> getByCompte(Compte compte) {
+		return Optional.empty();
+	}
 
 }

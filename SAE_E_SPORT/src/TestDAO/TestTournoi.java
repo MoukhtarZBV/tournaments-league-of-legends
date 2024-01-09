@@ -64,7 +64,7 @@ public class TestTournoi {
 		
 		e1.ajouterJoueur(j1, j2, j3, j4, j5);
 				
-		Compte compte = new Compte(6, "kyc88IUT", "$iutinfo", TypeCompte.ADMINISTRATEUR);
+		Compte compte = new Compte("kyc88IUT", "$iutinfo", TypeCompte.ADMINISTRATEUR);
 		
 		CompteJDBC cjdbc = new CompteJDBC();
 		cjdbc.add(compte);

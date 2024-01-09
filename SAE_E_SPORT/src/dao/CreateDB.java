@@ -194,7 +194,7 @@ public class CreateDB {
 		try {
 			stmt.executeUpdate("CREATE TABLE Equipe ("
 					+ "idEquipe INTEGER,"
-					+ "nomEquipe VARCHAR(100),"
+					+ "nomEquipe VARCHAR(40),"
 					+ "rang INTEGER,"
 					+ "nationalite VARCHAR(50),"
 					+ "CONSTRAINT PK_Equipe_idEquipe PRIMARY KEY(idEquipe),"
