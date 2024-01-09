@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Random;
 
 import dao.CompteJDBC;
+import ihm.VueAccueilAdmin;
+import ihm.VueTournoi;
 
 public class Compte {
 	private String login;
@@ -59,6 +61,23 @@ public class Compte {
 			mdp += caractères.charAt(indice);
 		}
 		return mdp;	
+	}
+	
+	public boolean compteValide(String login, String mdp) {
+		// Verifie que l'existance du couple login mdp
+		for (Compte compte : this.getTousLesComptes()) {
+			if (compte.getLogin().equals(login)) {
+				if (compte.getMotDePasse().equals(mdp)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean compteIsAdmin(String login, String mdp) {
+		Compte compte = this.getCompteParLogin(login);
+		return compte.getType().denomination() == "Administrateur";
 	}
 	
 	// Overrides

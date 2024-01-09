@@ -281,9 +281,11 @@ public class VueTournoi extends JFrame {
 			break;
 		case A_VENIR:
 			afficherBoutonOuvrir();
-			/*if (tournoi.getDateDebut().after(new Date(System.currentTimeMillis()))) {
+			/*
+			if (tournoi.getDateDebut().after(new Date(System.currentTimeMillis()))) {
 				btnOuvrir.setEnabled(false);
-			}*/
+			}
+			*/
 			afficherMessageArbitres(true);
 			break;
 		case EN_COURS:
