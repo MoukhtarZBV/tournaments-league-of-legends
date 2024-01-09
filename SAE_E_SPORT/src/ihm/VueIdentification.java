@@ -4,32 +4,40 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
+import components.CoolTextField;
+import components.PanelImage;
+import components.PanelPopUp;
 import controleur.ControleurIdentification;
 
-import javax.swing.BoxLayout;
-import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.Dimension;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import Images.ImagesIcons;
+
+import javax.swing.BorderFactory;
 
 public class VueIdentification extends JFrame {
 
-	private JPanel contentPane;
 	private JTextField textFieldLogin;
 	private JTextField textFieldPassword;
-	private JLabel errMsg;
-	private JPanel panelErreur;
+	
+	private PanelPopUp panelErreur;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		Ecran.setup();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -42,88 +50,150 @@ public class VueIdentification extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	
 	public VueIdentification() {
 		
 		ControleurIdentification controleur = new ControleurIdentification(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 826, 477);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
+		setResizable(false);
+		
+		
+		///// MAIN PANEL \\\\\
+		JPanel contentPane = new JPanel();
+		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.X_AXIS));
 		
-		JPanel panelId = new JPanel();
-		contentPane.add(panelId);
-		panelId.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panelHeader = new JPanel();
-		panelId.add(panelHeader, BorderLayout.NORTH);
-		panelHeader.setLayout(new BorderLayout(0, 0));
+		///// PANEL CONNEXION \\\\\
+		JPanel panelConnexion = new JPanel();
+		panelConnexion.setBorder(new CompoundBorder(new MatteBorder(0, 0, 0, 5, Palette.LIGHT_GRAY), new EmptyBorder(20, 0, 0, 0)));
+		panelConnexion.setLayout(new BorderLayout(0, 0));
+		panelConnexion.setPreferredSize(new Dimension(400, panelConnexion.getPreferredSize().height));
+		panelConnexion.setBackground(Palette.GRAY);
+		contentPane.add(panelConnexion, BorderLayout.WEST);
+				
 		
-		JPanel panelBar = new JPanel();
-		panelBar.setBackground(new Color(0, 128, 192));
-		panelHeader.add(panelBar, BorderLayout.SOUTH);
-		panelBar.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+		///// PANEL HEADER \\\\\
 		JPanel panelTitre = new JPanel();
-		panelTitre.setBorder(new EmptyBorder(70, 0, 0, 0));
-		panelHeader.add(panelTitre, BorderLayout.NORTH);
+		panelTitre.setLayout(new BorderLayout(0, 15));
+		panelTitre.setBorder(new EmptyBorder(0, 75, 10, 75));
+		panelTitre.setPreferredSize(new Dimension(150, 250));
+		panelTitre.setBackground(Palette.GRAY);
+		panelConnexion.add(panelTitre, BorderLayout.NORTH);
 		
+		// Titre
 		JLabel lblConnexion = new JLabel("Connexion");
-		lblConnexion.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		panelTitre.add(lblConnexion);
+		lblConnexion.setFont(Police.GROS_TITRE);
+		lblConnexion.setHorizontalAlignment(SwingConstants.CENTER);
+		lblConnexion.setBorder(new MatteBorder(0, 0, 5, 0, Palette.LIGHT_GRAY));
+		lblConnexion.setForeground(Palette.WHITE);
+		panelTitre.add(lblConnexion, BorderLayout.SOUTH);
 		
+		
+		///// MAIN CONNEXION PANEL \\\\\
 		JPanel panelMain = new JPanel();
-		panelId.add(panelMain, BorderLayout.CENTER);
-		panelMain.setLayout(new BorderLayout(0, 0));
+		panelMain.setBorder(new EmptyBorder(0, 5, 5, 5));
+		panelMain.setBackground(Palette.GRAY);
+		panelConnexion.add(panelMain, BorderLayout.CENTER);
+		panelMain.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
 		
-		this.panelErreur = new JPanel();
-		panelErreur.setBackground(new Color(240, 240, 240));
-		panelMain.add(panelErreur, BorderLayout.NORTH);
+		// Panel erreur
+		panelErreur = new PanelPopUp();
+		panelErreur.setPreferredSize(new Dimension(getPreferredSize().width - 100, 30));
+		panelErreur.setBackground(Palette.GRAY);
+		panelErreur.setVisible(false);
+		panelMain.add(panelErreur);
 		
-		this.errMsg = new JLabel(" ");
-		panelErreur.add(errMsg);
 		
-		JPanel panelField = new JPanel();
-		panelMain.add(panelField, BorderLayout.CENTER);
+		///// PANEL LOGIN \\\\\
+		JPanel panelLogin = new JPanel();
+		panelLogin.setLayout(new BorderLayout(0, 0));
+		panelLogin.setOpaque(false);
+		panelLogin.setPreferredSize(new Dimension(getPreferredSize().width - 100, 30));
+		panelMain.add(panelLogin);
 		
-		this.textFieldLogin = new JTextField();
-		panelField.add(textFieldLogin);
+		// Login input
+		JLabel iconLogin = new JLabel();
+		iconLogin.setPreferredSize(new Dimension(35, iconLogin.getPreferredSize().height));
+		iconLogin.setOpaque(true);
+		iconLogin.setBackground(Palette.LIGHT_GRAY);
+		iconLogin.setIcon(ImagesIcons.LOGIN);
+		iconLogin.setHorizontalAlignment(SwingConstants.CENTER);
+		iconLogin.setBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE));
+		panelLogin.add(iconLogin, BorderLayout.WEST);
+		
+		this.textFieldLogin = new CoolTextField();
 		textFieldLogin.setColumns(15);
+		panelLogin.add(textFieldLogin, BorderLayout.CENTER);
 		
-		this.textFieldPassword = new JTextField();
-		panelField.add(textFieldPassword);
+		
+		///// PANEL PASSWORD \\\\\
+		JPanel panelPass = new JPanel();
+		panelPass.setLayout(new BorderLayout(0, 0));
+		panelPass.setOpaque(false);
+		panelPass.setPreferredSize(new Dimension(getPreferredSize().width - 100, 30));
+		panelMain.add(panelPass);
+		
+		// Password input
+		JLabel iconPass = new JLabel();
+		iconPass.setPreferredSize(new Dimension(35, iconLogin.getPreferredSize().height));
+		iconPass.setOpaque(true);
+		iconPass.setBackground(Palette.LIGHT_GRAY);
+		iconPass.setIcon(ImagesIcons.PASSWORD);
+		iconPass.setHorizontalAlignment(SwingConstants.CENTER);
+		iconPass.setBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE));
+		panelPass.add(iconPass, BorderLayout.WEST);
+		
+		// Password input
+		this.textFieldPassword = new CoolTextField();
 		textFieldPassword.setColumns(15);
+		panelPass.add(textFieldPassword);
 		
+		
+		///// PANEL BOUTONS \\\\\
 		JPanel panelBtn = new JPanel();
-		panelBtn.setBorder(new EmptyBorder(0, 0, 200, 0));
-		panelId.add(panelBtn, BorderLayout.SOUTH);
+		panelBtn.setBorder(new EmptyBorder(25, 0, 0, 0));
+		panelBtn.setOpaque(false);
+		panelBtn.setLayout(new GridLayout(0, 1, 0, 10));
+		panelMain.add(panelBtn);
 		
-		JButton btnConnexion = new JButton("Se connecter");
+		// Bouton connexion
+		JButton btnConnexion = new JButton("<html><body style='padding: 5px 25px;'>Connexion</body></html>");
+		btnConnexion.setName("Connexion");
 		btnConnexion.addActionListener(controleur);
+		btnConnexion.addMouseListener(controleur);
+		btnConnexion.setBackground(Palette.WHITE);
+		btnConnexion.setForeground(Palette.GRAY);
+		btnConnexion.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnConnexion.setFont(Police.LABEL);
+		btnConnexion.setFocusable(false);
 		panelBtn.add(btnConnexion);
 		
-		JButton btnRetour = new JButton("Retour");
-		btnRetour.addActionListener(controleur);
-		panelBtn.add(btnRetour);
+		// Bouton quitter
+		JButton btnQuitter = new JButton("<html><body style='padding: 5px 25px;'>Quitter</body></html>");
+		btnQuitter.setName("Quitter");
+		btnQuitter.addActionListener(controleur);
+		btnQuitter.addMouseListener(controleur);
+		btnQuitter.setBackground(Palette.GRAY);
+		btnQuitter.setForeground(Palette.WHITE);
+		btnQuitter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnQuitter.setFont(Police.LABEL);
+		btnQuitter.setFocusable(false);
+		panelBtn.add(btnQuitter);
 		
-		JPanel panelImg = new JPanel();
-		FlowLayout fl_panelImg = (FlowLayout) panelImg.getLayout();
-		fl_panelImg.setHgap(275);
-		contentPane.add(panelImg);
-	}
-	
-	public void setMessageErreur(String erreur) {
-		this.errMsg.setText(erreur);
-	}
-	
-	public void setColorErreur(Color c) {
-		this.panelErreur.setBackground(c);
+
+		panelBtn.setPreferredSize(new Dimension(300, panelBtn.getPreferredSize().height));
+		
+		
+		
+		///// PANEL IMAGE CONNEXION \\\\\\
+		PanelImage panelImg = new PanelImage("src/Images/connexion.png");
+		contentPane.add(panelImg, BorderLayout.CENTER);
+		
+		
 	}
 	
 	public void setLogin(String login) {
@@ -141,5 +211,8 @@ public class VueIdentification extends JFrame {
 	public String getPassword() {
 		return this.textFieldPassword.getText();
 	}
-
+	
+	public PanelPopUp getPopup() {
+		return this.panelErreur;
+	}
 }
