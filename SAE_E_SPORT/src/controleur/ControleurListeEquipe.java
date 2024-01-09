@@ -53,7 +53,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		List<Equipe> equipes;
 		if (e.getSource() instanceof JTextField) {
-			this.rechercheEquipesEtRang();
+			this.rechercherParNomEtRang();;
 		} else if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			switch (bouton.getName()) {
@@ -63,20 +63,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 				vue.setVisible(true);
 				break;
 			case "Rechercher" :
-				try {
-					// Lister par Nom d'équipe
-					if(this.vue.getTriParNom()) {
-						this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
-						this.vue.setBtnSort("Trier par rang");
-
-					// Lister par Rang
-					}else {
-						this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
-						this.vue.setBtnSort("Trier par nom");
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				this.rechercherParNomEtRang();
 				break;
 
 			case "Trier" : 
@@ -143,6 +130,23 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 		}
 	}
 	*/
+
+	private void rechercherParNomEtRang() {
+		try {
+			// Lister par Nom d'équipe
+			if(this.vue.getTriParNom()) {
+				this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
+				this.vue.setBtnSort("Trier par rang");
+
+			// Lister par Rang
+			}else {
+				this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
+				this.vue.setBtnSort("Trier par nom");
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {
