@@ -32,46 +32,22 @@ import javax.swing.JButton;
 
 public class VueHistoriquePoints extends JFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private JTextField searchBar;
+	
 	private JTable equipesTable;
 	private JTable tournoiTable;
+	
 	private JLabel pasEquipe;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@SuppressWarnings("deprecation")
-			public void run() {
-				try {
-					VueHistoriquePoints frame = new VueHistoriquePoints();
-					frame.resize(new Dimension(500, 300));
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
+	
 	public VueHistoriquePoints() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
+		setBounds(100, 100, 1280, 720);
+		
+		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
 		
 		JLabel titrePage = new JLabel("Historique Points");
 		titrePage.setHorizontalAlignment(SwingConstants.CENTER);

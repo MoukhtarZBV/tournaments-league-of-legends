@@ -68,10 +68,7 @@ public class VueAjouterArbitre extends JFrame {
 		
 		
 		///// MENU BAR \\\\\
-		JPanel panelSide = new JPanel();
-		panelSide.setBackground(Palette.DARK_GRAY);
-		panelSide.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Palette.GRAY));
-		panelSide.setPreferredSize(new Dimension(125, 600));
+		MenuBar panelSide = new MenuBar(this);
 		contentPane.add(panelSide, BorderLayout.WEST);
 		
 		
