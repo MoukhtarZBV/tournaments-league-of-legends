@@ -68,10 +68,7 @@ public class VueListeTournois extends JFrame {
 		
 		
 		///// MENU BAR \\\\\
-		JPanel panelSide = new JPanel();
-		panelSide.setBackground(Palette.DARK_GRAY);
-		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Palette.GRAY));
-		panelSide.setPreferredSize(new Dimension(125, 600));
+		MenuBar panelSide = new MenuBar(this);
 		contentPane.add(panelSide, BorderLayout.WEST);
 		
 		
@@ -129,6 +126,7 @@ public class VueListeTournois extends JFrame {
 		champRecherche.setForeground(Palette.WHITE);
 		champRecherche.setText("");
 		champRecherche.setColumns(10);
+		champRecherche.addActionListener(controleur);
 		panelBarreRecherche.add(champRecherche, BorderLayout.CENTER);
 		
 		// Bouton rechercher

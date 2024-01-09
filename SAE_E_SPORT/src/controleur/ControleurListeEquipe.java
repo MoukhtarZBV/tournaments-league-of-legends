@@ -51,7 +51,10 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() instanceof JButton) {
+		List<Equipe> equipes;
+		if (e.getSource() instanceof JTextField) {
+			this.rechercheEquipesEtRang();
+		} else if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			switch (bouton.getName()) {
 			case "Retour": 
@@ -93,6 +96,53 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			}
 		}
 	}
+	/*
+	private void rechercheEquipesEtRang() {
+		List<Equipe> equipes;
+		try {
+			// Lister par Nom d'équipe
+			if(this.vue.getTriParNom()) {
+				equipes = this.modele.getToutesLesEquipes();
+				List<String> nomEquipes = equipes.stream()
+						.sorted((x,y)-> x.getNom().compareTo(y.getNom()))
+						.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+						.collect(Collectors.toList());
+
+				List<String> nomEquipesTri = nomEquipes.stream()
+						.filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+						.collect(Collectors.toList());
+
+				this.vue.updateListeEquipes(nomEquipesTri);
+				this.vue.setBtnSort("Trier par rang");
+
+				// Lister par Rang
+			}else {
+				equipes = this.modele.getToutesLesEquipes();
+				List<String> nomEquipes = equipes.stream()
+						.sorted((x,y)-> {
+							if (x.getRang()>y.getRang()){
+								return 1;
+							}else if(x.getRang()<y.getRang()) {
+								return -1;
+							}else {
+								return 0;
+							}
+						})
+						.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+						.collect(Collectors.toList());
+
+				List<String> nomEquipesTri = nomEquipes.stream()
+						.filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
+						.collect(Collectors.toList());
+
+				this.vue.updateListeEquipes(nomEquipesTri);
+				this.vue.setBtnSort("Trier par nom");
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	*/
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {
