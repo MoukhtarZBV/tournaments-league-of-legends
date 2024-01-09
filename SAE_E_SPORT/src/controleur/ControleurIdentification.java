@@ -33,37 +33,33 @@ public class ControleurIdentification implements ActionListener, WindowListener 
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
 		if (bouton.getText().equals("Se connecter")) {
-			// Verifie que le correspondance compte
-			for (Compte compte : this.modele.getTousLesComptes()) {
-				if (compte.getLogin().equals(this.vue.getLogin())) {
-					if (compte.getMotDePasse().equals(this.vue.getPassword())) {
-						this.vue.dispose();
-						// Si l'utilisateur est un administrateur
-						if (compte.getType().denomination() == "Administrateur") {
-							VueAccueilAdmin vue = new VueAccueilAdmin();
+			if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
+				this.vue.dispose();
+				// Si administrateur
+				if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
+					VueAccueilAdmin vue = new VueAccueilAdmin();
+					vue.setVisible(true);
+					// CHANGER LE BONJOUR ADMIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (le passer en paramètre de la vueAccueil problement)
+				}
+				// Si arbitre
+				else {
+					Associer associerBDD = new Associer();
+					List<Associer> associations = associerBDD.getToutesLesAssociations();
+					for (Associer ass : associations) {
+						if (ass.getArbitre().getCompte().getLogin().equals(this.vue.getLogin())) {
+							VueTournoi vue = new VueTournoi(ass.getTournoi());
 							vue.setVisible(true);
-							// CHANGER LE BONJOUR ADMIN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (le passer en paramètre de la vueAccueil problement)
-						}
-						// Si l'utilisateur est un arbitre
-						else {
-							Associer associerBDD = new Associer();
-							List<Associer> associations = associerBDD.getToutesLesAssociations();
-							for (Associer ass : associations) {
-								if (ass.getArbitre().getCompte().getLogin().equals(compte.getLogin())) {
-									VueTournoi vue = new VueTournoi(ass.getTournoi());
-									vue.setVisible(true);
-									this.vue.dispose();
-								}
-							}
+							this.vue.dispose();
 						}
 					}
 				}
+			}else {
+				// Si pas de correspondance
+				this.vue.setMessageErreur("Le login et/ou le mot de passe sont incorrect");
+				this.vue.setColorErreur (Color.RED);
+				this.vue.setLogin("");
+				this.vue.setPassword("");
 			}
-			// Si pas de correspondance
-			this.vue.setMessageErreur("Le login et/ou le mot de passe sont incorrect");
-			this.vue.setColorErreur (Color.RED);
-			this.vue.setLogin("");
-			this.vue.setPassword("");
 		}
 		if(bouton.getText().equals("Retour")) {
 			this.vue.dispose();

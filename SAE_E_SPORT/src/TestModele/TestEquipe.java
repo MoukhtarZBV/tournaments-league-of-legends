@@ -68,8 +68,8 @@ public class TestEquipe {
 		equipes.add(e2);
 		equipes.add(e3);
 		
-		assertTrue(Equipe.equipeExistante(e1));
-		assertFalse(Equipe.equipeExistante(e5));
+		assertTrue(e1.equipeExistante(e1));
+		assertFalse(e5.equipeExistante(e5));
 //		assertTrue(Equipe.toutesLesEquipes().equals(equipes));
 	}
 

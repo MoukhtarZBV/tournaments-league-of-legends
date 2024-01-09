@@ -47,7 +47,7 @@ public class TestJouer {
 		jdb.add(j5);
 		
 		PartieJDBC pbd = new PartieJDBC();
-		Partie partie = new Partie(Date.valueOf(LocalDate.of(2022,12,25)), "13:00", "Local", e1 ,t1);
+		Partie partie = new Partie(Date.valueOf(LocalDate.of(2024,01,30)), "13:00", "Local", t1);
 		
 		pbd.add(partie);
 		
