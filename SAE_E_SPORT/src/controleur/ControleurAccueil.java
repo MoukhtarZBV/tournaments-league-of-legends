@@ -42,7 +42,6 @@ public class ControleurAccueil implements MouseListener {
 				
 			case "Tournois":
 				Tournoi tournoiBDD = new Tournoi();
-				System.out.println(tournoiBDD.getTousLesTournois());
 				VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
 				vueTournois.setVisible(true);
 				this.vue.dispose();	
