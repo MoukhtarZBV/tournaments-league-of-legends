@@ -63,7 +63,6 @@ public class VueListeEquipe extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Équipes");
-//		setResizable(false);
 		
 
 		///// PANEL PRINCIPAL \\\\\	
@@ -73,10 +72,7 @@ public class VueListeEquipe extends JFrame {
 		
 		
 		///// MENU BAR \\\\\
-		JPanel panelSide = new JPanel();
-		panelSide.setBackground(Palette.DARK_GRAY);
-		panelSide.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Palette.GRAY));
-		panelSide.setPreferredSize(new Dimension(125, 600));
+		MenuBar panelSide = new MenuBar(this);
 		contentPane.add(panelSide, BorderLayout.WEST);
 		
 		
