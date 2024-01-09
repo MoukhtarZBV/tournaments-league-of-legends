@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +31,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
-		if (bouton.getText().equals("Se connecter")) {
+		if (bouton.getName().equals("Connexion")) {
 			if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
 				this.vue.dispose();
 				// Si administrateur
@@ -53,8 +54,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 				}
 			}else {
 				// Si pas de correspondance
-				this.vue.setMessageErreur("Le login et/ou le mot de passe sont incorrect");
-				this.vue.setColorErreur (Color.RED);
+				this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
 				this.vue.setLogin("");
 				this.vue.setPassword("");
 			}
