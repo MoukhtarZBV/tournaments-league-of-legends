@@ -65,9 +65,8 @@ public class VueListeArbitre extends JFrame {
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(Ecran.posX, Ecran.posY, 873, 528);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Arbitres");
-		setResizable(false);
 		
 
 		///// PANEL PRINCIPAL \\\\\	

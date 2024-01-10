@@ -1,13 +1,10 @@
 package controleur;
 
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -51,7 +48,6 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		List<Equipe> equipes;
 		if (e.getSource() instanceof JTextField) {
 			this.rechercherParNomEtRang();;
 		} else if (e.getSource() instanceof JButton) {
@@ -83,53 +79,6 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			}
 		}
 	}
-	/*
-	private void rechercheEquipesEtRang() {
-		List<Equipe> equipes;
-		try {
-			// Lister par Nom d'équipe
-			if(this.vue.getTriParNom()) {
-				equipes = this.modele.getToutesLesEquipes();
-				List<String> nomEquipes = equipes.stream()
-						.sorted((x,y)-> x.getNom().compareTo(y.getNom()))
-						.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
-						.collect(Collectors.toList());
-
-				List<String> nomEquipesTri = nomEquipes.stream()
-						.filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
-						.collect(Collectors.toList());
-
-				this.vue.updateListeEquipes(nomEquipesTri);
-				this.vue.setBtnSort("Trier par rang");
-
-				// Lister par Rang
-			}else {
-				equipes = this.modele.getToutesLesEquipes();
-				List<String> nomEquipes = equipes.stream()
-						.sorted((x,y)-> {
-							if (x.getRang()>y.getRang()){
-								return 1;
-							}else if(x.getRang()<y.getRang()) {
-								return -1;
-							}else {
-								return 0;
-							}
-						})
-						.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
-						.collect(Collectors.toList());
-
-				List<String> nomEquipesTri = nomEquipes.stream()
-						.filter(eq -> eq.toUpperCase().contains(this.vue.getSearch().toUpperCase()))
-						.collect(Collectors.toList());
-
-				this.vue.updateListeEquipes(nomEquipesTri);
-				this.vue.setBtnSort("Trier par nom");
-			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}
-	*/
 
 	private void rechercherParNomEtRang() {
 		try {
