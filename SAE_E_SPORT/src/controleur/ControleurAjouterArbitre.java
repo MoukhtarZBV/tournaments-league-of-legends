@@ -16,6 +16,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 
+import components.PanelPopUp;
 import dao.ArbitreJDBC;
 import dao.JoueurJDBC;
 import ihm.VueAjouterArbitre;
@@ -23,13 +24,14 @@ import ihm.VueCreationTournoi;
 import ihm.VueListeArbitre;
 import ihm.VueListeTournois;
 import modele.Arbitre;
+import modele.Equipe;
 import modele.Tournoi;
 
 public class ControleurAjouterArbitre implements ActionListener, FocusListener {
-	
+
 	private VueAjouterArbitre vue;
 	private Arbitre modele;
-	
+
 	public ControleurAjouterArbitre(VueAjouterArbitre vue) {
 		this.modele = new Arbitre();
 		this.vue = vue;
@@ -47,20 +49,26 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 			}
 			if (bouton.getName().equals("Valider")) {
 				try {
-					Arbitre arbitre;
-					try {
-						arbitre = new Arbitre(ArbitreJDBC.getNextValueSequence(),this.vue.getNom(),this.vue.getPrenom());
+					String prenom = this.vue.getPrenom().replace(" ", "");
+					String nom = this.vue.getNom().replace(" ", "");
+					if (!nom.equals("") && !prenom.equals("") && new Arbitre().getByNomPrenom(vue.getNom(),vue.getPrenom()) == null) {
+						Arbitre arbitre = new Arbitre(ArbitreJDBC.getNextValueSequence(),this.vue.getNom(),this.vue.getPrenom());
 						modele.ajouterArbitre(arbitre);
 						vue.getPopup().setEnabled(false);
-						Arbitre arbitreBDD = new Arbitre();
-						VueListeArbitre vue = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
+
+						VueListeArbitre vue = new VueListeArbitre(new Arbitre().getTousLesArbitres());
 						vue.setVisible(true);
-					} catch (Exception e1) {
-						e1.printStackTrace();
+						this.vue.dispose();
 					}
-					this.vue.dispose();
-				} catch (IllegalArgumentException iae) {
-					vue.getPopup().setErreur(iae.getMessage());
+					else if (nom.equals("")) {
+						this.vue.getPopup().setErreur("Le nom de l'arbitre ne peut pas être vide");
+					}else if(prenom.equals("")) {
+						this.vue.getPopup().setErreur("Le prénom de l'arbitre ne peut pas être vide");
+					}else {
+						this.vue.getPopup().setErreur("Un arbitre portant ce nom et prenom existe déjà");
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
 			}
 		}
@@ -75,11 +83,11 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 		}
 	}
 
-	
-	
+
+
 	// NOT IMPLEMENTED \\
-	
+
 	@Override
 	public void focusLost(FocusEvent e) {}
-	
+
 }
