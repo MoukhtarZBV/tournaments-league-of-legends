@@ -16,13 +16,14 @@ import dao.JoueurJDBC;
 import modele.Equipe;
 import modele.Joueur;
 import modele.ModeleHistoriquePoints;
+import modele.ModeleListeEquipes;
 import modele.Pays;
 
-public class TestsHistorique {
+public class TestsListeEquipes {
 	
-	private ModeleHistoriquePoints modele;
 	private Equipe equipeBDD;
 	private List<Equipe> equipes;
+	private ModeleListeEquipes modele;
 
 	@Before
 	public void setUp() throws Exception {
@@ -62,7 +63,7 @@ public class TestsHistorique {
 	    e3.ajouterJoueur(j11, j12, j13, j14, j15);
 	    equipeBDD.ajouterEquipe(e3);
 	    this.equipes.add(e3);
-	    this.modele = new ModeleHistoriquePoints();
+	    this.modele = new ModeleListeEquipes();
 	}
 
 	@After
@@ -74,20 +75,26 @@ public class TestsHistorique {
 
 	@Test
 	public void testSansFiltre() {
-		assertEquals(this.modele.getEquipes(), this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList()));
-	}
-	
-	@Test
-	public void testAvecFiltre() {
-		this.modele.filterEquipes("T");
-		assertEquals(this.modele.getFilteredEquipes(),this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).filter(e -> e.getNom().toUpperCase().contains("T")).collect(Collectors.toList()));
-	}
-	
-	@Test
-	public void testResetFiltre() {
-		this.modele.filterEquipes("T");
-		this.modele.resetEquipes();
 		assertEquals(this.modele.getEquipes(),this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList()));
+	}
+	
+	@Test
+	public void testTrierParNomSansRecherche() {
+		assertEquals(this.modele.trierParNom(""),this.equipes.stream().sorted((x,y)-> x.getNom().compareTo(y.getNom())).map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom())).collect(Collectors.toList()));
+	}
+	@Test
+	public void testTrierParRangSansRecherche() {
+		assertEquals(this.modele.trierParRang(""),this.equipes.stream().sorted((x,y)-> {
+			if (x.getRang()>y.getRang()){
+						return 1;
+					}else if(x.getRang()<y.getRang()) {
+						return -1;
+					}else {
+						return 0;
+					}
+				})
+				.map(eq -> String.format("%-5d %-50s", eq.getRang(), eq.getNom()))
+				.collect(Collectors.toList()));
 	}
 
 }

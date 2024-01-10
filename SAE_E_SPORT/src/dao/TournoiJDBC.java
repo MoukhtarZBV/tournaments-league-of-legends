@@ -32,6 +32,8 @@ public class TournoiJDBC implements TournoiDAO {
 		try {
 			Statement st = ConnectionJDBC.getConnection().createStatement();
 			ResultSet rs = st.executeQuery("select * from Tournoi order by dateDebut desc");
+			EquipeJDBC equipeBDD = new EquipeJDBC();
+			CompteJDBC compteBDD = new CompteJDBC(); 
 			while(rs.next()) {
 				tournois.add(Tournoi.createTournoi(rs.getString("nomTournoi"), 
 										Niveau.getNiveau(rs.getString("niveau")), 
@@ -39,8 +41,8 @@ public class TournoiJDBC implements TournoiDAO {
 										rs.getDate("dateFin"), 
 										Pays.getPays(rs.getString("nomPays")),
 										Statut.getStatut(rs.getString("statut")),
-										new EquipeJDBC().getById(rs.getInt("idEquipe")),
-										new CompteJDBC().getById(rs.getString("login"))));
+										equipeBDD.getById(rs.getInt("idEquipe")),
+										compteBDD.getById(rs.getString("login"))));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

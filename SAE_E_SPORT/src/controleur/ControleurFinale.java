@@ -34,7 +34,6 @@ public class ControleurFinale implements MouseListener, ActionListener {
 			this.vue.dispose();
 		} else if (bouton.getName().equals("Confirmer")) {
 			this.modele.cloturerTournoi(this.vue.getTournoi(), this.vue.getVainqueur());
-			this.modele.changerVainqueurTournoi(this.vue.getTournoi(), this.vue.getVainqueur());
 			this.vue.setVisibleConfirmer(false);
 			this.vue.getTournoi().setStatut(Statut.TERMINE);
 			this.vue.getTournoi().setVainqueur(this.vue.getVainqueur());

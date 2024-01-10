@@ -54,7 +54,7 @@ public class Tournoi {
 			throw new IllegalArgumentException("L'année de la date doit être la même que celle en cours");
 		} 
 		if (!moinsDeDeuxSemainesEntreDates(dateDebut, dateFin)) {
-			throw new IllegalArgumentException("Le tournoi ne peut durer plus de deux semaines");
+			throw new IllegalArgumentException("Le tournoi doit durer maximum deux semaines");
 		} 
 		if (!minimum5JoursEntreDates(dateDebut, dateFin)) {
 			throw new IllegalArgumentException("Le tournoi doit durer minimum cinq jours");
@@ -163,7 +163,7 @@ public class Tournoi {
 	public String toString() {
 		return "Tournoi [name=" +this.nomTournoi +", niveau=" + this.niveau.denomination() 
 				+ ", dateDebut=" + this.dateDebut.toString() + ", dateFin=" + this.dateFin.toString() + ", pays=" + this.pays.denomination() 
-				+", status=" + this.statut.denomination() + ", equipe vainqueur = " + this.vainqueur + "]";
+				+", statut=" + this.statut.denomination() + ", equipe vainqueur = " + this.vainqueur + "compte=" + this.compte + "]";
 	}
 	
 	// ======================= //
@@ -300,16 +300,15 @@ public class Tournoi {
 		// selection du nombre d'arbitres en fonction du nombre d'équipes
 		int nbArbitres = 0;
 		switch(nbEquipes) {
-		case 4:
-		case 5:
-			nbArbitres = 1;
-			break;
 		case 6:
 		case 7:
 			nbArbitres = 2;
 			break;
 		case 8:
 			nbArbitres = 3;
+			break;
+		default:
+			nbArbitres = 1;
 			break;
 		}
 
@@ -330,7 +329,7 @@ public class Tournoi {
 		// Ajout d'un compte à la base de donnée pour le tournoi
 		Compte compteTournoi = new Compte(tournoi.getDateDebut().toString().replace("-", ""), Compte.genererPassword(15), TypeCompte.ARBITRE);
 		new Compte().ajouterCompte(compteTournoi);
-
+		
 		for (int i = 0; i < nbArbitres; i++) {
 			int numArbitre = random.nextInt(arbitres.size());
 			arbitresTirees.add(arbitres.get(numArbitre));
@@ -344,6 +343,9 @@ public class Tournoi {
 			associerBDD.ajouterAssociation(new Associer(arbitres.get(numArbitre), tournoi));
 			arbitres.remove(numArbitre);
 		}
+		
+		tournoi.setCompte(compteTournoi);
+		new Tournoi().mettreAJourTournoi(tournoi);
 		return true;
 	}
 	
@@ -352,6 +354,7 @@ public class Tournoi {
 		tournoi.setVainqueur(equipe);
 		mettreAJourPointsFinalistes(tournoi);
 		changerStatutTournoi(tournoi, Statut.TERMINE);
+		tournoi.setStatut(Statut.TERMINE);
 	}
 	
 	public void mettreAJourPointsFinalistes(Tournoi tournoi) {
@@ -365,7 +368,9 @@ public class Tournoi {
 		Participer participationEquipePerdante = participerBDD.getParTournoiEquipe(tournoi, equipePerdante);
 		
 		participationEquipeGagnante.setNbPointsTournoiGagnes(participationEquipeGagnante.getNbPointsTournoiGagnes() + 200);
+		participationEquipeGagnante.setClassement(1);
 		participationEquipePerdante.setNbPointsTournoiGagnes(participationEquipePerdante.getNbPointsTournoiGagnes() + 100);
+		participationEquipePerdante.setClassement(2);
 		participerBDD.mettreAJourParticipation(participationEquipeGagnante);
 		participerBDD.mettreAJourParticipation(participationEquipePerdante);
 	}
