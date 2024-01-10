@@ -98,7 +98,7 @@ public class TestsGestionDesTournois {
 		this.modele.ajouterTournoi(tournoi);
 		ajouterEquipes(tournoi);
 		arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Richard", "Rich"));
-		assertTrue(InsertionDB.simulerParties(tournoi.generationPoule(), tournoi));	    
+		assertTrue(InsertionDB.simulerParties(tournoi.generationPoule(), tournoi, arbitreBDD.getTousLesArbitres()));	    
 		
 		Partie finale = new Partie().getFinaleTournoi(tournoi);
 		Equipe equipeGagnante = finale.getEquipeUne();
@@ -118,9 +118,9 @@ public class TestsGestionDesTournois {
 	public void testOuvertureTournoiPasAssezArbitres() throws Exception {
 		CreateDB.main(null);
 		this.modele.ajouterTournoi(tournoi);
-		assertFalse(tournoiBDD.selectionArbitre(tournoi));
+		assertFalse(tournoiBDD.associerArbitresTournoi(tournoi, arbitreBDD.getTousLesArbitres()));
 		arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Richard", "Rich"));
-		assertTrue(tournoiBDD.selectionArbitre(tournoi));
+		assertTrue(tournoiBDD.associerArbitresTournoi(tournoi, arbitreBDD.getTousLesArbitres()));
 	}
 	
 	@Test
@@ -129,7 +129,7 @@ public class TestsGestionDesTournois {
 		this.modele.ajouterTournoi(tournoi);
 		ajouterEquipes(tournoi);
 		arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Richard", "Rich"));
-		assertTrue(InsertionDB.simulerParties(tournoi.generationPoule(), tournoi));
+		assertTrue(InsertionDB.simulerParties(tournoi.generationPoule(), tournoi, arbitreBDD.getTousLesArbitres()));
 		
 		Partie finale = new Partie().getFinaleTournoi(tournoi);
 		Equipe equipeUne = finale.getEquipeUne();

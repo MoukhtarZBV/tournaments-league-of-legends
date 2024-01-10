@@ -40,21 +40,15 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 			@SuppressWarnings("unchecked")
 			JList<String> list = (JList<String>) e.getSource();
 			this.vue.getBtnSuppr().setEnabled(true);
-			if (e.getClickCount() == 1) {
-				try {
-					String arbitre = ((String) list.getSelectedValue());
-					
-					String nom;
-					String prenom;
-					nom = arbitre.substring(0, arbitre.indexOf(' ')); // Extrait le nom (jusqu'à l'espace)
-					prenom = arbitre.substring(arbitre.indexOf(' ') + 1, arbitre.length());
-					prenom = prenom.replace(" ", "");
-					this.arbitreSelected = new Arbitre().getByNomPrenom(nom, prenom);
-					
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
+			String arbitre = ((String) list.getSelectedValue());
+				
+			String nom;
+			String prenom;
+			nom = arbitre.substring(0, arbitre.indexOf(' ')); // Extrait le nom (jusqu'à l'espace)
+			prenom = arbitre.substring(arbitre.indexOf(' ') + 1, arbitre.length());
+			prenom = prenom.replace(" ", "");
+			this.arbitreSelected = new Arbitre().getByNomPrenom(nom, prenom);
+			System.out.println(arbitreSelected);
 		}
 	}
 	

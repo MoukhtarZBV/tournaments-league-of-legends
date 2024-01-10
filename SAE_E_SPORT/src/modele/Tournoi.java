@@ -292,6 +292,9 @@ public class Tournoi {
 	}
 	
 	public boolean associerArbitresTournoi(Tournoi tournoi, List<Arbitre> arbitres) {
+		if (arbitres.size() == 0) {
+			return false;
+		}
 		Tournoi tournoiBDD = new Tournoi();
 		boolean insertion = true;
 		Associer associerBDD = new Associer();
