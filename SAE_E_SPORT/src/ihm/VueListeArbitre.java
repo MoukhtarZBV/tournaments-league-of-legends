@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import components.CoolTextField;
 import controleur.ControleurListeArbitre;
@@ -37,6 +38,7 @@ public class VueListeArbitre extends JFrame {
 	private JTextField searchBar;
 	private JList<Object> listeArbitres;
 	private List<Arbitre> arbitres;
+	private JButton btnSuppr;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -198,6 +200,19 @@ public class VueListeArbitre extends JFrame {
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
+		// Bouton Supprimer
+		this.btnSuppr = new JButton("<html><body style='padding: 5px 25px;'>Supprimer</body></html>");
+		btnSuppr.setName("Supprimer");
+		btnSuppr.setEnabled(false);
+		btnSuppr.setBackground(Palette.GRAY);
+		btnSuppr.setForeground(Palette.WHITE);
+		btnSuppr.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnSuppr.setFont(Police.LABEL);
+		btnSuppr.addActionListener(controleur);
+		btnSuppr.setFocusable(false);
+		panelBoutons.add(btnSuppr);
+		
+		// Bouton Ajouter
 		JButton btnAjouter = new JButton("<html><body style='padding: 5px 25px;'>Ajouter</body></html>");
 		btnAjouter.setName("Ajouter");
 		btnAjouter.setForeground(Color.WHITE);
@@ -209,6 +224,22 @@ public class VueListeArbitre extends JFrame {
 		panelBoutons.add(btnAjouter);
 	}
 	
+	public JButton getBtnSuppr() {
+		return this.btnSuppr;
+	}
+	
+	public void setJListArbitre () throws InterruptedException {
+		List<String> nomArbitres = this.arbitres.stream()
+				.map(a -> String.format("%-11s %-30s", a.getNom(), a.getPrenom()))
+				.sorted((x,y)-> x.compareTo(y))
+				.collect(Collectors.toList());
+		
+		this.listeArbitres = new JList<Object>(nomArbitres.toArray());
+		listeArbitres.setFont(Police.TABLEAU_MONO);
+		listeArbitres.setBackground(Palette.GRAY);
+		listeArbitres.setForeground(Palette.WHITE);
+		listeArbitres.setBorder(new EmptyBorder(10, 10, 10, 10));
+	}
 	
 	public String getSearch() {
 		return searchBar.getText();

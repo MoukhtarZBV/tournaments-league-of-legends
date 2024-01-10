@@ -65,7 +65,7 @@ public class Arbitre {
 		if (o==this) return true;
 		if(o instanceof Arbitre) {
 			Arbitre a = (Arbitre) o;
-			return this.idArbitre == a.idArbitre && this.nomArbitre == a.nomArbitre && this.prenomArbitre == a.prenomArbitre; 
+			return this.nomArbitre.equals(a.nomArbitre) && this.prenomArbitre.equals(a.prenomArbitre); 
 		} else {
 			return false;
 		}
