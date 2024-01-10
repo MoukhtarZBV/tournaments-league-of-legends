@@ -271,24 +271,25 @@ public class VueTournoi extends JFrame {
 		panelNomsArbitres.setBorder(null);
 		panelArbitres.add(panelNomsArbitres);
 		
-		afficherBoutonsEtArbitres();
+		afficherBoutons();
+		afficherArbitresTournoi();
 	}
 
-	private void afficherBoutonsEtArbitres() {
+	private void afficherBoutons() {
 		switch (tournoi.getStatut()) {
 		case ATTENTE_EQUIPES:
 			afficherBoutonImporter();
-			afficherMessageArbitres(true);
+			afficherBoutonSupprimer();
+			break;
+		case ATTENTE_ARBITRES:
+			afficherBoutonArbitres();
 			afficherBoutonSupprimer();
 			break;
 		case A_VENIR:
 			afficherBoutonOuvrir();
-			/*
 			if (tournoi.getDateDebut().after(new Date(System.currentTimeMillis()))) {
 				btnOuvrir.setEnabled(false);
 			}
-			*/
-			afficherMessageArbitres(true);
 			afficherBoutonSupprimer();
 			break;
 		case EN_COURS:
@@ -299,45 +300,39 @@ public class VueTournoi extends JFrame {
 		case ATTENTE_RESULTATS:
 			afficherBoutonGererPoule("Consulter la poule");
 			afficherBoutonFinale("Gérer la finale");
-			afficherArbitresTournoi();
 			break;
 		case TERMINE:
 			afficherBoutonGererPoule("Consulter la poule");
 			afficherBoutonFinale("Consulter la finale");
-			afficherArbitresTournoi();
 			break;
 		case ANNULE:
 			afficherBoutonGererPoule("Consulter la poule");
-			afficherArbitresTournoi();
 			break;
 		}
 	}
 	
 	public void afficherArbitresTournoi() {
 		List<Arbitre> arbitresTournoi = new Tournoi().getArbitresTournoi(tournoi);
-		for (Arbitre arbitre : arbitresTournoi) {
-			JLabel labelArbitre = new JLabel(arbitre.getNom() + " " + arbitre.getPrenom());
-			labelArbitre.setForeground(Palette.WHITE);
-			labelArbitre.setFont(Police.LABEL);
-			labelArbitre.setBackground(Palette.DARK_GRAY);
-			labelArbitre.setOpaque(true);
-			labelArbitre.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE), Utilitaires.EMPTY_BORDER_BOUTONS));
-			panelNomsArbitres.add(labelArbitre);
+		if (arbitresTournoi.size() == 0) {
+			afficherMessageArbitres();
+		} else {
+			for (Arbitre arbitre : arbitresTournoi) {
+				JLabel labelArbitre = new JLabel(arbitre.getNom() + " " + arbitre.getPrenom());
+				labelArbitre.setForeground(Palette.WHITE);
+				labelArbitre.setFont(Police.LABEL);
+				labelArbitre.setBackground(Palette.DARK_GRAY);
+				labelArbitre.setOpaque(true);
+				labelArbitre.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE), Utilitaires.EMPTY_BORDER_BOUTONS));
+				panelNomsArbitres.add(labelArbitre);
+			}
 		}
 	}
 	
-	public void afficherMessageArbitres(boolean afficher) {
-		if (afficher) {
-			panelMessageArbitres = new PanelPopUp();
-			panelMessageArbitres.setNormal("Ouvrez le tournoi pour assigner des arbitres");
-			panelNomsArbitres.setLayout(new BorderLayout());
-			panelNomsArbitres.add(panelMessageArbitres, BorderLayout.CENTER);
-		} else {
-			for (Component c : panelNomsArbitres.getComponents()) {
-				panelNomsArbitres.remove(c); }
-			panelNomsArbitres.setLayout(new FlowLayout());
-			((FlowLayout) panelNomsArbitres.getLayout()).setAlignment(FlowLayout.LEFT);
-		}
+	public void afficherMessageArbitres() {
+		panelMessageArbitres = new PanelPopUp();
+		panelMessageArbitres.setNormal("Aucun arbitre assigné");
+		panelNomsArbitres.setLayout(new BorderLayout());
+		panelNomsArbitres.add(panelMessageArbitres, BorderLayout.CENTER);
 	}
 	
 	private void afficherBoutonSupprimer() {
@@ -355,6 +350,18 @@ public class VueTournoi extends JFrame {
 	public void afficherBoutonImporter() {
 		JButton btnImporter = new JButton("Importer des équipes");
 		btnImporter.setName("Importer");
+		btnImporter.setBackground(Palette.GRAY);
+		btnImporter.setForeground(Palette.WHITE);
+		btnImporter.setBorder(Utilitaires.BORDER_BOUTONS);
+		btnImporter.setFont(Police.LABEL);
+		btnImporter.setFocusable(false);
+		btnImporter.addActionListener(controleur);
+		panelBoutons.add(btnImporter);
+	}
+	
+	public void afficherBoutonArbitres() {
+		JButton btnImporter = new JButton("Attribuer des arbitres");
+		btnImporter.setName("Arbitres");
 		btnImporter.setBackground(Palette.GRAY);
 		btnImporter.setForeground(Palette.WHITE);
 		btnImporter.setBorder(Utilitaires.BORDER_BOUTONS);

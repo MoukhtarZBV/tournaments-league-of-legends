@@ -2,7 +2,7 @@ package modele;
 
 public enum Statut {
 
-	ATTENTE_EQUIPES("En attente d'équipes"), A_VENIR("À venir"), EN_COURS("En cours"), TERMINE("Terminé"), ANNULE("Annulé"), ATTENTE_RESULTATS("Attente de résultats"), FINALE("Finale en cours");
+	ATTENTE_EQUIPES("En attente d'équipes"), ATTENTE_ARBITRES("En attente d'arbitre(s)"), A_VENIR("À venir"), EN_COURS("En cours"), TERMINE("Terminé"), ANNULE("Annulé"), ATTENTE_RESULTATS("Attente de résultats"), FINALE("Finale en cours");
 	
 	private String denomination;
 	

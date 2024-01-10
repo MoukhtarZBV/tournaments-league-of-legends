@@ -290,63 +290,36 @@ public class Tournoi {
 	private int nombreMatchs(int nbEquipes) {
 		return nbEquipes*(nbEquipes-1)/2;
 	}
-
-	public boolean selectionArbitre(Tournoi tournoi) {
-		// nombre d'équipes dans le tournoi
-		int nbEquipes = (int) new Participer().getToutesLesParticipations().stream()
-				.filter(participer -> participer.getTournoi().getNomTournoi().equals(tournoi.getNomTournoi()))
-				.count();
-
-		// selection du nombre d'arbitres en fonction du nombre d'équipes
-		int nbArbitres = 0;
-		switch(nbEquipes) {
-		case 6:
-		case 7:
-			nbArbitres = 2;
-			break;
-		case 8:
-			nbArbitres = 3;
-			break;
-		default:
-			nbArbitres = 1;
-			break;
-		}
-
-		// Selection de tous les arbitres de la base
-		Arbitre arbitreBDD = new Arbitre();
-		List<Arbitre> arbitres = arbitreBDD.getTousLesArbitres();
-		
-		// S'il n'y a pas assez d'arbitres, on retourne faux
-		if (arbitres.size() < nbArbitres) {
-			return false;
-		}
-
-		// Selection d'arbitres au hasard
+	
+	public boolean associerArbitresTournoi(Tournoi tournoi, List<Arbitre> arbitres) {
+		Tournoi tournoiBDD = new Tournoi();
+		boolean insertion = true;
 		Associer associerBDD = new Associer();
-		List<Arbitre> arbitresTirees = new ArrayList<>();
-		Random random = new Random();
-
+		for (Arbitre arbitre : arbitres) {
+			insertion = associerBDD.ajouterAssociation(new Associer(arbitre, tournoi));
+			if (!insertion) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void associerCompteTournoiArbitres(Tournoi tournoi) {
 		// Ajout d'un compte à la base de donnée pour le tournoi
 		Compte compteTournoi = new Compte(tournoi.getDateDebut().toString().replace("-", ""), Compte.genererPassword(15), TypeCompte.ARBITRE);
 		new Compte().ajouterCompte(compteTournoi);
-		
-		for (int i = 0; i < nbArbitres; i++) {
-			int numArbitre = random.nextInt(arbitres.size());
-			arbitresTirees.add(arbitres.get(numArbitre));
-
-			// Association du compte aux arbitres
-			Arbitre arb = arbitres.get(numArbitre);
-			arb.setCompte(compteTournoi);
-			arbitreBDD.mettreAJourArbitre(arb);
-
-			// Ajout dans la base de données la liaison arbitre / tournoi
-			associerBDD.ajouterAssociation(new Associer(arbitres.get(numArbitre), tournoi));
-			arbitres.remove(numArbitre);
-		}
-		
 		tournoi.setCompte(compteTournoi);
-		new Tournoi().mettreAJourTournoi(tournoi);
-		return true;
+		Tournoi tournoiBDD = new Tournoi();
+		tournoiBDD.mettreAJourTournoi(tournoi);
+		
+		List<Arbitre> arbitresTournoi = tournoiBDD.getArbitresTournoi(tournoi);
+		Arbitre arbitreBDD = new Arbitre();
+		Associer associerBDD = new Associer();
+		for (Arbitre arbitre : arbitresTournoi) {
+			arbitre.setCompte(compteTournoi);
+			arbitreBDD.mettreAJourArbitre(arbitre);
+			associerBDD.ajouterAssociation(new Associer(arbitre, tournoi));
+		}
 	}
 	
 	public void cloturerTournoi(Tournoi tournoi, Equipe equipe) {
@@ -355,6 +328,14 @@ public class Tournoi {
 		mettreAJourPointsFinalistes(tournoi);
 		changerStatutTournoi(tournoi, Statut.TERMINE);
 		tournoi.setStatut(Statut.TERMINE);
+		
+		// Retirer le compte des arbitres associés au tournoi
+		List<Arbitre> arbitresTournoi = new Tournoi().getArbitresTournoi(tournoi);
+		Arbitre arbitreBDD = new Arbitre();
+		for (Arbitre arbitre : arbitresTournoi) {
+			arbitre.setCompte(null);
+			arbitreBDD.mettreAJourArbitre(arbitre);
+		}
 	}
 	
 	public void mettreAJourPointsFinalistes(Tournoi tournoi) {

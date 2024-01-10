@@ -51,6 +51,10 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 				vueTournois.setVisible(true);
 				this.vue.dispose();
 			} 			
+		} else if (bouton.getName().equals("Arbitres")) {
+			VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
+			vueTournois.setVisible(true);
+			this.vue.dispose();
 		} else if (bouton.getName().equals("Retour")) {
 			VueListeTournois vue = new VueListeTournois(new Tournoi().getTousLesTournois());
 			vue.setVisible(true);
@@ -60,17 +64,12 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 	        frame.setVisible(true);
 	        this.vue.dispose();
 		} else if (bouton.getName().equals("Ouvrir")) {
-			if (this.modele.selectionArbitre(vue.getTournoi())) {
-				this.modele.changerStatutTournoi(vue.getTournoi(), Statut.EN_COURS);
-				this.vue.getTournoi().setStatut(Statut.EN_COURS);
-				this.vue.getTournoi().generationPoule();
-				this.vue.setVisibleBoutonOuvrir(false);
-				this.vue.afficherMessageArbitres(false);
-				this.vue.afficherArbitresTournoi();
-				this.vue.afficherBoutonGererPoule("Gérer la poule");
-			} else {
-				this.vue.afficherMessageErreurArbitres();
-			}
+			this.modele.changerStatutTournoi(vue.getTournoi(), Statut.EN_COURS);
+			this.vue.getTournoi().setStatut(Statut.EN_COURS);
+			this.vue.getTournoi().generationPoule();
+			this.vue.setVisibleBoutonOuvrir(false);
+			this.vue.afficherArbitresTournoi();
+			this.vue.afficherBoutonGererPoule("Gérer la poule");
 		} else if (bouton.getName().equals("Finale")) {
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
 			vueFinale.setVisible(true);

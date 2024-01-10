@@ -52,10 +52,6 @@ public class VueListeArbitre extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
-
 	
 	public VueListeArbitre(List<Arbitre> arbitres) {
 		
