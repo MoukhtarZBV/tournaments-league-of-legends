@@ -44,27 +44,17 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			vueImportation.setVisible(true);
 			vue.dispose();
 		} else if (bouton.getText().equals("Supprimer")) {
-			String[] options = { "Oui", "Non"}; 
-			int choix = JOptionPane.showOptionDialog( 
-		            null, // Parent component (null means center on screen) 
-		            "Do you want to proceed?", // Message to display 
-		            "Custom Options", // Dialog title 
-		            JOptionPane.YES_NO_OPTION, // Option type (Yes, No, Cancel) 
-		            JOptionPane.QUESTION_MESSAGE, // Message type (question icon) 
-		            null, // Custom icon (null means no custom icon) 
-		            options, // Custom options array 
-		            options[1] // Initial selection (default is "Cancel") 
-	        ); 
+			int choix = afficherPopUpConfirmation(); 
 			if (choix == JOptionPane.YES_OPTION) {
-				this.vue.dispose();
 				this.modele.supprimerTournoi(this.vue.getTournoi());
 				VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
 				vueTournois.setVisible(true);
+				this.vue.dispose();
 			} 			
 		} else if (bouton.getName().equals("Retour")) {
-			this.vue.dispose();
 			VueListeTournois vue = new VueListeTournois(new Tournoi().getTousLesTournois());
 			vue.setVisible(true);
+			this.vue.dispose();
 		} else if (bouton.getName().equals("Poule")) {
 	        VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
 	        frame.setVisible(true);
@@ -86,6 +76,21 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			vueFinale.setVisible(true);
 			this.vue.dispose(); 
 		}
+	}
+
+	private int afficherPopUpConfirmation() {
+		String[] options = { "Oui", "Non"}; 
+		int choix = JOptionPane.showOptionDialog( 
+		        null,
+		        "Voulez vous supprimer ce tournoi ?",
+		        "Suppression du tournoi",
+		        JOptionPane.YES_NO_OPTION,
+		        JOptionPane.QUESTION_MESSAGE,
+		        null, // Custom icon (null means no custom icon) 
+		        options, // Custom options array 
+		        options[1] // Initial selection (default is "Cancel") 
+		);
+		return choix;
 	}
 	
 	@Override

@@ -41,6 +41,7 @@ public class VueTournoi extends JFrame {
 	private JTable tableEquipes;
 	private JButton btnOuvrir;
 	private JPanel panelNomsArbitres;
+	private JPanel panelConteneurBoutons;
 	private JPanel panelBoutons;
 	private PanelPopUp panelMessageArbitres;
 	
@@ -228,13 +229,16 @@ public class VueTournoi extends JFrame {
 		mettreIconeDansHeader("Joueur 5", ImagesIcons.BOTTOM);
 		
 		///// PANEL BOUTONS \\\\\
+		panelConteneurBoutons = new JPanel();
+		panelConteneurBoutons.setBackground(Palette.DARK_GRAY);
+		panelConteneurBoutons.setLayout(new BorderLayout());
+		panelCenter.add(panelConteneurBoutons, BorderLayout.SOUTH);
 		FlowLayout fl_panelBoutons = new FlowLayout(FlowLayout.RIGHT, 5, 5);
 		
 		panelBoutons = new JPanel();
-		panelBoutons.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelBoutons.setBackground(Palette.DARK_GRAY);
 		panelBoutons.setLayout(fl_panelBoutons);
-		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
+		panelConteneurBoutons.add(panelBoutons, BorderLayout.CENTER);
 		
 		// Bouton annuler
 		JButton btnRetour = new JButton("Retour");
@@ -246,11 +250,6 @@ public class VueTournoi extends JFrame {
 		btnRetour.addActionListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
-		
-		JButton btnSupprimer = new JButton("Supprimer");
-		btnSupprimer.setName("Supprimer");
-		btnSupprimer.addActionListener(controleur);
-		panelBoutons.add(btnSupprimer);
 
 		///// PANEL ARBITRES \\\\\
 		JPanel panelArbitres = new JPanel();
@@ -280,6 +279,7 @@ public class VueTournoi extends JFrame {
 		case ATTENTE_EQUIPES:
 			afficherBoutonImporter();
 			afficherMessageArbitres(true);
+			afficherBoutonSupprimer();
 			break;
 		case A_VENIR:
 			afficherBoutonOuvrir();
@@ -289,6 +289,7 @@ public class VueTournoi extends JFrame {
 			}
 			*/
 			afficherMessageArbitres(true);
+			afficherBoutonSupprimer();
 			break;
 		case EN_COURS:
 			afficherBoutonGererPoule("Gérer la poule");
@@ -337,6 +338,18 @@ public class VueTournoi extends JFrame {
 			panelNomsArbitres.setLayout(new FlowLayout());
 			((FlowLayout) panelNomsArbitres.getLayout()).setAlignment(FlowLayout.LEFT);
 		}
+	}
+	
+	private void afficherBoutonSupprimer() {
+		JButton btnSupprimer = new JButton("Supprimer");
+		btnSupprimer.setName("Supprimer");
+		btnSupprimer.setBackground(Palette.GRAY);
+		btnSupprimer.setForeground(Palette.ERREUR);
+		btnSupprimer.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
+		btnSupprimer.setFont(Police.LABEL);
+		btnSupprimer.setFocusable(false);
+		btnSupprimer.addActionListener(controleur);
+		panelConteneurBoutons.add(btnSupprimer, BorderLayout.WEST);
 	}
 	
 	public void afficherBoutonImporter() {

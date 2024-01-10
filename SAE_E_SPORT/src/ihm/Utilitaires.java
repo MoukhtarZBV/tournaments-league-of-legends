@@ -12,6 +12,7 @@ public class Utilitaires {
 
 	public static final EmptyBorder EMPTY_BORDER_BOUTONS = new EmptyBorder(5, 20, 5, 20);
 	public static final CompoundBorder BORDER_BOUTONS = new CompoundBorder(new MatteBorder(1, 1, 1, 1, Palette.WHITE), Utilitaires.EMPTY_BORDER_BOUTONS);
+	public static final CompoundBorder BORDER_BOUTONS_DANGEREUX = new CompoundBorder(new MatteBorder(1, 1, 1, 1, Palette.FOND_ERREUR), Utilitaires.EMPTY_BORDER_BOUTONS);
 	
 	public static String formaterDate(Date date) {
 		Calendar calendar = Calendar.getInstance();
