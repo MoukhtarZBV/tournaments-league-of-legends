@@ -246,6 +246,11 @@ public class VueTournoi extends JFrame {
 		btnRetour.addActionListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
+		
+		JButton btnSupprimer = new JButton("Supprimer");
+		btnSupprimer.setName("Supprimer");
+		btnSupprimer.addActionListener(controleur);
+		panelBoutons.add(btnSupprimer);
 
 		///// PANEL ARBITRES \\\\\
 		JPanel panelArbitres = new JPanel();

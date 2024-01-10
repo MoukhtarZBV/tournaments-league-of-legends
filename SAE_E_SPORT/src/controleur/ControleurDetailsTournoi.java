@@ -10,6 +10,7 @@ import java.awt.event.WindowListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import ihm.VueEquipe;
@@ -42,6 +43,24 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			VueImportation vueImportation = new VueImportation(vue.getTournoi());
 			vueImportation.setVisible(true);
 			vue.dispose();
+		} else if (bouton.getText().equals("Supprimer")) {
+			String[] options = { "Oui", "Non"}; 
+			int choix = JOptionPane.showOptionDialog( 
+		            null, // Parent component (null means center on screen) 
+		            "Do you want to proceed?", // Message to display 
+		            "Custom Options", // Dialog title 
+		            JOptionPane.YES_NO_OPTION, // Option type (Yes, No, Cancel) 
+		            JOptionPane.QUESTION_MESSAGE, // Message type (question icon) 
+		            null, // Custom icon (null means no custom icon) 
+		            options, // Custom options array 
+		            options[1] // Initial selection (default is "Cancel") 
+	        ); 
+			if (choix == JOptionPane.YES_OPTION) {
+				this.vue.dispose();
+				this.modele.supprimerTournoi(this.vue.getTournoi());
+				VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
+				vueTournois.setVisible(true);
+			} 			
 		} else if (bouton.getName().equals("Retour")) {
 			this.vue.dispose();
 			VueListeTournois vue = new VueListeTournois(new Tournoi().getTousLesTournois());
