@@ -350,12 +350,20 @@ public class Tournoi {
 	}
 	
 	public void cloturerTournoi(Tournoi tournoi, Equipe equipe) {
-		changerVainqueurTournoi(tournoi, equipe);
-		tournoi.setVainqueur(equipe);
-		mettreAJourPointsFinalistes(tournoi);
-		changerStatutTournoi(tournoi, Statut.TERMINE);
-		tournoi.setStatut(Statut.TERMINE);
-	}
+        changerVainqueurTournoi(tournoi, equipe);
+        tournoi.setVainqueur(equipe);
+        mettreAJourPointsFinalistes(tournoi);
+        changerStatutTournoi(tournoi, Statut.TERMINE);
+        tournoi.setStatut(Statut.TERMINE);
+        
+        // Retirer le compte des arbitres associés au tournoi
+        List<Arbitre> arbitresTournoi = new Tournoi().getArbitresTournoi(tournoi);
+        Arbitre arbitreBDD = new Arbitre();
+        for (Arbitre arbitre : arbitresTournoi) {
+            arbitre.setCompte(null);
+            arbitreBDD.mettreAJourArbitre(arbitre);
+        }
+    }
 	
 	public void mettreAJourPointsFinalistes(Tournoi tournoi) {
 		Partie partieBDD = new Partie();
