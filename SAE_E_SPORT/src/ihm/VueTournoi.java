@@ -227,7 +227,27 @@ public class VueTournoi extends JFrame {
 		mettreIconeDansHeader("Joueur 3", ImagesIcons.MID);
 		mettreIconeDansHeader("Joueur 4", ImagesIcons.SUPPORT);
 		mettreIconeDansHeader("Joueur 5", ImagesIcons.BOTTOM);
-		
+
+		///// PANEL ARBITRES \\\\\
+		JPanel panelArbitres = new JPanel();
+		panelArbitres.setBorder(new EmptyBorder(25, 0, 0, 0));
+		panelArbitres.setBackground(Palette.GRAY);
+		panelTableEquipes.add(panelArbitres, BorderLayout.SOUTH);
+		panelArbitres.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblArbitres = new JLabel("Arbitres");
+		lblArbitres.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
+		lblArbitres.setForeground(Palette.WHITE);
+		lblArbitres.setFont(Police.SOUS_TITRE);
+		panelArbitres.add(lblArbitres, BorderLayout.NORTH);
+
+		// Liste des noms et prénoms des arbitres
+		panelNomsArbitres = new JPanel();
+		((FlowLayout) panelNomsArbitres.getLayout()).setAlignment(FlowLayout.LEFT);
+		panelNomsArbitres.setBackground(Palette.GRAY);
+		panelNomsArbitres.setBorder(null);
+		panelArbitres.add(panelNomsArbitres);
+
 		///// PANEL BOUTONS \\\\\
 		panelConteneurBoutons = new JPanel();
 		panelConteneurBoutons.setBackground(Palette.DARK_GRAY);
@@ -251,26 +271,6 @@ public class VueTournoi extends JFrame {
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 
-		///// PANEL ARBITRES \\\\\
-		JPanel panelArbitres = new JPanel();
-		panelArbitres.setBorder(new EmptyBorder(25, 0, 0, 0));
-		panelArbitres.setBackground(Palette.GRAY);
-		panelTableEquipes.add(panelArbitres, BorderLayout.SOUTH);
-		panelArbitres.setLayout(new BorderLayout(0, 0));
-
-		JLabel lblArbitres = new JLabel("Arbitres");
-		lblArbitres.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
-		lblArbitres.setForeground(Palette.WHITE);
-		lblArbitres.setFont(Police.SOUS_TITRE);
-		panelArbitres.add(lblArbitres, BorderLayout.NORTH);
-
-		// Liste des noms et prénoms des arbitres
-		panelNomsArbitres = new JPanel();
-		((FlowLayout) panelNomsArbitres.getLayout()).setAlignment(FlowLayout.LEFT);
-		panelNomsArbitres.setBackground(Palette.GRAY);
-		panelNomsArbitres.setBorder(null);
-		panelArbitres.add(panelNomsArbitres);
-		
 		afficherBoutons();
 		afficherArbitresTournoi();
 	}
@@ -336,6 +336,9 @@ public class VueTournoi extends JFrame {
 	}
 	
 	private void afficherBoutonSupprimer() {
+		JPanel panelBoutonSupprimer = new JPanel();
+		panelBoutonSupprimer.setBackground(Palette.DARK_GRAY);
+		panelBoutonSupprimer.setLayout(new FlowLayout());
 		JButton btnSupprimer = new JButton("Supprimer");
 		btnSupprimer.setName("Supprimer");
 		btnSupprimer.setBackground(Palette.GRAY);
@@ -344,7 +347,8 @@ public class VueTournoi extends JFrame {
 		btnSupprimer.setFont(Police.LABEL);
 		btnSupprimer.setFocusable(false);
 		btnSupprimer.addActionListener(controleur);
-		panelConteneurBoutons.add(btnSupprimer, BorderLayout.WEST);
+		panelBoutonSupprimer.add(btnSupprimer);
+		panelConteneurBoutons.add(panelBoutonSupprimer, BorderLayout.WEST);
 	}
 	
 	public void afficherBoutonImporter() {

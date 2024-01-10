@@ -269,7 +269,7 @@ public class CreateDB {
 					+ "prenomArbitre VARCHAR(50),"
 					+ "login VARCHAR(30),"
 					+ "CONSTRAINT PK_Arbitre_idArbitre PRIMARY KEY (idArbitre),"
-					+ "CONSTRAINT FK_Arbitre_login FOREIGN KEY (login) REFERENCES Compte(login),"
+					+ "CONSTRAINT FK_Arbitre_login FOREIGN KEY (login) REFERENCES Compte(login) ON DELETE CASCADE,"
 					+ "CONSTRAINT UN_Arbitre_nomPrenom UNIQUE (nomArbitre, prenomArbitre))");
 			System.out.println("-- Table Arbitre créée");
 		} catch (SQLException e) {
@@ -349,8 +349,8 @@ public class CreateDB {
 					+ "idArbitre INTEGER,"
 					+ "nomTournoi VARCHAR(100),"
 					+ "CONSTRAINT PK_Associer_idArbitreTournoi PRIMARY KEY (idArbitre, nomTournoi),"
-					+ "CONSTRAINT FK_Associer_idArbitre FOREIGN KEY (idArbitre) REFERENCES Arbitre(idArbitre),"
-					+ "CONSTRAINT FK_Associer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi))");
+					+ "CONSTRAINT FK_Associer_idArbitre FOREIGN KEY (idArbitre) REFERENCES Arbitre(idArbitre) ON DELETE CASCADE,"
+					+ "CONSTRAINT FK_Associer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi) ON DELETE CASCADE)");
 			System.out.println("-- Table Associer créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
