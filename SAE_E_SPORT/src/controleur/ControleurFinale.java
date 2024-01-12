@@ -11,9 +11,11 @@ import javax.swing.JLabel;
 import ihm.VueFinale;
 import ihm.VueListeTournois;
 import ihm.VueTournoi;
+import modele.Compte;
 import modele.Participer;
 import modele.Statut;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 public class ControleurFinale implements MouseListener, ActionListener {
 
@@ -44,7 +46,7 @@ public class ControleurFinale implements MouseListener, ActionListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (this.vue.getTournoi().getStatut() == Statut.FINALE) {
+		if (this.vue.getTournoi().getStatut() == Statut.FINALE && Compte.getCompteConnecte().getType() == TypeCompte.ARBITRE) {
 			JLabel trophee = (JLabel) e.getSource();
 			this.vue.setVainqueur(trophee.getName());
 			this.vue.setActifConfirmer(true);

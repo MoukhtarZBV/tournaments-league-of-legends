@@ -280,42 +280,5 @@ public class TestsGestionDesTournois {
 	    
 	    InsertionDB.ajouterEquipesTournoi(tournoi, e1, e2, e3, e4);
 	}
-	
-	/* NE FONCTIONNE PAS
-	@Test
-	public void testCloturerSiTousLesVainqueurs() {
-		// Importation de 3 arbitres
-		Arbitre arbitreBDD = new Arbitre();
-		arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Richard", "Rich"));
-	    arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Saul", "Badman"));
-	    arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Gus", "Pollos"));
-	    
-	    // Importation de 4 équipes
-	    modeleImportation.importerEquipesJoueurs(cheminCSV);
-		EtatEquipe etat = this.modeleImportation.verifierEquipe();
-		if (etat == EtatEquipe.OK) {
-			this.modeleImportation.enregistrerImportation(tournoi);
-			this.modeleImportation.changerStatusAVenir(tournoi);
-		}
-		Equipe equipeBDD = new Equipe();
-		Tournoi tournoiBDD = new Tournoi();
-		assertTrue(tournoi.getStatut() == Statut.A_VENIR);
-		
-		int nbEquipesTotal = equipeBDD.getToutesLesEquipes().size();
-		int nbEquipesTournoi = tournoiBDD.getEquipesTournoi(tournoi).size();
-		assertEquals(nbEquipesTotal, 4);
-		assertEquals(nbEquipesTotal, nbEquipesTournoi);
-		
-		// generation de Poule
-		this.tournoi.generationPoule();
-
-		assertFalse(this.modelePoule.tousLesMatchsJouees());
-
-		for (int i = 0; i<6; i++) {
-			this.modelePoule.updateGagnant(i, 1);	
-		}
-		assertTrue (this.modelePoule.tousLesMatchsJouees());
-	}
-	*/
 
 }
