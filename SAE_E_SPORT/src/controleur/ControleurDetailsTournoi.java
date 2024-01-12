@@ -76,21 +76,6 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			this.vue.dispose(); 
 		}
 	}
-
-	private int afficherPopUpConfirmation() {
-		String[] options = { "Oui", "Non"}; 
-		int choix = JOptionPane.showOptionDialog( 
-		        null,
-		        "Voulez vous supprimer ce tournoi ?",
-		        "Suppression du tournoi",
-		        JOptionPane.YES_NO_OPTION,
-		        JOptionPane.QUESTION_MESSAGE,
-		        null, // Custom icon (null means no custom icon) 
-		        options, // Custom options array 
-		        options[1] // Initial selection (default is "Cancel") 
-		);
-		return choix;
-	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -110,6 +95,21 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 				}
 	         }
 		}
+	}
+	
+	private int afficherPopUpConfirmation() {
+		String[] options = { "Oui", "Non"}; 
+		int choix = JOptionPane.showOptionDialog( 
+		        null,
+		        "Voulez vous supprimer ce tournoi ?",
+		        "Suppression du tournoi",
+		        JOptionPane.YES_NO_OPTION,
+		        JOptionPane.QUESTION_MESSAGE,
+		        null,
+		        options,
+		        options[1] 
+		);
+		return choix;
 	}
 	
 	
