@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import dao.ArbitreJDBC;
 import dao.CompteJDBC;
 import dao.CreateDB;
 import dao.EquipeJDBC;
@@ -34,7 +36,7 @@ import modele.Statut;
 import modele.Tournoi;
 import modele.TypeCompte;
 
-public class TestHistoriquePoints {
+public class TestModeleHistoriquePoints {
 
 	private Equipe e1;
 	private Equipe e2;
@@ -107,6 +109,17 @@ public class TestHistoriquePoints {
 		Tournoi tournoi1 = Tournoi.createTournoi("Happy League1", Niveau.LOCAL, Date.valueOf(LocalDate.of(2024, 1, 13)), 
 				Date.valueOf(LocalDate.of(2024, 1, 18)), Pays.FR, Statut.EN_COURS, Optional.empty(), Optional.empty());
 		Tournoi modeleTournoi = new Tournoi();
+		Arbitre modeleArbitre = new Arbitre();
+		List<Arbitre> arbs = new LinkedList<>();
+		Arbitre arb1 = new Arbitre(ArbitreJDBC.getNextValueSequence() , "Koh1", "You Chen1");
+		Arbitre arb2 = new Arbitre(ArbitreJDBC.getNextValueSequence() , "Koh2", "You Chen2");
+		Arbitre arb3 = new Arbitre(ArbitreJDBC.getNextValueSequence() , "Koh3", "You Chen3");
+		arbs.add(arb1);
+		arbs.add(arb2);
+		arbs.add(arb3);
+		for (Arbitre arb : arbs) {
+			modeleArbitre.ajouterArbitre(arb);
+		}
 		List<Arbitre> arbitres = new Arbitre().getTousLesArbitres();
         Collections.shuffle(arbitres);
         Compte c = new Compte("arbitre", "youinfo", TypeCompte.ARBITRE);
@@ -114,8 +127,15 @@ public class TestHistoriquePoints {
         modeleCompte.ajouterCompte(c);
         tournoi1.setCompte(c);
 		modeleTournoi.ajouterTournoi(tournoi1);
-        modeleTournoi.selectionArbitre(tournoi1);
-        
+        List<Arbitre> arbitresAttribuer = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Arbitre arb = arbitres.get(i);
+            arb.setCompte(c);
+            new Arbitre().mettreAJourArbitre(arb);
+            arbitresAttribuer.add(arb);
+        }
+        modeleTournoi.associerArbitresTournoi(tournoi1, arbitresAttribuer);
+
 		Participer modelePart = new Participer();
 		for (Equipe equipe : equipes) {
 			Participer participer = new Participer(equipe, tournoi1);
@@ -131,8 +151,8 @@ public class TestHistoriquePoints {
 		Tournoi tournoi2 = Tournoi.createTournoi("Happy League2", Niveau.LOCAL, Date.valueOf(LocalDate.of(2024, 1, 20)), 
 				Date.valueOf(LocalDate.of(2024, 1, 26)), Pays.FR, Statut.EN_COURS, Optional.empty(), Optional.empty());
         tournoi2.setCompte(c);
-        modeleTournoi.selectionArbitre(tournoi2);
 		modeleTournoi.ajouterTournoi(tournoi2);
+        modeleTournoi.associerArbitresTournoi(tournoi2, arbitresAttribuer);
 		for (Equipe equipe : equipes) {
 			Participer participer = new Participer(equipe, tournoi2);
 			modelePart.ajouterParticipation(participer);
@@ -146,9 +166,9 @@ public class TestHistoriquePoints {
 		// Tournoi 3
 		Tournoi tournoi3 = Tournoi.createTournoi("Happy League3", Niveau.LOCAL, Date.valueOf(LocalDate.of(2024, 2, 1)), 
 				Date.valueOf(LocalDate.of(2024, 2, 8)), Pays.FR, Statut.EN_COURS, Optional.empty(), Optional.empty());
-        tournoi3.setCompte(c);
-        modeleTournoi.selectionArbitre(tournoi3);
-		modeleTournoi.ajouterTournoi(tournoi3);
+        tournoi3.setCompte(c);		
+        modeleTournoi.ajouterTournoi(tournoi3);
+        modeleTournoi.associerArbitresTournoi(tournoi3, arbitresAttribuer);
 		for (Equipe equipe : equipes) {
 			Participer participer = new Participer(equipe, tournoi3);
 			modelePart.ajouterParticipation(participer);
@@ -163,25 +183,19 @@ public class TestHistoriquePoints {
 		Map<Tournoi, Integer> point1 = modeleHistorique.pointsTournoiParEquipe(e1);
 		int point = 10;
 		for (Entry<Tournoi, Integer> p1 : point1.entrySet()) {
-			System.out.println("Point 1 : "+point+", p1 : "+p1.getValue());
-//			assertTrue(p1.getValue() == point);
-//			point += 10;
+			assertTrue(p1.getValue() == point);
 		}
 		
 		Map<Tournoi, Integer> point2 = modeleHistorique.pointsTournoiParEquipe(e2);
 		point = 20;
 		for (Entry<Tournoi, Integer> p2 : point2.entrySet()) {
-			System.out.println("Point 2 : "+point+", p2 : "+p2.getValue());
-//			assertTrue(p2.getValue() == point);
-//			point += 10;
+			assertTrue(p2.getValue() == point);
 		}
 		
 		Map<Tournoi, Integer> point3 = modeleHistorique.pointsTournoiParEquipe(e3);
 		point = 30;
 		for (Entry<Tournoi, Integer> p3 : point3.entrySet()) {
-			System.out.println("Point 3 : "+point+", p3 : "+p3.getValue());
-//			assertTrue(p3.getValue() == point);
-//			point += 10;
+			assertTrue(p3.getValue() == point);
 		}		
 	}
 	
