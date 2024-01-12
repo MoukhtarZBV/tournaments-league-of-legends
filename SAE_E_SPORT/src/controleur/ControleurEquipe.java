@@ -26,7 +26,15 @@ public class ControleurEquipe implements ActionListener {
 		if (bouton.getText().equals("Sauvegarder")) {
 			try {
 				String name = this.vue.getNomEquipe().replace(" ", "");
-				if (!name.equals("") && this.vue.getNomEquipe().length() < 40 && new Equipe().getEquipeParNom(vue.getNomEquipe()) == null) {
+				// Gestion des erreurs
+				if (this.modele.nomEquipeIsVide(name)) {
+					this.vue.getPopup().setErreur("Le nom de l'équipe ne peut pas être vide");
+				}else if(this.modele.nomEquipeIsTropLong(name)){
+					this.vue.getPopup().setErreur("Le nom de l'équipe comporte plus de 40 caractères");
+				} else if(this.modele.nomEquipeIsDejaExistant(name)){
+					this.vue.getPopup().setErreur("Une équipe portant ce nom existe déjà");
+				// Sinon la modification est valide
+				}else {
 					this.modele.mettreAJourEquipe((new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe())));
 					this.vue.dispose();
 					if (this.vue.getPere() == null) {
@@ -36,12 +44,6 @@ public class ControleurEquipe implements ActionListener {
 						VueTournoi vue = new VueTournoi(this.vue.getPere());
 						vue.setVisible(true);
 					}
-				} else if (name.equals("")) {
-					this.vue.getPopup().setErreur("Le nom de l'équipe ne peut pas être vide");
-				}else if(this.vue.getNomEquipe().length() >= 40){
-					this.vue.getPopup().setErreur("Le nom de l'équipe comporte plus de 40 caractères");
-				} else {
-					this.vue.getPopup().setErreur("Une équipe portant ce nom existe déjà");
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
