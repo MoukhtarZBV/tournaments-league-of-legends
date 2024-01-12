@@ -253,7 +253,7 @@ public class VueTournoi extends JFrame {
 
 		// Liste des noms et prénoms des arbitres
 		panelNomsArbitres = new JPanel();
-		((FlowLayout) panelNomsArbitres.getLayout()).setAlignment(FlowLayout.LEFT);
+		panelNomsArbitres.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelNomsArbitres.setBackground(Palette.GRAY);
 		panelNomsArbitres.setBorder(new EmptyBorder(5, 0, 0, 0));
 		panelArbitres.add(panelNomsArbitres);
@@ -263,21 +263,21 @@ public class VueTournoi extends JFrame {
 		panelConteneurBoutons.setBackground(Palette.DARK_GRAY);
 		panelConteneurBoutons.setLayout(new BorderLayout());
 		panelCenter.add(panelConteneurBoutons, BorderLayout.SOUTH);
-		FlowLayout fl_panelBoutons = new FlowLayout(FlowLayout.RIGHT, 5, 5);
 		
 		panelBoutons = new JPanel();
 		panelBoutons.setBackground(Palette.DARK_GRAY);
-		panelBoutons.setLayout(fl_panelBoutons);
+		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panelConteneurBoutons.add(panelBoutons, BorderLayout.CENTER);
 		
 		// Bouton annuler
-		JButton btnRetour = new JButton("Retour");
+		btnRetour = new JButton("Retour");
 		btnRetour.setName("Retour");
 		btnRetour.setBackground(Palette.GRAY);
 		btnRetour.setForeground(Palette.WHITE);
 		btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 

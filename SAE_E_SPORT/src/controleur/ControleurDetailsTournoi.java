@@ -127,6 +127,8 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			b.setBackground(b.getBackground().darker());
 			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}	
+	}
+	
 	private int afficherPopUpConfirmation() {
 		String[] options = { "Oui", "Non"}; 
 		int choix = JOptionPane.showOptionDialog( 
