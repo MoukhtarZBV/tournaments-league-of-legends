@@ -98,14 +98,14 @@ public class TestsGestionDesMatchs {
         Compte c = new Compte("arbitre", "youinfo", TypeCompte.ARBITRE);
         CompteJDBC cbdd = new CompteJDBC();
         cbdd.add(c);
-//        List<Arbitre> arbitresAttribuer = new ArrayList<>();
-//        for (int i = 0; i < 3; i++) {
-//            Arbitre arb = arbitres.get(i);
-//            arb.setCompte(c);
-//            new Arbitre().mettreAJourArbitre(arb);
-//            arbitresAttribuer.add(arb);
-//        }
-        tournoiBDD.selectionArbitre(t);
+        List<Arbitre> arbitresAttribuer = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            Arbitre arb = arbitres.get(i);
+            arb.setCompte(c);
+            new Arbitre().mettreAJourArbitre(arb);
+            arbitresAttribuer.add(arb);
+        }
+        tournoiBDD.associerArbitresTournoi(t, arbitresAttribuer);
         t.generationPoule();
 		this.bouton = new CloturerSimulationBouton();
 		this.modelePoule = new ModelePoule(t);
