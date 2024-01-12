@@ -1,15 +1,18 @@
 package controleur;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
+import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueEquipe;
@@ -35,6 +38,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			if (e.getClickCount() == 2) {
 				try {;
 					String nomEq = ((String) list.getSelectedValue()).substring(6, 55);
+					Ecran.update(this.vue);	
 					VueEquipe vue = new VueEquipe(this.modele.getEquipes(), new Equipe().getEquipeParNom(nomEq), null);
 					vue.setVisible(true);
 					this.vue.dispose();
@@ -54,6 +58,7 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 			JButton bouton = (JButton) e.getSource();
 			switch (bouton.getName()) {
 			case "Retour": 
+				Ecran.update(this.vue);
 				this.vue.dispose();
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
@@ -101,7 +106,14 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
 			JButton b = (JButton)e.getSource();
-			b.setBackground(Palette.LIGHT_PURPLE);
+			
+			if(b.getName().equals("Rechercher")) {
+				b.setBackground(Palette.LIGHT_PURPLE);	
+			} else {
+				b.setBackground(b.getBackground().brighter());
+			}
+			
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		}
 	}
 	
@@ -109,10 +121,16 @@ public class ControleurListeEquipe implements MouseListener, ActionListener {
 	public void mouseExited(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
 			JButton b = (JButton)e.getSource();
-			b.setBackground(Palette.WHITE);
-		}	
+			
+			if(b.getName().equals("Rechercher")) {
+				b.setBackground(Palette.WHITE);	
+			} else {
+				b.setBackground(b.getBackground().darker());
+			}
+			
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 	}
-	
 	
 	// NOT IMPLEMENTED \\
 	

@@ -3,6 +3,8 @@ package ihm;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javax.swing.JFrame;
+
 public class Ecran {
 	
 	public static int posX, posY;
@@ -15,6 +17,11 @@ public class Ecran {
 
 		posX = (int)size.getWidth()/2  - tailleX/2;
 		posY = (int)size.getHeight()/2 - tailleY/2;
+	}
+	
+	public static void update(JFrame frame) {
+		posX = frame.getBounds().x;
+		posY = frame.getBounds().y;
 	}
 
 }

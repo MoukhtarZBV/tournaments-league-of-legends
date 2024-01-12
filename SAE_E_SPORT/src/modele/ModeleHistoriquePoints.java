@@ -39,5 +39,5 @@ public class ModeleHistoriquePoints {
 	public List<Equipe> getEquipes(){
 		return this.equipes;
 	}
-	
+
 }

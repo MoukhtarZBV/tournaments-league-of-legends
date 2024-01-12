@@ -19,6 +19,7 @@ import javax.swing.JFormattedTextField;
 import components.PanelPopUp;
 import dao.ArbitreJDBC;
 import dao.JoueurJDBC;
+import ihm.Ecran;
 import ihm.VueAjouterArbitre;
 import ihm.VueCreationTournoi;
 import ihm.VueListeArbitre;
@@ -42,10 +43,11 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			if (bouton.getName().equals("Annuler")) {
+				Ecran.update(this.vue);				
 				Arbitre arbitreBDD = new Arbitre();
 				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
 				vueArbitres.setVisible(true);
-				this.vue.dispose();
+				this.vue.dispose();	
 			}
 			if (bouton.getName().equals("Valider")) {
 					String prenom = this.vue.getPrenom().replace(" ", "");
@@ -55,6 +57,7 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 						modele.ajouterArbitre(arbitre);
 						vue.getPopup().setEnabled(false);
 
+						Ecran.update(this.vue);	
 						VueListeArbitre vue = new VueListeArbitre(new Arbitre().getTousLesArbitres(), false, null);
 						vue.setVisible(true);
 						this.vue.dispose();

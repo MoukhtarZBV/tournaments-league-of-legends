@@ -227,6 +227,7 @@ public class VueEquipe extends JFrame {
 		
 		JButton btnBack = new JButton("Retour");
 		btnBack.addActionListener(controleur);
+		btnBack.addMouseListener(controleur);
 		btnBack.setForeground(Palette.WHITE);
 		btnBack.setBackground(Palette.GRAY);
 		btnBack.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
@@ -236,6 +237,7 @@ public class VueEquipe extends JFrame {
 		
 		JButton btnSave = new JButton("Sauvegarder");
 		btnSave.addActionListener(controleur);
+		btnSave.addMouseListener(controleur);
 		btnSave.setForeground(Palette.WHITE);
 		btnSave.setBackground(Palette.GRAY);
 		btnSave.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));

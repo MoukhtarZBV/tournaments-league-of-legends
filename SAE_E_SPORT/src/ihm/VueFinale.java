@@ -180,6 +180,7 @@ public class VueFinale extends JFrame {
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.setFocusable(false);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		panelBoutons.add(btnRetour);
 
 		btnConfirmer = new JButton("<html><body style='padding: 5px 20px;'>Confirmer</body></html>");
@@ -192,6 +193,7 @@ public class VueFinale extends JFrame {
 		btnConfirmer.setEnabled(false);
 		btnConfirmer.setVisible(false);
 		btnConfirmer.addActionListener(controleur);
+		btnConfirmer.addMouseListener(controleur);
 		panelBoutons.add(btnConfirmer);
 		
 		if (tournoi.getVainqueur() == null) {

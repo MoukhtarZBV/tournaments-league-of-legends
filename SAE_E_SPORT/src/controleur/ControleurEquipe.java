@@ -1,17 +1,24 @@
 package controleur;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 
+import ihm.Ecran;
+import ihm.VueAccueilAdmin;
 import ihm.VueEquipe;
 import ihm.VueListeEquipe;
 import ihm.VueTournoi;
 import modele.Equipe;
 
-public class ControleurEquipe implements ActionListener {
+public class ControleurEquipe implements ActionListener, MouseListener {
 	private VueEquipe vue;
 	private Equipe modele;
 
@@ -36,6 +43,7 @@ public class ControleurEquipe implements ActionListener {
 				// Sinon la modification est valide
 				}else {
 					this.modele.mettreAJourEquipe((new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe())));
+					Ecran.update(this.vue);
 					this.vue.dispose();
 					if (this.vue.getPere() == null) {
 						VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
@@ -50,6 +58,7 @@ public class ControleurEquipe implements ActionListener {
 			}
 		}
 		if (bouton.getText().equals("Retour")) {
+			Ecran.update(this.vue);	
 			if (this.vue.getPere() == null) {
 				VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
 				vue.setVisible(true);
@@ -61,4 +70,36 @@ public class ControleurEquipe implements ActionListener {
 		}
 				
 	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}	
+	}
+	
+	
+	// NOT IMPLEMENTED \\
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
 }

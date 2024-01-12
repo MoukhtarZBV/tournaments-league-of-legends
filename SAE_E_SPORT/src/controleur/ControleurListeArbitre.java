@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
+import ihm.Ecran;
 import components.PopUpSuppression;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
@@ -29,7 +30,7 @@ import modele.Statut;
 import modele.Tournoi;
 
 public class ControleurListeArbitre implements MouseListener, ActionListener {
-	
+
 	private VueListeArbitre vue;
 	private Arbitre modele;
 	private Arbitre arbitreSelected;
@@ -38,7 +39,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 		this.vue = vue;
 		this.modele = new Arbitre();
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(e.getSource() instanceof JList) {
@@ -58,6 +59,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    JButton bouton = (JButton) e.getSource();
 	    if (bouton.getName().equals("Retour")) {
+			Ecran.update(this.vue);	
 			if (this.vue.getTournoi() == null) {
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
@@ -69,6 +71,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	    } else if (bouton.getName().equals("Rechercher")){
 			this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
 	    } else if (bouton.getName().equals("Ajouter")) {
+			Ecran.update(this.vue);	
 	    	VueAjouterArbitre vue = new VueAjouterArbitre();
 	    	vue.setVisible(true);
 	    	this.vue.dispose();
@@ -132,7 +135,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 			JButton b = (JButton)e.getSource();
 			b.setBackground(Palette.LIGHT_PURPLE);
 		}
-		
+
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
@@ -170,8 +173,8 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {}
-	
+
 }
