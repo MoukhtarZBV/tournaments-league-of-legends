@@ -49,9 +49,6 @@ public class VueTournoi extends JFrame {
 
 	private ControleurDetailsTournoi controleur;
 	
-	/**
-	 * Create the frame.
-	 */
 	public VueTournoi(Tournoi tournoi) {
 		this.tournoi = tournoi;
 		this.controleur = new ControleurDetailsTournoi(this);

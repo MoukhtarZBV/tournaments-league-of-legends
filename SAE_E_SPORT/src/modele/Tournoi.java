@@ -295,7 +295,6 @@ public class Tournoi {
 		if (arbitres.size() == 0) {
 			return false;
 		}
-		Tournoi tournoiBDD = new Tournoi();
 		boolean insertion = true;
 		Associer associerBDD = new Associer();
 		for (Arbitre arbitre : arbitres) {
@@ -333,6 +332,10 @@ public class Tournoi {
 		tournoi.setStatut(Statut.TERMINE);
 		
 		// Retirer le compte des arbitres associés au tournoi
+		supprimerCompteArbitres(tournoi);
+	}
+	
+	public void supprimerCompteArbitres(Tournoi tournoi) {
 		List<Arbitre> arbitresTournoi = new Tournoi().getArbitresTournoi(tournoi);
 		Arbitre arbitreBDD = new Arbitre();
 		for (Arbitre arbitre : arbitresTournoi) {

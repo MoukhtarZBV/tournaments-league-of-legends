@@ -44,10 +44,6 @@ public class ImagesIcons {
 	public static final ImageIcon VIEW_PASS = ImagesIcons.getIcon(25, 25, "passHidden");
 	public static final ImageIcon VIEW_PASS_HOVER = ImagesIcons.getIcon(25, 25, "passShown");
 	
-	// Drapeaux
-	public static final ImageIcon FRANCE = ImagesIcons.getIcon(40, 40, "drapeaux/france");
-	public static final ImageIcon UKRAINE = ImagesIcons.getIcon(40, 40, "drapeaux/ukraine");
-	
 	private static ImageIcon getIcon(int xScale, int yScale, String type) {
 		ImageIcon originalIcon = new ImageIcon(ImagesIcons.class.getResource("/images/" + type + ".png"));
 		return new ImageIcon(originalIcon.getImage().getScaledInstance(xScale, yScale, Image.SCALE_DEFAULT));

@@ -2,6 +2,7 @@ package controleur;
 
 import java.awt.event.ActionEvent;
 
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,6 +20,8 @@ import ihm.VueGestionDeLaPoule;
 import ihm.VueImportation;
 import ihm.VueListeTournois;
 import ihm.VueTournoi;
+import ihm.VueListeArbitre;
+import modele.Arbitre;
 import modele.Compte;
 import modele.Equipe;
 import modele.ModelePoule;
@@ -46,14 +49,15 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 		} else if (bouton.getText().equals("Supprimer")) {
 			int choix = afficherPopUpConfirmation(); 
 			if (choix == JOptionPane.YES_OPTION) {
+				this.modele.supprimerCompteArbitres(this.vue.getTournoi());
 				this.modele.supprimerTournoi(this.vue.getTournoi());
 				VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
 				vueTournois.setVisible(true);
 				this.vue.dispose();
 			} 			
 		} else if (bouton.getName().equals("Arbitres")) {
-			VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
-			vueTournois.setVisible(true);
+			VueListeArbitre vueArbitres = new VueListeArbitre(new Arbitre().getTousLesArbitres(), true, this.vue.getTournoi()); 
+			vueArbitres.setVisible(true);
 			this.vue.dispose();
 		} else if (bouton.getName().equals("Retour")) {
 			VueListeTournois vue = new VueListeTournois(new Tournoi().getTousLesTournois());
@@ -68,7 +72,6 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			this.vue.getTournoi().setStatut(Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
 			this.vue.setVisibleBoutonOuvrir(false);
-			this.vue.afficherArbitresTournoi();
 			this.vue.afficherBoutonGererPoule("Gérer la poule");
 		} else if (bouton.getName().equals("Finale")) {
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());

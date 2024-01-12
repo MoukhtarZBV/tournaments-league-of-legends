@@ -20,4 +20,8 @@ public class Palette {
 
     public static final Color ERREUR      = new Color(255,   0,   0); 
     public static final Color FOND_ERREUR = new Color( 68,  24,  40); 
+    
+    // Finalistes
+    public static final Color EQUIPE_ROUGE = Color.decode("#C9002B");
+    public static final Color EQUIPE_BLEU = Color.decode("#004B93");
 }

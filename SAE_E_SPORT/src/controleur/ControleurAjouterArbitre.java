@@ -43,12 +43,11 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 			JButton bouton = (JButton) e.getSource();
 			if (bouton.getName().equals("Annuler")) {
 				Arbitre arbitreBDD = new Arbitre();
-				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
+				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
 				vueArbitres.setVisible(true);
 				this.vue.dispose();
 			}
 			if (bouton.getName().equals("Valider")) {
-				try {
 					String prenom = this.vue.getPrenom().replace(" ", "");
 					String nom = this.vue.getNom().replace(" ", "");
 					if (!nom.equals("") && !prenom.equals("") && new Arbitre().getByNomPrenom(vue.getNom(),vue.getPrenom()) == null) {
@@ -56,7 +55,7 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 						modele.ajouterArbitre(arbitre);
 						vue.getPopup().setEnabled(false);
 
-						VueListeArbitre vue = new VueListeArbitre(new Arbitre().getTousLesArbitres());
+						VueListeArbitre vue = new VueListeArbitre(new Arbitre().getTousLesArbitres(), false, null);
 						vue.setVisible(true);
 						this.vue.dispose();
 					}
@@ -67,9 +66,6 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 					}else {
 						this.vue.getPopup().setErreur("Un arbitre portant ce nom et prenom existe déjà");
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
 			}
 		}
 	}

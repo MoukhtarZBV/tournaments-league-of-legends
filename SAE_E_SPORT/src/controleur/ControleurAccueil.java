@@ -48,7 +48,7 @@ public class ControleurAccueil implements MouseListener {
 				break;
 			case "Arbitres":
 				Arbitre arbitreBDD = new Arbitre();
-				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
+				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
 				vueArbitres.setVisible(true);
 				this.vue.dispose();	
 				break;

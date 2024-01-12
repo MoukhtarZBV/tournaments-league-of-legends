@@ -120,7 +120,7 @@ public class VueIdentification extends JFrame {
 		panelLogin.setPreferredSize(new Dimension(getPreferredSize().width - 100, 30));
 		panelMain.add(panelLogin);
 		
-		// Login input
+		// Login logo
 		JLabel iconLogin = new JLabel();
 		iconLogin.setPreferredSize(new Dimension(35, iconLogin.getPreferredSize().height));
 		iconLogin.setOpaque(true);
@@ -130,7 +130,9 @@ public class VueIdentification extends JFrame {
 		iconLogin.setBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE));
 		panelLogin.add(iconLogin, BorderLayout.WEST);
 		
+		// Login input
 		this.textFieldLogin = new CoolTextField();
+		textFieldLogin.requestFocus();
 		textFieldLogin.setColumns(15);
 		textFieldLogin.addKeyListener(controleur);
 		panelLogin.add(textFieldLogin, BorderLayout.CENTER);
@@ -143,7 +145,7 @@ public class VueIdentification extends JFrame {
 		panelPass.setPreferredSize(new Dimension(getPreferredSize().width - 100, 30));
 		panelMain.add(panelPass);
 		
-		// Password input
+		// Password logo
 		JLabel iconPass = new JLabel();
 		iconPass.setPreferredSize(new Dimension(35, iconLogin.getPreferredSize().height));
 		iconPass.setOpaque(true);

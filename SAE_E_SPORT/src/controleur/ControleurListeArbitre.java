@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
+import components.PopUpSuppression;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueAjouterArbitre;
@@ -20,10 +21,12 @@ import ihm.VueEquipe;
 import ihm.VueListeArbitre;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
+import ihm.VueTournoi;
 import modele.Arbitre;
 import modele.Associer;
 import modele.Equipe;
 import modele.Statut;
+import modele.Tournoi;
 
 public class ControleurListeArbitre implements MouseListener, ActionListener {
 	
@@ -34,7 +37,6 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	public ControleurListeArbitre(VueListeArbitre vue) {
 		this.vue = vue;
 		this.modele = new Arbitre();
-		System.out.println(modele.getTousLesArbitres());
 	}
 	
 	@Override
@@ -42,9 +44,13 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 		if(e.getSource() instanceof JList) {
 			@SuppressWarnings("unchecked")
 			JList<String> list = (JList<String>) e.getSource();
-			this.vue.getBtnSuppr().setEnabled(true);
 			String arbitre = ((String) list.getSelectedValue());	
 			setArbitreSelectionne(arbitre);
+			if (this.vue.enModeAjout() && this.vue.getArbitresAttribues().size() < 3) {
+				this.vue.setActifBtnAttribuer(true);
+			} else if (!this.vue.enModeAjout()) {
+				this.vue.setActifBtnSupprimer(true);
+			} 
 		}
 	}
 	
@@ -52,8 +58,13 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    JButton bouton = (JButton) e.getSource();
 	    if (bouton.getName().equals("Retour")) {
-	    	VueAccueilAdmin vue = new VueAccueilAdmin();
-			vue.setVisible(true);
+			if (this.vue.getTournoi() == null) {
+				VueAccueilAdmin vue = new VueAccueilAdmin();
+				vue.setVisible(true);
+			} else {
+				VueTournoi vue = new VueTournoi(this.vue.getTournoi());
+				vue.setVisible(true);
+			}
 			this.vue.dispose();
 	    } else if (bouton.getName().equals("Rechercher")){
 			this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
@@ -61,20 +72,57 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	    	VueAjouterArbitre vue = new VueAjouterArbitre();
 	    	vue.setVisible(true);
 	    	this.vue.dispose();
+	    } else if (bouton.getName().equals("Vider")) {
+	    	viderListeArbitresAttribues();
+	    } else if (bouton.getName().equals("Attribuer")) {
+	    	ajouterArbitreAuxArbitresAttribues();
+	    } else if (bouton.getName().equals("Confirmer")) {
+	    	confirmerAttributionArbitres();
 	    } else if (bouton.getName().equals("Supprimer")) {
-	    	if(this.arbitreSelected != null) {
-	    		if (this.arbitreSelected.getCompte() != null) {
-	    			JOptionPane.showMessageDialog(null, "Impossible de supprimer cet arbitre car il arbitre actuellement un tournoi", "Suppression d'un arbitre", JOptionPane.ERROR_MESSAGE);
-	    		} else {
-	    			int choix = afficherPopUpConfirmation(arbitreSelected.getNom() + " " + arbitreSelected.getPrenom()); 
-	    			if (choix == JOptionPane.YES_OPTION) {
-	    				this.modele.supprimerArbitre(this.arbitreSelected);
-	    				this.vue.getArbitres().remove(this.vue.getArbitres().indexOf(this.arbitreSelected));
-	    				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
-	    			} 
-	    		}
-	    	}
+	    	supprimerArbitreSelectionne();
 	    }
+	}
+
+	private void supprimerArbitreSelectionne() {
+		if (this.arbitreSelected != null) {
+			if (this.arbitreSelected.getCompte() != null) {
+				JOptionPane.showMessageDialog(null, "Impossible de supprimer cet arbitre car il arbitre actuellement un tournoi", "Suppression d'un arbitre", JOptionPane.ERROR_MESSAGE);
+			} else {
+				int choix = afficherPopUpConfirmation(arbitreSelected.getNom() + " " + arbitreSelected.getPrenom()); 
+				if (choix == JOptionPane.YES_OPTION) {
+					this.modele.supprimerArbitre(this.arbitreSelected);
+					this.vue.getArbitres().remove(this.vue.getArbitres().indexOf(this.arbitreSelected));
+					this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
+					this.vue.setActifBtnSupprimer(false);
+				} 
+			}
+		}
+	}
+
+	private void confirmerAttributionArbitres() {
+		Tournoi tournoiBDD = new Tournoi();
+		tournoiBDD.associerArbitresTournoi(this.vue.getTournoi(), this.vue.getArbitresAttribues());
+		tournoiBDD.changerStatutTournoi(this.vue.getTournoi(), Statut.A_VENIR);
+		this.vue.getTournoi().setStatut(Statut.A_VENIR);
+		VueTournoi vueTournoi = new VueTournoi(this.vue.getTournoi());
+		vueTournoi.setVisible(true);
+		this.vue.dispose();
+	}
+
+	private void viderListeArbitresAttribues() {
+		this.vue.viderArbitresAttribues();
+		this.vue.setActifBtnVider(false);
+		this.vue.setActifBtnConfirmer(false);
+		this.vue.updateListeArbitres(this.modele.arbitresContenant(this.modele.getTousLesArbitres(), this.vue.getSearch()));
+		this.vue.afficherMessageArbitres();
+	}
+
+	private void ajouterArbitreAuxArbitresAttribues() {
+		this.vue.afficherArbitresAttribue(arbitreSelected);
+		this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
+		this.vue.setActifBtnVider(true);
+		this.vue.setActifBtnAttribuer(false);
+		this.vue.setActifBtnConfirmer(true);
 	}
 
 	
@@ -96,8 +144,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 
 	private int afficherPopUpConfirmation(String nomArbitre) {
 		String[] options = { "Oui", "Non"}; 
-		int choix = JOptionPane.showOptionDialog( 
-		        null,
+		int choix = PopUpSuppression.afficherPopUpConfirmation(
 		        "Voulez vous supprimer l'arbitre " + nomArbitre + " ?",
 		        "Suppression d'un arbitre",
 		        JOptionPane.YES_NO_OPTION,
@@ -120,6 +167,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	
 	
 	// NOT IMPLEMENTED \\
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {}
 	

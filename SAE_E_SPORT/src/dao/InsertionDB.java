@@ -291,6 +291,26 @@ public class InsertionDB {
 	    ajouterEquipesTournoi(t5, e1, e2, e8, e9, e10, e12, e13, e14);
 	    simulerParties(t5.generationPoule(), t5, arbitres);
 	    simulerFinale(t5);
+	    
+	    // Tournoi 6
+	    Tournoi t6 = Tournoi.createTournoi("Asia Esports Championsh3", Niveau.INTERNATIONAL_CLASSE, Date.valueOf(LocalDate.of(2024, 01, 10)), 
+	    		Date.valueOf(LocalDate.of(2024, 01, 22)), Pays.JP, Statut.ATTENTE_ARBITRES, Optional.empty(), Optional.empty());
+	    tournoiBDD.ajouterTournoi(t6);
+	    ajouterEquipesTournoi(t6, e1, e2, e8, e9, e10, e12, e13, e14);
+	    CompteJDBC cbdd = new CompteJDBC();
+	    /*
+	    Collections.shuffle(arbitres);
+	    Compte c = new Compte("arbitre", "youinfo", TypeCompte.ARBITRE);
+	    
+	    cbdd.add(c);
+		List<Arbitre> arbitresAttribuer = new ArrayList<>();
+		for (int i = 0; i < 3; i++) {
+			Arbitre arb = arbitres.get(i);
+			arb.setCompte(c);
+			arbitreBDD.mettreAJourArbitre(arb);
+			arbitresAttribuer.add(arb);
+		}
+		tournoiBDD.associerArbitresTournoi(t6, arbitresAttribuer);*/
 
 
 	    // ====================================== //
@@ -298,7 +318,7 @@ public class InsertionDB {
 	    // ====================================== //
 	    
 		AdminJDBC abdd = new AdminJDBC();
-		CompteJDBC cbdd = new CompteJDBC();
+		
 		
 		Compte c1 = new Compte("KHC4298A", "youinfo", TypeCompte.ADMINISTRATEUR);
 		Compte c2 = new Compte("MAR5221A", "davinfo", TypeCompte.ADMINISTRATEUR); 
