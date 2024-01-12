@@ -56,8 +56,6 @@ public class VueIdentification extends JFrame {
 	
 	public VueIdentification() {
 		
-		this.setUndecorated(true);
-		
 		controleur = new ControleurIdentification(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

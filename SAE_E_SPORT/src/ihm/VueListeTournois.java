@@ -225,7 +225,7 @@ public class VueListeTournois extends JFrame {
 		///// PANEL BOUTONS \\\\\
 		JPanel panelBoutons = new JPanel();
 		panelBoutons.setBorder(new EmptyBorder(10, 10, 10, 10));
-		panelBoutons.setBackground(Palette.GRAY);
+		panelBoutons.setBackground(Palette.DARK_GRAY);
 		panelBoutons.setPreferredSize(new Dimension(panelBoutons.getWidth(), 60));
 		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
@@ -238,6 +238,7 @@ public class VueListeTournois extends JFrame {
 		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
@@ -250,6 +251,7 @@ public class VueListeTournois extends JFrame {
 		btnNouveau.setFont(Police.LABEL);
 		btnNouveau.setFocusable(false);
 		btnNouveau.addActionListener(controleur);
+		btnNouveau.addMouseListener(controleur);
 		panelBoutons.add(btnNouveau);
 	}
 	

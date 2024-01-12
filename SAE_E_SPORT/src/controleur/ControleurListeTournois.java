@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 
+import ihm.Ecran;
 import ihm.VueAccueilAdmin;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
@@ -45,10 +47,12 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			JButton bouton = (JButton) e.getSource();
 			
 			if (bouton.getName().equals("Nouveau")) {
+				Ecran.update(this.vue);
 				VueCreationTournoi vue = new VueCreationTournoi();
 				vue.setVisible(true);
 				this.vue.dispose(); 
 			} else if (bouton.getName().equals("Retour")) {
+				Ecran.update(this.vue);
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
 				this.vue.dispose(); 
@@ -89,23 +93,40 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-            
+
+            Ecran.update(this.vue);
             VueTournoi vueTournoi = new VueTournoi(tournoi);
 			vueTournoi.setVisible(true);
 			this.vue.dispose();
          }
 	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}	
+	}
 	
+	
+	// NOT IMPLEMENTED \\
 
 	@Override
 	public void mousePressed(MouseEvent e) {}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-
-	@Override
-	public void mouseExited(MouseEvent e) {}
 }

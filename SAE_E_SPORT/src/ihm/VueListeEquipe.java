@@ -33,25 +33,11 @@ public class VueListeEquipe extends JFrame {
 
 	private JTextField searchBar;
 	private JList<Object> listeEquipes;
-	private List<Equipe> equipes;
-	private boolean triParNom;
 	private JButton btnSort;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VueListeEquipe frame = new VueListeEquipe(new Equipe().getToutesLesEquipes());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
+	private List<Equipe> equipes;
+	
+	private boolean triParNom;
 	
 	
 	public VueListeEquipe(List<Equipe> equipes) { 
@@ -176,6 +162,7 @@ public class VueListeEquipe extends JFrame {
 		JList<Object> listeEquipes = new JList<Object>(nomEquipes.toArray());
 		listeEquipes.setFont(Police.TABLEAU_MONO);
 		listeEquipes.setBackground(Palette.GRAY);
+		listeEquipes.setSelectionBackground(Palette.LIGHT_PURPLE);
 		listeEquipes.setForeground(Palette.WHITE);
 		listeEquipes.setBorder(new EmptyBorder(10, 10, 10, 10));
 		listeEquipes.addMouseListener(controleur);
@@ -205,6 +192,7 @@ public class VueListeEquipe extends JFrame {
 		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
@@ -215,6 +203,7 @@ public class VueListeEquipe extends JFrame {
 		btnSort.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnSort.setFont(Police.LABEL);
 		btnSort.addActionListener(controleur);
+		btnSort.addMouseListener(controleur);
 		btnSort.setFocusable(false);
 		panelBoutons.add(btnSort);
 		this.triParNom = false;

@@ -15,10 +15,11 @@ public class Police {
 	public static final Font INFO         = new Font("DejaVu Sans", Font.PLAIN, 12);				// Texte des info bulles
 	
 	// Components swing
-	public static final Font INPUT        = new Font("Tahoma",      Font.PLAIN, 20);				// JTextField
-	public static final Font TABLEAU_MONO = new Font("Consolas",    Font.PLAIN, 20);				// JList avec une police mono
-	public static final Font TABLEAU      = new Font("Tahoma",      Font.PLAIN, 17);				// JTable dans les cellules
-	public static final Font COMBO        = new Font("Tahoma",      Font.PLAIN, 18);				// JComboBox
+	public static final Font INPUT         = new Font("Tahoma",      Font.PLAIN, 20);				// JTextField
+	public static final Font TABLEAU_MONO  = new Font("Consolas",    Font.PLAIN, 20);				// JList avec une police mono
+	public static final Font TABLEAU       = new Font("Tahoma",      Font.PLAIN, 17);				// JTable dans les cellules
+	public static final Font TABLEAU_PETIT = new Font("Tahoma",      Font.PLAIN, 15);				// JTable dans les cellules
+	public static final Font COMBO         = new Font("Tahoma",      Font.PLAIN, 18);				// JComboBox
 	
 	// à suppr plus tard
 	public static final Font LIGNE        = new Font("Tahoma",      Font.PLAIN,  5);

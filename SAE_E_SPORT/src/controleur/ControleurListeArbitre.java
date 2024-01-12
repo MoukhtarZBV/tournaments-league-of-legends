@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.swing.JButton;
 import javax.swing.JList;
 
+import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueAjouterArbitre;
@@ -36,6 +37,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	    JButton bouton = (JButton) e.getSource();
 	    List<Arbitre> arbitres;
 	    if(bouton.getName().equals("Retour")) {
+	    	Ecran.update(this.vue);
 	    	this.vue.dispose();
 	    	VueAccueilAdmin vue = new VueAccueilAdmin();
 			vue.setVisible(true);
@@ -60,6 +62,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 			}
 	    }
 	    if(bouton.getName().equals("Ajouter")) {
+	    	Ecran.update(this.vue);
 	    	VueAjouterArbitre vue = new VueAjouterArbitre();
 	    	vue.setVisible(true);
 	    	this.vue.dispose();

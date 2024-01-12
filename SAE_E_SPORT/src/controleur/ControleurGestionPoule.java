@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
+import ihm.Ecran;
 import ihm.VueAccueilAdmin;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueTournoi;
@@ -61,6 +63,8 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 					this.modele.creerFinale(this.vue.getTournoi());
 					this.modele.changerStatusEnFinale(this.vue.getTournoi());
 					this.vue.getTournoi().setStatut(Statut.FINALE);
+					
+					Ecran.update(this.vue);
 					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
 					vue.setVisible(true);
 					this.vue.dispose();
@@ -69,6 +73,7 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 					if (this.modifie) {
 						this.modele.enregistrerResultat();
 					}
+					Ecran.update(this.vue);
 					this.vue.dispose();
 					VueTournoi vueT2 = new VueTournoi(this.vue.getTournoi());
 					vueT2.setVisible(true);
@@ -101,7 +106,26 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 			}
 		}
 	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
 
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}	
+	}
 
 	// NOT IMPLEMENTED \\
 	
@@ -110,11 +134,5 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-
-	@Override
-	public void mouseExited(MouseEvent e) {}
 	
 }

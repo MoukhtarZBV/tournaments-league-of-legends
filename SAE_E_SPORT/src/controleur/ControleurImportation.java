@@ -1,6 +1,7 @@
 package controleur;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -23,7 +24,7 @@ import modele.ModeleImportation;
 import modele.ModeleImportation.EtatEquipe;
 import modele.Statut;
 
-public class ControleurImportation implements ActionListener, DropListener {
+public class ControleurImportation implements ActionListener, DropListener, MouseListener {
 	
 	private VueImportation vue;
 	private ModeleImportation modele;
@@ -84,4 +85,36 @@ public class ControleurImportation implements ActionListener, DropListener {
 			this.vue.getPopup().setErreur("Le fichier importé ne concerne pas ce tournoi");
 		}
 	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}	
+	}
+	
+	
+	// NOT IMPLEMENTED \\
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
 }

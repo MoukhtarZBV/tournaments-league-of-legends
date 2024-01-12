@@ -110,19 +110,7 @@ public class VueTournoi extends JFrame {
 		panelInfos.setBackground(Palette.DARK_GRAY);
 		panelInfos.setLayout(new BorderLayout(0, 0));
 		panelCenter.add(panelInfos, BorderLayout.NORTH);
-
-		///// PANEL LIBELLE INFOS \\\\\
-		JPanel panelLibelleInfos = new JPanel();
-		panelLibelleInfos.setBorder(new EmptyBorder(10, 20, 10, 20));
-		panelLibelleInfos.setBackground(Palette.GRAY);
-		panelLibelleInfos.setLayout(new GridLayout(0, 1, 0, 0));
-		panelInfos.add(panelLibelleInfos, BorderLayout.NORTH);
-
-		JLabel lblInfosTournoi = new JLabel("À propos du tournoi");
-		lblInfosTournoi.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
-		lblInfosTournoi.setForeground(Palette.WHITE);
-		lblInfosTournoi.setFont(Police.SOUS_TITRE);
-		panelLibelleInfos.add(lblInfosTournoi);
+		
 
 		///// PANEL BULLES INFOS \\\\\
 		JPanel panelBullesInfos = new JPanel();
@@ -193,6 +181,7 @@ public class VueTournoi extends JFrame {
 		
 		JScrollPane scrollPaneTableEquipes = new JScrollPane();
 		scrollPaneTableEquipes.getViewport().setBackground(Palette.GRAY);
+		scrollPaneTableEquipes.setBackground(Palette.GRAY);
 		scrollPaneTableEquipes.setVerticalScrollBar(new CoolScrollBar());
 		panelTableEquipes.add(scrollPaneTableEquipes, BorderLayout.CENTER);
 		
@@ -200,14 +189,17 @@ public class VueTournoi extends JFrame {
 		tableEquipes = new JTable();
 		tableEquipes.setFont(Police.TABLEAU);
 		tableEquipes.setRowHeight(30);
-		tableEquipes.getTableHeader().setBackground(Palette.DARK_GRAY);
+		tableEquipes.setSelectionBackground(Palette.LIGHT_PURPLE);
+		tableEquipes.setBackground(Palette.DARK_GRAY);
+		tableEquipes.setForeground(Palette.WHITE);
+		tableEquipes.addMouseListener(controleur);
+		
+		tableEquipes.getTableHeader().setBackground(Palette.GRAY);
 		tableEquipes.getTableHeader().setForeground(Palette.WHITE);
 		tableEquipes.getTableHeader().setFont(Police.LABEL);
 		tableEquipes.getTableHeader().setReorderingAllowed(false);
 		tableEquipes.getTableHeader().setResizingAllowed(false);
-		tableEquipes.setBackground(Palette.DARK_GRAY);
-		tableEquipes.setForeground(Palette.WHITE);
-		tableEquipes.addMouseListener(controleur);
+		
 		scrollPaneTableEquipes.setViewportView(tableEquipes);
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
 	            new String[] { "Équipe", "Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4", "Joueur 5" }) {
@@ -245,6 +237,7 @@ public class VueTournoi extends JFrame {
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
 		btnRetour.setFocusable(false);
+		btnRetour.addMouseListener(controleur);
 		panelBoutons.add(btnRetour);
 
 		///// PANEL ARBITRES \\\\\
@@ -264,7 +257,7 @@ public class VueTournoi extends JFrame {
 		panelNomsArbitres = new JPanel();
 		((FlowLayout) panelNomsArbitres.getLayout()).setAlignment(FlowLayout.LEFT);
 		panelNomsArbitres.setBackground(Palette.GRAY);
-		panelNomsArbitres.setBorder(null);
+		panelNomsArbitres.setBorder(new EmptyBorder(5, 0, 0, 0));
 		panelArbitres.add(panelNomsArbitres);
 		
 		afficherBoutonsEtArbitres();
@@ -343,6 +336,7 @@ public class VueTournoi extends JFrame {
 		btnImporter.setFont(Police.LABEL);
 		btnImporter.setFocusable(false);
 		btnImporter.addActionListener(controleur);
+		btnImporter.addMouseListener(controleur);
 		panelBoutons.add(btnImporter);
 	}
 
@@ -355,6 +349,7 @@ public class VueTournoi extends JFrame {
 		btnOuvrir.setFont(Police.LABEL);
 		btnOuvrir.setFocusable(false);
 		btnOuvrir.addActionListener(controleur);
+		btnOuvrir.addMouseListener(controleur);
 		panelBoutons.add(btnOuvrir);
 	}
 
@@ -367,6 +362,7 @@ public class VueTournoi extends JFrame {
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.setFocusable(false);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		panelBoutons.add(btnRetour);
 	}
 
@@ -379,6 +375,7 @@ public class VueTournoi extends JFrame {
 		btnFinale.setFont(Police.LABEL);
 		btnFinale.setFocusable(false);
 		btnFinale.addActionListener(controleur);
+		btnFinale.addMouseListener(controleur);
 		panelBoutons.add(btnFinale);
 	}
 	

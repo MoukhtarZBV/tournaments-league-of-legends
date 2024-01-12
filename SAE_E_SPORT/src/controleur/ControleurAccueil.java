@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
+import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueHistoriquePoints;
@@ -26,6 +27,7 @@ public class ControleurAccueil implements MouseListener {
 		JPanel panel = (JPanel)e.getSource();
 		switch(panel.getName()) {
 			case "Equipes":
+				Ecran.update(this.vue);
 				Equipe equipeBDD = new Equipe();
 				VueListeEquipe vueEquipes = new VueListeEquipe(equipeBDD.getToutesLesEquipes());
 				vueEquipes.setVisible(true);
@@ -33,6 +35,7 @@ public class ControleurAccueil implements MouseListener {
 				break;
 				
 			case "Tournois":
+				Ecran.update(this.vue);
 				Tournoi tournoiBDD = new Tournoi();
 				VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
 				vueTournois.setVisible(true);
@@ -40,9 +43,10 @@ public class ControleurAccueil implements MouseListener {
 				break;
 				
 			case "Historique" :
+				Ecran.update(this.vue);
 				VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
 				vueHistorique.setVisible(true);
-				this.vue.dispose();
+				this.vue.dispose();	
 				break;
 		}
 		

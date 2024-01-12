@@ -280,12 +280,20 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 		btnRetour.setFocusable(false);
 		panelButtons.add(btnRetour);
 		
+		
 		// Controleur
 		this.controleur = new ControleurGestionPoule(this);
+		
 		this.tableMatches.addMouseListener(controleur);
+		
 		btnImprimer.addActionListener(controleur);
+		btnImprimer.addMouseListener(controleur);
+		
 		btnCloturer.addActionListener(controleur);
+		btnCloturer.addMouseListener(controleur);
+		
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		
 	}
 	

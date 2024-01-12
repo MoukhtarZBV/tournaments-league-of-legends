@@ -179,15 +179,17 @@ public class VueImportation extends JFrame {
 		JButton btnRetour = new JButton("Retour");
 		btnRetour.setBackground(Color.WHITE);
 		btnRetour.setForeground(Color.BLACK);
-		panelBoutons.add(btnRetour);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
+		panelBoutons.add(btnRetour);
 
 		btnValider = new JButton("Valider");
 		btnValider.setEnabled(false);
 		btnValider.setBackground(Color.WHITE);
 		btnValider.setForeground(Color.BLACK);
 		btnValider.addActionListener(controleur);	
+		btnValider.addMouseListener(controleur);
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
 		

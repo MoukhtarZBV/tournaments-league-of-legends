@@ -13,6 +13,8 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+
+import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueIdentification;
@@ -37,6 +39,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 		}
 			
 		if(bouton.getName().equals("Quitter")) {
+			Ecran.update(this.vue);
 			this.vue.dispose();
 		}
 				
@@ -45,6 +48,37 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	@Override
 	public void windowClosing(WindowEvent e) {
 		this.vue.dispose();
+	}
+	
+	public void connexion() {
+		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
+			Ecran.update(this.vue);
+			this.vue.dispose();
+			// Si administrateur
+			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
+				VueAccueilAdmin vue = new VueAccueilAdmin();
+				vue.setVisible(true);
+			}
+			
+			// Si arbitre
+			else {
+				Associer associerBDD = new Associer();
+				List<Associer> associations = associerBDD.getToutesLesAssociations();
+				for (Associer ass : associations) {
+					if (ass.getArbitre().getCompte().getLogin().equals(this.vue.getLogin())) {
+						Ecran.update(this.vue);
+						VueTournoi vue = new VueTournoi(ass.getTournoi());
+						vue.setVisible(true);
+						this.vue.dispose();
+					}
+				}
+			}
+		} else {
+			// Si pas de correspondance
+			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
+			this.vue.setLogin("");
+			this.vue.setPassword("");
+		}
 	}
 	
 	@Override
@@ -60,35 +94,6 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 			}
 			
 			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		}
-	}
-	
-	public void connexion() {
-		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
-			this.vue.dispose();
-			// Si administrateur
-			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
-				VueAccueilAdmin vue = new VueAccueilAdmin();
-				vue.setVisible(true);
-			}
-			
-			// Si arbitre
-			else {
-				Associer associerBDD = new Associer();
-				List<Associer> associations = associerBDD.getToutesLesAssociations();
-				for (Associer ass : associations) {
-					if (ass.getArbitre().getCompte().getLogin().equals(this.vue.getLogin())) {
-						VueTournoi vue = new VueTournoi(ass.getTournoi());
-						vue.setVisible(true);
-						this.vue.dispose();
-					}
-				}
-			}
-		} else {
-			// Si pas de correspondance
-			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
-			this.vue.setLogin("");
-			this.vue.setPassword("");
 		}
 	}
 
@@ -110,7 +115,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-	    if (e.getKeyCode()==KeyEvent.VK_ENTER){
+	    if (e.getKeyCode() == KeyEvent.VK_ENTER){
 	        this.connexion();
 	    }
 	}

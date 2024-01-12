@@ -369,6 +369,7 @@ public class VueCreationTournoi extends JFrame {
 		btnAnnuler.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnAnnuler.setFont(Police.LABEL);
 		btnAnnuler.addActionListener(controleur);
+		btnAnnuler.addMouseListener(controleur);
 		btnAnnuler.setFocusable(false);
 		panelBoutons.add(btnAnnuler);
 		
@@ -381,6 +382,7 @@ public class VueCreationTournoi extends JFrame {
 		btnValider.setFont(Police.LABEL);
 		btnValider.setFocusable(false);
 		btnValider.addActionListener(controleur);
+		btnValider.addMouseListener(controleur);
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
 	}
