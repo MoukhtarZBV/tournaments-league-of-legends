@@ -38,6 +38,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import java.awt.Dimension;
 
 public class VueFinale extends JFrame {
 
@@ -63,7 +64,7 @@ public class VueFinale extends JFrame {
 		ControleurFinale controleur = new ControleurFinale(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 560);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -71,15 +72,17 @@ public class VueFinale extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panelTitreFinale = new JPanel();
+		panelTitreFinale.setPreferredSize(new Dimension(10, 120));
+		panelTitreFinale.setBorder(new EmptyBorder(40, 0, 15, 0));
 		panelTitreFinale.setBackground(Palette.DARK_GRAY);
 		contentPane.add(panelTitreFinale, BorderLayout.NORTH);
 		
-		JLabel lblFinale = new JLabel("FINALE ");
+		JLabel lblFinale = new JLabel("Finale - ");
 		lblFinale.setFont(Police.GROS_TITRE);
 		lblFinale.setForeground(Palette.WHITE);
 		panelTitreFinale.add(lblFinale);
 		
-		JLabel lblNomTournoi = new JLabel("TAD 2023");
+		JLabel lblNomTournoi = new JLabel(tournoi.getNomTournoi());
 		lblNomTournoi.setFont(Police.GROS_TITRE);
 		lblNomTournoi.setForeground(Palette.WHITE);
 		panelTitreFinale.add(lblNomTournoi);
@@ -96,7 +99,7 @@ public class VueFinale extends JFrame {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(Palette.GRAY);
-		panel_2.setBorder(new CompoundBorder(new MatteBorder(0, 2, 0, 0, (Color) new Color(160, 0, 0)), new EmptyBorder(10, 30, 10, 20)));
+		panel_2.setBorder(new CompoundBorder(new MatteBorder(0, 2, 0, 0, Palette.EQUIPE_ROUGE), new EmptyBorder(10, 30, 10, 20)));
 		panelScores.add(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
@@ -105,10 +108,6 @@ public class VueFinale extends JFrame {
 		lblNomEquipeUne.setForeground(new Color(255, 255, 255));
 		lblNomEquipeUne.setFont(new Font("DejaVu Sans", Font.BOLD, 20));
 		panel_2.add(lblNomEquipeUne, BorderLayout.EAST);
-		
-		JLabel lblLogoEquipeUne = new JLabel();
-		lblLogoEquipeUne.setIcon(ImagesIcons.FRANCE);
-		panel_2.add(lblLogoEquipeUne, BorderLayout.WEST);
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new EmptyBorder(15, 20, 15, 20));
@@ -138,7 +137,7 @@ public class VueFinale extends JFrame {
 		
 		JPanel panel_4 = new JPanel();
 		panel_4.setBackground(Palette.GRAY);
-		panel_4.setBorder(new CompoundBorder(new MatteBorder(0, 0, 0, 2, (Color) new Color(0, 0, 160)), new EmptyBorder(10, 20, 10, 30)));
+		panel_4.setBorder(new CompoundBorder(new MatteBorder(0, 0, 0, 2, Palette.EQUIPE_BLEU), new EmptyBorder(10, 20, 10, 30)));
 		panelScores.add(panel_4);
 		panel_4.setLayout(new BorderLayout(0, 0));
 		
@@ -148,21 +147,17 @@ public class VueFinale extends JFrame {
 		lblNewLabel_1.setFont(new Font("DejaVu Sans", Font.BOLD, 20));
 		panel_4.add(lblNewLabel_1, BorderLayout.WEST);
 		
-		JLabel lblLogoEquipeDeux = new JLabel();
-		lblLogoEquipeDeux.setIcon(ImagesIcons.UKRAINE);
-		panel_4.add(lblLogoEquipeDeux, BorderLayout.EAST);
-		
 		JPanel panelEquipes = new JPanel();
 		panelEquipes.setBorder(new EmptyBorder(10, 20, 20, 20));
 		panelEquipes.setBackground(Palette.DARK_GRAY);
 		panelScoresEquipes.add(panelEquipes, BorderLayout.CENTER);
 			
 		TableEquipes tableEquipeUne = new TableEquipes(true);
-		tableEquipeUne.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, new Color(160, 0, 0)), new EmptyBorder(10, 20, 20, 10)));
+		tableEquipeUne.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, Palette.EQUIPE_ROUGE), new EmptyBorder(10, 20, 20, 10)));
 		tableEquipeUne.ajouterJoueurs(equipeUne.getJoueurs());
 		
 		TableEquipes tableEquipeDeux = new TableEquipes(false);
-		tableEquipeDeux.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, new Color(0, 0, 160)), new EmptyBorder(10, 20, 20, 10)));
+		tableEquipeDeux.setBorder(new CompoundBorder(new MatteBorder(2, 0, 0, 0, Palette.EQUIPE_BLEU), new EmptyBorder(10, 20, 20, 10)));
 		tableEquipeDeux.ajouterJoueurs(equipeDeux.getJoueurs());
 		
 		

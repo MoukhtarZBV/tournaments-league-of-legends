@@ -8,12 +8,16 @@ import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 import components.CoolTextField;
+import components.PanelPopUp;
 import controleur.ControleurListeArbitre;
 import modele.Arbitre;
+import modele.Tournoi;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,6 +34,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 
 
@@ -38,11 +43,24 @@ public class VueListeArbitre extends JFrame {
 	private JTextField searchBar;
 	private JList<Object> listeArbitres;
 	private List<Arbitre> arbitres;
-	private JButton btnSuppr;
+	private List<Arbitre> arbitresAttribues;
 	
-	public VueListeArbitre(List<Arbitre> arbitres) {
+	private JButton btnSuppr;
+	private JButton btnVider;
+	private JButton btnAttribuer;
+	private JButton btnConfirmer;
+	
+	private JPanel panelNomsArbitresAttribues;
+	
+	private boolean modeAjout;
+	private Tournoi tournoi;
+	
+	public VueListeArbitre(List<Arbitre> arbitres, boolean modeAjout, Tournoi tournoi) {
 		
 		this.arbitres = arbitres;
+		this.arbitresAttribues = new ArrayList<>();
+		this.modeAjout = modeAjout;
+		this.tournoi = tournoi;
 		
 		ControleurListeArbitre controleur = new ControleurListeArbitre(this);
 		
@@ -137,6 +155,7 @@ public class VueListeArbitre extends JFrame {
 		// Panel liste
 		JPanel panelListe = new JPanel();
 		panelListe.setLayout(new BorderLayout(5, 0));
+		panelListe.setBorder(new EmptyBorder(25, 25, 0, 25));
 		panelListe.setBackground(Palette.GRAY);
 		panelCenter.add(panelListe, BorderLayout.CENTER);
 
@@ -151,7 +170,7 @@ public class VueListeArbitre extends JFrame {
 		listeArbitres.setFont(Police.TABLEAU_MONO);
 		listeArbitres.setBackground(Palette.GRAY);
 		listeArbitres.setForeground(Palette.WHITE);
-		listeArbitres.setBorder(new EmptyBorder(10, 10, 10, 10));
+		listeArbitres.setBorder(new EmptyBorder(5, 5, 5, 5));
 		listeArbitres.addMouseListener(controleur);
 		updateListeArbitres(new Arbitre().arbitresContenant(arbitres, ""));
 		
@@ -159,6 +178,28 @@ public class VueListeArbitre extends JFrame {
 		scrollPane.setViewportView(listeArbitres);
 		scrollPane.setBorder(null);
 		panelListe.add(scrollPane, BorderLayout.CENTER);
+		
+		if (modeAjout) {
+			///// PANEL ARBITRES \\\\\
+			JPanel panelArbitres = new JPanel();
+			panelArbitres.setBorder(new EmptyBorder(25, 0, 15, 0));
+			panelArbitres.setBackground(Palette.GRAY);
+			panelArbitres.setLayout(new BorderLayout(0, 0));
+			panelListe.add(panelArbitres, BorderLayout.SOUTH);
+
+			JLabel lblArbitres = new JLabel("Arbitres attribués");
+			lblArbitres.setBorder(new MatteBorder(0, 0, 2, 0, Palette.WHITE));
+			lblArbitres.setForeground(Palette.WHITE);
+			lblArbitres.setFont(Police.SOUS_TITRE);
+			panelArbitres.add(lblArbitres, BorderLayout.NORTH);
+
+			// Liste des noms et prénoms des arbitres
+			panelNomsArbitresAttribues = new JPanel();
+			panelNomsArbitresAttribues.setBackground(Palette.GRAY);
+			panelNomsArbitresAttribues.setBorder(null);
+			panelArbitres.add(panelNomsArbitresAttribues);
+			afficherMessageArbitres();
+		}
 		
 		
 		// PANEL DU BOUTON
@@ -181,32 +222,89 @@ public class VueListeArbitre extends JFrame {
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
-		// Bouton Supprimer
-		this.btnSuppr = new JButton("Supprimer");
-		btnSuppr.setName("Supprimer");
-		btnSuppr.setEnabled(false);
-		btnSuppr.setBackground(Palette.GRAY);
-		btnSuppr.setForeground(Palette.ERREUR);
-		btnSuppr.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
-		btnSuppr.setFont(Police.LABEL);
-		btnSuppr.addActionListener(controleur);
-		btnSuppr.setFocusable(false);
-		panelBoutons.add(btnSuppr);
-		
-		// Bouton Ajouter
-		JButton btnAjouter = new JButton("Ajouter");
-		btnAjouter.setName("Ajouter");
-		btnAjouter.setForeground(Color.WHITE);
-		btnAjouter.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnAjouter.setFocusable(false);
-		btnAjouter.setBorder(Utilitaires.BORDER_BOUTONS);
-		btnAjouter.setBackground(new Color(32, 28, 44));
-		btnAjouter.addActionListener(controleur);
-		panelBoutons.add(btnAjouter);
+		if (!modeAjout) {
+			// Bouton Supprimer
+			this.btnSuppr = new JButton("Supprimer");
+			btnSuppr.setName("Supprimer");
+			btnSuppr.setEnabled(false);
+			btnSuppr.setBackground(Palette.GRAY);
+			btnSuppr.setForeground(Palette.ERREUR);
+			btnSuppr.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
+			btnSuppr.setFont(Police.LABEL);
+			btnSuppr.addActionListener(controleur);
+			btnSuppr.setFocusable(false);
+			panelBoutons.add(btnSuppr);
+			
+			// Bouton Ajouter
+			JButton btnAjouter = new JButton("Ajouter");
+			btnAjouter.setName("Ajouter");
+			btnAjouter.setForeground(Color.WHITE);
+			btnAjouter.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			btnAjouter.setFocusable(false);
+			btnAjouter.setBorder(Utilitaires.BORDER_BOUTONS);
+			btnAjouter.setBackground(new Color(32, 28, 44));
+			btnAjouter.addActionListener(controleur);
+			panelBoutons.add(btnAjouter);
+		} else {
+			// Bouton attribuer arbitre
+			this.btnVider = new JButton("Vider liste");
+			btnVider.setName("Vider");
+			btnVider.setEnabled(false);
+			btnVider.setBackground(Palette.GRAY);
+			btnVider.setForeground(Palette.WHITE);
+			btnVider.setBorder(Utilitaires.BORDER_BOUTONS);
+			btnVider.setFont(Police.LABEL);
+			btnVider.addActionListener(controleur);
+			btnVider.setFocusable(false);
+			btnVider.setEnabled(false);
+			panelBoutons.add(btnVider);
+						
+			// Bouton attribuer arbitre
+			this.btnAttribuer = new JButton("Attribuer l'arbitre");
+			btnAttribuer.setName("Attribuer");
+			btnAttribuer.setEnabled(false);
+			btnAttribuer.setBackground(Palette.GRAY);
+			btnAttribuer.setForeground(Palette.WHITE);
+			btnAttribuer.setBorder(Utilitaires.BORDER_BOUTONS);
+			btnAttribuer.setFont(Police.LABEL);
+			btnAttribuer.addActionListener(controleur);
+			btnAttribuer.setFocusable(false);
+			btnAttribuer.setEnabled(false);
+			panelBoutons.add(btnAttribuer);
+
+			// Bouton confirmer attribution
+			this.btnConfirmer = new JButton("Confirmer");
+			btnConfirmer.setName("Confirmer");
+			btnConfirmer.setEnabled(false);
+			btnConfirmer.setBackground(Palette.GRAY);
+			btnConfirmer.setForeground(Palette.WHITE);
+			btnConfirmer.setBorder(Utilitaires.BORDER_BOUTONS);
+			btnConfirmer.setFont(Police.LABEL);
+			btnConfirmer.addActionListener(controleur);
+			btnConfirmer.setFocusable(false);
+			btnConfirmer.setEnabled(false);
+			panelBoutons.add(btnConfirmer);
+		}
 	}
 	
-	public JButton getBtnSuppr() {
-		return this.btnSuppr;
+	public void setActifBtnSupprimer(boolean actif) {
+		this.btnSuppr.setEnabled(actif);;
+	}
+	
+	public void setActifBtnVider(boolean actif) {
+		this.btnVider.setEnabled(actif);
+	}
+	
+	public void setActifBtnAttribuer(boolean actif) {
+		this.btnAttribuer.setEnabled(actif);
+	}
+	
+	public void setActifBtnConfirmer(boolean actif) {
+		this.btnConfirmer.setEnabled(actif);
+	}
+	
+	public boolean enModeAjout() {
+		return this.modeAjout;
 	}
 	
 	public void setJListArbitre () throws InterruptedException {
@@ -230,9 +328,60 @@ public class VueListeArbitre extends JFrame {
 		return this.listeArbitres;
 	}
 	
+	public List<Arbitre> getArbitresAttribues() {
+		return this.arbitresAttribues;
+	}
+	
+	public Tournoi getTournoi() {
+		return this.tournoi;
+	}
+	
 	public void updateListeArbitres(List<String> arbitres) {
 	    this.listeArbitres.setListData(arbitres.toArray(new String[0]));
 	    this.listeArbitres.repaint();
+	}
+	
+	public void afficherArbitresAttribue(Arbitre arbitre) {
+		if (this.arbitresAttribues.size() == 0) {
+			viderPanelArbitres();
+			panelNomsArbitresAttribues.setLayout(new FlowLayout());
+			((FlowLayout) panelNomsArbitresAttribues.getLayout()).setAlignment(FlowLayout.LEFT);
+		}
+		this.arbitres.remove(this.arbitres.indexOf(arbitre));
+		this.arbitresAttribues.add(arbitre);
+		JLabel labelArbitre = new JLabel(arbitre.getNom() + " " + arbitre.getPrenom());
+		labelArbitre.setForeground(Palette.WHITE);
+		labelArbitre.setFont(Police.LABEL);
+		labelArbitre.setBackground(Palette.DARK_GRAY);
+		labelArbitre.setOpaque(true);
+		labelArbitre.setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Palette.WHITE), Utilitaires.EMPTY_BORDER_BOUTONS));
+		this.panelNomsArbitresAttribues.add(labelArbitre);
+		this.panelNomsArbitresAttribues.repaint();
+		this.panelNomsArbitresAttribues.revalidate();
+	}
+	
+	public void viderArbitresAttribues() {
+		viderPanelArbitres();
+		int nbArbitresAttribues = this.arbitresAttribues.size();
+		for (int i = 0; i < nbArbitresAttribues; i++) {
+			this.arbitres.add(this.arbitresAttribues.get(0));
+			this.arbitresAttribues.remove(0);
+		}
+	}
+
+	private void viderPanelArbitres() {
+		for (Component c : this.panelNomsArbitresAttribues.getComponents()) {
+			this.panelNomsArbitresAttribues.remove(c);
+		}
+		this.panelNomsArbitresAttribues.repaint();
+		this.panelNomsArbitresAttribues.revalidate();
+	}
+	
+	public void afficherMessageArbitres() {
+		PanelPopUp panelMessageArbitres = new PanelPopUp();
+		panelMessageArbitres.setNormal("Aucun arbitre attribué");
+		panelNomsArbitresAttribues.setLayout(new BorderLayout());
+		panelNomsArbitresAttribues.add(panelMessageArbitres, BorderLayout.CENTER);
 	}
 	
 	public JList<Object> getListeArbitres() {
