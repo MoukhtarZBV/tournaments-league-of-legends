@@ -14,9 +14,11 @@ import components.PanelRound;
 import controleur.ControleurDetailsTournoi;
 import Images.ImagesIcons;
 import modele.Arbitre;
+import modele.Compte;
 import modele.Equipe;
 import modele.Joueur;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -66,9 +68,7 @@ public class VueTournoi extends JFrame {
 		
 		
 		///// MENU BAR \\\\\
-		MenuBar panelSide = new MenuBar(this);
-		contentPane.add(panelSide, BorderLayout.WEST);
-		
+		afficherMenuBar(contentPane);
 		
 		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
@@ -269,23 +269,20 @@ public class VueTournoi extends JFrame {
 		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panelConteneurBoutons.add(panelBoutons, BorderLayout.CENTER);
 		
-		// Bouton annuler
-		btnRetour = new JButton("Retour");
-		btnRetour.setName("Retour");
-		btnRetour.setBackground(Palette.GRAY);
-		btnRetour.setForeground(Palette.WHITE);
-		btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
-		btnRetour.setFont(Police.LABEL);
-		btnRetour.addActionListener(controleur);
-		btnRetour.addMouseListener(controleur);
-		btnRetour.setFocusable(false);
-		panelBoutons.add(btnRetour);
-
+		// Boutons
 		afficherBoutons();
 		afficherArbitresTournoi();
 	}
 
+	private void afficherMenuBar(JPanel contentPane) {
+		if(Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			MenuBar panelSide = new MenuBar(this);
+			contentPane.add(panelSide, BorderLayout.WEST);
+		}
+	}
+
 	private void afficherBoutons() {
+		afficherBoutonRetour();
 		switch (tournoi.getStatut()) {
 		case ATTENTE_EQUIPES:
 			afficherBoutonImporter();
@@ -346,19 +343,22 @@ public class VueTournoi extends JFrame {
 	}
 	
 	private void afficherBoutonSupprimer() {
-		JPanel panelBoutonSupprimer = new JPanel();
-		panelBoutonSupprimer.setBackground(Palette.DARK_GRAY);
-		panelBoutonSupprimer.setLayout(new FlowLayout());
-		JButton btnSupprimer = new JButton("Supprimer");
-		btnSupprimer.setName("Supprimer");
-		btnSupprimer.setBackground(Palette.GRAY);
-		btnSupprimer.setForeground(Palette.ERREUR);
-		btnSupprimer.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
-		btnSupprimer.setFont(Police.LABEL);
-		btnSupprimer.setFocusable(false);
-		btnSupprimer.addActionListener(controleur);
-		panelBoutonSupprimer.add(btnSupprimer);
-		panelConteneurBoutons.add(panelBoutonSupprimer, BorderLayout.WEST);
+		if (Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			JPanel panelBoutonSupprimer = new JPanel();
+			panelBoutonSupprimer.setBackground(Palette.DARK_GRAY);
+			panelBoutonSupprimer.setLayout(new FlowLayout());
+			JButton btnSupprimer = new JButton("Supprimer");
+			btnSupprimer.setName("Supprimer");
+			btnSupprimer.setBackground(Palette.GRAY);
+			btnSupprimer.setForeground(Palette.ERREUR);
+			btnSupprimer.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
+			btnSupprimer.setFont(Police.LABEL);
+			btnSupprimer.setFocusable(false);
+			btnSupprimer.addActionListener(controleur);
+			panelBoutonSupprimer.add(btnSupprimer);
+			panelConteneurBoutons.add(panelBoutonSupprimer, BorderLayout.WEST);
+		}
+		
 	}
 	
 	public void afficherBoutonImporter() {
@@ -374,6 +374,21 @@ public class VueTournoi extends JFrame {
 		panelBoutons.add(btnImporter);
 	}
 	
+	public void afficherBoutonRetour() {
+		if (Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			JButton btnRetour = new JButton("Retour");
+			btnRetour.setName("Retour");
+			btnRetour.setBackground(Palette.GRAY);
+			btnRetour.setForeground(Palette.WHITE);
+			btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
+			btnRetour.setFont(Police.LABEL);
+			btnRetour.addActionListener(controleur);
+			btnRetour.addMouseListener(controleur);
+			btnRetour.setFocusable(false);
+			panelBoutons.add(btnRetour);
+		}
+	}
+	
 	public void afficherBoutonArbitres() {
 		JButton btnImporter = new JButton("Attribuer des arbitres");
 		btnImporter.setName("Arbitres");
@@ -387,16 +402,18 @@ public class VueTournoi extends JFrame {
 	}
 
 	public void afficherBoutonOuvrir() {
-		btnOuvrir = new JButton("Ouvrir le tournoi");
-		btnOuvrir.setName("Ouvrir");
-		btnOuvrir.setBackground(Palette.GRAY);
-		btnOuvrir.setForeground(Palette.WHITE);
-		btnOuvrir.setBorder(Utilitaires.BORDER_BOUTONS);
-		btnOuvrir.setFont(Police.LABEL);
-		btnOuvrir.setFocusable(false);
-		btnOuvrir.addActionListener(controleur);
-		btnOuvrir.addMouseListener(controleur);
-		panelBoutons.add(btnOuvrir);
+		if (Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			btnOuvrir = new JButton("Ouvrir le tournoi");
+			btnOuvrir.setName("Ouvrir");
+			btnOuvrir.setBackground(Palette.GRAY);
+			btnOuvrir.setForeground(Palette.WHITE);
+			btnOuvrir.setBorder(Utilitaires.BORDER_BOUTONS);
+			btnOuvrir.setFont(Police.LABEL);
+			btnOuvrir.setFocusable(false);
+			btnOuvrir.addActionListener(controleur);
+			btnOuvrir.addMouseListener(controleur);
+			panelBoutons.add(btnOuvrir);
+		}
 	}
 
 	public void afficherBoutonGererPoule(String nomBouton) {
