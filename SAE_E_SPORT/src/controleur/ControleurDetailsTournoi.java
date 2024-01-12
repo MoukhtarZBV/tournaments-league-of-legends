@@ -47,8 +47,8 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			String[] options = { "Oui", "Non"}; 
 			int choix = JOptionPane.showOptionDialog( 
 		            null, // Parent component (null means center on screen) 
-		            "Do you want to proceed?", // Message to display 
-		            "Custom Options", // Dialog title 
+		            "Vous voulez supprimer ce tournoi ?", // Message to display 
+		            "", // Dialog title 
 		            JOptionPane.YES_NO_OPTION, // Option type (Yes, No, Cancel) 
 		            JOptionPane.QUESTION_MESSAGE, // Message type (question icon) 
 		            null, // Custom icon (null means no custom icon) 

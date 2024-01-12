@@ -82,7 +82,8 @@ public class Participer implements Comparable<Participer>{
 	@Override 
 	public String toString() {
 		return "Participer = [equipe=" + this.equipe + ", tournoi=" + this.tournoi + ", nbMatchsJoues=" + this.nbMatchsJoues +
-				", nbMatchsGagnes=" + this.nbMatchsGagnes + ", nbPointsGagnes=" + this.nbPointsPouleGagnes + "\n";
+				", nbMatchsGagnes=" + this.nbMatchsGagnes + ", nbPointsPouleGagnes=" + this.nbPointsPouleGagnes + 
+				", nbPointsTournoiGagnes=" + this.nbPointsTournoiGagnes + "\n";
 	}
 
 	@Override

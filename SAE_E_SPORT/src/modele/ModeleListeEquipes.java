@@ -12,7 +12,7 @@ public class ModeleListeEquipes {
 		this.filteredEquipe = null;
 	}
 	
-	public void filterEquipes(List<String> nomEquipes, String recherche) {
+	private void filterEquipes(List<String> nomEquipes, String recherche) {
 		this.filteredEquipe = nomEquipes.stream()
 				.filter(eq -> eq.toUpperCase().contains(recherche))
 				.collect(Collectors.toList());
