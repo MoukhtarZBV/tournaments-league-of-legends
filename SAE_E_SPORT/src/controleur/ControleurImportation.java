@@ -1,6 +1,7 @@
 package controleur;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -22,8 +23,9 @@ import ihm.VueTournoi;
 import modele.ModeleImportation;
 import modele.ModeleImportation.EtatEquipe;
 import modele.Statut;
+import modele.Tournoi;
 
-public class ControleurImportation implements ActionListener, DropListener {
+public class ControleurImportation implements ActionListener, DropListener, MouseListener {
 	
 	private VueImportation vue;
 	private ModeleImportation modele;
@@ -53,8 +55,8 @@ public class ControleurImportation implements ActionListener, DropListener {
 	    	} else if (etat == EtatEquipe.OK) {
 	    		this.modele.enregistrerImportation(this.vue.getTournoi());
 	    		this.vue.getPopup().setSucces("Les équipes ont bien été importées");
-	    		this.vue.getTournoi().setStatut(Statut.A_VENIR);
-	    		this.modele.changerStatusAVenir(this.vue.getTournoi());
+	    		this.vue.getTournoi().setStatut(Statut.ATTENTE_ARBITRES);
+	    		new Tournoi().changerStatutTournoi(this.vue.getTournoi(), Statut.ATTENTE_ARBITRES);
 	    	}
 	    } else if (bouton.getText().equals("Retour")) {
 	    	VueTournoi vueTournoi = new VueTournoi(vue.getTournoi());
@@ -84,4 +86,36 @@ public class ControleurImportation implements ActionListener, DropListener {
 			this.vue.getPopup().setErreur("Le fichier importé ne concerne pas ce tournoi");
 		}
 	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}	
+	}
+	
+	
+	// NOT IMPLEMENTED \\
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
 }

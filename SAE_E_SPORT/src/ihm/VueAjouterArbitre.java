@@ -54,9 +54,8 @@ public class VueAjouterArbitre extends JFrame {
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(Ecran.posX, Ecran.posY, 822, 528);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Ajouter un arbitre");
-		setResizable(false);
 		
 		
 		
@@ -103,6 +102,7 @@ public class VueAjouterArbitre extends JFrame {
 		panelCenter.setLayout(new BorderLayout(0, 0));
 		
 		panelPopup = new PanelPopUp();
+		panelPopup.setBackground(new Color(24, 20, 36));
 		panelCenter.add(panelPopup, BorderLayout.NORTH);
 
 		JPanel panelInfosTournoi = new JPanel();
@@ -127,7 +127,7 @@ public class VueAjouterArbitre extends JFrame {
 		
 		// Panel Nom
 		JPanel panelNom = new JPanel();
-		panelNom.setBorder(new EmptyBorder(25, 35, 25, 35));
+		panelNom.setBorder(new EmptyBorder(65, 35, 65, 35));
 		panelNom.setLayout(new BoxLayout(panelNom, BoxLayout.X_AXIS));
 		panelNom.setBackground(Palette.DARK_GRAY);
 		panelInfos.add(panelNom);
@@ -152,9 +152,9 @@ public class VueAjouterArbitre extends JFrame {
 		panelNom.add(inputNom);
 		
 		
-		// Panel Niveau et Pays
+		// Panel Prenom
 		JPanel panelPrenom = new JPanel();
-		panelPrenom.setBorder(new EmptyBorder(25, 35, 25, 35));
+		panelPrenom.setBorder(new EmptyBorder(30, 35, 100, 35));
 		panelPrenom.setLayout(new BoxLayout(panelPrenom, BoxLayout.X_AXIS));
 		panelPrenom.setBackground(Palette.DARK_GRAY);
 		panelInfos.add(panelPrenom);

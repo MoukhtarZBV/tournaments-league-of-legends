@@ -13,6 +13,8 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+
+import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueIdentification;
@@ -38,6 +40,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 		}
 			
 		if(bouton.getName().equals("Quitter")) {
+			Ecran.update(this.vue);
 			this.vue.dispose();
 		}
 				
@@ -66,6 +69,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	
 	public void connexion() {
 		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
+			Ecran.update(this.vue);	
 			this.vue.dispose();
 			// Si administrateur
 			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
@@ -78,6 +82,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 				List<Tournoi> tournois = tournoiBDD.getTousLesTournois();
 				for (Tournoi tournoi : tournois) {
 					if (tournoi.getCompte().getLogin().equals(this.vue.getLogin())) {
+						Ecran.update(this.vue);	
 						VueTournoi vue = new VueTournoi(tournoi);
 						vue.setVisible(true);
 						this.vue.dispose();
@@ -110,7 +115,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-	    if (e.getKeyCode()==KeyEvent.VK_ENTER){
+	    if (e.getKeyCode() == KeyEvent.VK_ENTER){
 	        this.connexion();
 	    }
 	}

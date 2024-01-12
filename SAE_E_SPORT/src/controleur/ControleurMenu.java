@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import ihm.Ecran;
 import ihm.MenuBar;
 import ihm.Palette;
 import ihm.VueHistoriquePoints;
@@ -30,23 +31,32 @@ public class ControleurMenu implements MouseListener {
 		JPanel panel = (JPanel)e.getSource();
 		switch(panel.getName()) {
 			case "Equipes":
-				Equipe equipeBDD = new Equipe();
-				VueListeEquipe vueEquipes = new VueListeEquipe(equipeBDD.getToutesLesEquipes());
-				vueEquipes.setVisible(true);
-				parent.dispose();
+				if(!(parent instanceof VueListeEquipe)) {
+					Ecran.update(this.parent);
+					Equipe equipeBDD = new Equipe();
+					VueListeEquipe vueEquipes = new VueListeEquipe(equipeBDD.getToutesLesEquipes());
+					vueEquipes.setVisible(true);
+					parent.dispose();
+				}
 				break;
 				
 			case "Tournois":
-				Tournoi tournoiBDD = new Tournoi();
-				VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
-				vueTournois.setVisible(true);
-				parent.dispose();
+				if(!(parent instanceof VueListeTournois)) {
+					Ecran.update(this.parent);
+					Tournoi tournoiBDD = new Tournoi();
+					VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
+					vueTournois.setVisible(true);
+					parent.dispose();
+				}
 				break;
 				
 			case "Historique" :
-				VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
-				vueHistorique.setVisible(true);
-				parent.dispose();
+				if(!(parent instanceof VueHistoriquePoints)) {
+					Ecran.update(this.parent);
+					VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
+					vueHistorique.setVisible(true);
+					parent.dispose();
+				}
 				break;
 		}
 		

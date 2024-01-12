@@ -56,6 +56,23 @@ public class Equipe {
 		return this.nationalite;
 	}
 	
+	public boolean nomEquipeIsVide(String name) {
+		return name.replace(" ", "").length() == 0;
+	}
+	
+	public boolean nomEquipeIsTropLong(String name) {
+		return name.length()>=40;
+	}
+	
+	public boolean nomEquipeIsDejaExistant(String name) {
+		Equipe eq = new Equipe();
+		if(getEquipeParNom(name) == null){
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o==this) return true;

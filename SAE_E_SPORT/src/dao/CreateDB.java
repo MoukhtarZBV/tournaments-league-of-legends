@@ -235,9 +235,9 @@ public class CreateDB {
 					+ "idEquipe INTEGER,"
 					+ "statut VARCHAR(50),"
 					+ "CONSTRAINT PK_Tournoi_nomTournoi PRIMARY KEY (nomTournoi)," 
-					+ "CONSTRAINT FK_Tournoi_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
-					+ "CONSTRAINT FK_Tournoi_login FOREIGN KEY (login) REFERENCES Compte(login),"
-					+ "CONSTRAINT FK_Tournoi_nomPays FOREIGN KEY (nomPays) REFERENCES Pays(nomPays))");
+					+ "CONSTRAINT FK_Tournoi_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) ON DELETE CASCADE,"
+					+ "CONSTRAINT FK_Tournoi_login FOREIGN KEY (login) REFERENCES Compte(login) ON DELETE CASCADE,"
+					+ "CONSTRAINT FK_Tournoi_nomPays FOREIGN KEY (nomPays) REFERENCES Pays(nomPays) ON DELETE CASCADE)");
 			System.out.println("-- Table Tournoi créée");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -269,7 +269,7 @@ public class CreateDB {
 					+ "prenomArbitre VARCHAR(50),"
 					+ "login VARCHAR(30),"
 					+ "CONSTRAINT PK_Arbitre_idArbitre PRIMARY KEY (idArbitre),"
-					+ "CONSTRAINT FK_Arbitre_login FOREIGN KEY (login) REFERENCES Compte(login),"
+					+ "CONSTRAINT FK_Arbitre_login FOREIGN KEY (login) REFERENCES Compte(login) ON DELETE CASCADE,"
 					+ "CONSTRAINT UN_Arbitre_nomPrenom UNIQUE (nomArbitre, prenomArbitre))");
 			System.out.println("-- Table Arbitre créée");
 		} catch (SQLException e) {
@@ -304,8 +304,8 @@ public class CreateDB {
 					+ "nbMatchsGagnes INTEGER,"
 					+ "classement INTEGER,"
 					+ "CONSTRAINT PK_Participer_idEquipeTournoi PRIMARY KEY (idEquipe, nomTournoi),"
-					+ "CONSTRAINT FK_Participer_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe),"
-					+ "CONSTRAINT FK_Participer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi),"
+					+ "CONSTRAINT FK_Participer_idEquipe FOREIGN KEY (idEquipe) REFERENCES Equipe(idEquipe) ON DELETE CASCADE,"
+					+ "CONSTRAINT FK_Participer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi) ON DELETE CASCADE,"
 					+ "CONSTRAINT CK_Participer_classement CHECK (0 <= classement AND classement <= 8))");
 			System.out.println("-- Table Participer créée");
 		} catch (SQLException e) {
@@ -349,8 +349,8 @@ public class CreateDB {
 					+ "idArbitre INTEGER,"
 					+ "nomTournoi VARCHAR(100),"
 					+ "CONSTRAINT PK_Associer_idArbitreTournoi PRIMARY KEY (idArbitre, nomTournoi),"
-					+ "CONSTRAINT FK_Associer_idArbitre FOREIGN KEY (idArbitre) REFERENCES Arbitre(idArbitre),"
-					+ "CONSTRAINT FK_Associer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi))");
+					+ "CONSTRAINT FK_Associer_idArbitre FOREIGN KEY (idArbitre) REFERENCES Arbitre(idArbitre) ON DELETE CASCADE,"
+					+ "CONSTRAINT FK_Associer_nomTournoi FOREIGN KEY (nomTournoi) REFERENCES Tournoi(nomTournoi) ON DELETE CASCADE)");
 			System.out.println("-- Table Associer créée");
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -3,6 +3,7 @@ package modele;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import dao.ArbitreJDBC;
 import dao.EquipeJDBC;
@@ -65,7 +66,7 @@ public class Arbitre {
 		if (o==this) return true;
 		if(o instanceof Arbitre) {
 			Arbitre a = (Arbitre) o;
-			return this.idArbitre == a.idArbitre && this.nomArbitre == a.nomArbitre && this.prenomArbitre == a.prenomArbitre; 
+			return this.nomArbitre.equals(a.nomArbitre) && this.prenomArbitre.equals(a.prenomArbitre); 
 		} else {
 			return false;
 		}
@@ -78,8 +79,17 @@ public class Arbitre {
 	
 	@Override
 	public String toString() {
-		return String.format("Arbitre ID[%d], %s %s", this.getId(), this.getPrenom(), this.getNom().toUpperCase());
+		return String.format("Arbitre ID[%d] : %s %s | Compte : %s", this.getId(), this.getPrenom(), this.getNom().toUpperCase(), this.getCompte());
 	}	
+	
+	public List<String> arbitresContenant(List<Arbitre> arbitres, String caracteres) {
+		List<String> nomArbitres = arbitres.stream()
+				.map(a -> String.format("%-11s %-30s", a.getNom(), a.getPrenom()))
+				.filter(eq -> eq.toUpperCase().contains(caracteres.toUpperCase()))
+				.sorted((x,y)-> x.compareTo(y))
+				.collect(Collectors.toList());
+	    return nomArbitres;
+	}
 
 	// ==================== //
 	// ==== Partie DAO ==== //
