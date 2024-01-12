@@ -42,7 +42,7 @@ public class Associer {
 		return jdbc.getAll();
 	}
 	
-	public void ajouterAssociation(Associer associer) {
-		jdbc.add(associer);
+	public boolean ajouterAssociation(Associer associer) {
+		return jdbc.add(associer);
 	}
 }

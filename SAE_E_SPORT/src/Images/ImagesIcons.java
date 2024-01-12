@@ -41,8 +41,8 @@ public class ImagesIcons {
 	
 	public static final ImageIcon LOGIN = ImagesIcons.getIcon(25, 25, "login");
 	public static final ImageIcon PASSWORD = ImagesIcons.getIcon(25, 25, "password");
-	public static final ImageIcon VIEW_PASS = ImagesIcons.getIcon(25, 25, "viewPass");
-	public static final ImageIcon VIEW_PASS_HOVER = ImagesIcons.getIcon(25, 25, "viewPassHover");
+	public static final ImageIcon VIEW_PASS = ImagesIcons.getIcon(25, 25, "passHidden");
+	public static final ImageIcon VIEW_PASS_HOVER = ImagesIcons.getIcon(25, 25, "passShown");
 	
 	// Drapeaux
 	public static final ImageIcon FRANCE = ImagesIcons.getIcon(40, 40, "drapeaux/france");

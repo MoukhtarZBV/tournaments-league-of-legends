@@ -9,8 +9,10 @@ import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueHistoriquePoints;
+import ihm.VueListeArbitre;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
+import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
@@ -46,6 +48,12 @@ public class ControleurAccueil implements MouseListener {
 				Ecran.update(this.vue);
 				VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
 				vueHistorique.setVisible(true);
+				this.vue.dispose();	
+				break;
+			case "Arbitres":
+				Arbitre arbitreBDD = new Arbitre();
+				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
+				vueArbitres.setVisible(true);
 				this.vue.dispose();	
 				break;
 		}

@@ -129,14 +129,14 @@ public class VueAccueilAdmin extends JFrame {
 		panelHistorique.setLayout(new BorderLayout(0, 0));
 		panelCadre.add(panelHistorique);
 		
-		// Logo Tournois
+		// Logo Historique
 		JLabel iconHistorique = new JLabel();
 		iconHistorique.setHorizontalAlignment(SwingConstants.CENTER);
 		iconHistorique.setIcon(ImagesIcons.HISTORIQUE);
 		iconHistorique.setSize(20, 80);
 		panelHistorique.add(iconHistorique, BorderLayout.CENTER);
 		
-		// Bouton tournois
+		// Bouton Historique
 		JLabel lblHistorique = new JLabel("Historique");
 		lblHistorique.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHistorique.setForeground(Palette.WHITE);
@@ -144,23 +144,23 @@ public class VueAccueilAdmin extends JFrame {
 		panelHistorique.add(lblHistorique, BorderLayout.SOUTH);
 		
 		
-		///// PANEL HISTORIQUE \\\\\
+		///// PANEL ARBITRES \\\\\
 		JPanel panelArbitres = new JPanel();
-		panelArbitres.setName("Historique");
+		panelArbitres.setName("Arbitres");
 		panelArbitres.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelArbitres.addMouseListener(controleur);
 		panelArbitres.setBackground(Palette.DARK_GRAY);
 		panelArbitres.setLayout(new BorderLayout(0, 0));
 		panelCadre.add(panelArbitres);
 		
-		// Logo Tournois
+		// Logo Arbitres
 		JLabel iconArbitres = new JLabel();
 		iconArbitres.setHorizontalAlignment(SwingConstants.CENTER);
 		iconArbitres.setIcon(ImagesIcons.ARBITRE);
 		iconArbitres.setSize(20, 80);
 		panelArbitres.add(iconArbitres, BorderLayout.CENTER);
 		
-		// Bouton tournois
+		// Bouton Arbitre
 		JLabel lblArbitres = new JLabel("Arbitres");
 		lblArbitres.setHorizontalAlignment(SwingConstants.CENTER);
 		lblArbitres.setForeground(Palette.WHITE);

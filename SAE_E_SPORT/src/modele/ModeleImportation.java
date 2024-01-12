@@ -132,9 +132,4 @@ public class ModeleImportation {
 		}
 		return true;
 	}
-	
-	public void changerStatusAVenir(Tournoi tournoi) {
-		tournoi.setStatut(Statut.A_VENIR);
-		new Tournoi().changerStatutTournoi(tournoi, Statut.A_VENIR);
-	}
 }

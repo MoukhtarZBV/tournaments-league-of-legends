@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import components.CoolTextField;
 import controleur.ControleurListeArbitre;
@@ -37,25 +38,7 @@ public class VueListeArbitre extends JFrame {
 	private JTextField searchBar;
 	private JList<Object> listeArbitres;
 	private List<Arbitre> arbitres;
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Arbitre arbitreBDD = new Arbitre();
-					VueListeArbitre frame = new VueListeArbitre(arbitreBDD.getTousLesArbitres());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-
+	private JButton btnSuppr;
 	
 	public VueListeArbitre(List<Arbitre> arbitres) {
 		
@@ -65,9 +48,8 @@ public class VueListeArbitre extends JFrame {
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(Ecran.posX, Ecran.posY, 873, 528);
+		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Arbitres");
-		setResizable(false);
 		
 
 		///// PANEL PRINCIPAL \\\\\	
@@ -165,17 +147,13 @@ public class VueListeArbitre extends JFrame {
 		panelListe.add(lblHeader, BorderLayout.NORTH);
 		
 		// Liste des arbitres
-		List<String> nomArbitres = this.arbitres.stream()
-				.map(a -> String.format("%-11s %-30s", a.getNom(), a.getPrenom()))
-				.sorted((x,y)-> x.compareTo(y))
-				.collect(Collectors.toList());
-		
-		this.listeArbitres = new JList<Object>(nomArbitres.toArray());
+		this.listeArbitres = new JList<Object>();
 		listeArbitres.setFont(Police.TABLEAU_MONO);
 		listeArbitres.setBackground(Palette.GRAY);
 		listeArbitres.setForeground(Palette.WHITE);
 		listeArbitres.setBorder(new EmptyBorder(10, 10, 10, 10));
 		listeArbitres.addMouseListener(controleur);
+		updateListeArbitres(new Arbitre().arbitresContenant(arbitres, ""));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeArbitres);
@@ -193,27 +171,56 @@ public class VueListeArbitre extends JFrame {
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 		
 		// Bouton retour
-		JButton btnRetour = new JButton("<html><body style='padding: 5px 25px;'>Retour</body></html>");
+		JButton btnRetour = new JButton("Retour");
 		btnRetour.setName("Retour");
 		btnRetour.setBackground(Palette.GRAY);
 		btnRetour.setForeground(Palette.WHITE);
-		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
-		JButton btnAjouter = new JButton("<html><body style='padding: 5px 25px;'>Ajouter</body></html>");
+		// Bouton Supprimer
+		this.btnSuppr = new JButton("Supprimer");
+		btnSuppr.setName("Supprimer");
+		btnSuppr.setEnabled(false);
+		btnSuppr.setBackground(Palette.GRAY);
+		btnSuppr.setForeground(Palette.ERREUR);
+		btnSuppr.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
+		btnSuppr.setFont(Police.LABEL);
+		btnSuppr.addActionListener(controleur);
+		btnSuppr.setFocusable(false);
+		panelBoutons.add(btnSuppr);
+		
+		// Bouton Ajouter
+		JButton btnAjouter = new JButton("Ajouter");
 		btnAjouter.setName("Ajouter");
 		btnAjouter.setForeground(Color.WHITE);
 		btnAjouter.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btnAjouter.setFocusable(false);
-		btnAjouter.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
+		btnAjouter.setBorder(Utilitaires.BORDER_BOUTONS);
 		btnAjouter.setBackground(new Color(32, 28, 44));
 		btnAjouter.addActionListener(controleur);
 		panelBoutons.add(btnAjouter);
 	}
 	
+	public JButton getBtnSuppr() {
+		return this.btnSuppr;
+	}
+	
+	public void setJListArbitre () throws InterruptedException {
+		List<String> nomArbitres = this.arbitres.stream()
+				.map(a -> String.format("%-11s %-30s", a.getNom(), a.getPrenom()))
+				.sorted((x,y)-> x.compareTo(y))
+				.collect(Collectors.toList());
+		
+		this.listeArbitres = new JList<Object>(nomArbitres.toArray());
+		listeArbitres.setFont(Police.TABLEAU_MONO);
+		listeArbitres.setBackground(Palette.GRAY);
+		listeArbitres.setForeground(Palette.WHITE);
+		listeArbitres.setBorder(new EmptyBorder(10, 10, 10, 10));
+	}
 	
 	public String getSearch() {
 		return searchBar.getText();
@@ -223,13 +230,17 @@ public class VueListeArbitre extends JFrame {
 		return this.listeArbitres;
 	}
 	
-	public void updateListeArbitres(List<String> elementsFiltres) {
-	    this.listeArbitres.setListData(elementsFiltres.toArray(new String[0]));
+	public void updateListeArbitres(List<String> arbitres) {
+	    this.listeArbitres.setListData(arbitres.toArray(new String[0]));
 	    this.listeArbitres.repaint();
 	}
 	
 	public JList<Object> getListeArbitres() {
         return this.listeArbitres;
     }
+	
+	public List<Arbitre> getArbitres(){
+		return arbitres;
+	}
 
 }

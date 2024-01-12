@@ -26,51 +26,51 @@ public class ModelePoule {
 	private Map<String, Participer> participations;
 	private Tournoi tournoi;
 	
-	public ModelePoule(Tournoi tournoi) throws Exception {
+	public ModelePoule(Tournoi tournoi) {
 		this.parties = this.partiesParTournoi(tournoi);
 		this.participations = this.participerParTournoi(tournoi);
 		this.tournoi = tournoi;
 	}
 	
-	private List<Partie> partiesParTournoi(Tournoi t) throws Exception{
+	private List<Partie> partiesParTournoi(Tournoi t) {
 		return new PartieJDBC().getAll().stream()
 								.filter(e -> e.getTournoi().getNomTournoi().equals(t.getNomTournoi()) && e.getDeroulement().equals("Poule"))
 								.sorted((p1,p2) -> p1.getDate().compareTo(p2.getDate()))
 								.collect(Collectors.toList());
 	}
 	
-	private Map<String,Participer> participerParTournoi(Tournoi t) throws Exception {
+	private Map<String,Participer> participerParTournoi(Tournoi t) {
 		return new ParticiperJDBC().getAll().stream()
 								.filter(e->e.getTournoi().getNomTournoi().equals(t.getNomTournoi()))
 								.collect(Collectors.toMap(e->e.getEquipe().getNom(), e->e));
 	}
 	
 	public void updateGagnant(int indicePartie, int numeroEquipeGagnante) {
-			Partie partie = this.parties.get(indicePartie);
-			Equipe equipeGagnante = partie.getEquipeGagnante();
-			Equipe nouvelleEquipe = numeroEquipeGagnante == 1 ? partie.getEquipeUne() : partie.getEquipeDeux();
-			String nomNouvelleEquipe = nouvelleEquipe.getNom();
-			if (equipeGagnante != null) {
-				if (equipeGagnante != nouvelleEquipe) {
-					String nomEquipeGagnante = equipeGagnante.getNom();
-					Participer participationEquipeGagnante = this.participations.get(nomEquipeGagnante);
-					participationEquipeGagnante.setNbPointsPouleGagnes(participationEquipeGagnante.getNbPointsPouleGagnes() - 2);
-					participationEquipeGagnante.setNbMatchsGagnes(participationEquipeGagnante.getNbMatchsGagnes() - 1);
-					Participer participationNouvelleEquipeGagnante = this.participations.get(nomNouvelleEquipe);
-					participationNouvelleEquipeGagnante.setNbPointsPouleGagnes(participationNouvelleEquipeGagnante.getNbPointsPouleGagnes() + 2);
-					participationNouvelleEquipeGagnante.setNbMatchsGagnes(participationNouvelleEquipeGagnante.getNbMatchsGagnes() + 1);
-				}
-			} else {
-				String nomEquipePerdante = numeroEquipeGagnante == 1 ? partie.getEquipeDeux().getNom() : partie.getEquipeUne().getNom();
+		Partie partie = this.parties.get(indicePartie);
+		Equipe equipeGagnante = partie.getEquipeGagnante();
+		Equipe nouvelleEquipe = numeroEquipeGagnante == 1 ? partie.getEquipeUne() : partie.getEquipeDeux();
+		String nomNouvelleEquipe = nouvelleEquipe.getNom();
+		if (equipeGagnante != null) {
+			if (equipeGagnante != nouvelleEquipe) {
+				String nomEquipeGagnante = equipeGagnante.getNom();
+				Participer participationEquipeGagnante = this.participations.get(nomEquipeGagnante);
+				participationEquipeGagnante.setNbPointsPouleGagnes(participationEquipeGagnante.getNbPointsPouleGagnes() - 2);
+				participationEquipeGagnante.setNbMatchsGagnes(participationEquipeGagnante.getNbMatchsGagnes() - 1);
 				Participer participationNouvelleEquipeGagnante = this.participations.get(nomNouvelleEquipe);
-				participationNouvelleEquipeGagnante.setNbPointsPouleGagnes(participationNouvelleEquipeGagnante.getNbPointsPouleGagnes() + 3);
+				participationNouvelleEquipeGagnante.setNbPointsPouleGagnes(participationNouvelleEquipeGagnante.getNbPointsPouleGagnes() + 2);
 				participationNouvelleEquipeGagnante.setNbMatchsGagnes(participationNouvelleEquipeGagnante.getNbMatchsGagnes() + 1);
-				participationNouvelleEquipeGagnante.setNbMatchsJoues(participationNouvelleEquipeGagnante.getNbMatchsJoues() + 1);
-				Participer participationEquipePerdante = this.participations.get(nomEquipePerdante);
-				participationEquipePerdante.setNbPointsPouleGagnes(participationEquipePerdante.getNbPointsPouleGagnes() + 1);
-				participationEquipePerdante.setNbMatchsJoues(participationEquipePerdante.getNbMatchsJoues() + 1);
 			}
-			partie.setEquipeGagnante(nouvelleEquipe);
+		} else {
+			String nomEquipePerdante = numeroEquipeGagnante == 1 ? partie.getEquipeDeux().getNom() : partie.getEquipeUne().getNom();
+			Participer participationNouvelleEquipeGagnante = this.participations.get(nomNouvelleEquipe);
+			participationNouvelleEquipeGagnante.setNbPointsPouleGagnes(participationNouvelleEquipeGagnante.getNbPointsPouleGagnes() + 3);
+			participationNouvelleEquipeGagnante.setNbMatchsGagnes(participationNouvelleEquipeGagnante.getNbMatchsGagnes() + 1);
+			participationNouvelleEquipeGagnante.setNbMatchsJoues(participationNouvelleEquipeGagnante.getNbMatchsJoues() + 1);
+			Participer participationEquipePerdante = this.participations.get(nomEquipePerdante);
+			participationEquipePerdante.setNbPointsPouleGagnes(participationEquipePerdante.getNbPointsPouleGagnes() + 1);
+			participationEquipePerdante.setNbMatchsJoues(participationEquipePerdante.getNbMatchsJoues() + 1);
+		}
+		partie.setEquipeGagnante(nouvelleEquipe);
 	}
 	
 	public Object[][] matches() throws Exception {

@@ -74,22 +74,19 @@ public class TestsHistorique {
 
 	@Test
 	public void testSansFiltre() {
-		assertEquals(this.modele.getEquipes(),this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList()));
+		assertEquals(this.modele.getEquipes(), this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList()));
 	}
 	
 	@Test
 	public void testAvecFiltre() {
 		this.modele.filterEquipes("T");
-		this.equipes.remove(new Equipe(EquipeJDBC.getNextValueSequence(), "Cloud9", 59, Pays.US));
-		assertEquals(this.modele.getFilteredEquipes(),this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList()));
+		assertEquals(this.modele.getFilteredEquipes(),this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).filter(e -> e.getNom().toUpperCase().contains("T")).collect(Collectors.toList()));
 	}
 	
 	@Test
 	public void testResetFiltre() {
 		this.modele.filterEquipes("T");
-		this.equipes.remove(new Equipe(EquipeJDBC.getNextValueSequence(), "Cloud9", 59, Pays.US));
 		this.modele.resetEquipes();
-		this.equipes.add(new Equipe(EquipeJDBC.getNextValueSequence(), "Cloud9", 59, Pays.US));
 		assertEquals(this.modele.getEquipes(),this.equipes.stream().sorted((e1,e2)->e1.getNom().compareTo(e2.getNom())).collect(Collectors.toList()));
 	}
 

@@ -21,6 +21,7 @@ import ihm.VueIdentification;
 import ihm.VueTournoi;
 import modele.Associer;
 import modele.Compte;
+import modele.Tournoi;
 
 public class ControleurIdentification implements ActionListener, WindowListener, MouseListener, KeyListener {
 	private VueIdentification vue;
@@ -50,37 +51,6 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 		this.vue.dispose();
 	}
 	
-	public void connexion() {
-		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
-			Ecran.update(this.vue);
-			this.vue.dispose();
-			// Si administrateur
-			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
-				VueAccueilAdmin vue = new VueAccueilAdmin();
-				vue.setVisible(true);
-			}
-			
-			// Si arbitre
-			else {
-				Associer associerBDD = new Associer();
-				List<Associer> associations = associerBDD.getToutesLesAssociations();
-				for (Associer ass : associations) {
-					if (ass.getArbitre().getCompte().getLogin().equals(this.vue.getLogin())) {
-						Ecran.update(this.vue);
-						VueTournoi vue = new VueTournoi(ass.getTournoi());
-						vue.setVisible(true);
-						this.vue.dispose();
-					}
-				}
-			}
-		} else {
-			// Si pas de correspondance
-			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
-			this.vue.setLogin("");
-			this.vue.setPassword("");
-		}
-	}
-	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
@@ -94,6 +64,36 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 			}
 			
 			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}
+	}
+	
+	public void connexion() {
+		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
+			Ecran.update(this.vue);	
+			this.vue.dispose();
+			// Si administrateur
+			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
+				VueAccueilAdmin vue = new VueAccueilAdmin();
+				vue.setVisible(true);
+			}
+			// Si arbitre
+			else {
+				Tournoi tournoiBDD = new Tournoi();
+				List<Tournoi> tournois = tournoiBDD.getTousLesTournois();
+				for (Tournoi tournoi : tournois) {
+					if (tournoi.getCompte().getLogin().equals(this.vue.getLogin())) {
+						Ecran.update(this.vue);	
+						VueTournoi vue = new VueTournoi(tournoi);
+						vue.setVisible(true);
+						this.vue.dispose();
+					}
+				}
+			}
+		} else {
+			// Si pas de correspondance
+			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
+			this.vue.setLogin("");
+			this.vue.setPassword("");
 		}
 	}
 

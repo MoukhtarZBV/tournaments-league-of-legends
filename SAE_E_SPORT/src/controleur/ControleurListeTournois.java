@@ -14,6 +14,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import ihm.Ecran;
 import ihm.VueAccueilAdmin;
@@ -60,7 +61,11 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 				this.nom = vue.saisieChamp();
 				vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
 			}
+		} else if (e.getSource() instanceof JTextField) {
+			this.nom = vue.saisieChamp();
+			vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
 		}
+			
 	}
 
 	@Override

@@ -53,15 +53,15 @@ public class TestsImportationEquipes {
 
 	@Test
 	public void testAdministrateurImporteEtConfirme() throws IOException {
+		Equipe equipeBDD = new Equipe();
+		Tournoi tournoiBDD = new Tournoi();
 		modele.importerEquipesJoueurs(cheminCSV);
 		if (this.modele.verifierEquipe() == EtatEquipe.OK) {
 			this.modele.enregistrerImportation(tournoi);
-			this.modele.changerStatusAVenir(tournoi);
+			tournoiBDD.changerStatutTournoi(tournoi, Statut.ATTENTE_ARBITRES);
 		}
-		
-		Equipe equipeBDD = new Equipe();
-		Tournoi tournoiBDD = new Tournoi();
-		assertTrue(tournoi.getStatut() == Statut.A_VENIR);
+	
+		assertEquals(Statut.ATTENTE_ARBITRES, tournoiBDD.getTournoiParNom(tournoi.getNomTournoi()).getStatut());
 		
 		int nbEquipesTotal = equipeBDD.getToutesLesEquipes().size();
 		int nbEquipesTournoi = tournoiBDD.getEquipesTournoi(tournoi).size();
@@ -103,10 +103,10 @@ public class TestsImportationEquipes {
 		modele.importerEquipesJoueurs(cheminCSV);
 		if (this.modele.verifierEquipe() == EtatEquipe.OK) {
 			this.modele.enregistrerImportation(tournoi);
-			this.modele.changerStatusAVenir(tournoi);
+			tournoiBDD.changerStatutTournoi(tournoi, Statut.ATTENTE_ARBITRES);
 		}
 		
-		assertTrue(tournoi.getStatut() == Statut.A_VENIR);
+		assertEquals(Statut.ATTENTE_ARBITRES, tournoiBDD.getTournoiParNom(tournoi.getNomTournoi()).getStatut());
 		
 		int nbEquipesTotal = equipeBDD.getToutesLesEquipes().size();
 		int nbEquipesTournoi = tournoiBDD.getEquipesTournoi(tournoi).size();

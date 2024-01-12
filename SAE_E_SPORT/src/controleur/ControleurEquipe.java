@@ -2,6 +2,7 @@ package controleur;
 
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -32,7 +33,15 @@ public class ControleurEquipe implements ActionListener, MouseListener {
 		if (bouton.getText().equals("Sauvegarder")) {
 			try {
 				String name = this.vue.getNomEquipe().replace(" ", "");
-				if (!name.equals("") && new Equipe().getEquipeParNom(vue.getNomEquipe()) == null) {
+				// Gestion des erreurs
+				if (this.modele.nomEquipeIsVide(name)) {
+					this.vue.getPopup().setErreur("Le nom de l'équipe ne peut pas être vide");
+				}else if(this.modele.nomEquipeIsTropLong(name)){
+					this.vue.getPopup().setErreur("Le nom de l'équipe comporte plus de 40 caractères");
+				} else if(this.modele.nomEquipeIsDejaExistant(name)){
+					this.vue.getPopup().setErreur("Une équipe portant ce nom existe déjà");
+				// Sinon la modification est valide
+				}else {
 					this.modele.mettreAJourEquipe((new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe())));
 					Ecran.update(this.vue);
 					this.vue.dispose();
@@ -43,29 +52,21 @@ public class ControleurEquipe implements ActionListener, MouseListener {
 						VueTournoi vue = new VueTournoi(this.vue.getPere());
 						vue.setVisible(true);
 					}
-				} else if (name.equals("")) {
-					this.vue.getPopup().setErreur("Le nom de l'équipe ne peut pas être vide");
-				} else {
-					this.vue.getPopup().setErreur("Une équipe portant ce nom existe déjà");
 				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
 		if (bouton.getText().equals("Retour")) {
-			Ecran.update(this.vue);
-			this.vue.dispose();
-			try {
-				if(this.vue.getPere() == null) {
-					VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
-					vue.setVisible(true);
-				} else {
-					VueTournoi vue = new VueTournoi(this.vue.getPere());
-					vue.setVisible(true);
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			Ecran.update(this.vue);	
+			if (this.vue.getPere() == null) {
+				VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
+				vue.setVisible(true);
+			} else {
+				VueTournoi vue = new VueTournoi(this.vue.getPere());
+				vue.setVisible(true);
 			}
+			this.vue.dispose();
 		}
 				
 	}

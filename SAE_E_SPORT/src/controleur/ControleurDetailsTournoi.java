@@ -11,6 +11,7 @@ import java.awt.event.WindowListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import ihm.Ecran;
@@ -44,29 +45,38 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			Ecran.update(this.vue);
 			VueImportation vueImportation = new VueImportation(vue.getTournoi());
 			vueImportation.setVisible(true);
-			this.vue.dispose();	
+			vue.dispose();
+		} else if (bouton.getText().equals("Supprimer")) {
+			int choix = afficherPopUpConfirmation(); 
+			if (choix == JOptionPane.YES_OPTION) {
+				Ecran.update(this.vue);	
+				this.modele.supprimerTournoi(this.vue.getTournoi());
+				VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
+				vueTournois.setVisible(true);
+				this.vue.dispose();
+			} 			
+		} else if (bouton.getName().equals("Arbitres")) {
+			Ecran.update(this.vue);	
+			VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
+			vueTournois.setVisible(true);
+			this.vue.dispose();
 		} else if (bouton.getName().equals("Retour")) {
-			Ecran.update(this.vue);
+			Ecran.update(this.vue);	
 			VueListeTournois vue = new VueListeTournois(new Tournoi().getTousLesTournois());
 			vue.setVisible(true);
-			this.vue.dispose();	
+			this.vue.dispose();
 		} else if (bouton.getName().equals("Poule")) {
 			Ecran.update(this.vue);			
 	        VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
 	        frame.setVisible(true);
 			this.vue.dispose();	
 		} else if (bouton.getName().equals("Ouvrir")) {
-			if (this.modele.selectionArbitre(vue.getTournoi())) {
-				this.modele.changerStatutTournoi(vue.getTournoi(), Statut.EN_COURS);
-				this.vue.getTournoi().setStatut(Statut.EN_COURS);
-				this.vue.getTournoi().generationPoule();
-				this.vue.setVisibleBoutonOuvrir(false);
-				this.vue.afficherMessageArbitres(false);
-				this.vue.afficherArbitresTournoi();
-				this.vue.afficherBoutonGererPoule("Gérer la poule");
-			} else {
-				this.vue.afficherMessageErreurArbitres();
-			}
+			this.modele.changerStatutTournoi(vue.getTournoi(), Statut.EN_COURS);
+			this.vue.getTournoi().setStatut(Statut.EN_COURS);
+			this.vue.getTournoi().generationPoule();
+			this.vue.setVisibleBoutonOuvrir(false);
+			this.vue.afficherArbitresTournoi();
+			this.vue.afficherBoutonGererPoule("Gérer la poule");
 		} else if (bouton.getName().equals("Finale")) {
 			Ecran.update(this.vue);			
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
@@ -114,6 +124,19 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			b.setBackground(b.getBackground().darker());
 			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}	
+	private int afficherPopUpConfirmation() {
+		String[] options = { "Oui", "Non"}; 
+		int choix = JOptionPane.showOptionDialog( 
+		        null,
+		        "Voulez vous supprimer ce tournoi ?",
+		        "Suppression du tournoi",
+		        JOptionPane.YES_NO_OPTION,
+		        JOptionPane.QUESTION_MESSAGE,
+		        null,
+		        options,
+		        options[1] 
+		);
+		return choix;
 	}
 	
 	
