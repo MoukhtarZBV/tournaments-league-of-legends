@@ -323,6 +323,7 @@ public class VueTournoi extends JFrame {
 		if (arbitresTournoi.size() == 0) {
 			afficherMessageArbitres();
 		} else {
+			panelNomsArbitres.removeAll();
 			for (Arbitre arbitre : arbitresTournoi) {
 				JLabel labelArbitre = new JLabel(arbitre.getNom() + " " + arbitre.getPrenom());
 				labelArbitre.setForeground(Palette.WHITE);
