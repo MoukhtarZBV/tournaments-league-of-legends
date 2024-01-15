@@ -19,8 +19,10 @@ import ihm.Ecran;
 import ihm.VueAccueilAdmin;
 import ihm.VueGestionDeLaPoule;
 import ihm.VueTournoi;
+import modele.Compte;
 import modele.ModelePoule;
 import modele.Statut;
+import modele.TypeCompte;
 
 public class ControleurGestionPoule implements MouseListener, ActionListener {
 
@@ -35,7 +37,7 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 			this.modele = new ModelePoule(this.vue.getTournoi());
 			this.vue.setJTableClassement(modele.classement());
 			this.vue.setJTableMatches(modele.matches());
-			if (!modele.tousLesMatchsJouees()) {
+			if (!modele.tousLesMatchsJouees() || Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
 				this.vue.setActifBoutonCloturer(false);
 			} else if (this.vue.getTournoi().getStatut() != Statut.EN_COURS) {
 				this.vue.setVisibleBoutonCloturer(false);
@@ -85,7 +87,7 @@ public class ControleurGestionPoule implements MouseListener, ActionListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (this.vue.getTournoi().getStatut() == Statut.EN_COURS) {
-			if (e.getSource() instanceof JTable) {
+			if (e.getSource() instanceof JTable && Compte.getCompteConnecte().getType() == TypeCompte.ARBITRE) {
 				JTable source = (JTable) e.getSource();
 				int columnClicked = source.getSelectedColumn();
 				int rowClicked = source.getSelectedRow();

@@ -13,7 +13,9 @@ import components.BufferedImageResize;
 import components.CoolScrollBar;
 import components.PanelRenderer;
 import controleur.ControleurGestionPoule;
+import modele.Compte;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -66,8 +68,7 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 		
 		
 		///// MENU BAR \\\\\
-		MenuBar panelSide = new MenuBar(this);
-		contentPane.add(panelSide, BorderLayout.WEST);
+		afficherMenuBar(contentPane);
 		
 		
 		///// MAIN \\\\\
@@ -295,6 +296,12 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 		btnRetour.addActionListener(controleur);
 		btnRetour.addMouseListener(controleur);
 		
+	}
+	private void afficherMenuBar(JPanel contentPane) {
+		if(Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			MenuBar panelSide = new MenuBar(this);
+			contentPane.add(panelSide, BorderLayout.WEST);
+		}
 	}
 	
 	public Tournoi getTournoi() {

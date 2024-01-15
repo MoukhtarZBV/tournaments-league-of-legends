@@ -149,6 +149,7 @@ public class VueListeArbitre extends JFrame {
 		searchBar.setFont(Police.INPUT);
 		searchBar.setPreferredSize(new Dimension(searchBar.getPreferredSize().width, 25));
 		searchBar.setColumns(30);
+		searchBar.addActionListener(controleur);
 		panelSearch.add(searchBar);
 		
 		

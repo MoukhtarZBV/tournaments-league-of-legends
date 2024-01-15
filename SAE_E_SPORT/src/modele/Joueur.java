@@ -102,8 +102,8 @@ public class Joueur {
 		return jdbc.getByEquipe(equipe);
 	}
 	
-	public boolean presentDansAutreEquipe() {
-		Joueur j = jdbc.getByPseudo(this.pseudo).orElse(null);
-		return !j.getEquipe().equals(this.getEquipe());
-	}
+//	public boolean presentDansAutreEquipe(Joueur j) {
+//		Joueur joueur = jdbc.getByPseudo(j.getPseudo()).orElse(null);
+//		return !joueur.getEquipe().equals(this.getEquipe());
+//	}
 }

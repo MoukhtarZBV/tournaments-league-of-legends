@@ -31,7 +31,7 @@ import modele.Statut;
 import modele.Tournoi;
 
 public class ControleurListeArbitre implements MouseListener, ActionListener {
-	
+
 	private VueListeArbitre vue;
 	private Arbitre modele;
 	private Arbitre arbitreSelected;
@@ -40,7 +40,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 		this.vue = vue;
 		this.modele = new Arbitre();
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(e.getSource() instanceof JList) {
@@ -194,8 +194,8 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {}
-	
+
 }
