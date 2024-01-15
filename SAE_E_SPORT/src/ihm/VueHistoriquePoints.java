@@ -7,8 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DateFormatter;
-
 import components.CoolScrollBar;
 import components.CoolTextField;
 import components.PanelPopUp;
@@ -19,7 +17,6 @@ import modele.Tournoi;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,6 +34,8 @@ import javax.swing.JButton;
 
 public class VueHistoriquePoints extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private CoolTextField searchBar;
 	private JTable equipesTable;
 	private JTable tournoiTable;
@@ -52,13 +51,20 @@ public class VueHistoriquePoints extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Équipes");
+		setResizable(false);
+		setUndecorated(true);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Historique des points");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -145,6 +151,7 @@ public class VueHistoriquePoints extends JFrame {
 		
 		// Scroll équipes
 		String[] columnNamesEquipes = {"","Equipe"};
+		@SuppressWarnings("serial")
 		DefaultTableModel modeleEquipes = new DefaultTableModel(columnNamesEquipes, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -186,6 +193,7 @@ public class VueHistoriquePoints extends JFrame {
 
 		// Scroll des résultats de l'équipe aux tournois		
 		String[] columnNamesTournoi = {"Date", "Tournoi", "Points"};
+		@SuppressWarnings("serial")
 		DefaultTableModel modeleTournoi = new DefaultTableModel(columnNamesTournoi, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -250,6 +258,7 @@ public class VueHistoriquePoints extends JFrame {
 		
 		// Controleur
 		this.controleur = new ControleurHistoriquePoints(this);
+		addWindowListener(controleur);
 		
 		validateBtn.addActionListener(controleur);
 		validateBtn.addMouseListener(controleur);

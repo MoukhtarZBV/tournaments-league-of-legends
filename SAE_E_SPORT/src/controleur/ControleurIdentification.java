@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
@@ -19,11 +18,11 @@ import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueIdentification;
 import ihm.VueTournoi;
-import modele.Associer;
 import modele.Compte;
 import modele.Tournoi;
 
 public class ControleurIdentification implements ActionListener, WindowListener, MouseListener, KeyListener {
+	
 	private VueIdentification vue;
 	private Compte modele;
 
@@ -40,7 +39,6 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 		}
 			
 		if(bouton.getName().equals("Quitter")) {
-			Ecran.update(this.vue);
 			this.vue.dispose();
 		}
 				
@@ -70,7 +68,6 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	public void connexion() {
 		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
 			Ecran.update(this.vue);	
-			this.vue.dispose();
 			// Si administrateur
 			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
 				VueAccueilAdmin vue = new VueAccueilAdmin();
@@ -85,10 +82,10 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 						Ecran.update(this.vue);	
 						VueTournoi vue = new VueTournoi(tournoi);
 						vue.setVisible(true);
-						this.vue.dispose();
 					}
 				}
 			}
+			//this.vue.dispose();
 		} else {
 			// Si pas de correspondance
 			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");

@@ -9,11 +9,10 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.HashMap;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -26,7 +25,7 @@ import modele.Equipe;
 import modele.ModeleHistoriquePoints;
 import modele.Tournoi;
 
-public class ControleurHistoriquePoints extends MouseAdapter implements FocusListener, ActionListener, MouseListener {
+public class ControleurHistoriquePoints extends MouseAdapter implements FocusListener, ActionListener, MouseListener, WindowListener {
 
 	private VueHistoriquePoints vue;
 	private ModeleHistoriquePoints modele;
@@ -76,7 +75,6 @@ public class ControleurHistoriquePoints extends MouseAdapter implements FocusLis
 				Ecran.update(this.vue);
 				VueAccueilAdmin frame = new VueAccueilAdmin();
 				frame.setVisible(true);
-				this.vue.dispose();
 			}
 		}
 	}
@@ -148,8 +146,31 @@ public class ControleurHistoriquePoints extends MouseAdapter implements FocusLis
 		}
 	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
 	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}

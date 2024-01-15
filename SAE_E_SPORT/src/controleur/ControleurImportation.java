@@ -1,21 +1,14 @@
 package controleur;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-
-import javax.swing.table.DefaultTableModel;
 
 import components.DropListener;
 import ihm.VueImportation;

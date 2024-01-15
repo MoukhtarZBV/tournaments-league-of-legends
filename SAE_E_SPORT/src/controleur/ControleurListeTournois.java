@@ -25,7 +25,7 @@ import modele.Niveau;
 import modele.Statut;
 import modele.Tournoi;
 
-public class ControleurListeTournois implements ActionListener, ItemListener, MouseListener {
+public class ControleurListeTournois implements ActionListener, ItemListener, MouseListener, WindowListener {
 
 	private VueListeTournois vue;
 	private Tournoi modele;
@@ -51,16 +51,17 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 				Ecran.update(this.vue);
 				VueCreationTournoi vue = new VueCreationTournoi();
 				vue.setVisible(true);
-				this.vue.dispose(); 
+
 			} else if (bouton.getName().equals("Retour")) {
 				Ecran.update(this.vue);
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
-				this.vue.dispose(); 
+
 			} else if (bouton.getFont().getFamily().equals("Gigi")) {
 				this.nom = vue.saisieChamp();
 				vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
 			}
+			
 		} else if (e.getSource() instanceof JTextField) {
 			this.nom = vue.saisieChamp();
 			vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
@@ -71,6 +72,7 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() instanceof JComboBox) {
+			@SuppressWarnings("unchecked")
 			JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
 			String option = (String) comboBox.getSelectedItem();
 			
@@ -102,7 +104,6 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
             Ecran.update(this.vue);
             VueTournoi vueTournoi = new VueTournoi(tournoi);
 			vueTournoi.setVisible(true);
-			this.vue.dispose();
          }
 	}
 
@@ -126,8 +127,31 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 		}	
 	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
 	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}

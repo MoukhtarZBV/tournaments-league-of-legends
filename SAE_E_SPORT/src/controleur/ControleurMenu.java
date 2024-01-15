@@ -8,27 +8,26 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import ihm.Ecran;
-import ihm.MenuBar;
 import ihm.Palette;
 import ihm.VueHistoriquePoints;
+import ihm.VueListeArbitre;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
+import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
 public class ControleurMenu implements MouseListener {
 	
-	private MenuBar vue;
 	private JFrame parent;
 	
-	public ControleurMenu(MenuBar vue, JFrame parent) {
-		this.vue = vue;
+	public ControleurMenu(JFrame parent) {
 		this.parent = parent;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		JPanel panel = (JPanel)e.getSource();
+		JPanel panel = (JPanel)e.getSource();		
 		switch(panel.getName()) {
 			case "Equipes":
 				if(!(parent instanceof VueListeEquipe)) {
@@ -36,7 +35,6 @@ public class ControleurMenu implements MouseListener {
 					Equipe equipeBDD = new Equipe();
 					VueListeEquipe vueEquipes = new VueListeEquipe(equipeBDD.getToutesLesEquipes());
 					vueEquipes.setVisible(true);
-					parent.dispose();
 				}
 				break;
 				
@@ -46,7 +44,6 @@ public class ControleurMenu implements MouseListener {
 					Tournoi tournoiBDD = new Tournoi();
 					VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
 					vueTournois.setVisible(true);
-					parent.dispose();
 				}
 				break;
 				
@@ -55,7 +52,15 @@ public class ControleurMenu implements MouseListener {
 					Ecran.update(this.parent);
 					VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
 					vueHistorique.setVisible(true);
-					parent.dispose();
+				}
+				break;
+				
+			case "Arbitres":
+				if(!(parent instanceof VueListeArbitre)) {
+					Ecran.update(this.parent);
+					Arbitre arbitreBDD = new Arbitre();
+					VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
+					vueArbitres.setVisible(true);
 				}
 				break;
 		}

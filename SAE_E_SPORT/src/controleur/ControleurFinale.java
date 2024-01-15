@@ -5,21 +5,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import ihm.Ecran;
 import ihm.VueFinale;
-import ihm.VueListeTournois;
 import ihm.VueTournoi;
 import modele.Compte;
-import modele.Participer;
 import modele.Statut;
 import modele.Tournoi;
 import modele.TypeCompte;
 
-public class ControleurFinale implements MouseListener, ActionListener {
+public class ControleurFinale implements MouseListener, ActionListener, WindowListener {
 
 	private VueFinale vue;
 	private Tournoi modele;
@@ -34,9 +34,10 @@ public class ControleurFinale implements MouseListener, ActionListener {
 		JButton bouton = (JButton) e.getSource();
 		if (bouton.getName().equals("Retour")) {
 			Ecran.update(this.vue);
+			
 			VueTournoi vueTournoi = new VueTournoi(this.vue.getTournoi());
 			vueTournoi.setVisible(true);
-			this.vue.dispose();
+
 		} else if (bouton.getName().equals("Confirmer")) {
 			this.modele.cloturerTournoi(this.vue.getTournoi(), this.vue.getVainqueur());
 			this.vue.setVisibleConfirmer(false);
@@ -76,8 +77,31 @@ public class ControleurFinale implements MouseListener, ActionListener {
 		}	
 	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+		
 	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}

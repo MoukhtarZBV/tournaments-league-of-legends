@@ -4,43 +4,30 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import components.CoolTextField;
 import components.PanelPopUp;
-import modele.Niveau;
-import modele.Pays;
-
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.util.Date;
-import java.time.LocalDate;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import javax.swing.JFormattedTextField;
 import javax.swing.BoxLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 import controleur.ControleurAjouterArbitre;
-import controleur.ControleurCreationTournoi;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
 public class VueAjouterArbitre extends JFrame {
 	
-	private 		 JTextField inputNom;
+	private static final long serialVersionUID = 1L;
+
+	private JTextField inputNom;
 	
 	private PanelPopUp panelPopup;
 	private JTextField inputPrenom;
@@ -50,26 +37,30 @@ public class VueAjouterArbitre extends JFrame {
 	public VueAjouterArbitre() {
 		
 		ControleurAjouterArbitre controleur = new ControleurAjouterArbitre(this);
-		Ecran.setup();
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Ajouter un arbitre");
+		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-		
-		
-		///// PANEL PRINCIPAL \\\\\
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
-		
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Connexion");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
 		MenuBar panelSide = new MenuBar(this);
 		contentPane.add(panelSide, BorderLayout.WEST);
-		
 		
 		
 		///// MAIN \\\\\
@@ -102,7 +93,7 @@ public class VueAjouterArbitre extends JFrame {
 		panelCenter.setLayout(new BorderLayout(0, 0));
 		
 		panelPopup = new PanelPopUp();
-		panelPopup.setBackground(new Color(24, 20, 36));
+		panelPopup.setBackground(Palette.DARK_GRAY);
 		panelCenter.add(panelPopup, BorderLayout.NORTH);
 
 		JPanel panelInfosTournoi = new JPanel();
@@ -221,20 +212,5 @@ public class VueAjouterArbitre extends JFrame {
 	
 	public PanelPopUp getPopup() {
 		return this.panelPopup;
-	}
-	
-	private static LocalDate getDate(String date) {
-		int indexSeparateur = date.indexOf('/');
-		int jour = Integer.valueOf(date.substring(0, indexSeparateur));
-		
-		date = date.substring(indexSeparateur + 1);
-		indexSeparateur = date.indexOf('/');
-		int mois = Integer.valueOf(date.substring(0, indexSeparateur));
-		
-		date = date.substring(indexSeparateur);
-		int annee = Integer.valueOf(date.substring(1));
-		
-		LocalDate localDate = LocalDate.of(annee, mois, jour);
-		return localDate;
 	}
 }
