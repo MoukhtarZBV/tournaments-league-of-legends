@@ -1,15 +1,15 @@
 package controleur;
 
 import java.awt.Color;
-
-
-
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Date;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -20,6 +20,7 @@ import components.PanelPopUp;
 import dao.ArbitreJDBC;
 import dao.JoueurJDBC;
 import ihm.Ecran;
+import ihm.Palette;
 import ihm.VueAjouterArbitre;
 import ihm.VueCreationTournoi;
 import ihm.VueListeArbitre;
@@ -28,7 +29,7 @@ import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
-public class ControleurAjouterArbitre implements ActionListener, FocusListener {
+public class ControleurAjouterArbitre implements ActionListener, FocusListener, MouseListener {
 
 	private VueAjouterArbitre vue;
 	private Arbitre modele;
@@ -64,9 +65,9 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 					}
 					else if (nom.equals("")) {
 						this.vue.getPopup().setErreur("Le nom de l'arbitre ne peut pas être vide");
-					}else if(prenom.equals("")) {
+					} else if(prenom.equals("")) {
 						this.vue.getPopup().setErreur("Le prénom de l'arbitre ne peut pas être vide");
-					}else {
+					} else {
 						this.vue.getPopup().setErreur("Un arbitre portant ce nom et prenom existe déjà");
 					}
 			}
@@ -81,6 +82,24 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 			txt.setText("");
 		}
 	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}
+	}
+	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
 
 
 
@@ -88,5 +107,14 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener {
 
 	@Override
 	public void focusLost(FocusEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 
 }

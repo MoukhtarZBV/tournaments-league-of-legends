@@ -62,7 +62,7 @@ public class MenuBar extends JPanel {
 		
 		///// PANEL ARBITRES \\\\\
 		JPanel panelArbitres = new JPanel();
-		panelArbitres.setName("Historique");
+		panelArbitres.setName("Arbitres");
 		panelArbitres.setBorder(new EmptyBorder(15, 15, 15, 15));
 		panelArbitres.addMouseListener(controleur);
 		panelArbitres.setBackground(Palette.DARK_GRAY);

@@ -219,6 +219,7 @@ public class VueListeArbitre extends JFrame {
 		btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
@@ -232,6 +233,7 @@ public class VueListeArbitre extends JFrame {
 			btnSuppr.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
 			btnSuppr.setFont(Police.LABEL);
 			btnSuppr.addActionListener(controleur);
+			btnSuppr.addMouseListener(controleur);
 			btnSuppr.setFocusable(false);
 			panelBoutons.add(btnSuppr);
 			
@@ -244,6 +246,7 @@ public class VueListeArbitre extends JFrame {
 			btnAjouter.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnAjouter.setBackground(new Color(32, 28, 44));
 			btnAjouter.addActionListener(controleur);
+			btnAjouter.addMouseListener(controleur);
 			panelBoutons.add(btnAjouter);
 		} else {
 			// Bouton attribuer arbitre
@@ -255,6 +258,7 @@ public class VueListeArbitre extends JFrame {
 			btnVider.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnVider.setFont(Police.LABEL);
 			btnVider.addActionListener(controleur);
+			btnVider.addMouseListener(controleur);
 			btnVider.setFocusable(false);
 			btnVider.setEnabled(false);
 			panelBoutons.add(btnVider);
@@ -268,6 +272,7 @@ public class VueListeArbitre extends JFrame {
 			btnAttribuer.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnAttribuer.setFont(Police.LABEL);
 			btnAttribuer.addActionListener(controleur);
+			btnAttribuer.addMouseListener(controleur);
 			btnAttribuer.setFocusable(false);
 			btnAttribuer.setEnabled(false);
 			panelBoutons.add(btnAttribuer);
@@ -281,6 +286,7 @@ public class VueListeArbitre extends JFrame {
 			btnConfirmer.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnConfirmer.setFont(Police.LABEL);
 			btnConfirmer.addActionListener(controleur);
+			btnConfirmer.addMouseListener(controleur);
 			btnConfirmer.setFocusable(false);
 			btnConfirmer.setEnabled(false);
 			panelBoutons.add(btnConfirmer);

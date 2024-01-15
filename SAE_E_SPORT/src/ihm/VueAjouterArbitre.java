@@ -56,6 +56,7 @@ public class VueAjouterArbitre extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setTitle("Ajouter un arbitre");
+		setResizable(false);
 		
 		
 		
@@ -102,7 +103,7 @@ public class VueAjouterArbitre extends JFrame {
 		panelCenter.setLayout(new BorderLayout(0, 0));
 		
 		panelPopup = new PanelPopUp();
-		panelPopup.setBackground(new Color(24, 20, 36));
+		panelPopup.setBackground(Palette.DARK_GRAY);
 		panelCenter.add(panelPopup, BorderLayout.NORTH);
 
 		JPanel panelInfosTournoi = new JPanel();
