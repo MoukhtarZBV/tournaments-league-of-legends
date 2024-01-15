@@ -39,6 +39,12 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 	public ControleurDetailsTournoi(VueTournoi vue) {
 		this.modele = new Tournoi();
 		this.vue = vue;
+		List<Equipe> equipes = this.modele.getEquipesTournoi(this.vue.getTournoi());
+		this.vue.afficherEquipes(equipes);
+		this.vue.setEquipesSize(equipes);
+		List<Arbitre> arbitres = this.modele.getArbitresTournoi(this.vue.getTournoi());
+		this.vue.afficherBoutons(arbitres, this);
+		this.vue.afficherArbitresTournoi(arbitres);
 	}
 	
 	@Override
@@ -79,7 +85,7 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 			this.vue.getTournoi().setStatut(Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
 			this.vue.setVisibleBoutonOuvrir(false);
-			this.vue.afficherBoutonGererPoule("Gérer la poule");
+			this.vue.afficherBoutonGererPoule("Gérer la poule", this);
 		} else if (bouton.getName().equals("Finale")) {
 			Ecran.update(this.vue);			
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());

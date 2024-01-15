@@ -76,12 +76,16 @@ public class ControleurImportation implements ActionListener, DropListener, Mous
 	
 	private void afficherTableEquipes(String chemin) throws IOException, Exception {
 		if (this.modele.fichierCSVconcerneTournoi(chemin, vue.getTournoi())) {
-			this.modele.importerEquipesJoueurs(chemin);
-			this.vue.afficherTableEquipes();
-			this.vue.ajouterEquipesTable(this.modele.getEquipesJoueurs());
-		    this.vue.changerBtnValider(true);
-		    this.vue.setVisible(true);
-		    this.vue.getPopup().setNormal("Voici les équipes qui seront importées");
+			if (this.modele.fichierCSVTailleEquipe(chemin, vue.getTournoi())) {
+				this.modele.importerEquipesJoueurs(chemin);
+				this.vue.afficherTableEquipes();
+				this.vue.ajouterEquipesTable(this.modele.getEquipesJoueurs());
+			    this.vue.changerBtnValider(true);
+			    this.vue.setVisible(true);
+			    this.vue.getPopup().setNormal("Voici les équipes qui seront importées");
+			} else {
+				this.vue.getPopup().setErreur("Le nombre d'équipes n'est pas entre 4 et 8");
+			}
 		} else {
 			this.vue.getPopup().setErreur("Le fichier importé ne concerne pas ce tournoi");
 		}

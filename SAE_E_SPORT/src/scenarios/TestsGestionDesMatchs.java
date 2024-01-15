@@ -105,7 +105,7 @@ public class TestsGestionDesMatchs {
             new Arbitre().mettreAJourArbitre(arb);
             arbitresAttribuer.add(arb);
         }
-        tournoiBDD.associerArbitresTournoi(t, arbitresAttribuer);
+        tournoiBDD.associerArbitresTournoi(t, arbitresAttribuer);        
         t.generationPoule();
 		this.bouton = new CloturerSimulationBouton();
 		this.modelePoule = new ModelePoule(t);
