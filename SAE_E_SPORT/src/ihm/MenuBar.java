@@ -17,9 +17,11 @@ import controleur.ControleurMenu;
 
 public class MenuBar extends JPanel {
 
+	private static final long serialVersionUID = 1L;
+
 	public MenuBar(JFrame parent) {
 		
-		ControleurMenu controleur = new ControleurMenu(this, parent);
+		ControleurMenu controleur = new ControleurMenu(parent);
 		
 		setBackground(Palette.DARK_GRAY);
 		setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, Palette.GRAY), BorderFactory.createEmptyBorder(75, 0, 75, 0)));

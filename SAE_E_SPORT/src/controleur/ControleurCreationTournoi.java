@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.Date;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -17,12 +15,11 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 
 import ihm.Ecran;
-import ihm.Palette;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
 import modele.Tournoi;
 
-public class ControleurCreationTournoi implements ActionListener, FocusListener, MouseListener {
+public class ControleurCreationTournoi implements ActionListener, FocusListener, MouseListener, WindowListener {
 	
 	private VueCreationTournoi vue;
 	private Tournoi modele;
@@ -41,7 +38,6 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener,
 				Tournoi t = new Tournoi();
 				VueListeTournois vue = new VueListeTournois(t.getTousLesTournois());
 				vue.setVisible(true);
-				this.vue.dispose();	
 			}
 			if (bouton.getName().equals("Valider")) {
 				try {
@@ -52,7 +48,6 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener,
 					Ecran.update(this.vue);
 					Tournoi t = new Tournoi();
 					VueListeTournois vue = new VueListeTournois(t.getTousLesTournois());
-					this.vue.dispose();	
 					vue.setVisible(true);
 				} catch (IllegalArgumentException iae) {
 					vue.getPopup().setErreur(iae.getMessage());
@@ -89,10 +84,32 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener,
 			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}		
 	}
-
+	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
 	
 	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 	
 	@Override
 	public void focusLost(FocusEvent e) {}

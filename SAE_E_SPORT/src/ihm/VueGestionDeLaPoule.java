@@ -6,9 +6,6 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-
-import Images.ImagesIcons;
 import components.BufferedImageResize;
 import components.CoolScrollBar;
 import components.PanelRenderer;
@@ -44,27 +41,35 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private JTable tableClassement = new JTable();
-	private JTable tableMatches = new JTable();
-	private Tournoi tournoi;
-	private JButton btnCloturer;
+	private JTable   tableClassement = new JTable();
+	private JTable   tableMatches    = new JTable();
+	private Tournoi  tournoi;
+	private JButton  btnCloturer;
 	private String[] columnsClassementT;
 	
 	private ControleurGestionPoule controleur;
+	
 	
 	public VueGestionDeLaPoule(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Poule - " + tournoi.getNomTournoi());
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY); 
+		setResizable(false);
+		setUndecorated(true);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Connexion");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -284,6 +289,7 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 		
 		// Controleur
 		this.controleur = new ControleurGestionPoule(this);
+		addWindowListener(controleur);
 		
 		this.tableMatches.addMouseListener(controleur);
 		

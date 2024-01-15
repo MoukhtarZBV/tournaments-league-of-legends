@@ -17,26 +17,36 @@ import controleur.ControleurAccueil;
 
 public class VueAccueilAdmin extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	public VueAccueilAdmin() {
 		
 		ControleurAccueil controleur = new ControleurAccueil(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Accueil");
+		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-		
-		///// PANEL PRINCIPAL \\\\\
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Accueil");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// PANEL TITRE \\\\\
 		JPanel panelTop = new JPanel();
-		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setPreferredSize(new Dimension(800, 150));
 		panelTop.setBackground(Palette.DARK_GRAY);
-		panelTop.setBorder(new EmptyBorder(15, 100, 15, 100));
+		panelTop.setBorder(new EmptyBorder(45, 100, 15, 100));
 		panelTop.setLayout(new GridLayout());
 		contentPane.add(panelTop, BorderLayout.NORTH);
 		

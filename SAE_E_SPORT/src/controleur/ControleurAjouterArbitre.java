@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.Date;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -16,20 +14,13 @@ import java.awt.event.WindowListener;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 
-import components.PanelPopUp;
 import dao.ArbitreJDBC;
-import dao.JoueurJDBC;
 import ihm.Ecran;
-import ihm.Palette;
 import ihm.VueAjouterArbitre;
-import ihm.VueCreationTournoi;
 import ihm.VueListeArbitre;
-import ihm.VueListeTournois;
 import modele.Arbitre;
-import modele.Equipe;
-import modele.Tournoi;
 
-public class ControleurAjouterArbitre implements ActionListener, FocusListener, MouseListener {
+public class ControleurAjouterArbitre implements ActionListener, FocusListener, MouseListener, WindowListener {
 
 	private VueAjouterArbitre vue;
 	private Arbitre modele;
@@ -44,11 +35,11 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener, 
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			if (bouton.getName().equals("Annuler")) {
-				Ecran.update(this.vue);				
+				Ecran.update(this.vue);		
+				
 				Arbitre arbitreBDD = new Arbitre();
 				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
 				vueArbitres.setVisible(true);
-				this.vue.dispose();	
 			}
 			if (bouton.getName().equals("Valider")) {
 					String prenom = this.vue.getPrenom().replace(" ", "");
@@ -61,7 +52,6 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener, 
 						Ecran.update(this.vue);	
 						VueListeArbitre vue = new VueListeArbitre(new Arbitre().getTousLesArbitres(), false, null);
 						vue.setVisible(true);
-						this.vue.dispose();
 					}
 					else if (nom.equals("")) {
 						this.vue.getPopup().setErreur("Le nom de l'arbitre ne peut pas être vide");
@@ -101,9 +91,31 @@ public class ControleurAjouterArbitre implements ActionListener, FocusListener, 
 		}
 	}
 
-
-
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
+	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void focusLost(FocusEvent e) {}

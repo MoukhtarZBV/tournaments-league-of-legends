@@ -4,13 +4,9 @@ import javax.swing.JFrame;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
-
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.util.List;
@@ -44,6 +40,8 @@ import java.awt.FlowLayout;
 
 public class VueListeTournois extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField 	champRecherche;
 	private JTable     	table = new JTable();
 	private JComboBox<String> triNiveau = new JComboBox<String>();
@@ -57,14 +55,21 @@ public class VueListeTournois extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Tournois");
 		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Tournois");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -194,6 +199,7 @@ public class VueListeTournois extends JFrame {
 		table.setForeground(Palette.WHITE);
 		
 		// Modele de la table
+		@SuppressWarnings("serial")
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
 	            new String[] { "Nom", "Niveau", "Date début", "Équipes", "Statut" }) {
 	                

@@ -1,8 +1,5 @@
 package ihm;
 
-import java.awt.EventQueue;
-
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
@@ -10,31 +7,21 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.border.MatteBorder;
-import javax.swing.table.DefaultTableModel;
-
 import Images.ImagesIcons;
 import components.TableEquipes;
 import controleur.ControleurFinale;
 import modele.Equipe;
-import modele.Joueur;
 import modele.Partie;
-import modele.Statut;
 import modele.Tournoi;
 
 import java.awt.Color;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -43,7 +30,6 @@ import java.awt.Dimension;
 public class VueFinale extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	
 	private JLabel lblTropheeEquipeUne;
 	private JLabel lblTropheeEquipeDeux;
@@ -65,7 +51,8 @@ public class VueFinale extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		contentPane = new JPanel();
+		addWindowListener(controleur);
+		JPanel contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);

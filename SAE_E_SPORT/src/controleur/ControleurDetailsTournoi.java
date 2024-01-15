@@ -24,14 +24,11 @@ import ihm.VueListeTournois;
 import ihm.VueTournoi;
 import ihm.VueListeArbitre;
 import modele.Arbitre;
-import modele.Compte;
 import modele.Equipe;
-import modele.ModelePoule;
 import modele.Statut;
 import modele.Tournoi;
-import modele.TypeCompte;
 
-public class ControleurDetailsTournoi implements ActionListener, MouseListener {
+public class ControleurDetailsTournoi implements ActionListener, MouseListener, WindowListener {
 	
 	private VueTournoi vue;
 	private Tournoi modele;
@@ -46,45 +43,52 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 		JButton bouton = (JButton) e.getSource();
 		if (bouton.getName().equals("Importer")) {
 			Ecran.update(this.vue);
+			
 			VueImportation vueImportation = new VueImportation(vue.getTournoi());
 			vueImportation.setVisible(true);
-			vue.dispose();
+			
 		} else if (bouton.getText().equals("Supprimer")) {
 			int choix = afficherPopUpConfirmation(); 
+			
 			if (choix == JOptionPane.YES_OPTION) {
 				Ecran.update(this.vue);	
 				this.modele.supprimerCompteArbitres(this.vue.getTournoi());
 				this.modele.supprimerTournoi(this.vue.getTournoi());
+				
 				VueListeTournois vueTournois = new VueListeTournois(this.modele.getTousLesTournois());
 				vueTournois.setVisible(true);
-				this.vue.dispose();
 			} 			
+			
 		} else if (bouton.getName().equals("Arbitres")) {
 			Ecran.update(this.vue);	
+			
 			VueListeArbitre vueArbitres = new VueListeArbitre(new Arbitre().getTousLesArbitres(), true, this.vue.getTournoi()); 
 			vueArbitres.setVisible(true);
-			this.vue.dispose();
+			
 		} else if (bouton.getName().equals("Retour")) {
 			Ecran.update(this.vue);	
+			
 			VueListeTournois vue = new VueListeTournois(new Tournoi().getTousLesTournois());
 			vue.setVisible(true);
-			this.vue.dispose();
+			
 		} else if (bouton.getName().equals("Poule")) {
-			Ecran.update(this.vue);			
+			Ecran.update(this.vue);		
+			
 	        VueGestionDeLaPoule frame = new VueGestionDeLaPoule(this.vue.getTournoi());
 	        frame.setVisible(true);
-			this.vue.dispose();	
+	        
 		} else if (bouton.getName().equals("Ouvrir")) {
 			this.modele.changerStatutTournoi(vue.getTournoi(), Statut.EN_COURS);
 			this.vue.getTournoi().setStatut(Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
 			this.vue.setVisibleBoutonOuvrir(false);
 			this.vue.afficherBoutonGererPoule("Gérer la poule");
+			
 		} else if (bouton.getName().equals("Finale")) {
-			Ecran.update(this.vue);			
+			Ecran.update(this.vue);		
+			
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
 			vueFinale.setVisible(true);
-			this.vue.dispose();	
 		}
 	}
 	
@@ -101,7 +105,6 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 		            Ecran.update(this.vue);
 					VueEquipe vue = new VueEquipe(equipes, equipeBDD.getEquipeParNom(table.getValueAt(row, 0).toString()), this.vue.getTournoi());
 					vue.setVisible(true);
-					this.vue.dispose();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -144,8 +147,31 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener {
 		return choix;
 	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
 	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}

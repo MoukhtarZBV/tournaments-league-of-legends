@@ -25,7 +25,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.sql.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -40,6 +39,8 @@ import javax.swing.border.MatteBorder;
 
 public class VueTournoi extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private JTable tableEquipes;
 	private JButton btnOuvrir;
 	private JPanel panelNomsArbitres;
@@ -58,13 +59,21 @@ public class VueTournoi extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle(tournoi.getNomTournoi());
+		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-		
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre(tournoi.getNomTournoi());
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -199,6 +208,7 @@ public class VueTournoi extends JFrame {
 		tableEquipes.getTableHeader().setResizingAllowed(false);
 		
 		scrollPaneTableEquipes.setViewportView(tableEquipes);
+		@SuppressWarnings("serial")
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
 	            new String[] { "Équipe", "Joueur 1", "Joueur 2", "Joueur 3", "Joueur 4", "Joueur 5" }) {
 	                

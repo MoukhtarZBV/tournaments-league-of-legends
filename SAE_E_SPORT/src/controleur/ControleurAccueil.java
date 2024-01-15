@@ -3,6 +3,9 @@ package controleur;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.JPanel;
 
 import ihm.Ecran;
@@ -16,7 +19,7 @@ import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
-public class ControleurAccueil implements MouseListener {
+public class ControleurAccueil implements MouseListener, WindowListener {
 	
 	private VueAccueilAdmin vue;
 	
@@ -53,7 +56,6 @@ public class ControleurAccueil implements MouseListener {
 				vueArbitres.setVisible(true);
 				break;
 		}
-		this.vue.dispose();	
 		
 	}
 
@@ -71,7 +73,32 @@ public class ControleurAccueil implements MouseListener {
 		panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
+	
+	// NOT IMPLEMENTED \\
 
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
+	
 	@Override
 	public void mousePressed(MouseEvent e) {}
 

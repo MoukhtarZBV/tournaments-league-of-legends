@@ -4,25 +4,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
-
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-
 import components.CoolTextField;
 import components.PanelPopUp;
 import components.TableEquipes;
 
 import java.awt.GridLayout;
 import java.util.List;
-import java.util.Optional;
-
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
@@ -31,12 +22,13 @@ import javax.swing.JComboBox;
 
 import controleur.ControleurEquipe;
 import modele.Equipe;
-import modele.Joueur;
 import modele.Pays;
 import modele.Tournoi;
 
 public class VueEquipe extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField fieldName;
 	private JTextField fieldWR;
 	private JComboBox<String> comboPays;
@@ -45,9 +37,6 @@ public class VueEquipe extends JFrame {
 	
 	private Tournoi fenPere;
 
-	/**
-	 * Launch the application.
-	 */
 	public VueEquipe(List<Equipe> equipes, Equipe equipe, Tournoi pere) {
 		
 		this.equipe = equipe;
@@ -57,14 +46,21 @@ public class VueEquipe extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle(equipe.getNom());
 		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-		
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre(equipe.getNom());
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\

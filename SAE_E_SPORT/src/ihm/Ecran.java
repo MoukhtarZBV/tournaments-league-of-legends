@@ -12,6 +12,8 @@ public class Ecran {
 	public static final int tailleX = 1280;
 	public static final int tailleY = 720;
 	
+	public static JFrame lastFrame;
+	
 	public static void setup() {
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize(); 
 
@@ -22,6 +24,12 @@ public class Ecran {
 	public static void update(JFrame frame) {
 		posX = frame.getBounds().x;
 		posY = frame.getBounds().y;
+		
+		lastFrame = frame;
+	}
+	
+	public static void closeLast() {
+		lastFrame.dispose();
 	}
 
 }

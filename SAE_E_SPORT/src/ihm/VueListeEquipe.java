@@ -16,8 +16,6 @@ import modele.Equipe;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -31,6 +29,8 @@ import javax.swing.ImageIcon;
 
 public class VueListeEquipe extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField searchBar;
 	private JList<Object> listeEquipes;
 	private JButton btnSort;
@@ -48,13 +48,21 @@ public class VueListeEquipe extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Équipes");
+		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Équipes");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
