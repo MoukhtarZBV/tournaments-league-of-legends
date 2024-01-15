@@ -27,36 +27,33 @@ public class ControleurAccueil implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		JPanel panel = (JPanel)e.getSource();
+
+		Ecran.update(this.vue);
 		switch(panel.getName()) {
 			case "Equipes":
-				Ecran.update(this.vue);
 				Equipe equipeBDD = new Equipe();
 				VueListeEquipe vueEquipes = new VueListeEquipe(equipeBDD.getToutesLesEquipes());
 				vueEquipes.setVisible(true);
-				this.vue.dispose();	
 				break;
 				
 			case "Tournois":
-				Ecran.update(this.vue);
 				Tournoi tournoiBDD = new Tournoi();
 				VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
 				vueTournois.setVisible(true);
-				this.vue.dispose();	
 				break;
 				
 			case "Historique" :
-				Ecran.update(this.vue);
 				VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
 				vueHistorique.setVisible(true);
-				this.vue.dispose();	
 				break;
+				
 			case "Arbitres":
 				Arbitre arbitreBDD = new Arbitre();
 				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
 				vueArbitres.setVisible(true);
-				this.vue.dispose();	
 				break;
 		}
+		this.vue.dispose();	
 		
 	}
 

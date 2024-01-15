@@ -11,8 +11,10 @@ import ihm.Ecran;
 import ihm.MenuBar;
 import ihm.Palette;
 import ihm.VueHistoriquePoints;
+import ihm.VueListeArbitre;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
+import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
@@ -28,7 +30,7 @@ public class ControleurMenu implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		JPanel panel = (JPanel)e.getSource();
+		JPanel panel = (JPanel)e.getSource();		
 		switch(panel.getName()) {
 			case "Equipes":
 				if(!(parent instanceof VueListeEquipe)) {
@@ -55,6 +57,16 @@ public class ControleurMenu implements MouseListener {
 					Ecran.update(this.parent);
 					VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
 					vueHistorique.setVisible(true);
+					parent.dispose();
+				}
+				break;
+				
+			case "Arbitres":
+				if(!(parent instanceof VueListeArbitre)) {
+					Ecran.update(this.parent);
+					Arbitre arbitreBDD = new Arbitre();
+					VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
+					vueArbitres.setVisible(true);
 					parent.dispose();
 				}
 				break;

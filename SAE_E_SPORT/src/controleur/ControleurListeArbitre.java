@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -133,16 +134,36 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
 			JButton b = (JButton)e.getSource();
-			b.setBackground(Palette.LIGHT_PURPLE);
+			
+			if(b.isEnabled()) {
+				if(b.getName().equals("Rechercher")) {
+					b.setBackground(Palette.LIGHT_PURPLE);					
+				} else if(b.getName().equals("Supprimer")) {
+					b.setBackground(Palette.FOND_ERREUR);		
+				} else {
+					b.setBackground(b.getBackground().brighter());
+				}
+				
+				b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
 		}
-
 	}
+	
 	@Override
 	public void mouseExited(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
 			JButton b = (JButton)e.getSource();
-			b.setBackground(Palette.WHITE);
-		}	
+			
+			if(b.getName().equals("Rechercher")) {
+				b.setBackground(Palette.WHITE);	
+			} else if(b.getName().equals("Supprimer")) {
+				b.setBackground(Palette.GRAY);	
+			} else {
+				b.setBackground(b.getBackground().darker());
+			}
+			
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 	}
 
 	private int afficherPopUpConfirmation(String nomArbitre) {
