@@ -79,10 +79,11 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JTextField) {
-			this.rechercherParNomEtRang();;
+			this.rechercherParNomEtRang(this.vue.getSearch());;
 		} else if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
-			
+			String recherche = this.vue.getSearch();
+			if(recherche.equals("Filtrer équipes par nom ou rang")) recherche = "";
 			switch (bouton.getName()) {
 				case "Retour": 
 					Ecran.update(this.vue);
@@ -91,20 +92,20 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 					break;
 					
 				case "Rechercher" :
-					this.rechercherParNomEtRang();
+					this.rechercherParNomEtRang(recherche);
 					break;
 	
 				case "Trier" : 
 					// Lister par Rang
 					if(this.vue.getTriParNom()) {
 						this.vue.setTriParNom(false);
-						this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
+						this.vue.updateListeEquipes(this.modele.trierParRang(recherche.toUpperCase()));
 						this.vue.setBtnSort("Trier par nom");
 	
 					// Lister par Nom d'équipe
 					} else {
 						this.vue.setTriParNom(true);
-						this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
+						this.vue.updateListeEquipes(this.modele.trierParNom(recherche.toUpperCase()));
 						this.vue.setBtnSort("Trier par rang");
 					}
 					break;
@@ -112,16 +113,16 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 		}
 	}
 
-	private void rechercherParNomEtRang() {
+	private void rechercherParNomEtRang(String recherche) {
 		try {
 			// Lister par Nom d'équipe
 			if(this.vue.getTriParNom()) {
-				this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
+				this.vue.updateListeEquipes(this.modele.trierParNom(recherche.toUpperCase()));
 				this.vue.setBtnSort("Trier par rang");
 
 			// Lister par Rang
 			} else {
-				this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
+				this.vue.updateListeEquipes(this.modele.trierParRang(recherche.toUpperCase()));
 				this.vue.setBtnSort("Trier par nom");
 			}
 		} catch (Exception e1) {

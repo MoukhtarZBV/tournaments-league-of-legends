@@ -327,9 +327,9 @@ public class VueTournoi extends JFrame {
 			break;
 		case A_VENIR:
 			afficherBoutonOuvrir(controleur);
-			/*if (tournoi.getDateDebut().after(new Date(System.currentTimeMillis()))) {
+			if (tournoi.getDateDebut().after(new Date(System.currentTimeMillis()))) {
 				btnOuvrir.setEnabled(false);
-			}*/
+			}
 			afficherBoutonSupprimer(controleur);
 			break;
 		case EN_COURS:

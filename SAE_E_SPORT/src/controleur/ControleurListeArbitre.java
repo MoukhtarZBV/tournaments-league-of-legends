@@ -79,6 +79,8 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	    
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
+			String recherche = this.vue.getSearch();
+			if(recherche.equals("Filtrer arbitres par nom ou prénom")) recherche = "";
 		    
 		    if (bouton.getName().equals("Retour")) {
 				Ecran.update(this.vue);	
@@ -92,7 +94,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 				}
 				
 		    } else if (bouton.getName().equals("Rechercher")){
-				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), recherche));
 				
 		    } else if (bouton.getName().equals("Ajouter")) {
 				Ecran.update(this.vue);	
@@ -101,11 +103,11 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	
 		    } else if (bouton.getName().equals("Vider")) {
 		    	viderListeArbitresAttribues();
-				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), ""));
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), recherche));
 		    	
 		    } else if (bouton.getName().equals("Attribuer")) {
 		    	ajouterArbitreAuxArbitresAttribues();
-				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), ""));
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), recherche));
 		    	
 		    } else if (bouton.getName().equals("Confirmer")) {
 		    	confirmerAttributionArbitres();
@@ -123,11 +125,13 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 			if (this.arbitreSelected.getCompte() != null) {
 				JOptionPane.showMessageDialog(null, "Impossible de supprimer cet arbitre car il arbitre actuellement un tournoi", "Suppression d'un arbitre", JOptionPane.ERROR_MESSAGE);
 			} else {
+				String recherche = this.vue.getSearch();
+				if(recherche.equals("Filtrer arbitres par nom ou prénom")) recherche = "";
 				int choix = afficherPopUpConfirmation(arbitreSelected.getNom() + " " + arbitreSelected.getPrenom()); 
 				if (choix == JOptionPane.YES_OPTION) {
 					this.modele.supprimerArbitre(this.arbitreSelected);
 					this.vue.getArbitres().remove(this.vue.getArbitres().indexOf(this.arbitreSelected));
-					this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
+					this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), recherche));
 					this.vue.setActifBtnSupprimer(false);
 				} 
 			}

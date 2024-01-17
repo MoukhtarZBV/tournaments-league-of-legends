@@ -3,6 +3,7 @@ package dao;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -296,11 +297,20 @@ public class InsertionDB {
 	    
 	    // Tournoi 6
 	    Tournoi t6 = Tournoi.createTournoi("League Arena ED", Niveau.INTERNATIONAL_CLASSE, Date.valueOf(LocalDate.of(2024, 01, 02)), 
-	    		Date.valueOf(LocalDate.of(2024, 01, 12)), Pays.JP, Statut.ATTENTE_ARBITRES, Optional.empty(), Optional.empty());
+	    		Date.valueOf(LocalDate.of(2024, 01, 12)), Pays.JP, Statut.TERMINE, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t6);
 	    ajouterEquipesTournoi(t6, e1, e2, e8, e9, e10, e12, e13, e14);
 	    simulerParties(t6.generationPoule(), t6, arbitres);
 	    simulerFinale(t6);
+	    
+	    // Tournoi en cours
+	    Calendar cDateJour = Calendar.getInstance();
+		cDateJour.add(Calendar.DAY_OF_MONTH, +5);
+		Date dateJourPlus5 = new Date(cDateJour.getTimeInMillis());
+	    Tournoi t7 = Tournoi.createTournoi("High Honors Tournament 2024", Niveau.REGIONAL, Date.valueOf(LocalDate.now()), 
+	    		dateJourPlus5, Pays.GB, Statut.ATTENTE_ARBITRES, Optional.empty(), Optional.empty());
+	    tournoiBDD.ajouterTournoi(t7);
+	    ajouterEquipesTournoi(t7, e1, e2, e8, e9, e10, e12, e13, e14);
 	    
 
 	    // ====================================== //

@@ -50,6 +50,8 @@ public class ControleurListeTournois implements ActionListener, FocusListener, I
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
+			String recherche = this.vue.saisieChamp();
+			if(recherche.equals("Filtrer tournois par nom")) recherche = "";
 			
 			if (bouton.getName().equals("Nouveau")) {
 				Ecran.update(this.vue);
@@ -61,9 +63,8 @@ public class ControleurListeTournois implements ActionListener, FocusListener, I
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
 
-			} else if (bouton.getFont().getFamily().equals("Gigi")) {
-				this.nom = vue.saisieChamp();
-				vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
+			} else if (bouton.getName().equals("Recherche")) {
+				vue.afficherTournois(modele.getTournoisNiveauStatutNom(recherche, niveau, statut));
 			}
 			
 		} else if (e.getSource() instanceof JTextField) {
@@ -101,6 +102,8 @@ public class ControleurListeTournois implements ActionListener, FocusListener, I
 			@SuppressWarnings("unchecked")
 			JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
 			String option = (String) comboBox.getSelectedItem();
+			String recherche = this.vue.saisieChamp();
+			if(recherche.equals("Filtrer tournois par nom")) recherche = "";
 			
 			if (vue.estOptionComboboxNiveau(option)) {
 				this.niveau = Niveau.getNiveau(option);
@@ -110,7 +113,7 @@ public class ControleurListeTournois implements ActionListener, FocusListener, I
 				this.statut = Statut.getStatut(option);
 			}
 			
-			vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
+			vue.afficherTournois(modele.getTournoisNiveauStatutNom(recherche, niveau, statut));
 		}
 	}
 
