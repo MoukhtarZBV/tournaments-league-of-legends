@@ -7,12 +7,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
-import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -28,18 +25,11 @@ import java.awt.Component;
 
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.SwingConstants;
 import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
-import java.awt.CardLayout;
-
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.border.TitledBorder;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.border.BevelBorder;
 
 public class VueImportation extends JFrame {
 
@@ -179,15 +169,17 @@ public class VueImportation extends JFrame {
 		JButton btnRetour = new JButton("Retour");
 		btnRetour.setBackground(Color.WHITE);
 		btnRetour.setForeground(Color.BLACK);
-		panelBoutons.add(btnRetour);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
+		panelBoutons.add(btnRetour);
 
 		btnValider = new JButton("Valider");
 		btnValider.setEnabled(false);
 		btnValider.setBackground(Color.WHITE);
 		btnValider.setForeground(Color.BLACK);
 		btnValider.addActionListener(controleur);	
+		btnValider.addMouseListener(controleur);
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
 		
@@ -224,6 +216,7 @@ public class VueImportation extends JFrame {
 		return this.tournoi;
 	}
 	
+	@SuppressWarnings("serial")
 	public void afficherTableEquipes() {
 		panelDrop.setVisible(false);
 		JScrollPane tableScroll = new JScrollPane();

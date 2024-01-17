@@ -292,29 +292,29 @@ public class Tournoi {
 	}
 	
 	public boolean associerArbitresTournoi(Tournoi tournoi, List<Arbitre> arbitres) {
-		if (arbitres.size() == 0) {
-			return false;
-		}
-		// Ajout d'un compte à la base de donnée pour le tournoi
-		Compte compteTournoi = new Compte(tournoi.getDateDebut().toString().replace("-", ""), Compte.genererPassword(15), TypeCompte.ARBITRE);
-		new Compte().ajouterCompte(compteTournoi);
-		tournoi.setCompte(compteTournoi);
-		Tournoi tournoiBDD = new Tournoi();
-		tournoiBDD.mettreAJourTournoi(tournoi);
-		
-		boolean insertion = true;
-		Associer associerBDD = new Associer();
-		Arbitre arbitreBDD = new Arbitre();
-		for (Arbitre arbitre : arbitres) {
-			arbitre.setCompte(compteTournoi);
-			arbitreBDD.mettreAJourArbitre(arbitre);
-			insertion = associerBDD.ajouterAssociation(new Associer(arbitre, tournoi));
-			if (!insertion) {
-				return false;
-			}
-		}
-		return true;
-	}
+        if (arbitres.size() == 0) {
+            return false;
+        }
+        // Ajout d'un compte à la base de donnée pour le tournoi
+        Compte compteTournoi = new Compte(tournoi.getDateDebut().toString().replace("-", ""), Compte.genererPassword(15), TypeCompte.ARBITRE);
+        new Compte().ajouterCompte(compteTournoi);
+        tournoi.setCompte(compteTournoi);
+        Tournoi tournoiBDD = new Tournoi();
+        tournoiBDD.mettreAJourTournoi(tournoi);
+        
+        boolean insertion = true;
+        Associer associerBDD = new Associer();
+        Arbitre arbitreBDD = new Arbitre();
+        for (Arbitre arbitre : arbitres) {
+            arbitre.setCompte(compteTournoi);
+            arbitreBDD.mettreAJourArbitre(arbitre);
+            insertion = associerBDD.ajouterAssociation(new Associer(arbitre, tournoi));
+            if (!insertion) {
+                return false;
+            }
+        }
+        return true;
+    }
 	
 	public void cloturerTournoi(Tournoi tournoi, Equipe equipe) {
 		changerVainqueurTournoi(tournoi, equipe);

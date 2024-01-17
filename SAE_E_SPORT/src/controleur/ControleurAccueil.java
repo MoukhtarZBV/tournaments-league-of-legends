@@ -3,8 +3,12 @@ package controleur;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.JPanel;
 
+import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueHistoriquePoints;
@@ -15,7 +19,7 @@ import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
-public class ControleurAccueil implements MouseListener {
+public class ControleurAccueil implements MouseListener, WindowListener {
 	
 	private VueAccueilAdmin vue;
 	
@@ -26,31 +30,30 @@ public class ControleurAccueil implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		JPanel panel = (JPanel)e.getSource();
+
+		Ecran.update(this.vue);
 		switch(panel.getName()) {
 			case "Equipes":
 				Equipe equipeBDD = new Equipe();
 				VueListeEquipe vueEquipes = new VueListeEquipe(equipeBDD.getToutesLesEquipes());
 				vueEquipes.setVisible(true);
-				this.vue.dispose();	
 				break;
 				
 			case "Tournois":
 				Tournoi tournoiBDD = new Tournoi();
 				VueListeTournois vueTournois = new VueListeTournois(tournoiBDD.getTousLesTournois());
 				vueTournois.setVisible(true);
-				this.vue.dispose();	
 				break;
 				
 			case "Historique" :
 				VueHistoriquePoints vueHistorique = new VueHistoriquePoints();
 				vueHistorique.setVisible(true);
-				this.vue.dispose();
 				break;
+				
 			case "Arbitres":
 				Arbitre arbitreBDD = new Arbitre();
 				VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
 				vueArbitres.setVisible(true);
-				this.vue.dispose();	
 				break;
 		}
 		
@@ -70,7 +73,32 @@ public class ControleurAccueil implements MouseListener {
 		panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
+	
+	// NOT IMPLEMENTED \\
 
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
+	
 	@Override
 	public void mousePressed(MouseEvent e) {}
 

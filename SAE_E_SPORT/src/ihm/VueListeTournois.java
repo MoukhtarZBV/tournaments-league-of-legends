@@ -4,13 +4,9 @@ import javax.swing.JFrame;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
-
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.util.List;
@@ -44,6 +40,8 @@ import java.awt.FlowLayout;
 
 public class VueListeTournois extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField 	champRecherche;
 	private JTable     	table = new JTable();
 	private JComboBox<String> triNiveau = new JComboBox<String>();
@@ -57,14 +55,21 @@ public class VueListeTournois extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Tournois");
 		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Tournois");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -127,6 +132,7 @@ public class VueListeTournois extends JFrame {
 		champRecherche.setText("");
 		champRecherche.setColumns(10);
 		champRecherche.addActionListener(controleur);
+		champRecherche.addFocusListener(controleur);
 		panelBarreRecherche.add(champRecherche, BorderLayout.CENTER);
 		
 		// Bouton rechercher
@@ -194,6 +200,7 @@ public class VueListeTournois extends JFrame {
 		table.setForeground(Palette.WHITE);
 		
 		// Modele de la table
+		@SuppressWarnings("serial")
 		DefaultTableModel modele = new DefaultTableModel(new Object[][] {},
 	            new String[] { "Nom", "Niveau", "Date début", "Équipes", "Statut" }) {
 	                
@@ -226,7 +233,7 @@ public class VueListeTournois extends JFrame {
 		///// PANEL BOUTONS \\\\\
 		JPanel panelBoutons = new JPanel();
 		panelBoutons.setBorder(new EmptyBorder(10, 10, 10, 10));
-		panelBoutons.setBackground(Palette.GRAY);
+		panelBoutons.setBackground(Palette.DARK_GRAY);
 		panelBoutons.setPreferredSize(new Dimension(panelBoutons.getWidth(), 60));
 		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
@@ -239,6 +246,7 @@ public class VueListeTournois extends JFrame {
 		btnRetour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
@@ -251,6 +259,7 @@ public class VueListeTournois extends JFrame {
 		btnNouveau.setFont(Police.LABEL);
 		btnNouveau.setFocusable(false);
 		btnNouveau.addActionListener(controleur);
+		btnNouveau.addMouseListener(controleur);
 		panelBoutons.add(btnNouveau);
 	}
 	

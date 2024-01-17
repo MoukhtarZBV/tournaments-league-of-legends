@@ -3,14 +3,14 @@ package scenarios;
 import static org.junit.Assert.*;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import dao.ArbitreJDBC;
@@ -27,7 +27,6 @@ import modele.Partie;
 import modele.Pays;
 import modele.Statut;
 import modele.Tournoi;
-import modele.ModeleImportation.EtatEquipe;
 import modele.ModelePoule;
 
 public class TestsGestionDesTournois {
@@ -46,6 +45,10 @@ public class TestsGestionDesTournois {
 	private Date dateJourMoins10;
 	private Date dateJourAnneePlus1;
 	private Date dateJourAnneePlus1Plus10Jours;
+	private Equipe e1;
+	private Equipe e2;
+	private Equipe e3;
+	private Equipe e4;
 	
 	private String cheminCSV;
 	private ModeleImportation modeleImportation;
@@ -152,7 +155,7 @@ public class TestsGestionDesTournois {
 		cDateJour.add(Calendar.DAY_OF_MONTH, -2);
 		Date dateJourMoins2 = new Date(cDateJour.getTimeInMillis());
 	    try {
-	        Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJour, dateJourPlus10, Pays.FR);
+	        tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJour, dateJourPlus10, Pays.FR);
 	        fail("L'exception attendue n'a pas été levée");
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("Il existe déjà un tournoi sur ce créneau", e.getMessage());
@@ -164,7 +167,7 @@ public class TestsGestionDesTournois {
 		cDateJour.add(Calendar.DAY_OF_MONTH, +8);
 		Date dateJourPlus8 = new Date(cDateJour.getTimeInMillis());
 	    try {
-	        Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourPlus8, dateJourPlus20, Pays.FR);
+	        tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourPlus8, dateJourPlus20, Pays.FR);
 	        fail("L'exception attendue n'a pas été levée");
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("Il existe déjà un tournoi sur ce créneau", e.getMessage());
@@ -173,7 +176,7 @@ public class TestsGestionDesTournois {
 	    
 	    // Ajout d'un tournoi englobé par les dates d'un autre
 	    try {
-	        Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourPlus2, dateJourPlus8, Pays.FR);
+	        tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourPlus2, dateJourPlus8, Pays.FR);
 	        fail("L'exception attendue n'a pas été levée");
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("Il existe déjà un tournoi sur ce créneau", e.getMessage());
@@ -184,7 +187,7 @@ public class TestsGestionDesTournois {
 	@Test
 	public void testDateDeDebutSuperieurDateDeFin() {
 		try {
-			Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourPlus10, dateJour, Pays.FR);
+			tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourPlus10, dateJour, Pays.FR);
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("La date de début doit être inférieure à la date de fin", e.getMessage());
 	        return;
@@ -195,7 +198,7 @@ public class TestsGestionDesTournois {
 	@Test
 	public void testDateDeDebutInferieureDateDuJour() {
 	    try {
-	        Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourMoins10, dateJour, Pays.FR);
+	        tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourMoins10, dateJour, Pays.FR);
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("La date de début doit être supérieure à la date du jour", e.getMessage());
 	        return;
@@ -207,7 +210,7 @@ public class TestsGestionDesTournois {
 	public void testDateDebutMemeAneeEnCours() {
 	    try {
 	    	System.out.println(dateJourAnneePlus1);
-	        Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourAnneePlus1, dateJourAnneePlus1Plus10Jours, Pays.FR);
+	        tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJourAnneePlus1, dateJourAnneePlus1Plus10Jours, Pays.FR);
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("L'année de la date doit être la même que celle en cours", e.getMessage());
 	        return;
@@ -218,7 +221,7 @@ public class TestsGestionDesTournois {
 	@Test
 	public void testTournoiMoins5Jours() {
 		try {
-			Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJour, dateJourPlus2, Pays.FR);
+			tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJour, dateJourPlus2, Pays.FR);
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("Le tournoi doit durer minimum cinq jours", e.getMessage());
 	        return;
@@ -229,7 +232,7 @@ public class TestsGestionDesTournois {
 	@Test
 	public void testTournoiPlus2Semaines() {
 		try {
-			Tournoi tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJour, dateJourPlus20, Pays.FR);
+			tournoi = new Tournoi("TournoiTest", Niveau.LOCAL, dateJour, dateJourPlus20, Pays.FR);
 	    } catch (IllegalArgumentException e) {
 	        assertEquals("Le tournoi doit durer maximum deux semaines", e.getMessage());
 	        return;
@@ -237,9 +240,42 @@ public class TestsGestionDesTournois {
 	    fail("L'exception attendue n'a pas été levée");	
 	}
 	
+	@Test 
+	public void testTirageAuSort() throws Exception {
+		CreateDB.main(null);
+		this.modele.ajouterTournoi(tournoi);
+		ajouterEquipes(tournoi);		
+		
+		List<Equipe> eqs = new LinkedList<>();
+		eqs.add(e1);
+		eqs.add(e2);
+		eqs.add(e3);
+		eqs.add(e4);
+		
+		tournoi.generationPoule();
+		this.modelePoule.updateGagnant(0, 1);
+		this.modelePoule.updateGagnant(1, 2);
+		this.modelePoule.updateGagnant(2, 1);
+		this.modelePoule.updateGagnant(3, 1);
+		this.modelePoule.updateGagnant(4, 1);
+		this.modelePoule.updateGagnant(5, 2);
+		this.modelePoule.enregistrerResultat();
+		this.modelePoule.creerFinale(tournoi);
+		Partie p = new Partie().getFinaleTournoi(tournoi);
+		eqs = eqs.stream().sorted((x,y)->{int res = x.getRang()-y.getRang();
+									if (res<0) return -1;
+									else if (res == 0) return 0;
+									else return 1;
+								})
+				.filter(e->!e.getNom().equals("T1"))
+				.collect(Collectors.toList());
+		assertEquals(p.getEquipeUne().getNom(), eqs.get(0).getNom());
+		assertEquals(p.getEquipeDeux().getNom(), eqs.get(1).getNom());
+	}
+	
 	private void ajouterEquipes(Tournoi tournoi) {
 		// Équipe 1 - G2 Esports
-	    Equipe e1 = new Equipe(EquipeJDBC.getNextValueSequence(), "G2 Esports", 18, Pays.ES);
+	    this.e1 = new Equipe(EquipeJDBC.getNextValueSequence(), "G2 Esports", 18, Pays.ES);
 	    Joueur j1 = new Joueur(JoueurJDBC.getNextValueSequence(), "Wunder", e1);
 	    Joueur j2 = new Joueur(JoueurJDBC.getNextValueSequence(), "Jankos", e1);
 	    Joueur j3 = new Joueur(JoueurJDBC.getNextValueSequence(), "Caps", e1);
@@ -249,7 +285,7 @@ public class TestsGestionDesTournois {
 	    equipeBDD.ajouterEquipe(e1);
 
 	    // Équipe 2 - T1
-	    Equipe e2 = new Equipe(EquipeJDBC.getNextValueSequence(), "T1", 32, Pays.KR);
+	    this.e2 = new Equipe(EquipeJDBC.getNextValueSequence(), "T1", 32, Pays.KR);
 	    Joueur j6 = new Joueur(JoueurJDBC.getNextValueSequence(), "Canna", e2);
 	    Joueur j7 = new Joueur(JoueurJDBC.getNextValueSequence(), "Cuzz", e2);
 	    Joueur j8 = new Joueur(JoueurJDBC.getNextValueSequence(), "Faker", e2);
@@ -259,7 +295,7 @@ public class TestsGestionDesTournois {
 	    equipeBDD.ajouterEquipe(e2);
 
 	    // Équipe 3 - Cloud9
-	    Equipe e3 = new Equipe(EquipeJDBC.getNextValueSequence(), "Cloud9", 59, Pays.US);
+	    this.e3 = new Equipe(EquipeJDBC.getNextValueSequence(), "Cloud9", 59, Pays.US);
 	    Joueur j11 = new Joueur(JoueurJDBC.getNextValueSequence(), "Fudge", e3);
 	    Joueur j12 = new Joueur(JoueurJDBC.getNextValueSequence(), "Blaber", e3);
 	    Joueur j13 = new Joueur(JoueurJDBC.getNextValueSequence(), "Perkz", e3);
@@ -269,7 +305,7 @@ public class TestsGestionDesTournois {
 	    equipeBDD.ajouterEquipe(e3);
 	    
 	    // Équipe 4 - Fnatic
-	    Equipe e4 = new Equipe(EquipeJDBC.getNextValueSequence(), "Fnatic", 101, Pays.GB);
+	    this.e4 = new Equipe(EquipeJDBC.getNextValueSequence(), "Fnatic", 101, Pays.GB);
 	    Joueur j16 = new Joueur(JoueurJDBC.getNextValueSequence(), "Bwipo", e4);
 	    Joueur j17 = new Joueur(JoueurJDBC.getNextValueSequence(), "Selfmade", e4);
 	    Joueur j18 = new Joueur(JoueurJDBC.getNextValueSequence(), "Nisqy", e4);
@@ -280,42 +316,5 @@ public class TestsGestionDesTournois {
 	    
 	    InsertionDB.ajouterEquipesTournoi(tournoi, e1, e2, e3, e4);
 	}
-	
-	/* NE FONCTIONNE PAS
-	@Test
-	public void testCloturerSiTousLesVainqueurs() {
-		// Importation de 3 arbitres
-		Arbitre arbitreBDD = new Arbitre();
-		arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Richard", "Rich"));
-	    arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Saul", "Badman"));
-	    arbitreBDD.ajouterArbitre(new Arbitre(ArbitreJDBC.getNextValueSequence(), "Gus", "Pollos"));
-	    
-	    // Importation de 4 équipes
-	    modeleImportation.importerEquipesJoueurs(cheminCSV);
-		EtatEquipe etat = this.modeleImportation.verifierEquipe();
-		if (etat == EtatEquipe.OK) {
-			this.modeleImportation.enregistrerImportation(tournoi);
-			this.modeleImportation.changerStatusAVenir(tournoi);
-		}
-		Equipe equipeBDD = new Equipe();
-		Tournoi tournoiBDD = new Tournoi();
-		assertTrue(tournoi.getStatut() == Statut.A_VENIR);
-		
-		int nbEquipesTotal = equipeBDD.getToutesLesEquipes().size();
-		int nbEquipesTournoi = tournoiBDD.getEquipesTournoi(tournoi).size();
-		assertEquals(nbEquipesTotal, 4);
-		assertEquals(nbEquipesTotal, nbEquipesTournoi);
-		
-		// generation de Poule
-		this.tournoi.generationPoule();
-
-		assertFalse(this.modelePoule.tousLesMatchsJouees());
-
-		for (int i = 0; i<6; i++) {
-			this.modelePoule.updateGagnant(i, 1);	
-		}
-		assertTrue (this.modelePoule.tousLesMatchsJouees());
-	}
-	*/
 
 }

@@ -13,6 +13,7 @@ public class Compte {
 	private String login;
 	private String motDePasse;
 	private TypeCompte type;
+	private static Compte compteConnecte;
 	
 	private CompteJDBC jdbc;
 	
@@ -53,7 +54,7 @@ public class Compte {
 	}
 	
 	public static String genererPassword(int longueur) {
-		String caractères = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]};:<>./?";
+		String caractères = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		String mdp = "";
 		Random random = new Random();
 		for (int i = 0 ; i < longueur; i++) {
@@ -67,6 +68,7 @@ public class Compte {
 		Compte compte = this.getCompteParLogin(login);
 		if (compte != null) {
 			if(compte.getMotDePasse().equals(mdp)) {
+				this.setCompteConnecte(compte);
 				return true;
 			}
 		}
@@ -76,6 +78,14 @@ public class Compte {
 	public boolean compteIsAdmin(String login, String mdp) {
 		Compte compte = this.getCompteParLogin(login);
 		return compte.getType().denomination() == "Administrateur";
+	}
+	
+	public void setCompteConnecte(Compte compte) {
+		compteConnecte = compte;
+	}
+	
+	public static Compte getCompteConnecte() {
+		return compteConnecte;
 	}
 	
 	// Overrides

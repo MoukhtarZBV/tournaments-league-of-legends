@@ -173,13 +173,14 @@ public class PartieJDBC implements PartieDAO{
 	public List<Partie> getPartiesTournoi(Tournoi tournoi) {
 		List<Partie> parties = new ArrayList<>();
 		try {
-			Statement st = ConnectionJDBC.getConnection().createStatement();
-			ResultSet rs = st.executeQuery("select * from Partie where id");
+			CallableStatement cs = ConnectionJDBC.getConnection().prepareCall("select * from Partie where nomTournoi = ?");
+			cs.setString(1, tournoi.getNomTournoi());
+			ResultSet rs = cs.executeQuery();
 			while(rs.next()) {
-				TournoiJDBC tournoiBDD = new TournoiJDBC();
-				Optional<Tournoi> opt = tournoiBDD.getById(rs.getString("nomTournoi"));
-				Tournoi tournoiPartie = null;
-				tournoi = opt.orElse(null);
+//				TournoiJDBC tournoiBDD = new TournoiJDBC();
+//				Optional<Tournoi> opt = tournoiBDD.getById(rs.getString("nomTournoi"));
+//				Tournoi tournoiPartie = null;
+//				tournoi = opt.orElse(null);
 				
 				EquipeJDBC equipeBDD = new EquipeJDBC();
 				Optional<Equipe> opte = equipeBDD.getById(rs.getInt("idEquipe"));

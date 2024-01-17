@@ -10,18 +10,19 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+
+import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueIdentification;
 import ihm.VueTournoi;
-import modele.Associer;
 import modele.Compte;
 import modele.Tournoi;
 
 public class ControleurIdentification implements ActionListener, WindowListener, MouseListener, KeyListener {
+	
 	private VueIdentification vue;
 	private Compte modele;
 
@@ -66,7 +67,7 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	
 	public void connexion() {
 		if (this.modele.compteValide(this.vue.getLogin(), this.vue.getPassword())) {
-			this.vue.dispose();
+			Ecran.update(this.vue);	
 			// Si administrateur
 			if (this.modele.compteIsAdmin(this.vue.getLogin(), this.vue.getPassword())) {
 				VueAccueilAdmin vue = new VueAccueilAdmin();
@@ -78,12 +79,13 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 				List<Tournoi> tournois = tournoiBDD.getTousLesTournois();
 				for (Tournoi tournoi : tournois) {
 					if (tournoi.getCompte().getLogin().equals(this.vue.getLogin())) {
+						Ecran.update(this.vue);	
 						VueTournoi vue = new VueTournoi(tournoi);
 						vue.setVisible(true);
-						this.vue.dispose();
 					}
 				}
 			}
+			//this.vue.dispose();
 		} else {
 			// Si pas de correspondance
 			this.vue.getPopup().setErreur("Login et/ou mot de passe incorrect(s).");
@@ -110,17 +112,20 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-	    if (e.getKeyCode()==KeyEvent.VK_ENTER){
+	    if (e.getKeyCode() == KeyEvent.VK_ENTER){
 	        this.connexion();
 	    }
 	}
+	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		if(Ecran.lastFrame != null) Ecran.closeLast();
+	}
+
 
 		
 	// NOT IMPLEMENTED \\
 	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
 	@Override
 	public void windowClosed(WindowEvent e) {}
 

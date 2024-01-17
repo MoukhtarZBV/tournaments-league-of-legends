@@ -29,6 +29,8 @@ import javax.swing.BorderFactory;
 
 public class VueIdentification extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField textFieldLogin;
 	private JTextField textFieldPassword;
 	
@@ -39,7 +41,6 @@ public class VueIdentification extends JFrame {
 	public static void main(String[] args) {
 		ConnectionJDBC.getConnection();
 		Ecran.setup();
-		ConnectionJDBC.getConnection();
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -55,14 +56,14 @@ public class VueIdentification extends JFrame {
 
 	
 	public VueIdentification() {
-		
-		this.setUndecorated(true);
-		
+
 		controleur = new ControleurIdentification(this);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
 				
 		
 		///// MAIN PANEL \\\\\
@@ -70,6 +71,11 @@ public class VueIdentification extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Connexion");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// PANEL CONNEXION \\\\\

@@ -16,8 +16,6 @@ import modele.Equipe;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -31,11 +29,16 @@ import javax.swing.ImageIcon;
 
 public class VueListeEquipe extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField searchBar;
 	private JList<Object> listeEquipes;
-	private List<Equipe> equipes;
-	private boolean triParNom;
 	private JButton btnSort;
+	
+	private List<Equipe> equipes;
+	
+	private boolean triParNom;
+	
 	
 	public VueListeEquipe(List<Equipe> equipes) { 
 		
@@ -45,13 +48,21 @@ public class VueListeEquipe extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Équipes");
+		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Équipes");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -127,6 +138,7 @@ public class VueListeEquipe extends JFrame {
 		searchBar.setPreferredSize(new Dimension(searchBar.getPreferredSize().width, 25));
 		searchBar.setColumns(30);
 		searchBar.addActionListener(controleur);
+		searchBar.addFocusListener(controleur);
 		panelSearch.add(searchBar);
 		
 		
@@ -159,6 +171,7 @@ public class VueListeEquipe extends JFrame {
 		JList<Object> listeEquipes = new JList<Object>(nomEquipes.toArray());
 		listeEquipes.setFont(Police.TABLEAU_MONO);
 		listeEquipes.setBackground(Palette.GRAY);
+		listeEquipes.setSelectionBackground(Palette.LIGHT_PURPLE);
 		listeEquipes.setForeground(Palette.WHITE);
 		listeEquipes.setBorder(new EmptyBorder(10, 10, 10, 10));
 		listeEquipes.addMouseListener(controleur);
@@ -188,6 +201,7 @@ public class VueListeEquipe extends JFrame {
 		btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
@@ -198,6 +212,7 @@ public class VueListeEquipe extends JFrame {
 		btnSort.setBorder(Utilitaires.BORDER_BOUTONS);
 		btnSort.setFont(Police.LABEL);
 		btnSort.addActionListener(controleur);
+		btnSort.addMouseListener(controleur);
 		btnSort.setFocusable(false);
 		panelBoutons.add(btnSort);
 		this.triParNom = false;

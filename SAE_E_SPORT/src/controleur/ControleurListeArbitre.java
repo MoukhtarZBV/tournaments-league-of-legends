@@ -1,35 +1,33 @@
 package controleur;
 
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
+import ihm.Ecran;
 import components.PopUpSuppression;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueAjouterArbitre;
-import ihm.VueEquipe;
 import ihm.VueListeArbitre;
-import ihm.VueListeEquipe;
-import ihm.VueListeTournois;
 import ihm.VueTournoi;
 import modele.Arbitre;
-import modele.Associer;
-import modele.Equipe;
 import modele.Statut;
 import modele.Tournoi;
 
-public class ControleurListeArbitre implements MouseListener, ActionListener {
-	
+public class ControleurListeArbitre implements MouseListener, ActionListener, FocusListener, WindowListener {
+
 	private VueListeArbitre vue;
 	private Arbitre modele;
 	private Arbitre arbitreSelected;
@@ -38,7 +36,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 		this.vue = vue;
 		this.modele = new Arbitre();
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(e.getSource() instanceof JList) {
@@ -55,32 +53,69 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	}
 	
 	@Override
+    public void focusGained(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+			JTextField searchText = (JTextField) e.getSource();
+			if (searchText.getText().equals("Filtrer arbitres par nom ou prénom")) {
+	            searchText.setText("");
+	            searchText.setForeground(Palette.WHITE);
+	        }
+		}
+    }
+	
+    @Override
+    public void focusLost(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+	    	JTextField searchText = (JTextField) e.getSource();
+	        if (searchText.getText().isEmpty()) {
+	            searchText.setForeground(Color.LIGHT_GRAY);
+	            searchText.setText("Filtrer arbitres par nom ou prénom");
+	        }
+		}
+    }
+	
+	@Override
 	public void actionPerformed(ActionEvent e) {
-	    JButton bouton = (JButton) e.getSource();
-	    if (bouton.getName().equals("Retour")) {
-			if (this.vue.getTournoi() == null) {
-				VueAccueilAdmin vue = new VueAccueilAdmin();
-				vue.setVisible(true);
-			} else {
-				VueTournoi vue = new VueTournoi(this.vue.getTournoi());
-				vue.setVisible(true);
-			}
-			this.vue.dispose();
-	    } else if (bouton.getName().equals("Rechercher")){
+	    
+		if (e.getSource() instanceof JButton) {
+			JButton bouton = (JButton) e.getSource();
+		    
+		    if (bouton.getName().equals("Retour")) {
+				Ecran.update(this.vue);	
+				
+				if (this.vue.getTournoi() == null) {
+					VueAccueilAdmin vue = new VueAccueilAdmin();
+					vue.setVisible(true);
+				} else {
+					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
+					vue.setVisible(true);
+				}
+				
+		    } else if (bouton.getName().equals("Rechercher")){
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
+				
+		    } else if (bouton.getName().equals("Ajouter")) {
+				Ecran.update(this.vue);	
+		    	VueAjouterArbitre vue = new VueAjouterArbitre();
+		    	vue.setVisible(true);
+	
+		    } else if (bouton.getName().equals("Vider")) {
+		    	viderListeArbitresAttribues();
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), ""));
+		    	
+		    } else if (bouton.getName().equals("Attribuer")) {
+		    	ajouterArbitreAuxArbitresAttribues();
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), ""));
+		    	
+		    } else if (bouton.getName().equals("Confirmer")) {
+		    	confirmerAttributionArbitres();
+		    	
+		    } else if (bouton.getName().equals("Supprimer")) {
+		    	supprimerArbitreSelectionne();
+		    }
+		} else if (e.getSource() instanceof JTextField) {
 			this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
-	    } else if (bouton.getName().equals("Ajouter")) {
-	    	VueAjouterArbitre vue = new VueAjouterArbitre();
-	    	vue.setVisible(true);
-	    	this.vue.dispose();
-	    } else if (bouton.getName().equals("Vider")) {
-	    	viderListeArbitresAttribues();
-	    } else if (bouton.getName().equals("Attribuer")) {
-	    	ajouterArbitreAuxArbitresAttribues();
-	    } else if (bouton.getName().equals("Confirmer")) {
-	    	confirmerAttributionArbitres();
-	    } else if (bouton.getName().equals("Supprimer")) {
-	    	supprimerArbitreSelectionne();
-	    }
+		}
 	}
 
 	private void supprimerArbitreSelectionne() {
@@ -104,9 +139,10 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 		tournoiBDD.associerArbitresTournoi(this.vue.getTournoi(), this.vue.getArbitresAttribues());
 		tournoiBDD.changerStatutTournoi(this.vue.getTournoi(), Statut.A_VENIR);
 		this.vue.getTournoi().setStatut(Statut.A_VENIR);
+		
+		Ecran.update(this.vue);
 		VueTournoi vueTournoi = new VueTournoi(this.vue.getTournoi());
 		vueTournoi.setVisible(true);
-		this.vue.dispose();
 	}
 
 	private void viderListeArbitresAttribues() {
@@ -130,16 +166,36 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
 			JButton b = (JButton)e.getSource();
-			b.setBackground(Palette.LIGHT_PURPLE);
+			
+			if(b.isEnabled()) {
+				if(b.getName().equals("Rechercher")) {
+					b.setBackground(Palette.LIGHT_PURPLE);					
+				} else if(b.getName().equals("Supprimer")) {
+					b.setBackground(Palette.FOND_ERREUR);		
+				} else {
+					b.setBackground(b.getBackground().brighter());
+				}
+				
+				b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
 		}
-		
 	}
+	
 	@Override
 	public void mouseExited(MouseEvent e) {
 		if(e.getSource() instanceof JButton) {
 			JButton b = (JButton)e.getSource();
-			b.setBackground(Palette.WHITE);
-		}	
+			
+			if(b.getName().equals("Rechercher")) {
+				b.setBackground(Palette.WHITE);	
+			} else if(b.getName().equals("Supprimer")) {
+				b.setBackground(Palette.GRAY);	
+			} else {
+				b.setBackground(b.getBackground().darker());
+			}
+			
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 	}
 
 	private int afficherPopUpConfirmation(String nomArbitre) {
@@ -165,13 +221,36 @@ public class ControleurListeArbitre implements MouseListener, ActionListener {
 		this.arbitreSelected = new Arbitre().getByNomPrenom(nom, prenom);
 	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
 	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {}
-	
+
 	@Override
 	public void mousePressed(MouseEvent e) {}
-	
+
 }

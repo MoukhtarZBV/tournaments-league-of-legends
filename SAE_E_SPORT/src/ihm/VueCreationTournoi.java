@@ -19,7 +19,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -38,6 +37,8 @@ import java.awt.FlowLayout;
 
 public class VueCreationTournoi extends JFrame {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private 		 JTextField inputNom;
 	private   JComboBox<String> inputNiveau;
 	private   JComboBox<String> inputPays;
@@ -51,21 +52,25 @@ public class VueCreationTournoi extends JFrame {
 	public VueCreationTournoi() {
 		
 		ControleurCreationTournoi controleur = new ControleurCreationTournoi(this);
-		Ecran.setup();
 		
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY); 
-		setTitle("Nouveau tournoi");
 		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-		
-		
-		///// PANEL PRINCIPAL \\\\\
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
-		
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Création tournoi");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -369,6 +374,7 @@ public class VueCreationTournoi extends JFrame {
 		btnAnnuler.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Palette.WHITE));
 		btnAnnuler.setFont(Police.LABEL);
 		btnAnnuler.addActionListener(controleur);
+		btnAnnuler.addMouseListener(controleur);
 		btnAnnuler.setFocusable(false);
 		panelBoutons.add(btnAnnuler);
 		
@@ -381,6 +387,7 @@ public class VueCreationTournoi extends JFrame {
 		btnValider.setFont(Police.LABEL);
 		btnValider.setFocusable(false);
 		btnValider.addActionListener(controleur);
+		btnValider.addMouseListener(controleur);
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);
 	}

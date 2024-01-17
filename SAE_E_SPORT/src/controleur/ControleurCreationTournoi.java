@@ -1,26 +1,25 @@
 package controleur;
 
 import java.awt.Color;
-
-
-
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.Date;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 
+import ihm.Ecran;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
 import modele.Tournoi;
 
-public class ControleurCreationTournoi implements ActionListener, FocusListener {
+public class ControleurCreationTournoi implements ActionListener, FocusListener, MouseListener, WindowListener {
 	
 	private VueCreationTournoi vue;
 	private Tournoi modele;
@@ -35,7 +34,7 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			if (bouton.getName().equals("Annuler")) {
-				vue.dispose();
+				Ecran.update(this.vue);
 				Tournoi t = new Tournoi();
 				VueListeTournois vue = new VueListeTournois(t.getTousLesTournois());
 				vue.setVisible(true);
@@ -45,10 +44,11 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 					Tournoi tournoi = new Tournoi(vue.getNom(), vue.getNiveau(), vue.getDateDebut(), vue.getDateFin(), vue.getPays());
 					modele.ajouterTournoi(tournoi);
 					vue.getPopup().setEnabled(false);
+					
+					Ecran.update(this.vue);
 					Tournoi t = new Tournoi();
 					VueListeTournois vue = new VueListeTournois(t.getTousLesTournois());
 					vue.setVisible(true);
-					this.vue.dispose();
 				} catch (IllegalArgumentException iae) {
 					vue.getPopup().setErreur(iae.getMessage());
 				}
@@ -64,12 +64,63 @@ public class ControleurCreationTournoi implements ActionListener, FocusListener 
 			txt.setText("");
 		}
 	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
 
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}		
+	}
+	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
 	
 	
 	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 	
 	@Override
 	public void focusLost(FocusEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 
 }

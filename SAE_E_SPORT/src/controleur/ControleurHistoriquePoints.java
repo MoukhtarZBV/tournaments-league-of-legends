@@ -1,28 +1,31 @@
 package controleur;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import ihm.Ecran;
+import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueHistoriquePoints;
 import modele.Equipe;
 import modele.ModeleHistoriquePoints;
 import modele.Tournoi;
 
-public class ControleurHistoriquePoints extends MouseAdapter implements FocusListener, ActionListener {
+public class ControleurHistoriquePoints extends MouseAdapter implements FocusListener, ActionListener, MouseListener, WindowListener {
 
 	private VueHistoriquePoints vue;
 	private ModeleHistoriquePoints modele;
@@ -39,7 +42,7 @@ public class ControleurHistoriquePoints extends MouseAdapter implements FocusLis
 			JTextField searchText = (JTextField) e.getSource();
 			if (searchText.getText().equals("Filtrer équipes par nom")) {
 	            searchText.setText("");
-	            searchText.setForeground(Color.BLACK);
+	            searchText.setForeground(Palette.WHITE);
 	        }
 		}
     }
@@ -49,7 +52,7 @@ public class ControleurHistoriquePoints extends MouseAdapter implements FocusLis
 		if (e.getSource() instanceof JTextField) {
 	    	JTextField searchText = (JTextField) e.getSource();
 	        if (searchText.getText().isEmpty()) {
-	            searchText.setForeground(Color.GRAY);
+	            searchText.setForeground(Color.LIGHT_GRAY);
 	            searchText.setText("Filtrer équipes par nom");
 	        }
 		}
@@ -60,30 +63,19 @@ public class ControleurHistoriquePoints extends MouseAdapter implements FocusLis
 		if (e.getSource() instanceof JTextField) {
 			JTextField tf = (JTextField) e.getSource();
 			String text = tf.getText();
-			this.vue.viderColonneTableEquipe();
-			if (!text.equals("")) {
-				this.modele.filterEquipes(text);
-				List<Equipe> filEquipes = this.modele.getFilteredEquipes();
-				if (filEquipes.size()==0) {
-					this.vue.setResultat(true);
-					this.vue.viderColonneTableTournoi();
-				} else {
-					this.vue.addColumnTableEquipe();
-					this.vue.setResultat(false);
-					this.vue.setTableEquipes(filEquipes);
-					this.vue.viderColonneTableTournoi();
-				}
-			} else {
-				this.modele.resetEquipes();
-				this.vue.addColumnTableEquipe();
-				this.vue.setResultat(false);
-				this.vue.viderColonneTableTournoi();
-				this.vue.setTableEquipes(this.modele.getEquipes());
-			}
+			
+			recherche(text);
 		} else if (e.getSource() instanceof JButton) {
-			VueAccueilAdmin frame = new VueAccueilAdmin();
-			frame.setVisible(true);
-			this.vue.dispose();
+			JButton b = (JButton) e.getSource();
+			if(b.getName().equals("Rechercher")) {
+				String text = this.vue.getSearchBar().getText();
+				if(text.equals("Filtrer équipes par nom")) text = "";
+				recherche(text);
+			} else {
+				Ecran.update(this.vue);
+				VueAccueilAdmin frame = new VueAccueilAdmin();
+				frame.setVisible(true);
+			}
 		}
 	}
 	
@@ -94,9 +86,95 @@ public class ControleurHistoriquePoints extends MouseAdapter implements FocusLis
 			int row = table.getSelectedRow();
 			Equipe eq = this.modele.getFilteredEquipes().get(row);	
 			this.vue.viderColonneTableTournoi();
-			this.vue.addColumnTableTournoi();
-			this.vue.setTableTournoi(this.modele.pointsTournoiParEquipe(eq));
+			
+			Map<Tournoi, Integer> points = this.modele.pointsTournoiParEquipe(eq);
+			this.vue.setTableTournoi(points);
+			boolean visible = (points.size() == 0) ? false : true;
+			this.vue.showTournoiHeader(visible);
 		}
 	}
 	
+	
+	private void recherche(String text) {
+		this.vue.viderColonneTableEquipe();
+		if (!text.equals("")) {
+			this.modele.filterEquipes(text);
+			List<Equipe> filEquipes = this.modele.getFilteredEquipes();
+			if (filEquipes.size()==0) {
+				this.vue.setResultat(true);
+				this.vue.viderColonneTableTournoi();
+			} else {
+				this.vue.setResultat(false);
+				this.vue.setTableEquipes(filEquipes);
+				this.vue.viderColonneTableTournoi();
+			}
+		} else {
+			this.modele.resetEquipes();
+			this.vue.setResultat(false);
+			this.vue.viderColonneTableTournoi();
+			this.vue.setTableEquipes(this.modele.getEquipes());
+		}
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			if(b.getName().equals("Rechercher")) {
+				b.setBackground(Palette.LIGHT_PURPLE);	
+			} else {
+				b.setBackground(b.getBackground().brighter());
+			}
+			
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}
+	}
+	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			if(b.getName().equals("Rechercher")) {
+				b.setBackground(Palette.WHITE);	
+			} else {
+				b.setBackground(b.getBackground().darker());
+			}
+			
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
+	
+	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
 }

@@ -11,8 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.table.DefaultTableModel;
-
 import components.CoolTextField;
 import components.PanelPopUp;
 import controleur.ControleurListeArbitre;
@@ -21,8 +19,6 @@ import modele.Tournoi;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -40,6 +36,8 @@ import java.awt.Font;
 
 public class VueListeArbitre extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField searchBar;
 	private JList<Object> listeArbitres;
 	private List<Arbitre> arbitres;
@@ -67,14 +65,21 @@ public class VueListeArbitre extends JFrame {
 		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
-		setTitle("Arbitres");
+		setResizable(false);
+		setUndecorated(true);
+		addWindowListener(controleur);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
-		
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Arbitres");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
@@ -149,6 +154,8 @@ public class VueListeArbitre extends JFrame {
 		searchBar.setFont(Police.INPUT);
 		searchBar.setPreferredSize(new Dimension(searchBar.getPreferredSize().width, 25));
 		searchBar.setColumns(30);
+		searchBar.addActionListener(controleur);
+		searchBar.addFocusListener(controleur);
 		panelSearch.add(searchBar);
 		
 		
@@ -219,6 +226,7 @@ public class VueListeArbitre extends JFrame {
 		btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
 		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 		
@@ -232,6 +240,7 @@ public class VueListeArbitre extends JFrame {
 			btnSuppr.setBorder(Utilitaires.BORDER_BOUTONS_DANGEREUX);
 			btnSuppr.setFont(Police.LABEL);
 			btnSuppr.addActionListener(controleur);
+			btnSuppr.addMouseListener(controleur);
 			btnSuppr.setFocusable(false);
 			panelBoutons.add(btnSuppr);
 			
@@ -244,6 +253,7 @@ public class VueListeArbitre extends JFrame {
 			btnAjouter.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnAjouter.setBackground(new Color(32, 28, 44));
 			btnAjouter.addActionListener(controleur);
+			btnAjouter.addMouseListener(controleur);
 			panelBoutons.add(btnAjouter);
 		} else {
 			// Bouton attribuer arbitre
@@ -255,6 +265,7 @@ public class VueListeArbitre extends JFrame {
 			btnVider.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnVider.setFont(Police.LABEL);
 			btnVider.addActionListener(controleur);
+			btnVider.addMouseListener(controleur);
 			btnVider.setFocusable(false);
 			btnVider.setEnabled(false);
 			panelBoutons.add(btnVider);
@@ -268,6 +279,7 @@ public class VueListeArbitre extends JFrame {
 			btnAttribuer.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnAttribuer.setFont(Police.LABEL);
 			btnAttribuer.addActionListener(controleur);
+			btnAttribuer.addMouseListener(controleur);
 			btnAttribuer.setFocusable(false);
 			btnAttribuer.setEnabled(false);
 			panelBoutons.add(btnAttribuer);
@@ -281,6 +293,7 @@ public class VueListeArbitre extends JFrame {
 			btnConfirmer.setBorder(Utilitaires.BORDER_BOUTONS);
 			btnConfirmer.setFont(Police.LABEL);
 			btnConfirmer.addActionListener(controleur);
+			btnConfirmer.addMouseListener(controleur);
 			btnConfirmer.setFocusable(false);
 			btnConfirmer.setEnabled(false);
 			panelBoutons.add(btnConfirmer);

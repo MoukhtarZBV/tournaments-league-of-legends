@@ -6,14 +6,13 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-
-import Images.ImagesIcons;
 import components.BufferedImageResize;
 import components.CoolScrollBar;
 import components.PanelRenderer;
 import controleur.ControleurGestionPoule;
+import modele.Compte;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,32 +41,39 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private JTable tableClassement = new JTable();
-	private JTable tableMatches = new JTable();
-	private Tournoi tournoi;
-	private JButton btnCloturer;
+	private JTable   tableClassement = new JTable();
+	private JTable   tableMatches    = new JTable();
+	private Tournoi  tournoi;
+	private JButton  btnCloturer;
 	private String[] columnsClassementT;
 	
 	private ControleurGestionPoule controleur;
+	
 	
 	public VueGestionDeLaPoule(Tournoi tournoi) {
 		
 		this.tournoi = tournoi;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Poule - " + tournoi.getNomTournoi());
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY); 
+		setResizable(false);
+		setUndecorated(true);
+				
 		
-
-		///// PANEL PRINCIPAL \\\\\	
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
 		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Connexion");
+		contentPane.add(header, BorderLayout.NORTH);
 		
 		
 		///// MENU BAR \\\\\
-		MenuBar panelSide = new MenuBar(this);
-		contentPane.add(panelSide, BorderLayout.WEST);
+		afficherMenuBar(contentPane);
 		
 		
 		///// MAIN \\\\\
@@ -280,13 +286,28 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 		btnRetour.setFocusable(false);
 		panelButtons.add(btnRetour);
 		
+		
 		// Controleur
 		this.controleur = new ControleurGestionPoule(this);
-		this.tableMatches.addMouseListener(controleur);
-		btnImprimer.addActionListener(controleur);
-		btnCloturer.addActionListener(controleur);
-		btnRetour.addActionListener(controleur);
+		addWindowListener(controleur);
 		
+		this.tableMatches.addMouseListener(controleur);
+		
+		btnImprimer.addActionListener(controleur);
+		btnImprimer.addMouseListener(controleur);
+		
+		btnCloturer.addActionListener(controleur);
+		btnCloturer.addMouseListener(controleur);
+		
+		btnRetour.addActionListener(controleur);
+		btnRetour.addMouseListener(controleur);
+		
+	}
+	private void afficherMenuBar(JPanel contentPane) {
+		if(Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			MenuBar panelSide = new MenuBar(this);
+			contentPane.add(panelSide, BorderLayout.WEST);
+		}
 	}
 	
 	public Tournoi getTournoi() {

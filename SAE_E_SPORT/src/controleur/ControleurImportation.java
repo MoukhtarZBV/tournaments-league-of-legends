@@ -1,20 +1,14 @@
 package controleur;
 
-import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-
-import javax.swing.table.DefaultTableModel;
 
 import components.DropListener;
 import ihm.VueImportation;
@@ -24,7 +18,7 @@ import modele.ModeleImportation.EtatEquipe;
 import modele.Statut;
 import modele.Tournoi;
 
-public class ControleurImportation implements ActionListener, DropListener {
+public class ControleurImportation implements ActionListener, DropListener, MouseListener {
 	
 	private VueImportation vue;
 	private ModeleImportation modele;
@@ -75,14 +69,50 @@ public class ControleurImportation implements ActionListener, DropListener {
 	
 	private void afficherTableEquipes(String chemin) throws IOException, Exception {
 		if (this.modele.fichierCSVconcerneTournoi(chemin, vue.getTournoi())) {
-			this.modele.importerEquipesJoueurs(chemin);
-			this.vue.afficherTableEquipes();
-			this.vue.ajouterEquipesTable(this.modele.getEquipesJoueurs());
-		    this.vue.changerBtnValider(true);
-		    this.vue.setVisible(true);
-		    this.vue.getPopup().setNormal("Voici les équipes qui seront importées");
+			if (this.modele.fichierCSVNombreEquipes(chemin, vue.getTournoi())) {
+				this.modele.importerEquipesJoueurs(chemin);
+				this.vue.afficherTableEquipes();
+				this.vue.ajouterEquipesTable(this.modele.getEquipesJoueurs());
+			    this.vue.changerBtnValider(true);
+			    this.vue.setVisible(true);
+			    this.vue.getPopup().setNormal("Voici les équipes qui seront importées");
+			} else {
+				this.vue.getPopup().setErreur("Le nombre d'équipes n'est pas entre 4 et 8");
+			}
 		} else {
 			this.vue.getPopup().setErreur("Le fichier importé ne concerne pas ce tournoi");
 		}
 	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}	
+	}
+	
+	
+	// NOT IMPLEMENTED \\
+
+	@Override
+	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {}
 }

@@ -1,8 +1,12 @@
 package controleur;
 
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -15,6 +19,8 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import ihm.Ecran;
+import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
@@ -23,7 +29,7 @@ import modele.Niveau;
 import modele.Statut;
 import modele.Tournoi;
 
-public class ControleurListeTournois implements ActionListener, ItemListener, MouseListener {
+public class ControleurListeTournois implements ActionListener, FocusListener, ItemListener, MouseListener, WindowListener {
 
 	private VueListeTournois vue;
 	private Tournoi modele;
@@ -46,27 +52,53 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			JButton bouton = (JButton) e.getSource();
 			
 			if (bouton.getName().equals("Nouveau")) {
+				Ecran.update(this.vue);
 				VueCreationTournoi vue = new VueCreationTournoi();
 				vue.setVisible(true);
-				this.vue.dispose(); 
+
 			} else if (bouton.getName().equals("Retour")) {
+				Ecran.update(this.vue);
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
-				this.vue.dispose(); 
+
 			} else if (bouton.getFont().getFamily().equals("Gigi")) {
 				this.nom = vue.saisieChamp();
 				vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
 			}
+			
 		} else if (e.getSource() instanceof JTextField) {
 			this.nom = vue.saisieChamp();
 			vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));
 		}
 			
 	}
+	
+	@Override
+    public void focusGained(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+			JTextField searchText = (JTextField) e.getSource();
+			if (searchText.getText().equals("Filtrer tournois par nom")) {
+	            searchText.setText("");
+	            searchText.setForeground(Palette.WHITE);
+	        }
+		}
+    }
+	
+    @Override
+    public void focusLost(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+	    	JTextField searchText = (JTextField) e.getSource();
+	        if (searchText.getText().isEmpty()) {
+	            searchText.setForeground(Color.LIGHT_GRAY);
+	            searchText.setText("Filtrer tournois par nom");
+	        }
+		}
+    }
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource() instanceof JComboBox) {
+			@SuppressWarnings("unchecked")
 			JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
 			String option = (String) comboBox.getSelectedItem();
 			
@@ -94,23 +126,62 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-            
+
+            Ecran.update(this.vue);
             VueTournoi vueTournoi = new VueTournoi(tournoi);
 			vueTournoi.setVisible(true);
-			this.vue.dispose();
          }
 	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().brighter());
+			b.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}	
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() instanceof JButton) {
+			JButton b = (JButton)e.getSource();
+			
+			b.setBackground(b.getBackground().darker());
+			b.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}	
+	}
 	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		Ecran.closeLast();
+	}
+	
+	
+	// NOT IMPLEMENTED \\
+
+	@Override
+	public void windowClosing(WindowEvent e) {}
+
+	@Override
+	public void windowClosed(WindowEvent e) {}
+
+	@Override
+	public void windowIconified(WindowEvent e) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {}
+
+	@Override
+	public void windowActivated(WindowEvent e) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-
-	@Override
-	public void mouseExited(MouseEvent e) {}
 }
