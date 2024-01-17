@@ -44,7 +44,7 @@ public class ModeleImportation {
 		return true;
 	}
 	
-	public boolean fichierCSVTailleEquipe(String chemin, Tournoi tournoi) throws IOException {
+	public boolean fichierCSVNombreEquipes(String chemin, Tournoi tournoi) throws IOException {
 		String line;
     	BufferedReader br;
 		br = new BufferedReader(new FileReader(chemin));

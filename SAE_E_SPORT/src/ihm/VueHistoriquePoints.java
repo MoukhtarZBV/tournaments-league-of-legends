@@ -305,6 +305,9 @@ public class VueHistoriquePoints extends JFrame {
 		for (Entry<Tournoi, Integer> entry : pointsTournoi.entrySet()) {
 			modeleTournoi.addRow(new Object[]{dateFormat.format(entry.getKey().getDateDebut()), entry.getKey().getNomTournoi(), entry.getValue()});
 		}
+		if (pointsTournoi.size()>0) {
+			modeleTournoi.addRow(new Object[] {"Total", "", pointsTournoi.values().stream().reduce((x,y)->x+y).orElse(0)});
+		}
 	}
 	
 	public void setTableEquipes (List<Equipe> equipes) {
