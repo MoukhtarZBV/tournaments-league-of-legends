@@ -1,17 +1,22 @@
 package controleur;
 
 import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueHistoriquePoints;
+import ihm.VueIdentification;
 import ihm.VueListeArbitre;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
@@ -19,12 +24,36 @@ import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
-public class ControleurAccueil implements MouseListener, WindowListener {
+public class ControleurAccueil implements MouseListener, WindowListener, ActionListener {
 	
 	private VueAccueilAdmin vue;
 	
 	public ControleurAccueil(VueAccueilAdmin vue) {
 		this.vue = vue;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton b = (JButton) e.getSource();
+		if(b.getName().equals("Deconnexion")) {
+			String[] options = { "Oui", "Non" }; 
+			int choix = JOptionPane.showOptionDialog( 
+			        null,
+			        "Voulez-vous vous déconnecter ?",
+			        "Deconnexion",
+			        JOptionPane.YES_NO_OPTION,
+			        JOptionPane.QUESTION_MESSAGE,
+			        null,
+			        options,
+			        options[1] 
+			);
+			
+			if(choix == 0) {
+				Ecran.update(this.vue);
+				VueIdentification vueIdentification = new VueIdentification();
+				vueIdentification.setVisible(true);
+			}
+		}
 	}
 
 	@Override

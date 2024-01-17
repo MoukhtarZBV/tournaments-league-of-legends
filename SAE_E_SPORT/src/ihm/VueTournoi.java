@@ -66,7 +66,6 @@ public class VueTournoi extends JFrame {
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setResizable(false);
 		setUndecorated(true);
-		addWindowListener(controleur);
 				
 		
 		///// MAIN PANEL \\\\\
@@ -298,6 +297,7 @@ public class VueTournoi extends JFrame {
 		tableEquipes.addMouseListener(this.controleur);
 		btnRetour.addActionListener(this.controleur);
 		btnRetour.addMouseListener(this.controleur);
+		addWindowListener(controleur);
 		
 	}
 	

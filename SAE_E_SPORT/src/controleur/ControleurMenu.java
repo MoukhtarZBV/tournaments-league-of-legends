@@ -70,7 +70,7 @@ public class ControleurMenu implements MouseListener {
 				String[] options = { "Oui", "Non" }; 
 				int choix = JOptionPane.showOptionDialog( 
 				        null,
-				        "Voulez-vous vous déconnecter ? ?",
+				        "Voulez-vous vous déconnecter ?",
 				        "Deconnexion",
 				        JOptionPane.YES_NO_OPTION,
 				        JOptionPane.QUESTION_MESSAGE,
