@@ -49,40 +49,73 @@ public class VueFinale extends JFrame {
 		setEquipes();
 		ControleurFinale controleur = new ControleurFinale(this);
 		
+		///// FENÊTRE \\\\\
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		addWindowListener(controleur);
+		setResizable(false);
+		setUndecorated(true);
+				
+		
+		///// MAIN PANEL \\\\\
 		JPanel contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setBackground(Palette.GRAY);
+		setContentPane(contentPane);
+
+		///// HEADER \\\\\
+		Header header = new Header(this);
+		header.setTitre("Finale " + this.tournoi.getNomTournoi());
+		contentPane.add(header, BorderLayout.NORTH);
 		
-		JPanel panelTitreFinale = new JPanel();
-		panelTitreFinale.setPreferredSize(new Dimension(10, 120));
-		panelTitreFinale.setBorder(new EmptyBorder(40, 0, 15, 0));
-		panelTitreFinale.setBackground(Palette.DARK_GRAY);
-		contentPane.add(panelTitreFinale, BorderLayout.NORTH);
 		
-		JLabel lblFinale = new JLabel("Finale - ");
-		lblFinale.setFont(Police.GROS_TITRE);
-		lblFinale.setForeground(Palette.WHITE);
-		panelTitreFinale.add(lblFinale);
+		///// MENU BAR \\\\\
+		MenuBar panelSide = new MenuBar(this);
+		contentPane.add(panelSide, BorderLayout.WEST);
 		
-		JLabel lblNomTournoi = new JLabel(tournoi.getNomTournoi());
-		lblNomTournoi.setFont(Police.GROS_TITRE);
-		lblNomTournoi.setForeground(Palette.WHITE);
-		panelTitreFinale.add(lblNomTournoi);
+		
+		///// MAIN \\\\\
+		JPanel panelMain = new JPanel();
+		panelMain.setBorder(new EmptyBorder(25, 50, 25, 50));
+		panelMain.setLayout(new BorderLayout(0, 0));
+		panelMain.setBackground(Palette.DARK_GRAY);
+		contentPane.add(panelMain, BorderLayout.CENTER);
+		
+		///// PANEL TITRE \\\\\
+		JPanel panelTop = new JPanel();
+		panelTop.setPreferredSize(new Dimension(800, 120));
+		panelTop.setBackground(Palette.DARK_GRAY);
+		panelTop.setBorder(new EmptyBorder(15, 100, 0, 100));
+		panelTop.setLayout(new GridLayout());
+		panelMain.add(panelTop, BorderLayout.NORTH);
+		
+		// Label titre
+		JLabel lblTitre = new JLabel("Finale " + this.tournoi.getNomTournoi());
+		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
+		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitre.setForeground(Palette.WHITE);
+		lblTitre.setFont(Police.GROS_TITRE);
+		panelTop.add(lblTitre);
+		
+		
+		
+		///// MAN PANEL MILIEU \\\\\
+		JPanel panelCenter = new JPanel();
+		panelCenter.setLayout(new BorderLayout(0, 25));
+		panelCenter.setBackground(Palette.DARK_GRAY);
+		panelCenter.setBorder(new EmptyBorder(15, 100, 15, 100));
+		panelMain.add(panelCenter, BorderLayout.CENTER);
+		
 		
 		JPanel panelScoresEquipes = new JPanel();
-		contentPane.add(panelScoresEquipes, BorderLayout.CENTER);
 		panelScoresEquipes.setLayout(new BorderLayout(0, 0));
+		panelMain.add(panelScoresEquipes, BorderLayout.CENTER);
 		
 		JPanel panelScores = new JPanel();
 		panelScores.setBackground(Palette.DARK_GRAY);
 		panelScores.setBorder(new EmptyBorder(10, 20, 10, 20));
-		panelScoresEquipes.add(panelScores, BorderLayout.NORTH);
 		panelScores.setLayout(new GridLayout(0, 3, 0, 0));
+		panelScoresEquipes.add(panelScores, BorderLayout.NORTH);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(Palette.GRAY);
