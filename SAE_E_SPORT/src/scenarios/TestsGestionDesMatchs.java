@@ -14,6 +14,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import Images.ImagesIcons;
+import dao.ArbitreJDBC;
 import dao.CompteJDBC;
 import dao.CreateDB;
 import dao.EquipeJDBC;
@@ -39,6 +41,60 @@ public class TestsGestionDesMatchs {
 	@Before
 	public void setUp() throws Exception {
 		CreateDB.main(null);
+		creerDonnees();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		this.bouton = null;
+		this.modelePoule = null;
+		this.t = null;
+	}
+
+	@Test
+	public void testCloturationPouleLosqueTousLesMatchsOntUnVainqueur() throws Exception {
+		assertFalse(this.bouton.getEnabled());
+		for(int i=0; i<this.modelePoule.matches().length; i++) {
+			this.modelePoule.updateGagnant(i, 1);
+		}
+		cloturerPoule();
+		assertTrue(this.bouton.getEnabled());
+	}
+	
+	@Test
+	public void testTentativeSelectionDeuxEquipesVainqueurs() throws Exception {
+		this.modelePoule.updateGagnant(0, 1);
+		Object[][] matchs = this.modelePoule.matches();
+		assertEquals((String)matchs[0][4], ImagesIcons.TROPHY_WIN);
+		this.modelePoule.updateGagnant(0, 2);
+		matchs = this.modelePoule.matches();
+		assertEquals((String)matchs[0][4], ImagesIcons.TROPHY);
+		assertEquals((String)matchs[0][5], ImagesIcons.TROPHY_WIN);
+	}
+
+	private void cloturerPoule() {
+		if (this.modelePoule.tousLesMatchsJouees()) {
+			this.bouton.setEnabled(true);
+		}
+	}
+	
+	private class CloturerSimulationBouton{
+		private boolean enabled;
+		
+		public CloturerSimulationBouton(){
+			this.enabled = false;
+		}
+		
+		public void setEnabled (boolean enabled) {
+			this.enabled = enabled;
+		}
+		
+		public boolean getEnabled() {
+			return this.enabled;
+		}
+	}
+	
+	private void creerDonnees() {
 		this.t = Tournoi.createTournoi("Asia Esports Championsh3", Niveau.INTERNATIONAL_CLASSE, Date.valueOf(LocalDate.of(2024, 01, 10)), 
                 Date.valueOf(LocalDate.of(2024, 01, 22)), Pays.JP, Statut.A_VENIR, Optional.empty(), Optional.empty());
 		Tournoi tournoiBDD = new Tournoi();
@@ -93,6 +149,15 @@ public class TestsGestionDesMatchs {
 			Participer participer = new Participer(equipe, t);
 			new Participer().ajouterParticipation(participer);
 		}
+		Arbitre arb1 = new Arbitre(ArbitreJDBC.getNextValueSequence(), "Yoush", "OPOP");
+		Arbitre arb2 = new Arbitre(ArbitreJDBC.getNextValueSequence(), "Youshi", "OP");
+		Arbitre arb3 = new Arbitre(ArbitreJDBC.getNextValueSequence(), "Max", "Chef");
+		Arbitre arb4 = new Arbitre(ArbitreJDBC.getNextValueSequence(), "Poppy", "Cheve");
+		Arbitre modeleArbitre = new Arbitre();
+		modeleArbitre.ajouterArbitre(arb1);
+		modeleArbitre.ajouterArbitre(arb2);
+		modeleArbitre.ajouterArbitre(arb3);
+		modeleArbitre.ajouterArbitre(arb4);
         List<Arbitre> arbitres = new Arbitre().getTousLesArbitres();
         Collections.shuffle(arbitres);
         Compte c = new Compte("arbitre", "youinfo", TypeCompte.ARBITRE);
@@ -105,50 +170,11 @@ public class TestsGestionDesMatchs {
             new Arbitre().mettreAJourArbitre(arb);
             arbitresAttribuer.add(arb);
         }
-        tournoiBDD.associerArbitresTournoi(t, arbitresAttribuer);
+        tournoiBDD.associerArbitresTournoi(t, arbitresAttribuer);        
         t.generationPoule();
 		this.bouton = new CloturerSimulationBouton();
 		this.modelePoule = new ModelePoule(t);
 		tournoiBDD.changerStatutTournoi(this.t, Statut.EN_COURS);
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		this.bouton = null;
-		this.modelePoule = null;
-		this.t = null;
-	}
-
-	@Test
-	public void test() throws Exception {
-		assertFalse(this.bouton.getEnabled());
-		for(int i=0; i<this.modelePoule.matches().length; i++) {
-			this.modelePoule.updateGagnant(i, 1);
-		}
-		cloturerPoule();
-		assertTrue(this.bouton.getEnabled());
-	}
-
-	private void cloturerPoule() {
-		if (this.modelePoule.tousLesMatchsJouees()) {
-			this.bouton.setEnabled(true);
-		}
-	}
-	
-	private class CloturerSimulationBouton{
-		private boolean enabled;
-		
-		public CloturerSimulationBouton(){
-			this.enabled = false;
-		}
-		
-		public void setEnabled (boolean enabled) {
-			this.enabled = enabled;
-		}
-		
-		public boolean getEnabled() {
-			return this.enabled;
-		}
 	}
 	
 	

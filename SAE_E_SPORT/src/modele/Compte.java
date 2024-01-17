@@ -54,7 +54,7 @@ public class Compte {
 	}
 	
 	public static String genererPassword(int longueur) {
-		String caractères = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]};:<>./?";
+		String caractères = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		String mdp = "";
 		Random random = new Random();
 		for (int i = 0 ; i < longueur; i++) {

@@ -4,7 +4,7 @@ package modele;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +14,7 @@ import dao.ConnectionJDBC;
 import dao.EquipeJDBC;
 import dao.JoueurJDBC;
 import dao.ParticiperJDBC;
+import ihm.Utilitaires;
 
 public class ModeleImportation {
 
@@ -34,10 +35,28 @@ public class ModeleImportation {
 		br.readLine();
 		if ((line = br.readLine()) != null) {
 		    String[] values = line.split(",");
-			if (!values[0].equals(tournoi.getNomTournoi())) {
+			if (!(values[0].equals(tournoi.getNomTournoi()) || values[1].equals(Utilitaires.formaterDate(tournoi.getDateDebut())) || values[2].equals(Utilitaires.formaterDate(tournoi.getDateFin())))) {
 				br.close();
 				return false;
 		    }
+		}
+		br.close();
+		return true;
+	}
+	
+	public boolean fichierCSVNombreEquipes(String chemin, Tournoi tournoi) throws IOException {
+		String line;
+    	BufferedReader br;
+		br = new BufferedReader(new FileReader(chemin));
+		br.readLine();
+		List<String> lines = new LinkedList<>();
+		while ((line = br.readLine()) != null) {
+			lines.add(line);
+		}
+		if (!(lines.size()>=20 && lines.size()<=32)) {
+			System.out.println(lines.size());
+			br.close();
+			return false;
 		}
 		br.close();
 		return true;

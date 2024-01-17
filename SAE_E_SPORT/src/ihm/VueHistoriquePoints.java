@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -303,6 +304,9 @@ public class VueHistoriquePoints extends JFrame {
 		modeleTournoi.setRowCount(0);
 		for (Entry<Tournoi, Integer> entry : pointsTournoi.entrySet()) {
 			modeleTournoi.addRow(new Object[]{dateFormat.format(entry.getKey().getDateDebut()), entry.getKey().getNomTournoi(), entry.getValue()});
+		}
+		if (pointsTournoi.size()>0) {
+			modeleTournoi.addRow(new Object[] {"Total", "", pointsTournoi.values().stream().reduce((x,y)->x+y).orElse(0)});
 		}
 	}
 	
