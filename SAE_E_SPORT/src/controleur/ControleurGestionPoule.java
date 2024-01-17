@@ -33,12 +33,11 @@ public class ControleurGestionPoule implements MouseListener, ActionListener, Wi
 			this.modele = new ModelePoule(this.vue.getTournoi());
 			this.vue.setJTableClassement(modele.classement());
 			this.vue.setJTableMatches(modele.matches());
-			if (!modele.tousLesMatchsJouees() || Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
-				this.vue.setActifBoutonCloturer(false);
-				
-			} else if (this.vue.getTournoi().getStatut() != Statut.EN_COURS) {
+			if (this.vue.getTournoi().getStatut() != Statut.EN_COURS) {
 				this.vue.setVisibleBoutonCloturer(false);
-			}
+			} else if (!modele.tousLesMatchsJouees() || Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+				this.vue.setActifBoutonCloturer(false);
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

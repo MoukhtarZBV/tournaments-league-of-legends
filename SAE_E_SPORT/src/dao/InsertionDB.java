@@ -325,7 +325,7 @@ public class InsertionDB {
 
 	public static boolean simulerParties(int nbParties, Tournoi tournoi, List<Arbitre> arbitres) {
 		ModelePoule poule = new ModelePoule(tournoi);
-		int nbArbitres = new Random().nextInt(Math.min(4, arbitres.size())) + 1;
+		int nbArbitres = new Random().nextInt(Math.min(3, arbitres.size())) + 1;
 		Collections.shuffle(arbitres);
 		List<Arbitre> arbitresAttribuer = new ArrayList<>();
 		for (int i = 0; i < nbArbitres; i++) {

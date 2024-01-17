@@ -48,6 +48,7 @@ public class VueTournoi extends JFrame {
 	private JButton btnOuvrir;
 	private JPanel panelNomsArbitres;
 	private JPanel panelConteneurBoutons;
+	private JPanel panelBoutonSupprimer;
 	private JPanel panelBoutons;
 	private PanelPopUp panelMessageArbitres;
 	private int equipesSize;
@@ -288,9 +289,10 @@ public class VueTournoi extends JFrame {
 		panelBoutons.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		panelConteneurBoutons.add(panelBoutons, BorderLayout.CENTER);
 		
-		// Boutons
-//		afficherBoutons();
-//		afficherArbitresTournoi();
+		panelBoutonSupprimer = new JPanel();
+		panelBoutonSupprimer.setBackground(Palette.DARK_GRAY);
+		panelBoutonSupprimer.setLayout(new FlowLayout());
+		panelConteneurBoutons.add(panelBoutonSupprimer, BorderLayout.WEST);
 		
 		this.controleur = new ControleurDetailsTournoi(this);
 		ajouterInfoBulle(panelEquipes, this.equipesSize + " participants");
@@ -325,9 +327,9 @@ public class VueTournoi extends JFrame {
 			break;
 		case A_VENIR:
 			afficherBoutonOuvrir(controleur);
-			if (tournoi.getDateDebut().after(new Date(System.currentTimeMillis()))) {
+			/*if (tournoi.getDateDebut().after(new Date(System.currentTimeMillis()))) {
 				btnOuvrir.setEnabled(false);
-			}
+			}*/
 			afficherBoutonSupprimer(controleur);
 			break;
 		case EN_COURS:
@@ -352,9 +354,6 @@ public class VueTournoi extends JFrame {
 	}
 	
 	public void afficherArbitresTournoi(List<Arbitre> arbitresTournoi) {
-//	public void afficherArbitresTournoi() {
-//		List<Arbitre> arbitresTournoi = new Tournoi().getArbitresTournoi(tournoi);
-		System.out.println(arbitresTournoi);
 		if (arbitresTournoi.size() == 0) {
 			afficherMessageArbitres();
 		} else {
@@ -380,9 +379,6 @@ public class VueTournoi extends JFrame {
 	
 	private void afficherBoutonSupprimer(ControleurDetailsTournoi controleur) {
 		if (Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
-			JPanel panelBoutonSupprimer = new JPanel();
-			panelBoutonSupprimer.setBackground(Palette.DARK_GRAY);
-			panelBoutonSupprimer.setLayout(new FlowLayout());
 			JButton btnSupprimer = new JButton("Supprimer");
 			btnSupprimer.setName("Supprimer");
 			btnSupprimer.setBackground(Palette.GRAY);
@@ -392,9 +388,7 @@ public class VueTournoi extends JFrame {
 			btnSupprimer.setFocusable(false);
 			btnSupprimer.addActionListener(controleur);
 			panelBoutonSupprimer.add(btnSupprimer);
-			panelConteneurBoutons.add(panelBoutonSupprimer, BorderLayout.WEST);
 		}
-		
 	}
 	
 	public void afficherBoutonImporter(ControleurDetailsTournoi controleur) {
@@ -491,6 +485,12 @@ public class VueTournoi extends JFrame {
 		btnFinale.addActionListener(controleur);
 		btnFinale.addMouseListener(controleur);
 		panelBoutons.add(btnFinale);
+	}
+	
+	public void masquerBoutonSupprimer() {
+		for (Component c : panelBoutonSupprimer.getComponents()) {
+			panelBoutonSupprimer.remove(c);
+		}
 	}
 	
 	private PanelRound creerBordureBulleInfo() {

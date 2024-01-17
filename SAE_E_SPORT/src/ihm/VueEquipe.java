@@ -266,4 +266,8 @@ public class VueEquipe extends JFrame {
 	public PanelPopUp getPopup() {
 		return this.panelPopup;
 	}
+	
+	public Equipe getEquipe() {
+		return this.equipe;
+	}
 }

@@ -31,51 +31,48 @@ public class ControleurEquipe implements ActionListener, MouseListener, WindowLi
 	public void actionPerformed(ActionEvent e) {
 		JButton bouton = (JButton) e.getSource();
 		if (bouton.getText().equals("Sauvegarder")) {
-			try {
-				String name = this.vue.getNomEquipe().replace(" ", "");
-				// Gestion des erreurs
-				if (this.modele.nomEquipeIsVide(name)) {
-					this.vue.getPopup().setErreur("Le nom de l'équipe ne peut pas être vide");
-					
-				} else if(this.modele.nomEquipeIsTropLong(name)){
-					this.vue.getPopup().setErreur("Le nom de l'équipe comporte plus de 40 caractères");
-					
-				} else if(this.modele.nomEquipeIsDejaExistant(name)){
-					this.vue.getPopup().setErreur("Une équipe portant ce nom existe déjà");
-					
-					
-				// Sinon la modification est valide
-				} else {
-					this.modele.mettreAJourEquipe((new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe())));
-					Ecran.update(this.vue);
-					
-					if (this.vue.getPere() == null) {
-						VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
-						vue.setVisible(true);
-						
-					} else {
-						VueTournoi vue = new VueTournoi(this.vue.getPere());
-						vue.setVisible(true);
-					}
-				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			String name = this.vue.getNomEquipe().replace(" ", "");
+			String fullName = this.vue.getNomEquipe();
+			// Gestion des erreurs
+			if (this.modele.nomEquipeIsVide(name)) {
+				this.vue.getPopup().setErreur("Le nom de l'équipe ne peut pas être vide");
+
+			} else if (this.modele.nomEquipeIsTropLong(fullName)){
+				this.vue.getPopup().setErreur("Le nom de l'équipe comporte plus de 40 caractères");
+
+			} else if (this.vue.getEquipe().getNom().equals(fullName)) {
+				ouvrirPagePrecedente();
+
+			} else if (this.modele.nomEquipeIsDejaExistant(fullName)){
+				this.vue.getPopup().setErreur("Une équipe portant ce nom existe déjà");
+
+			} else { // Sinon la modification est valide
+				this.modele.mettreAJourEquipe((new Equipe(this.vue.getIdEquipe(),this.vue.getNomEquipe(),this.vue.getRangEquipe(), this.vue.getPaysEquipe())));
+
+				ouvrirPagePrecedente();
 			}
+
 		}
 		
 		if (bouton.getText().equals("Retour")) {
 			Ecran.update(this.vue);	
 			
-			if (this.vue.getPere() == null) {
-				VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
-				vue.setVisible(true);
-				
-			} else {
-				VueTournoi vue = new VueTournoi(this.vue.getPere());
-				vue.setVisible(true);
-			}
+			ouvrirPagePrecedente();
 		}
 				
+	}
+
+	private void ouvrirPagePrecedente() {
+		Ecran.update(this.vue);
+		if (this.vue.getPere() == null) {
+			VueListeEquipe vue = new VueListeEquipe(this.modele.getToutesLesEquipes());
+			vue.setVisible(true);
+			
+		} else {
+			VueTournoi vue = new VueTournoi(this.vue.getPere());
+			vue.setVisible(true);
+		}
+		this.vue.dispose();
 	}
 	
 	@Override
