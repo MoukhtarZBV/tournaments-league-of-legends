@@ -167,7 +167,7 @@ public class ModelePoule {
 		for (int classement = 0; classement < participationsOrdrePoints.size(); classement++) {
 			Participer participation = participationsOrdrePoints.get(classement);
 			participation.setClassement(classement + 1);
-			nbPointsTournoi = ((participation.getNbMatchsJoues() * 25) + ((participation.getNbMatchsJoues() - participation.getNbMatchsJoues()) * 15)) * 10;
+			nbPointsTournoi = ((participation.getNbMatchsGagnes() * 25) + ((participation.getNbMatchsJoues() - participation.getNbMatchsGagnes()) * 15)) * 10;
 			nbPointsTournoi = (int) (nbPointsTournoi * basePoints);
 			participation.setNbPointsTournoiGagnes(nbPointsTournoi);;
 			participerBDD.mettreAJourParticipation(participation);
@@ -176,6 +176,8 @@ public class ModelePoule {
 		// Mise à jour des points finaux du 3ème et 4ème du tournoi
 		participationsOrdrePoints.get(2).setNbPointsTournoiGagnes(participationsOrdrePoints.get(2).getNbPointsTournoiGagnes() + 50);
 		participationsOrdrePoints.get(3).setNbPointsTournoiGagnes(participationsOrdrePoints.get(3).getNbPointsTournoiGagnes() + 15);
+		participerBDD.mettreAJourParticipation(participationsOrdrePoints.get(2));
+		participerBDD.mettreAJourParticipation(participationsOrdrePoints.get(3));
 		
 		// Choix d'une heure pour la finale 
 		int heure = new Random().nextInt(8 + 1)  + 10;

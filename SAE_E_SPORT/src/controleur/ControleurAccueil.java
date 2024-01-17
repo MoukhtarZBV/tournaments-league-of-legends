@@ -31,6 +31,30 @@ public class ControleurAccueil implements ActionListener, MouseListener, WindowL
 	public ControleurAccueil(VueAccueilAdmin vue) {
 		this.vue = vue;
 	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton b = (JButton) e.getSource();
+		if(b.getName().equals("Deconnexion")) {
+			String[] options = { "Oui", "Non" }; 
+			int choix = JOptionPane.showOptionDialog( 
+			        null,
+			        "Voulez-vous vous déconnecter ?",
+			        "Deconnexion",
+			        JOptionPane.YES_NO_OPTION,
+			        JOptionPane.QUESTION_MESSAGE,
+			        null,
+			        options,
+			        options[1] 
+			);
+			
+			if(choix == 0) {
+				Ecran.update(this.vue);
+				VueIdentification vueIdentification = new VueIdentification();
+				vueIdentification.setVisible(true);
+			}
+		}
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -76,30 +100,6 @@ public class ControleurAccueil implements ActionListener, MouseListener, WindowL
 		JPanel panel = (JPanel)e.getSource();
 		panel.setBackground(Palette.DARK_GRAY);
 		panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-	    JButton b = (JButton) e.getSource();
-	    if(b.getName().equals("Deconnexion")) {
-	        String[] options = { "Oui", "Non" }; 
-	        int choix = JOptionPane.showOptionDialog( 
-	                null,
-	                "Voulez-vous vous déconnecter ?",
-	                "Deconnexion",
-	                JOptionPane.YES_NO_OPTION,
-	                JOptionPane.QUESTION_MESSAGE,
-	                null,
-	                options,
-	                options[1] 
-	        );
-	        
-	        if(choix == 0) {
-	            Ecran.update(this.vue);
-	            VueIdentification vueIdentification = new VueIdentification();
-	            vueIdentification.setVisible(true);
-	        }
-	    }
 	}
 	
 	@Override

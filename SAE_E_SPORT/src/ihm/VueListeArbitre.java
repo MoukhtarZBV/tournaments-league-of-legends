@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+
+import components.CoolScrollBar;
 import components.CoolTextField;
 import components.PanelPopUp;
 import components.CoolScrollBar;
@@ -184,6 +186,7 @@ public class VueListeArbitre extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeArbitres);
+		scrollPane.setVerticalScrollBar(new CoolScrollBar());
 		scrollPane.setBorder(null);
 		scrollPane.setVerticalScrollBar(new CoolScrollBar());
 		panelListe.add(scrollPane, BorderLayout.CENTER);
