@@ -13,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import components.CoolTextField;
 import components.PanelPopUp;
+import components.CoolScrollBar;
 import controleur.ControleurListeArbitre;
 import modele.Arbitre;
 import modele.Tournoi;
@@ -184,6 +185,7 @@ public class VueListeArbitre extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(listeArbitres);
 		scrollPane.setBorder(null);
+		scrollPane.setVerticalScrollBar(new CoolScrollBar());
 		panelListe.add(scrollPane, BorderLayout.CENTER);
 		
 		if (modeAjout) {
@@ -229,10 +231,10 @@ public class VueListeArbitre extends JFrame {
 		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
-		
+		this.btnSuppr = new JButton("Supprimer");
+
 		if (!modeAjout) {
 			// Bouton Supprimer
-			this.btnSuppr = new JButton("Supprimer");
 			btnSuppr.setName("Supprimer");
 			btnSuppr.setEnabled(false);
 			btnSuppr.setBackground(Palette.GRAY);
@@ -301,7 +303,7 @@ public class VueListeArbitre extends JFrame {
 	}
 	
 	public void setActifBtnSupprimer(boolean actif) {
-		this.btnSuppr.setEnabled(actif);;
+		this.btnSuppr.setEnabled(actif);
 	}
 	
 	public void setActifBtnVider(boolean actif) {

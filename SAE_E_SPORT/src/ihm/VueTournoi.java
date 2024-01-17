@@ -66,7 +66,6 @@ public class VueTournoi extends JFrame {
 		setBounds(Ecran.posX, Ecran.posY, Ecran.tailleX, Ecran.tailleY);
 		setResizable(false);
 		setUndecorated(true);
-		addWindowListener(controleur);
 				
 		
 		///// MAIN PANEL \\\\\
@@ -298,7 +297,8 @@ public class VueTournoi extends JFrame {
 		tableEquipes.addMouseListener(this.controleur);
 		btnRetour.addActionListener(this.controleur);
 		btnRetour.addMouseListener(this.controleur);
-		
+		addWindowListener(controleur);
+
 	}
 	
 	public void setEquipesSize(List<Equipe> equipes) {
@@ -354,7 +354,7 @@ public class VueTournoi extends JFrame {
 	public void afficherArbitresTournoi(List<Arbitre> arbitresTournoi) {
 //	public void afficherArbitresTournoi() {
 //		List<Arbitre> arbitresTournoi = new Tournoi().getArbitresTournoi(tournoi);
-		System.out.println(arbitresTournoi);
+//		System.out.println(arbitresTournoi);
 		if (arbitresTournoi.size() == 0) {
 			afficherMessageArbitres();
 		} else {

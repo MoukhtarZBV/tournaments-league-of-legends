@@ -35,7 +35,7 @@ public class ModeleImportation {
 		br.readLine();
 		if ((line = br.readLine()) != null) {
 		    String[] values = line.split(",");
-			if (!(values[0].equals(tournoi.getNomTournoi()) || values[1].equals(Utilitaires.formaterDate(tournoi.getDateDebut())) || values[2].equals(Utilitaires.formaterDate(tournoi.getDateFin())))) {
+			if (!(values[0].equals(tournoi.getNomTournoi()))) {
 				br.close();
 				return false;
 		    }

@@ -51,7 +51,7 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 					e1.printStackTrace();
 				}
 			}
-		}
+		} 
 	}
 	
 	@Override
@@ -79,7 +79,16 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JTextField) {
-			this.rechercherParNomEtRang();;
+			String str = this.vue.getSearch();
+			if (this.vue.getSearch().equals("Filtrer équipes par nom ou rang")) {
+				str = "";
+			}
+			System.out.println(str);
+			if(this.vue.getTriParNom()) {
+				this.vue.updateListeEquipes(this.modele.trierParNom(str));
+			} else {
+				this.vue.updateListeEquipes(this.modele.trierParRang(str));
+			}
 		} else if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			
@@ -91,43 +100,114 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 					break;
 					
 				case "Rechercher" :
-					this.rechercherParNomEtRang();
+					String str = this.vue.getSearch();
+					System.out.println(str);
+					if (this.vue.getSearch().equals("Filtrer équipes par nom ou rang")) {
+						str = "";
+					}
+					if(this.vue.getTriParNom()) {
+						this.vue.updateListeEquipes(this.modele.trierParNom(str));
+					} else {
+						this.vue.updateListeEquipes(this.modele.trierParRang(str));
+					}
+					if(this.vue.getTriParNom()) {
+						this.vue.updateListeEquipes(this.modele.trierParNom(str));
+					} else {
+						this.vue.updateListeEquipes(this.modele.trierParRang(str));
+					}
+					
+					
+					
+//					
+//					if (this.vue.getSearch().equals("Filtrer équipes par nom ou rang")) {
+//						if(this.vue.getTriParNom()) {
+//							this.vue.updateListeEquipes(this.modele.trierParRang(""));
+//							this.vue.setBtnSort("Trier par nom");
+//		
+//						// Lister par Nom d'équipe
+//						} else {
+//							this.vue.updateListeEquipes(this.modele.trierParNom(""));
+//							this.vue.setBtnSort("Trier par rang");
+//						}
+//					} else {
+//						// Lister par Rang
+//						if(this.vue.getTriParNom()) {
+//							this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
+//							this.vue.setBtnSort("Trier par nom");
+//		
+//						// Lister par Nom d'équipe
+//						} else {
+//							this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
+//							this.vue.setBtnSort("Trier par rang");
+//						}
+//					}
 					break;
 	
 				case "Trier" : 
-					// Lister par Rang
-					if(this.vue.getTriParNom()) {
-						this.vue.setTriParNom(false);
-						this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
-						this.vue.setBtnSort("Trier par nom");
-	
-					// Lister par Nom d'équipe
-					} else {
-						this.vue.setTriParNom(true);
-						this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
-						this.vue.setBtnSort("Trier par rang");
+					str = this.vue.getSearch();
+					if (this.vue.getSearch().equals("Filtrer équipes par nom ou rang")) {
+						str = "";
 					}
-					break;
+					System.out.println(str);
+
+					if(!this.vue.getTriParNom()) {
+						this.vue.setTriParNom(true);
+						this.vue.updateListeEquipes(this.modele.trierParNom(str));
+						this.vue.setBtnSort("Trier par rang");
+					} else {
+						this.vue.setTriParNom(false);
+						this.vue.updateListeEquipes(this.modele.trierParRang(str));
+						this.vue.setBtnSort("Trier par nom");
+					}
+//					
+//					if (this.vue.getSearch().equals("Filtrer équipes par nom ou rang")) {
+//						// Lister par Rang
+//						if(this.vue.getTriParNom()) {
+//							this.vue.setTriParNom(false);
+//							this.vue.updateListeEquipes(this.modele.trierParRang(""));
+//							this.vue.setBtnSort("Trier par nom");
+//		
+//						// Lister par Nom d'équipe
+//						} else {
+//							this.vue.setTriParNom(true);
+//							this.vue.updateListeEquipes(this.modele.trierParNom(""));
+//							this.vue.setBtnSort("Trier par rang");
+//						}
+//						break;
+//					} else {
+//						// Lister par Rang
+//						if(this.vue.getTriParNom()) {
+//							this.vue.setTriParNom(false);
+//							this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
+//							this.vue.setBtnSort("Trier par nom");
+//		
+//						// Lister par Nom d'équipe
+//						} else {
+//							this.vue.setTriParNom(true);
+//							this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
+//							this.vue.setBtnSort("Trier par rang");
+//						}
+//					}
 			}
 		}
 	}
 
-	private void rechercherParNomEtRang() {
-		try {
-			// Lister par Nom d'équipe
-			if(this.vue.getTriParNom()) {
-				this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
-				this.vue.setBtnSort("Trier par rang");
-
-			// Lister par Rang
-			} else {
-				this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
-				this.vue.setBtnSort("Trier par nom");
-			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}
+//	private void rechercherParNomEtRang() {
+//		try {
+//			// Lister par Nom d'équipe
+//			if(this.vue.getTriParNom()) {
+//				this.vue.updateListeEquipes(this.modele.trierParNom(this.vue.getSearch().toUpperCase()));
+//				this.vue.setBtnSort("Trier par rang");
+//
+//			// Lister par Rang
+//			} else {
+//				this.vue.updateListeEquipes(this.modele.trierParRang(this.vue.getSearch().toUpperCase()));
+//				this.vue.setBtnSort("Trier par nom");
+//			}
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//		}
+//	}
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {

@@ -110,7 +110,7 @@ public class MenuBar extends JPanel {
 		// Logo déco
 		JLabel iconDeconnexion = new JLabel();
 		iconDeconnexion.setHorizontalAlignment(SwingConstants.CENTER);
-		iconDeconnexion.setIcon(ImagesIcons.HISTORIQUE_MENU);
+		iconDeconnexion.setIcon(ImagesIcons.LOGOUT_MENU);
 		iconDeconnexion.setSize(20, 80);
 		panelDeconnexion.add(iconDeconnexion, BorderLayout.CENTER);
 	}

@@ -148,7 +148,7 @@ public class VueListeEquipe extends JFrame {
 		panelListe.setBackground(Palette.GRAY);
 		panelCenter.add(panelListe, BorderLayout.CENTER);
 
-		JLabel lblHeader = new JLabel(String.format("%-5s %-50s", "Rang", "Nom de l'équipe"));
+		JLabel lblHeader = new JLabel(String.format("%-8s %-50s", "Rang", "Nom de l'équipe"));
 		lblHeader.setFont(Police.TABLEAU);
 		lblHeader.setBorder(new EmptyBorder(5, 10, 5, 10));
 		lblHeader.setForeground(Palette.WHITE);
