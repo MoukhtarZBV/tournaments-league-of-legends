@@ -291,7 +291,6 @@ public class VueTournoi extends JFrame {
 			break;
 		case EN_COURS:
 			afficherBoutonGererPoule("Gérer la poule");
-			afficherArbitresTournoi();
 			break;
 		case FINALE:
 		case ATTENTE_RESULTATS:
