@@ -33,6 +33,8 @@ public class InsertionDB {
 	private static Participer participerBDD = new Participer();
 	private static Partie partieBDD = new Partie();
 	private static Arbitre arbitreBDD = new Arbitre();
+	private static Administrateur adminBDD = new Administrateur();
+	private static Compte compteBDD = new Compte();
 
 	public static void main(String args[]) throws Exception {
 		CreateDB.main(args);
@@ -293,46 +295,31 @@ public class InsertionDB {
 	    simulerFinale(t5);
 	    
 	    // Tournoi 6
-	    Tournoi t6 = Tournoi.createTournoi("Asia Esports Championsh3", Niveau.INTERNATIONAL_CLASSE, Date.valueOf(LocalDate.of(2024, 01, 10)), 
-	    		Date.valueOf(LocalDate.of(2024, 01, 22)), Pays.JP, Statut.ATTENTE_ARBITRES, Optional.empty(), Optional.empty());
+	    Tournoi t6 = Tournoi.createTournoi("League Arena ED", Niveau.INTERNATIONAL_CLASSE, Date.valueOf(LocalDate.of(2024, 01, 02)), 
+	    		Date.valueOf(LocalDate.of(2024, 01, 12)), Pays.JP, Statut.ATTENTE_ARBITRES, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t6);
 	    ajouterEquipesTournoi(t6, e1, e2, e8, e9, e10, e12, e13, e14);
-	    CompteJDBC cbdd = new CompteJDBC();
-	    /*
-	    Collections.shuffle(arbitres);
-	    Compte c = new Compte("arbitre", "youinfo", TypeCompte.ARBITRE);
+	    simulerParties(t6.generationPoule(), t6, arbitres);
+	    simulerFinale(t6);
 	    
-	    cbdd.add(c);
-		List<Arbitre> arbitresAttribuer = new ArrayList<>();
-		for (int i = 0; i < 3; i++) {
-			Arbitre arb = arbitres.get(i);
-			arb.setCompte(c);
-			arbitreBDD.mettreAJourArbitre(arb);
-			arbitresAttribuer.add(arb);
-		}
-		tournoiBDD.associerArbitresTournoi(t6, arbitresAttribuer);*/
-
 
 	    // ====================================== //
 	    // ==== Création des Administrateurs ==== //
 	    // ====================================== //
-	    
-		AdminJDBC abdd = new AdminJDBC();
-		
 		
 		Compte c1 = new Compte("KHC4298A", "youinfo", TypeCompte.ADMINISTRATEUR);
 		Compte c2 = new Compte("MAR5221A", "davinfo", TypeCompte.ADMINISTRATEUR); 
 		Compte c3 = new Compte("CHE1111A", "maxinfo", TypeCompte.ADMINISTRATEUR);
-		cbdd.add(c1);
-		cbdd.add(c2);
-		cbdd.add(c3);
+		compteBDD.ajouterCompte(c1);
+		compteBDD.ajouterCompte(c2);
+		compteBDD.ajouterCompte(c3);
 		
 		Administrateur a1 = new Administrateur(1, "koh", "youchen", c1);
 		Administrateur a2 = new Administrateur(2, "marquet", "david", c2);
 		Administrateur a3 = new Administrateur(3, "chevalier", "max", c3);
-		abdd.add(a1);
-		abdd.add(a2);
-		abdd.add(a3);
+		adminBDD.ajouterAdministrateur(a1);
+		adminBDD.ajouterAdministrateur(a2);
+		adminBDD.ajouterAdministrateur(a3);
 	    
 	}
 
