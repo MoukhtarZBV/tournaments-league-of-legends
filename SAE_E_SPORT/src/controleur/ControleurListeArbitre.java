@@ -101,9 +101,11 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	
 		    } else if (bouton.getName().equals("Vider")) {
 		    	viderListeArbitresAttribues();
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), ""));
 		    	
 		    } else if (bouton.getName().equals("Attribuer")) {
 		    	ajouterArbitreAuxArbitresAttribues();
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), ""));
 		    	
 		    } else if (bouton.getName().equals("Confirmer")) {
 		    	confirmerAttributionArbitres();

@@ -423,7 +423,7 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
             try {
                 job.print();
             } catch (PrinterException ex) {
-                ex.printStackTrace();
+                System.out.println("Annulation d'imprimerie");
             }
         }
     }

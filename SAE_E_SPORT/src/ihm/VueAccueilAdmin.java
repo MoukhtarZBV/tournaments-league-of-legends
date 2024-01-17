@@ -4,8 +4,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 
 import java.awt.Dimension;
 import java.awt.BorderLayout;
@@ -46,17 +48,27 @@ public class VueAccueilAdmin extends JFrame {
 		JPanel panelTop = new JPanel();
 		panelTop.setPreferredSize(new Dimension(800, 150));
 		panelTop.setBackground(Palette.DARK_GRAY);
-		panelTop.setBorder(new EmptyBorder(45, 100, 15, 100));
-		panelTop.setLayout(new GridLayout());
+		panelTop.setBorder(new CompoundBorder(new EmptyBorder(45, 100, 15, 100), BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE)));
+		panelTop.setLayout(new BorderLayout(0, 0));
 		contentPane.add(panelTop, BorderLayout.NORTH);
 		
 		// Label titre
 		JLabel lblTitre = new JLabel("Accueil");
-		lblTitre.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Palette.WHITE));
 		lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTitre.setForeground(Palette.WHITE);
 		lblTitre.setFont(Police.GROS_TITRE);
-		panelTop.add(lblTitre);
+		panelTop.add(lblTitre, BorderLayout.CENTER);
+		
+		
+		JButton btnDeco = new JButton("");
+		btnDeco.setName("Deconnexion");
+		btnDeco.setIcon(ImagesIcons.LOGOUT_MENU);
+		btnDeco.setBackground(Palette.DARK_GRAY);
+		btnDeco.setFocusable(false);
+		btnDeco.setPreferredSize(new Dimension(btnDeco.getPreferredSize().height, btnDeco.getPreferredSize().height));
+		btnDeco.setBorder(new EmptyBorder(0, 0, 0, 0));
+		btnDeco.addActionListener(controleur);
+		panelTop.add(btnDeco, BorderLayout.EAST);
 		
 		
 		///// MAIN PANEL \\\\\
