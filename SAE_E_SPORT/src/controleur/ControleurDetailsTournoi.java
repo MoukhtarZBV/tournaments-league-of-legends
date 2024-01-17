@@ -1,5 +1,6 @@
 package controleur;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 import ihm.Ecran;
 import ihm.VueEquipe;
@@ -82,6 +84,7 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			this.vue.getTournoi().setStatut(Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
 			this.vue.setVisibleBoutonOuvrir(false);
+			this.vue.afficherBoutonMDP();
 			this.vue.afficherBoutonGererPoule("Gérer la poule");
 			
 		} else if (bouton.getName().equals("Finale")) {
@@ -89,7 +92,20 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			
 			VueFinale vueFinale = new VueFinale(this.vue.getTournoi());
 			vueFinale.setVisible(true);
+		} else if (bouton.getName().equals("Mot de passe")) {
+            String id = "Login : "+vue.getTournoi().getCompte().getLogin()+"\n"+"Mot de passe : "+vue.getTournoi().getCompte().getMotDePasse();
+            JTextArea textArea = contenuPopup(id);
+			JOptionPane.showMessageDialog(null, textArea, "Mot de passe", JOptionPane.INFORMATION_MESSAGE);
 		}
+	}
+
+	private JTextArea contenuPopup(String id) {
+		JTextArea textArea = new JTextArea(id);
+		textArea.setEditable(false);
+		textArea.setWrapStyleWord(true);
+		textArea.setLineWrap(true);
+		textArea.setBackground(new Color(240, 236, 236));
+		return textArea;
 	}
 	
 	@Override
