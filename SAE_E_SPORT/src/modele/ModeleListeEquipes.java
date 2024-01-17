@@ -14,7 +14,7 @@ public class ModeleListeEquipes {
 	
 	private void filterEquipes(List<String> nomEquipes, String recherche) {
 		this.filteredEquipe = nomEquipes.stream()
-				.filter(eq -> eq.toUpperCase().contains(recherche))
+				.filter(eq -> eq.toUpperCase().contains(recherche.toUpperCase()))
 				.collect(Collectors.toList());
 	}
 

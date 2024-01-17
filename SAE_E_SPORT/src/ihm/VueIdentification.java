@@ -38,21 +38,21 @@ public class VueIdentification extends JFrame {
 	
 	private PanelPopUp panelErreur;
 
-	public static void main(String[] args) {
-		ConnectionJDBC.getConnection();
-		Ecran.setup();
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VueIdentification frame = new VueIdentification();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		ConnectionJDBC.getConnection();
+//		Ecran.setup();
+//		
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					VueIdentification frame = new VueIdentification();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	
 	public VueIdentification() {

@@ -47,9 +47,12 @@ public class ModelePoule {
 	
 	public void updateGagnant(int indicePartie, int numeroEquipeGagnante) {
 		Partie partie = this.parties.get(indicePartie);
+		// NOUVELLE VAINQUEUR 
 		Equipe equipeGagnante = partie.getEquipeGagnante();
+		
 		Equipe nouvelleEquipe = numeroEquipeGagnante == 1 ? partie.getEquipeUne() : partie.getEquipeDeux();
 		String nomNouvelleEquipe = nouvelleEquipe.getNom();
+		
 		if (equipeGagnante != null) {
 			if (equipeGagnante != nouvelleEquipe) {
 				String nomEquipeGagnante = equipeGagnante.getNom();
@@ -60,6 +63,16 @@ public class ModelePoule {
 				participationNouvelleEquipeGagnante.setNbPointsPouleGagnes(participationNouvelleEquipeGagnante.getNbPointsPouleGagnes() + 2);
 				participationNouvelleEquipeGagnante.setNbMatchsGagnes(participationNouvelleEquipeGagnante.getNbMatchsGagnes() + 1);
 			}
+//			else {
+//				// ANNULER VAINQUEUR
+//				String nomEquipeGagnante = equipeGagnante.getNom();
+//				Participer participationEquipeGagnante = this.participations.get(nomEquipeGagnante);
+//				participationEquipeGagnante.setNbPointsPouleGagnes(participationEquipeGagnante.getNbPointsPouleGagnes() - 3);
+//				participationEquipeGagnante.setNbMatchsGagnes(participationEquipeGagnante.getNbMatchsGagnes() - 1);
+//				
+//				
+//				
+//			}
 		} else {
 			String nomEquipePerdante = numeroEquipeGagnante == 1 ? partie.getEquipeDeux().getNom() : partie.getEquipeUne().getNom();
 			Participer participationNouvelleEquipeGagnante = this.participations.get(nomNouvelleEquipe);

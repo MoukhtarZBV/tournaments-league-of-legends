@@ -51,7 +51,7 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 					e1.printStackTrace();
 				}
 			}
-		}
+		} 
 	}
 	
 	@Override
@@ -108,7 +108,16 @@ public class ControleurListeEquipe implements MouseListener, FocusListener, Acti
 						this.vue.updateListeEquipes(this.modele.trierParNom(recherche.toUpperCase()));
 						this.vue.setBtnSort("Trier par rang");
 					}
-					break;
+
+					if(!this.vue.getTriParNom()) {
+						this.vue.setTriParNom(true);
+						this.vue.updateListeEquipes(this.modele.trierParNom(recherche));
+						this.vue.setBtnSort("Trier par rang");
+					} else {
+						this.vue.setTriParNom(false);
+						this.vue.updateListeEquipes(this.modele.trierParRang(recherche));
+						this.vue.setBtnSort("Trier par nom");
+					}
 			}
 		}
 	}

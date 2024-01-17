@@ -13,9 +13,11 @@ import javax.swing.border.MatteBorder;
 import Images.ImagesIcons;
 import components.TableEquipes;
 import controleur.ControleurFinale;
+import modele.Compte;
 import modele.Equipe;
 import modele.Partie;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -70,9 +72,7 @@ public class VueFinale extends JFrame {
 		
 		
 		///// MENU BAR \\\\\
-		MenuBar panelSide = new MenuBar(this);
-		contentPane.add(panelSide, BorderLayout.WEST);
-		
+		afficherMenuBar(contentPane);
 		
 		///// MAIN \\\\\
 		JPanel panelMain = new JPanel();
@@ -223,6 +223,13 @@ public class VueFinale extends JFrame {
 			lblTropheeEquipeDeux.addMouseListener(controleur);
 		} else {
 			afficherTropheeVainqueur();
+		}
+	}
+
+	private void afficherMenuBar(JPanel contentPane) {
+		if(Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			MenuBar panelSide = new MenuBar(this);
+			contentPane.add(panelSide, BorderLayout.WEST);
 		}
 	}
 

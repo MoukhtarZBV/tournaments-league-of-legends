@@ -24,7 +24,7 @@ import modele.Arbitre;
 import modele.Equipe;
 import modele.Tournoi;
 
-public class ControleurAccueil implements MouseListener, WindowListener, ActionListener {
+public class ControleurAccueil implements ActionListener, MouseListener, WindowListener {
 	
 	private VueAccueilAdmin vue;
 	

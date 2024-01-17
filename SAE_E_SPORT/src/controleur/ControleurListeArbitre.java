@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.stream.Collectors;
+
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -35,11 +37,16 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	public ControleurListeArbitre(VueListeArbitre vue) {
 		this.vue = vue;
 		this.modele = new Arbitre();
+		this.vue.setArbitres(this.vue.getArbitres()
+									.stream()
+									.sorted((x,y) -> x.getNom().toUpperCase().compareTo(y.getNom().toUpperCase()))
+									.collect(Collectors.toList()));
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {
 		if(e.getSource() instanceof JList) {
+			this.vue.setActifBtnSupprimer(true);
 			@SuppressWarnings("unchecked")
 			JList<String> list = (JList<String>) e.getSource();
 			String arbitre = ((String) list.getSelectedValue());	
@@ -48,12 +55,13 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 				this.vue.setActifBtnAttribuer(true);
 			} else if (!this.vue.enModeAjout()) {
 				this.vue.setActifBtnSupprimer(true);
-			} 
-		}
+			}
+		} 
 	}
 	
 	@Override
     public void focusGained(FocusEvent e) {
+	    this.vue.setActifBtnSupprimer(false);
 		if (e.getSource() instanceof JTextField) {
 			JTextField searchText = (JTextField) e.getSource();
 			if (searchText.getText().equals("Filtrer arbitres par nom ou prénom")) {
@@ -65,6 +73,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	
     @Override
     public void focusLost(FocusEvent e) {
+	    this.vue.setActifBtnSupprimer(false);
 		if (e.getSource() instanceof JTextField) {
 	    	JTextField searchText = (JTextField) e.getSource();
 	        if (searchText.getText().isEmpty()) {
@@ -76,7 +85,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	    
+	    this.vue.setActifBtnSupprimer(false);
 		if (e.getSource() instanceof JButton) {
 			JButton bouton = (JButton) e.getSource();
 			String recherche = this.vue.getSearch();
@@ -114,6 +123,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 		    	
 		    } else if (bouton.getName().equals("Supprimer")) {
 		    	supprimerArbitreSelectionne();
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), recherche));
 		    }
 		} else if (e.getSource() instanceof JTextField) {
 			this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
@@ -217,6 +227,7 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	}
 	
 	private void setArbitreSelectionne(String arbitre) {
+		System.out.println(arbitre);
 		String nom;
 		String prenom;
 		nom = arbitre.substring(0, arbitre.indexOf(' ')); // Extrait le nom (jusqu'à l'espace)
@@ -251,10 +262,16 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	@Override
 	public void windowDeactivated(WindowEvent e) {}
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {}
+//	@Override
+//	public void mouseClicked(MouseEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -300,7 +300,6 @@ public class VueTournoi extends JFrame {
 		btnRetour.addActionListener(this.controleur);
 		btnRetour.addMouseListener(this.controleur);
 		addWindowListener(controleur);
-		
 	}
 	
 	public void setEquipesSize(List<Equipe> equipes) {
@@ -354,6 +353,9 @@ public class VueTournoi extends JFrame {
 	}
 	
 	public void afficherArbitresTournoi(List<Arbitre> arbitresTournoi) {
+//	public void afficherArbitresTournoi() {
+//		List<Arbitre> arbitresTournoi = new Tournoi().getArbitresTournoi(tournoi);
+//		System.out.println(arbitresTournoi);
 		if (arbitresTournoi.size() == 0) {
 			afficherMessageArbitres();
 		} else {
