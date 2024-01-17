@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
 import ihm.Ecran;
 import ihm.VueEquipe;
@@ -90,7 +91,7 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 			this.vue.getTournoi().setStatut(Statut.EN_COURS);
 			this.vue.getTournoi().generationPoule();
 			this.vue.setVisibleBoutonOuvrir(false);
-			this.vue.afficherBoutonMDP();
+			this.vue.afficherBoutonMDP(this);
 			this.vue.afficherBoutonGererPoule("Gérer la poule",this);
 			
 		} else if (bouton.getName().equals("Finale")) {
@@ -101,6 +102,13 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 		} else if (bouton.getName().equals("Mot de passe")) {
             String id = "Login : "+vue.getTournoi().getCompte().getLogin()+"\n"+"Mot de passe : "+vue.getTournoi().getCompte().getMotDePasse();
             JTextArea textArea = contenuPopup(id);
+            Object paneBG = UIManager.get("OptionPane.background");
+            Object panelBG = UIManager.get("Panel.background");
+            UIManager.put("OptionPane.background", new Color(255,0,0));
+            UIManager.put("Panel.background", new Color(255,0,0));
+
+            UIManager.put("OptionPane.background", paneBG);
+            UIManager.put("Panel.background", panelBG);
 			JOptionPane.showMessageDialog(null, textArea, "Mot de passe", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

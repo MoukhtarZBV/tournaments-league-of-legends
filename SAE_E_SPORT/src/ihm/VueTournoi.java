@@ -331,13 +331,13 @@ public class VueTournoi extends JFrame {
 			afficherBoutonSupprimer(controleur);
 			break;
 		case EN_COURS:
-			afficherBoutonMDP();
+			afficherBoutonMDP(controleur);
 			afficherBoutonGererPoule("Gérer la poule", controleur);
 			afficherArbitresTournoi(arbitres);
 			break;
 		case FINALE:
 		case ATTENTE_RESULTATS:
-			afficherBoutonMDP();
+			afficherBoutonMDP(controleur);
 			afficherBoutonGererPoule("Consulter la poule", controleur);
 			afficherBoutonFinale("Gérer la finale", controleur);
 			break;
