@@ -102,13 +102,6 @@ public class ControleurDetailsTournoi implements ActionListener, MouseListener, 
 		} else if (bouton.getName().equals("Mot de passe")) {
             String id = "Login : "+vue.getTournoi().getCompte().getLogin()+"\n"+"Mot de passe : "+vue.getTournoi().getCompte().getMotDePasse();
             JTextArea textArea = contenuPopup(id);
-            Object paneBG = UIManager.get("OptionPane.background");
-            Object panelBG = UIManager.get("Panel.background");
-            UIManager.put("OptionPane.background", new Color(255,0,0));
-            UIManager.put("Panel.background", new Color(255,0,0));
-
-            UIManager.put("OptionPane.background", paneBG);
-            UIManager.put("Panel.background", panelBG);
 			JOptionPane.showMessageDialog(null, textArea, "Mot de passe", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
