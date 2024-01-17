@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.stream.Collectors;
+
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -35,6 +37,10 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Fo
 	public ControleurListeArbitre(VueListeArbitre vue) {
 		this.vue = vue;
 		this.modele = new Arbitre();
+		this.vue.setArbitres(this.vue.getArbitres()
+									.stream()
+									.sorted((x,y) -> x.getNom().toUpperCase().compareTo(y.getNom().toUpperCase()))
+									.collect(Collectors.toList()));
 	}
 
 	@Override

@@ -406,6 +406,10 @@ public class VueListeArbitre extends JFrame {
         return this.listeArbitres;
     }
 	
+	public void setArbitres(List<Arbitre> arbitres) {
+		this.arbitres = arbitres;
+	}
+	
 	public List<Arbitre> getArbitres(){
 		return arbitres;
 	}
