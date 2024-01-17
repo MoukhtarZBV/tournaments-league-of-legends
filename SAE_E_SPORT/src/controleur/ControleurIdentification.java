@@ -116,13 +116,16 @@ public class ControleurIdentification implements ActionListener, WindowListener,
 	        this.connexion();
 	    }
 	}
+	
+	@Override
+	public void windowOpened(WindowEvent e) {
+		if(Ecran.lastFrame != null) Ecran.closeLast();
+	}
+
 
 		
 	// NOT IMPLEMENTED \\
 	
-	@Override
-	public void windowOpened(WindowEvent e) {}
-
 	@Override
 	public void windowClosed(WindowEvent e) {}
 
