@@ -152,9 +152,14 @@ public class VueImportation extends JFrame {
 		gbc_btnImporter.gridx = 1;
 		gbc_btnImporter.gridy = 3;
 		JButton btnImporter = new JButton("Importez depuis l'explorateur");
-		btnImporter.setBackground(new Color(255, 255, 255));
-		btnImporter.setFocusable(false);
+		btnImporter.setName("Importer");
+		btnImporter.setBackground(Palette.WHITE);
+		btnImporter.setForeground(Palette.GRAY);
+		btnImporter.setBorder(Utilitaires.BORDER_BOUTONS);
+		btnImporter.setFont(Police.LABEL);
 		btnImporter.addActionListener(controleur);
+		btnImporter.addMouseListener(controleur);
+		btnImporter.setFocusable(false);
 		panelDropInfos.add(btnImporter, gbc_btnImporter);
 
 
@@ -167,18 +172,21 @@ public class VueImportation extends JFrame {
 		panelCenter.add(panelBoutons, BorderLayout.SOUTH);
 
 		JButton btnRetour = new JButton("Retour");
-		btnRetour.setBackground(Color.WHITE);
-		btnRetour.setForeground(Color.BLACK);
+		btnRetour.setBackground(Palette.GRAY);
+		btnRetour.setForeground(Palette.WHITE);
+		btnRetour.setBorder(Utilitaires.BORDER_BOUTONS);
+		btnRetour.setFont(Police.LABEL);
 		btnRetour.addActionListener(controleur);
 		btnRetour.addMouseListener(controleur);
 		btnRetour.setFocusable(false);
 		panelBoutons.add(btnRetour);
 
 		btnValider = new JButton("Valider");
-		btnValider.setEnabled(false);
-		btnValider.setBackground(Color.WHITE);
-		btnValider.setForeground(Color.BLACK);
-		btnValider.addActionListener(controleur);	
+		btnValider.setBackground(Palette.GRAY);
+		btnValider.setForeground(Palette.WHITE);
+		btnValider.setBorder(Utilitaires.BORDER_BOUTONS);
+		btnValider.setFont(Police.LABEL);
+		btnValider.addActionListener(controleur);
 		btnValider.addMouseListener(controleur);
 		btnValider.setFocusable(false);
 		panelBoutons.add(btnValider);

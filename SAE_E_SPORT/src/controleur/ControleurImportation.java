@@ -31,7 +31,7 @@ public class ControleurImportation implements ActionListener, DropListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	    JButton bouton = (JButton) e.getSource();
-	    if (bouton.getText().equals("Importez depuis l'explorateur")) {
+	    if (bouton.getText().equals("Importer")) {
 	        try {
 	            JFileChooser fc = new JFileChooser();
 	            if (fc.showOpenDialog(this.vue) == JFileChooser.APPROVE_OPTION) {
@@ -45,7 +45,7 @@ public class ControleurImportation implements ActionListener, DropListener, Mous
 	    	EtatEquipe etat = this.modele.verifierEquipe();
 	    	if(etat==EtatEquipe.MAL_COMPOSITION || etat==EtatEquipe.JOUEUR_EXISTE) {
 	    		this.vue.getPopup().setErreur("Un ou plusieurs joueurs d'équipe appartiennent à plus d'une équipe");
-	    	} else if (etat == EtatEquipe.OK) {
+	    	} else {
 	    		this.modele.enregistrerImportation(this.vue.getTournoi());
 	    		this.vue.getPopup().setSucces("Les équipes ont bien été importées");
 	    		this.vue.getTournoi().setStatut(Statut.ATTENTE_ARBITRES);
