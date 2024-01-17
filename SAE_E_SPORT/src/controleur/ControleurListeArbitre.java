@@ -1,8 +1,11 @@
 package controleur;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -10,6 +13,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import ihm.Ecran;
 import components.PopUpSuppression;
@@ -22,7 +26,7 @@ import modele.Arbitre;
 import modele.Statut;
 import modele.Tournoi;
 
-public class ControleurListeArbitre implements MouseListener, ActionListener, WindowListener {
+public class ControleurListeArbitre implements MouseListener, ActionListener, FocusListener, WindowListener {
 
 	private VueListeArbitre vue;
 	private Arbitre modele;
@@ -49,40 +53,67 @@ public class ControleurListeArbitre implements MouseListener, ActionListener, Wi
 	}
 	
 	@Override
+    public void focusGained(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+			JTextField searchText = (JTextField) e.getSource();
+			if (searchText.getText().equals("Filtrer arbitres par nom ou prénom")) {
+	            searchText.setText("");
+	            searchText.setForeground(Palette.WHITE);
+	        }
+		}
+    }
+	
+    @Override
+    public void focusLost(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+	    	JTextField searchText = (JTextField) e.getSource();
+	        if (searchText.getText().isEmpty()) {
+	            searchText.setForeground(Color.LIGHT_GRAY);
+	            searchText.setText("Filtrer arbitres par nom ou prénom");
+	        }
+		}
+    }
+	
+	@Override
 	public void actionPerformed(ActionEvent e) {
-	    JButton bouton = (JButton) e.getSource();
 	    
-	    if (bouton.getName().equals("Retour")) {
-			Ecran.update(this.vue);	
-			
-			if (this.vue.getTournoi() == null) {
-				VueAccueilAdmin vue = new VueAccueilAdmin();
-				vue.setVisible(true);
-			} else {
-				VueTournoi vue = new VueTournoi(this.vue.getTournoi());
-				vue.setVisible(true);
-			}
-			
-	    } else if (bouton.getName().equals("Rechercher")){
+		if (e.getSource() instanceof JButton) {
+			JButton bouton = (JButton) e.getSource();
+		    
+		    if (bouton.getName().equals("Retour")) {
+				Ecran.update(this.vue);	
+				
+				if (this.vue.getTournoi() == null) {
+					VueAccueilAdmin vue = new VueAccueilAdmin();
+					vue.setVisible(true);
+				} else {
+					VueTournoi vue = new VueTournoi(this.vue.getTournoi());
+					vue.setVisible(true);
+				}
+				
+		    } else if (bouton.getName().equals("Rechercher")){
+				this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
+				
+		    } else if (bouton.getName().equals("Ajouter")) {
+				Ecran.update(this.vue);	
+		    	VueAjouterArbitre vue = new VueAjouterArbitre();
+		    	vue.setVisible(true);
+	
+		    } else if (bouton.getName().equals("Vider")) {
+		    	viderListeArbitresAttribues();
+		    	
+		    } else if (bouton.getName().equals("Attribuer")) {
+		    	ajouterArbitreAuxArbitresAttribues();
+		    	
+		    } else if (bouton.getName().equals("Confirmer")) {
+		    	confirmerAttributionArbitres();
+		    	
+		    } else if (bouton.getName().equals("Supprimer")) {
+		    	supprimerArbitreSelectionne();
+		    }
+		} else if (e.getSource() instanceof JTextField) {
 			this.vue.updateListeArbitres(this.modele.arbitresContenant(this.vue.getArbitres(), this.vue.getSearch()));
-			
-	    } else if (bouton.getName().equals("Ajouter")) {
-			Ecran.update(this.vue);	
-	    	VueAjouterArbitre vue = new VueAjouterArbitre();
-	    	vue.setVisible(true);
-
-	    } else if (bouton.getName().equals("Vider")) {
-	    	viderListeArbitresAttribues();
-	    	
-	    } else if (bouton.getName().equals("Attribuer")) {
-	    	ajouterArbitreAuxArbitresAttribues();
-	    	
-	    } else if (bouton.getName().equals("Confirmer")) {
-	    	confirmerAttributionArbitres();
-	    	
-	    } else if (bouton.getName().equals("Supprimer")) {
-	    	supprimerArbitreSelectionne();
-	    }
+		}
 	}
 
 	private void supprimerArbitreSelectionne() {

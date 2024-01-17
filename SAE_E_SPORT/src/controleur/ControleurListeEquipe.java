@@ -1,9 +1,12 @@
 package controleur;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -21,7 +24,7 @@ import ihm.VueListeEquipe;
 import modele.Equipe;
 import modele.ModeleListeEquipes;
 
-public class ControleurListeEquipe implements MouseListener, ActionListener, WindowListener {
+public class ControleurListeEquipe implements MouseListener, FocusListener, ActionListener, WindowListener {
 	
 	private VueListeEquipe vue;
 	private ModeleListeEquipes modele;
@@ -50,6 +53,28 @@ public class ControleurListeEquipe implements MouseListener, ActionListener, Win
 			}
 		}
 	}
+	
+	@Override
+    public void focusGained(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+			JTextField searchText = (JTextField) e.getSource();
+			if (searchText.getText().equals("Filtrer équipes par nom ou rang")) {
+	            searchText.setText("");
+	            searchText.setForeground(Palette.WHITE);
+	        }
+		}
+    }
+	
+    @Override
+    public void focusLost(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+	    	JTextField searchText = (JTextField) e.getSource();
+	        if (searchText.getText().isEmpty()) {
+	            searchText.setForeground(Color.LIGHT_GRAY);
+	            searchText.setText("Filtrer équipes par nom ou rang");
+	        }
+		}
+    }
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -30,7 +30,8 @@ public class TestsImportationEquipes {
 	
 	private Tournoi tournoi;
 	private Tournoi autreTournoi;
-	private String cheminCSV;
+	private String cheminCSV1;
+	private String cheminCSV2;
 	private ModeleImportation modele;
 
 	@Before
@@ -41,7 +42,8 @@ public class TestsImportationEquipes {
 		autreTournoi = Tournoi.createTournoi("AutreTournoi", Niveau.LOCAL, Date.valueOf(LocalDate.of(2024, 02, 01)), Date.valueOf(LocalDate.of(2024, 02, 10)), 
 				Pays.FR, Statut.ATTENTE_EQUIPES, Optional.empty(), Optional.empty());
 		new Tournoi().ajouterTournoi(tournoi);
-		cheminCSV = System.getProperty("user.dir") + "\\src\\scenarios\\testCSV_Tournoi1.csv";
+		cheminCSV1 = System.getProperty("user.dir") + "\\src\\scenarios\\testCSV_Tournoi1.csv";
+		cheminCSV2 = System.getProperty("user.dir") + "\\src\\scenarios\\testCSV_Tournoi1_Equipes.csv";
 		modele = new ModeleImportation();
 	}
 
@@ -55,7 +57,7 @@ public class TestsImportationEquipes {
 	public void testAdministrateurImporteEtConfirme() throws IOException {
 		Equipe equipeBDD = new Equipe();
 		Tournoi tournoiBDD = new Tournoi();
-		modele.importerEquipesJoueurs(cheminCSV);
+		modele.importerEquipesJoueurs(cheminCSV1);
 		if (this.modele.verifierEquipe() == EtatEquipe.OK) {
 			this.modele.enregistrerImportation(tournoi);
 			tournoiBDD.changerStatutTournoi(tournoi, Statut.ATTENTE_ARBITRES);
@@ -82,8 +84,16 @@ public class TestsImportationEquipes {
 	
 	@Test
 	public void testFichierCSVConcerneTournoi() throws IOException {
-		assertTrue(modele.fichierCSVconcerneTournoi(cheminCSV, tournoi));
-		assertFalse(modele.fichierCSVconcerneTournoi(cheminCSV, autreTournoi));
+		assertTrue(modele.fichierCSVconcerneTournoi(cheminCSV1, tournoi));
+		assertFalse(modele.fichierCSVconcerneTournoi(cheminCSV1, autreTournoi));
+	}
+	
+	@Test 
+	public void testFichierCSVNombreEquipes() throws IOException {
+		assertTrue(modele.fichierCSVconcerneTournoi(cheminCSV1, tournoi));
+		assertTrue(modele.fichierCSVNombreEquipes(cheminCSV1, tournoi));
+		assertTrue(modele.fichierCSVconcerneTournoi(cheminCSV2, tournoi));
+		assertFalse(modele.fichierCSVNombreEquipes(cheminCSV2, tournoi));
 	}
 	
 	@Test
@@ -100,7 +110,7 @@ public class TestsImportationEquipes {
 	    equipeUne.ajouterJoueur(j1, j2, j3, j4, j5);
 	    equipeBDD.ajouterEquipe(equipeUne);
 		
-		modele.importerEquipesJoueurs(cheminCSV);
+		modele.importerEquipesJoueurs(cheminCSV1);
 		if (this.modele.verifierEquipe() == EtatEquipe.OK) {
 			this.modele.enregistrerImportation(tournoi);
 			tournoiBDD.changerStatutTournoi(tournoi, Statut.ATTENTE_ARBITRES);

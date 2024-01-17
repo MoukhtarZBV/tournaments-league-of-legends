@@ -1,9 +1,12 @@
 package controleur;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -17,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import ihm.Ecran;
+import ihm.Palette;
 import ihm.VueAccueilAdmin;
 import ihm.VueCreationTournoi;
 import ihm.VueListeTournois;
@@ -25,7 +29,7 @@ import modele.Niveau;
 import modele.Statut;
 import modele.Tournoi;
 
-public class ControleurListeTournois implements ActionListener, ItemListener, MouseListener, WindowListener {
+public class ControleurListeTournois implements ActionListener, FocusListener, ItemListener, MouseListener, WindowListener {
 
 	private VueListeTournois vue;
 	private Tournoi modele;
@@ -68,6 +72,28 @@ public class ControleurListeTournois implements ActionListener, ItemListener, Mo
 		}
 			
 	}
+	
+	@Override
+    public void focusGained(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+			JTextField searchText = (JTextField) e.getSource();
+			if (searchText.getText().equals("Filtrer tournois par nom")) {
+	            searchText.setText("");
+	            searchText.setForeground(Palette.WHITE);
+	        }
+		}
+    }
+	
+    @Override
+    public void focusLost(FocusEvent e) {
+		if (e.getSource() instanceof JTextField) {
+	    	JTextField searchText = (JTextField) e.getSource();
+	        if (searchText.getText().isEmpty()) {
+	            searchText.setForeground(Color.LIGHT_GRAY);
+	            searchText.setText("Filtrer tournois par nom");
+	        }
+		}
+    }
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
