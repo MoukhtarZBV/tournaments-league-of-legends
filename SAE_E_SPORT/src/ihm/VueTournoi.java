@@ -331,11 +331,13 @@ public class VueTournoi extends JFrame {
 			afficherBoutonSupprimer(controleur);
 			break;
 		case EN_COURS:
+			afficherBoutonMDP(controleur);
 			afficherBoutonGererPoule("Gérer la poule", controleur);
 			afficherArbitresTournoi(arbitres);
 			break;
 		case FINALE:
 		case ATTENTE_RESULTATS:
+			afficherBoutonMDP(controleur);
 			afficherBoutonGererPoule("Consulter la poule", controleur);
 			afficherBoutonFinale("Gérer la finale", controleur);
 			break;
@@ -406,6 +408,21 @@ public class VueTournoi extends JFrame {
 		btnImporter.addActionListener(controleur);
 		btnImporter.addMouseListener(controleur);
 		panelBoutons.add(btnImporter);
+	}
+	
+	public void afficherBoutonMDP(ControleurDetailsTournoi controleur) {
+		if (Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			JButton btnMDP = new JButton("Mot de passe");
+			btnMDP.setName("Mot de passe");
+			btnMDP.setBackground(Palette.GRAY);
+			btnMDP.setForeground(Palette.WHITE);
+			btnMDP.setBorder(Utilitaires.BORDER_BOUTONS);
+			btnMDP.setFont(Police.LABEL);
+			btnMDP.setFocusable(false);
+			btnMDP.addActionListener(controleur);
+			btnMDP.addMouseListener(controleur);
+			panelBoutons.add(btnMDP);
+		}
 	}
 	
 	public void afficherBoutonRetour(ControleurDetailsTournoi controleur) {

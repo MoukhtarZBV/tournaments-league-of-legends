@@ -5,11 +5,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ihm.Ecran;
 import ihm.Palette;
 import ihm.VueHistoriquePoints;
+import ihm.VueIdentification;
 import ihm.VueListeArbitre;
 import ihm.VueListeEquipe;
 import ihm.VueListeTournois;
@@ -61,6 +63,26 @@ public class ControleurMenu implements MouseListener {
 					Arbitre arbitreBDD = new Arbitre();
 					VueListeArbitre vueArbitres = new VueListeArbitre(arbitreBDD.getTousLesArbitres(), false, null);
 					vueArbitres.setVisible(true);
+				}
+				break;
+				
+			case "Deconnexion":
+				String[] options = { "Oui", "Non" }; 
+				int choix = JOptionPane.showOptionDialog( 
+				        null,
+				        "Voulez-vous vous déconnecter ? ?",
+				        "Deconnexion",
+				        JOptionPane.YES_NO_OPTION,
+				        JOptionPane.QUESTION_MESSAGE,
+				        null,
+				        options,
+				        options[1] 
+				);
+				
+				if(choix == 0) {
+					Ecran.update(this.parent);
+					VueIdentification vueIdentification = new VueIdentification();
+					vueIdentification.setVisible(true);
 				}
 				break;
 		}
