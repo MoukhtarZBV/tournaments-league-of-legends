@@ -11,46 +11,47 @@ Bienvenue dans le Gestionnaire de Compétitions Esport, une application Java dé
 2. Ouvrez le projet avec Eclipse.
 
 3. Ajoutez Derby.jar au projet via :
-   - Properties -> Java Build Path -> Add External JARs
+- Properties -> Java Build Path -> Add External JARs
+
 
 # Exécution de l'Application
 1. Ouvrez le package "Application"
 
 2. Lancez le fichier "Donnees.java" pour charger les jeux de données
-   -  Cliquer sur "Run Application"
+-  Cliquer sur "Run Application"
 
 3. Ensuite, lancez le fichier "Application.java" pour exécuter l'application principale
 
 # Fonctionnalités
 
 1. Identification 
-   - Deux types d'utilisateurs : administrateur et arbitre
-   - L'admin peut gérer les tournois, les matchs, l'historique et les arbitres (sauf choisir le vainqueur d'un match et de la finale)
-   - Les arbitres peuvent choisir le vainqueur d'un match et de la finale
+- Deux types d'utilisateurs : administrateur et arbitre
+- L'admin peut gérer les tournois, les matchs, l'historique et les arbitres (sauf choisir le vainqueur d'un match et de la finale)
+- Les arbitres peuvent choisir le vainqueur d'un match et de la finale
 
 2. Gestion des Tournois
-   - Création d'un tournoi
-   - Affichage de tous les tournois
-   - Importation des équipes pour un tournoi
-   - Attribution des arbitres pour un tournoi
-   - Ouverture et fermeture d'un tournoi
-   - Détermination du vainqueur d'un tournoi
+- Création d'un tournoi
+- Affichage de tous les tournois
+- Importation des équipes pour un tournoi
+- Attribution des arbitres pour un tournoi
+- Ouverture et fermeture d'un tournoi
+- Détermination du vainqueur d'un tournoi
 
 3. Gestion des Matchs
-   - Choix des vainqueurs
-   - Calcul automatique des points pour le classement
-   - Création d'une finale
+- Choix des vainqueurs
+- Calcul automatique des points pour le classement
+- Création d'une finale
 
 4. Gestion des équipes
-   - Affichage de toutes les équipes dans la base de données 
-   - Modification de nom et de pays d'une équipe
-   - La composition d'une équipe ne peut pas être changer pendant la saison en cours
+- Affichage de toutes les équipes dans la base de données 
+- Modification de nom et de pays d'une équipe
+- La composition d'une équipe ne peut pas être changer pendant la saison en cours
 
 5. Gestion des Arbitres
-   - Ajout et suppression d'arbitres
+- Ajout et suppression d'arbitres
 
 6. Gestion de l'Historique des Points
-   - Suivi des points gagnés par chaque équipe dans tous les tournois joués
+- Suivi des points gagnés par chaque équipe dans tous les tournois joués
 
 
 # Licence
