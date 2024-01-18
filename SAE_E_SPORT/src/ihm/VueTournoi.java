@@ -296,7 +296,9 @@ public class VueTournoi extends JFrame {
 		
 		this.controleur = new ControleurDetailsTournoi(this);
 		ajouterInfoBulle(panelEquipes, this.equipesSize + " participants");
-		tableEquipes.addMouseListener(this.controleur);
+		if(Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
+			tableEquipes.addMouseListener(this.controleur);
+		}		
 		btnRetour.addActionListener(this.controleur);
 		btnRetour.addMouseListener(this.controleur);
 		addWindowListener(controleur);
@@ -565,4 +567,5 @@ public class VueTournoi extends JFrame {
 	public Tournoi getTournoi() {
 		return this.tournoi;
 	}
+	
 }

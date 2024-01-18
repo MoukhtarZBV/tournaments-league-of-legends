@@ -52,7 +52,6 @@ public class ControleurListeTournois implements ActionListener, FocusListener, I
 			JButton bouton = (JButton) e.getSource();
 			String recherche = this.vue.saisieChamp();
 			if(recherche.equals("Filtrer tournois par nom")) recherche = "";
-			
 			if (bouton.getName().equals("Nouveau")) {
 				Ecran.update(this.vue);
 				VueCreationTournoi vue = new VueCreationTournoi();
@@ -63,10 +62,9 @@ public class ControleurListeTournois implements ActionListener, FocusListener, I
 				VueAccueilAdmin vue = new VueAccueilAdmin();
 				vue.setVisible(true);
 
-			} else if (bouton.getName().equals("Recherche")) {
+			} else if (bouton.getName().equals("Rechercher")) {
 				vue.afficherTournois(modele.getTournoisNiveauStatutNom(recherche, niveau, statut));
-			}
-			
+			} 
 		} else if (e.getSource() instanceof JTextField) {
 			this.nom = vue.saisieChamp();
 			vue.afficherTournois(modele.getTournoisNiveauStatutNom(nom, niveau, statut));

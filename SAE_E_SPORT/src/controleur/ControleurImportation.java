@@ -31,7 +31,7 @@ public class ControleurImportation implements ActionListener, DropListener, Mous
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	    JButton bouton = (JButton) e.getSource();
-	    if (bouton.getText().equals("Importer")) {
+	    if (bouton.getText().equals("Importez depuis l'explorateur")) {
 	        try {
 	            JFileChooser fc = new JFileChooser();
 	            if (fc.showOpenDialog(this.vue) == JFileChooser.APPROVE_OPTION) {

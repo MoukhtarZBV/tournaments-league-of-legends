@@ -27,9 +27,11 @@ import ihm.VueListeTournois;
 import ihm.VueTournoi;
 import ihm.VueListeArbitre;
 import modele.Arbitre;
+import modele.Compte;
 import modele.Equipe;
 import modele.Statut;
 import modele.Tournoi;
+import modele.TypeCompte;
 
 public class ControleurDetailsTournoi implements ActionListener, MouseListener, WindowListener {
 	

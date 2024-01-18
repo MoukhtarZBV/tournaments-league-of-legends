@@ -53,7 +53,7 @@ public class ModeleImportation {
 		while ((line = br.readLine()) != null) {
 			lines.add(line);
 		}
-		if (!(lines.size()>=20 && lines.size()<=32)) {
+		if (!(lines.size()>=20 && lines.size()<=40)) {
 			System.out.println(lines.size());
 			br.close();
 			return false;

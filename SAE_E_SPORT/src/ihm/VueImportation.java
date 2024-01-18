@@ -182,6 +182,7 @@ public class VueImportation extends JFrame {
 		panelBoutons.add(btnRetour);
 
 		btnValider = new JButton("Valider");
+		btnValider.setEnabled(false);
 		btnValider.setBackground(Palette.GRAY);
 		btnValider.setForeground(Palette.WHITE);
 		btnValider.setBorder(Utilitaires.BORDER_BOUTONS);

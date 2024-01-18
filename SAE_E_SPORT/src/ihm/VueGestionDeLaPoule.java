@@ -303,6 +303,7 @@ public class VueGestionDeLaPoule extends JFrame implements Printable{
 		btnRetour.addMouseListener(controleur);
 		
 	}
+	
 	private void afficherMenuBar(JPanel contentPane) {
 		if(Compte.getCompteConnecte().getType() == TypeCompte.ADMINISTRATEUR) {
 			MenuBar panelSide = new MenuBar(this);
