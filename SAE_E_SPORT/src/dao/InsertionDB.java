@@ -308,9 +308,8 @@ public class InsertionDB {
 		cDateJour.add(Calendar.DAY_OF_MONTH, +5);
 		Date dateJourPlus5 = new Date(cDateJour.getTimeInMillis());
 	    Tournoi t7 = Tournoi.createTournoi("High Honors Tournament 2024", Niveau.REGIONAL, Date.valueOf(LocalDate.now()), 
-	    		dateJourPlus5, Pays.GB, Statut.ATTENTE_ARBITRES, Optional.empty(), Optional.empty());
+	    		dateJourPlus5, Pays.GB, Statut.ATTENTE_EQUIPES, Optional.empty(), Optional.empty());
 	    tournoiBDD.ajouterTournoi(t7);
-	    ajouterEquipesTournoi(t7, e1, e2, e8, e9, e10, e12, e13, e14);
 	    
 
 	    // ====================================== //
@@ -324,9 +323,9 @@ public class InsertionDB {
 		compteBDD.ajouterCompte(c2);
 		compteBDD.ajouterCompte(c3);
 		
-		Administrateur a1 = new Administrateur(1, "koh", "youchen", c1);
-		Administrateur a2 = new Administrateur(2, "marquet", "david", c2);
-		Administrateur a3 = new Administrateur(3, "chevalier", "max", c3);
+		Administrateur a1 = new Administrateur(1, "Koh", "Youchen", c1);
+		Administrateur a2 = new Administrateur(2, "Marquet", "David", c2);
+		Administrateur a3 = new Administrateur(3, "Chene", "Maxence", c3);
 		adminBDD.ajouterAdministrateur(a1);
 		adminBDD.ajouterAdministrateur(a2);
 		adminBDD.ajouterAdministrateur(a3);

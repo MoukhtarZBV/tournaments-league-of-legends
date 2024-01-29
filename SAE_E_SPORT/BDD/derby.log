@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
-Wed Jan 17 11:21:06 CET 2024:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-018d-16f0-57d1-ffffccd3fcad 
-on database directory C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT\BDD\BDD  with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@22d8cfe0 
-Loaded from file:/C:/Users/David%20Marquet/Documents/GitHub/SAE-e-sport/SAE_E_SPORT/derby.jar
+Mon Jan 29 15:26:20 CET 2024:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-018d-559d-2c60-ffffdcad2bd8 
+on database directory C:\Users\Admin\Documents\GitHub\tournaments-league-of-legends\SAE_E_SPORT\BDD\BDD  with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@bebdb06 
+Loaded from file:/C:/Users/Admin/Documents/GitHub/tournaments-league-of-legends/SAE_E_SPORT/derby.jar
 java.vendor=Eclipse Adoptium
-java.runtime.version=17.0.6+10
-user.dir=C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT
-derby.system.home=C:\Users\David Marquet\Documents\GitHub\SAE-e-sport\SAE_E_SPORT/BDD
+java.runtime.version=17.0.8.1+1
+user.dir=C:\Users\Admin\Documents\GitHub\tournaments-league-of-legends\SAE_E_SPORT
+derby.system.home=C:\Users\Admin\Documents\GitHub\tournaments-league-of-legends\SAE_E_SPORT/BDD
 Database Class Loader started - derby.database.classpath=''
